@@ -14,7 +14,8 @@ import dagger.Provides;
 public class ImagesModule {
 
     @Provides
-    @Singleton Picasso providePicasso(@Application Context context) {
+    @Singleton
+    Picasso providePicasso(@Application Context context) {
         return Picasso.with(context);
     }
 

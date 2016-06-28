@@ -33,8 +33,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Module(includes = {ConfigModule.class, InstrumentationModule.class})
 public class ApiModule {
 
-    public static final String URL_CONFIG = "ApiModule.URL_CONFIG";
-    public static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";
+    static final String URL_CONFIG = "ApiModule.URL_CONFIG";
+    static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";
 
     @Provides
     @Singleton
@@ -106,12 +106,12 @@ public class ApiModule {
 
     @Qualifier
     @Retention(RUNTIME)
-    public @interface AppInterceptors {
+    @interface AppInterceptors {
     }
 
     @Qualifier
     @Retention(RUNTIME)
-    public @interface NetworkInterceptors {
+    @interface NetworkInterceptors {
     }
 
 }

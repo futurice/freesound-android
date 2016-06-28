@@ -7,24 +7,19 @@ import com.futurice.freesound.inject.activity.BaseActivityModule;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SearchActivity extends BaseActivity<SearchActivityComponent> {
+import polanski.option.Option;
 
-    @Nullable
-    private SearchActivityComponent component;
+public class SearchActivity extends BaseActivity<SearchActivityComponent> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                                       .add(R.id.container, SearchFragment.create())
-                                       .commit();
-        }
+        Option.ofObj(savedInstanceState)
+              .ifNone(this::addSearchFragment);
     }
 
     @Override
@@ -55,4 +50,11 @@ public class SearchActivity extends BaseActivity<SearchActivityComponent> {
                                             .searchActivityModule(new SearchActivityModule())
                                             .build();
     }
+
+    private void addSearchFragment() {
+        getSupportFragmentManager().beginTransaction()
+                                   .add(R.id.container, SearchFragment.create())
+                                   .commit();
+    }
+
 }

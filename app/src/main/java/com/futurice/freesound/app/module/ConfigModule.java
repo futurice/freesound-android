@@ -11,13 +11,13 @@ public class ConfigModule {
 
     @Provides
     @Singleton @Named(ApiModule.URL_CONFIG)
-    public String provideApiModuleUrlConfig() {
+    String provideApiModuleUrlConfig() {
         return "https://www.freesound.org/";
     }
 
     @Provides
     @Singleton @Named(ApiModule.API_TOKEN_CONFIG)
-    public String provideApiModuleApiTokenConfig() {
+    String provideApiModuleApiTokenConfig() {
         throw new IllegalStateException("No Api Token defined");
     }
 
