@@ -1,3 +1,6 @@
 /build
 gradle.properties
 *.iml
+
+# Keep API keys out of repository
+freesound-api.properties

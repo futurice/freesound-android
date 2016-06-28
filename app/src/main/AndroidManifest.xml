@@ -8,6 +8,7 @@
             android:allowBackup="false"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
+            android:name=".app.FreesoundApplication"
             android:theme="@style/AppTheme">
         <activity android:name="com.futurice.freesound.feature.search.SearchActivity"
                   android:label="@string/app_name">

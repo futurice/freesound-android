@@ -1,0 +1,7 @@
+ext {
+    def Properties props = new Properties()
+    props.load(new FileInputStream("app/freesound-api.properties"))
+
+    freesound_api_key = props.getProperty("freesound.api.key")
+    freesound_api_url = "\"https://www.freesound.org/\""
+}
