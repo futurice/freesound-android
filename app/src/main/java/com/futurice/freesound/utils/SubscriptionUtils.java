@@ -10,10 +10,6 @@ import rx.functions.Action1;
 
 public final class SubscriptionUtils {
 
-    private SubscriptionUtils() {
-        throw new AssertionError("No instances allowed");
-    }
-
     @NonNull
     static public Subscription subscribeTextViewText(@NonNull final Observable<String> observable,
                                                      @NonNull final TextView textView) {
@@ -25,5 +21,9 @@ public final class SubscriptionUtils {
                         textView.setText(s);
                     }
                 });
+    }
+
+    private SubscriptionUtils() {
+        throw new AssertionError("No instances allowed");
     }
 }

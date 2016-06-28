@@ -28,7 +28,7 @@ public class SearchDataModel {
 
     @NonNull
     Observable<Unit> querySearch(@NonNull final String query) {
-        return freeSoundApi.search(get(query), "", "")
+        return freeSoundApi.search(get(query), null, null)
                            .map(SoundSearchResult::results)
                            .doOnNext(lastResults)
                            .map(Unit::asUnit);

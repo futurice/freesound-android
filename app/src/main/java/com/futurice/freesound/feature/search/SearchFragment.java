@@ -3,22 +3,31 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.BaseBindingFragment;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
+import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.Binder;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
 public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent> {
+
+    private static final String TAG = SearchFragment.class.getSimpleName();
 
     @Nullable
     @Inject
@@ -28,16 +37,20 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
     @Inject
     SoundItemAdapter soundItemAdapter;
 
+    @Nullable
+    private RecyclerView searchResultsRecyclerView;
+
     @NonNull
     private final Binder binder = new Binder() {
 
         @Override
         public void bind(@NonNull final CompositeSubscription subscription) {
             subscription.add(viewModel().getSounds()
-                                        .subscribe(it -> get(soundItemAdapter).setItems(it),
-                                                   e -> System.err
-                                                           .println("Error setting Sound items"
-                                                                    + e)));
+                                        .subscribeOn(Schedulers.computation())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(SearchFragment.this::setItems,
+                                                   e -> Log.e(TAG, "Error setting Sound items",
+                                                              e)));
         }
 
         @Override
@@ -46,6 +59,10 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
         }
 
     };
+
+    private void setItems(@NonNull final List<Sound> sounds) {
+        get(soundItemAdapter).setItems(sounds);
+    }
 
     @NonNull
     public static SearchFragment create() {
@@ -64,6 +81,25 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
     }
 
     @Override
+    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        searchResultsRecyclerView = (RecyclerView) view
+                .findViewById(R.id.recyclerView_searchResults);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        get(searchResultsRecyclerView).setAdapter(get(soundItemAdapter));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel().search("cats");
+    }
+
+    @Override
     public void inject() {
         component().inject(this);
     }
@@ -79,8 +115,6 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
                                             .build();
     }
 
-
-
     @NonNull
     @Override
     protected SearchViewModel viewModel() {
@@ -92,4 +126,5 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
     protected Binder binder() {
         return binder;
     }
+
 }

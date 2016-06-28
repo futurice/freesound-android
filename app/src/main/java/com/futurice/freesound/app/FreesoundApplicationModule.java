@@ -11,5 +11,5 @@ import dagger.Module;
                     ApiModule.class,
                     ImagesModule.class,
                     DataModule.class})
-public class FreesoundApplicationModule {
+class FreesoundApplicationModule {
 }

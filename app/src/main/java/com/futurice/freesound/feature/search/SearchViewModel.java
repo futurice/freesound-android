@@ -1,6 +1,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.Unit;
+import com.futurice.freesound.functional.Functions;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.jakewharton.rxrelay.BehaviorRelay;
@@ -62,7 +63,8 @@ class SearchViewModel extends BaseViewModel {
         searchTermRelay.subscribeOn(AndroidSchedulers.mainThread())
                        .observeOn(Schedulers.computation())
                        .map(String::trim)
-                       .subscribe(searchDataModel::querySearch,
+                       .switchMap(searchDataModel::querySearch)
+                       .subscribe(Functions.nothing1(),
                                   e -> Log.e(TAG, "Error when setting search term", e));
 
     }
