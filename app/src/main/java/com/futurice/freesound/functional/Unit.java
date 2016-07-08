@@ -1,4 +1,4 @@
-package com.futurice.freesound;
+package com.futurice.freesound.functional;
 
 import android.support.annotation.NonNull;
 

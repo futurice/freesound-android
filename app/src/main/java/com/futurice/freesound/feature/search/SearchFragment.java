@@ -9,6 +9,7 @@ import com.futurice.freesound.viewmodel.Binder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,7 +62,8 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
     };
 
     private void setItems(@NonNull final List<Sound> sounds) {
-        get(soundItemAdapter).setItems(sounds);
+        Log.d(TAG, "#### Setting items: " + sounds);
+        get(soundItemAdapter).setItems(get(sounds));
     }
 
     @NonNull
@@ -85,6 +87,9 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
         super.onViewCreated(view, savedInstanceState);
         searchResultsRecyclerView = (RecyclerView) view
                 .findViewById(R.id.recyclerView_searchResults);
+
+        // TODO
+        get(searchResultsRecyclerView).setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     @Override

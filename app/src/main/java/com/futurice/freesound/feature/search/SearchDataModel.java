@@ -1,7 +1,7 @@
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.Unit;
-import com.futurice.freesound.network.api.FreeSoundApi;
+import com.futurice.freesound.functional.Unit;
+import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.jakewharton.rxrelay.BehaviorRelay;
@@ -17,21 +17,21 @@ import static com.futurice.freesound.utils.Preconditions.get;
 public class SearchDataModel {
 
     @NonNull
-    private final FreeSoundApi freeSoundApi;
+    private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
     private final BehaviorRelay<List<Sound>> lastResults = BehaviorRelay.create();
 
-    SearchDataModel(@NonNull final FreeSoundApi freeSoundApi) {
-        this.freeSoundApi = get(freeSoundApi);
+    SearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
+        this.freeSoundSearchService = get(freeSoundSearchService);
     }
 
     @NonNull
     Observable<Unit> querySearch(@NonNull final String query) {
-        return freeSoundApi.search(get(query), null, null)
-                           .map(SoundSearchResult::results)
-                           .doOnNext(lastResults)
-                           .map(Unit::asUnit);
+        return freeSoundSearchService.search(get(query))
+                                     .map(SoundSearchResult::results)
+                                     .doOnNext(lastResults)
+                                     .map(Unit::asUnit);
     }
 
     @NonNull

@@ -7,6 +7,7 @@ import com.futurice.freesound.network.api.FreeSoundApi;
 import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
+import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -84,6 +85,7 @@ public class ApiModule {
     Gson provideGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
+                .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
                 .create();
     }
 

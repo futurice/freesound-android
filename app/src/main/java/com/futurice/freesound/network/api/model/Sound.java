@@ -1,12 +1,17 @@
 package com.futurice.freesound.network.api.model;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.futurice.freesound.utils.Preconditions.get;
 
 @AutoValue
 public abstract class Sound implements Parcelable {
@@ -46,5 +51,10 @@ public abstract class Sound implements Parcelable {
     // respectively).
     @Nullable
     public abstract Map<SoundImageFormat, String> images();
+
+    @NonNull
+    public static TypeAdapter<Sound> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_Sound.GsonTypeAdapter(get(gson));
+    }
 
 }

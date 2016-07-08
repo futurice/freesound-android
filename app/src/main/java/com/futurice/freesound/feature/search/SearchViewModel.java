@@ -1,7 +1,7 @@
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.Unit;
 import com.futurice.freesound.functional.Functions;
+import com.futurice.freesound.functional.Unit;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.jakewharton.rxrelay.BehaviorRelay;
