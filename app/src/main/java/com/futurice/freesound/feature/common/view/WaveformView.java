@@ -62,6 +62,8 @@ public class WaveformView extends View {
 
         backgroundPaint = createBackgroundPaint(DEFAULT_BACKGROUND_COLOR);
 
+        logV(TAG, "View isHardwareAccelerated: " + isHardwareAccelerated());
+
     }
 
     public void setWaveform(float[] waveform) {
@@ -80,33 +82,31 @@ public class WaveformView extends View {
 
         final long start = System.currentTimeMillis();
 
-        // Draw background
-        canvas.drawPaint(backgroundPaint);
-
         // Don't draw if we haven't got anything to draw!
         if (waveform == null || waveform.length == 0) {
+            Log.w(TAG, "Empty waveform!");
             return;
         }
 
-     //   logV(TAG, "onDraw() - data width: " + waveform.length);
-     //   logV(TAG, "onDraw() - canvas width: " + canvas.getWidth());
-      //  logV(TAG, "onDraw() - column width & padding width: " +
-      //            columnWidthPx + "," + columnGapPx);
+        logV(TAG, "onDraw() - data width: " + waveform.length);
+        logV(TAG, "onDraw() - canvas width: " + canvas.getWidth());
+        logV(TAG, "onDraw() - column width & padding width: " +
+                  columnWidthPx + "," + columnGapPx);
 
-        final float drawableWidth = canvas.getWidth() - columnGapPx;
-     //   logV(TAG, "onDraw() - usableWidth: " + drawableWidth);
+        final float drawableWidth = canvas.getWidth();
+        logV(TAG, "onDraw() - usableWidth: " + drawableWidth);
 
         // The number of whole columns that fit in the drawable width with the desired column spacing
-        final int columnCount = (int) (drawableWidth / (columnGapPx));
-     //   logV(TAG, "onDraw() - columns: " + columnCount);
+        final int columnCount = (int) (drawableWidth / (columnWidthPx + columnGapPx));
+        logV(TAG, "onDraw() - columns: " + columnCount);
 
         // The remainder, we want to shift the columns to the centre of the available width.
         final float remainder = drawableWidth % columnCount;
-    //    logV(TAG, "onDraw() - remainder: " + remainder);
+        logV(TAG, "onDraw() - remainder: " + remainder);
 
         // The number of datapoints that contribute to a column
         final int datapoints = waveform.length / columnCount;
-     //   logV(TAG, "onDraw() - datapoint per column: " + datapoints);
+        logV(TAG, "onDraw() - datapoint per column: " + datapoints);
 
         // Max height to be used by the waveform
         final int heightScalingFactor = canvas.getHeight() / 2;

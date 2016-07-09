@@ -42,8 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
                 app:waveformColor="@color/red"
-                app:columnWidth="24dp"
-                app:columnGap="2dp"
+                app:columnWidth="4dp"
+                app:columnGap="1dp"
+                android:background="@color/gray_very_light"
                 android:contentDescription="@string/sound_item_image"/>
 
     </LinearLayout>

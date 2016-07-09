@@ -2,6 +2,7 @@
 <resources>
 
     <!-- Grayscale -->
+    <color name="gray_very_light">#EFEFEF</color>
     <color name="gray_light">#DFDFDF</color>
     <color name="gray_dark">#5F5F5F</color>
 
