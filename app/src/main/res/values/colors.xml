@@ -29,4 +29,7 @@
     <color name="text_menu">@color/black_87</color>
     <color name="text_button">@color/black_87</color>
 
+    <!-- App wide usage colors -->
+    <color name="background_tinted">@color/gray_light</color>
+
 </resources>
