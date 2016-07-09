@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Waveform">
+        <attr name="waveformColor" format="color"/>
+        <attr name="columnWidth" format="dimension"/>
+        <attr name="columnGap" format="dimension"/>
+    </declare-styleable>
+
+</resources>

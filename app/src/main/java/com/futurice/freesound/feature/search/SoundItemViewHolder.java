@@ -1,13 +1,16 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
+import com.futurice.freesound.feature.common.view.WaveformView;
+import com.futurice.freesound.feature.common.view.WaveformViewTarget;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,7 +26,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     private final View rootView;
     private final TextView titleTextView;
     private final TextView descriptionTextView;
-    private final ImageView thumbnailImageView;
+    private final Target waveformViewTarget;
     private final Picasso picasso;
 
     private final Binder viewBinder = new Binder() {
@@ -49,7 +52,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             subscriptions.add(vm.thumbnailImageUrl()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(url -> picasso.load(url)
-                                                         .into(thumbnailImageView),
+                                                         .into(waveformViewTarget),
                                            error -> e(TAG,
                                                       "Unable to set SoundItem thumbnail",
                                                       error)));
@@ -60,7 +63,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         @Override
         public void unbind() {
             rootView.setOnClickListener(null);
-            picasso.cancelRequest(thumbnailImageView);
+            picasso.cancelRequest(waveformViewTarget);
         }
 
     };
@@ -72,7 +75,9 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         this.picasso = get(picasso);
         this.titleTextView = get((TextView) view.findViewById(R.id.textView_title));
         this.descriptionTextView = get((TextView) view.findViewById(R.id.textView_description));
-        this.thumbnailImageView = get((ImageView) view.findViewById(R.id.imageView_soundItem));
+        this.waveformViewTarget = new WaveformViewTarget(
+                get((WaveformView) view.findViewById(R.id.waveformView_soundItem)),
+                new BlackBackgroundWaveformExtractor());
     }
 
     @NonNull
