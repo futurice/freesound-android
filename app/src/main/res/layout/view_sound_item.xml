@@ -41,7 +41,7 @@
                 android:id="@+id/waveformView_soundItem"
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
-                app:waveformColor="@color/red"
+                app:waveformColor="@color/brand"
                 app:columnWidth="4dp"
                 app:columnGap="1dp"
                 android:background="@color/gray_very_light"

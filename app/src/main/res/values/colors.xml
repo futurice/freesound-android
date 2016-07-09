@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Brand Colors -->
+    <color name="brand">#CB3D44</color>
+    <color name="brandDark">#BA2C33</color>
+
     <!-- Grayscale -->
     <color name="gray_very_light">#EFEFEF</color>
     <color name="gray_light">#DFDFDF</color>
     <color name="gray_dark">#5F5F5F</color>
+
+    <color name="colorPrimary">@color/brand</color>
+    <color name="colorPrimaryDark">@color/brandDark</color>
+    <color name="colorAccent">@android:color/white</color>
 
     <!-- Basic colors -->
     <color name="green">#27D34D</color>
