@@ -19,7 +19,7 @@ import rx.subscriptions.CompositeSubscription;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-class SearchViewModel extends BaseViewModel {
+final class SearchViewModel extends BaseViewModel {
 
     private static final String TAG = SearchViewModel.class.getSimpleName();
 

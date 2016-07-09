@@ -11,7 +11,7 @@ import rx.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-class SoundItemViewModel extends SimpleViewModel {
+final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     private final Sound sound;

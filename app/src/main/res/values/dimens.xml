@@ -8,9 +8,19 @@
     <dimen name="spacing_normal">16dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
 
-    <!-- Font sizes -->
-    <dimen name="font_size_large">20dp</dimen>
-    <dimen name="font_size_normal">16dp</dimen>
-    <dimen name="font_size_small">12dp</dimen>
+    <!-- Text sizes -->
+    <!-- From https://material.google.com/style/typography.html#typography-styles -->
+    <dimen name="text_display4">112sp</dimen>
+    <dimen name="text_display3">56sp</dimen>
+    <dimen name="text_display2">45sp</dimen>
+    <dimen name="text_display1">34sp</dimen>
+    <dimen name="text_headline">24sp</dimen>
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_subheading">16sp</dimen>
+    <dimen name="text_body2">14sp</dimen>
+    <dimen name="text_body1">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_menu">20sp</dimen>
+    <dimen name="text_button">14sp</dimen>
 
 </resources>

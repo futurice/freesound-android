@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
+final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     private final List<Sound> items;
     private final SoundItemViewModel_Factory viewModelFactory;

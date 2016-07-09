@@ -26,7 +26,7 @@ import rx.subscriptions.CompositeSubscription;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent> {
+public final class SearchFragment extends BaseBindingFragment<SearchFragmentComponent> {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 
@@ -101,7 +101,7 @@ public class SearchFragment extends BaseBindingFragment<SearchFragmentComponent>
     @Override
     public void onResume() {
         super.onResume();
-        viewModel().search("cats");
+        viewModel().search("train");
     }
 
     @Override

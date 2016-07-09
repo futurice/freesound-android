@@ -4,6 +4,7 @@ import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.Activity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.inject.activity.PerActivity;
+import com.futurice.freesound.network.api.DefaultFreeSoundSearchService;
 import com.futurice.freesound.network.api.FreeSoundApi;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 
@@ -30,12 +31,12 @@ class SearchActivityModule {
     @Provides
     @PerActivity
     SearchDataModel provideSearchDataModel(FreeSoundSearchService freeSoundSearchService) {
-        return new SearchDataModel(freeSoundSearchService);
+        return new DefaultSearchDataModel(freeSoundSearchService);
     }
 
     @Provides
     @PerActivity
     FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
-        return new FreeSoundSearchService(freeSoundApi);
+        return new DefaultFreeSoundSearchService(freeSoundApi);
     }
 }

@@ -2,16 +2,31 @@
 <resources>
 
     <!-- Grayscale -->
-    <color name="white">#FFFFFF</color>
     <color name="gray_light">#DFDFDF</color>
-    <color name="gray">#939393</color>
     <color name="gray_dark">#5F5F5F</color>
-    <color name="black">#303030</color>
 
     <!-- Basic colors -->
     <color name="green">#27D34D</color>
     <color name="blue">#2A91BD</color>
     <color name="orange">#FF9D2F</color>
     <color name="red">#FF432F</color>
+
+    <!-- Contrasts -->
+    <color name="black_54">#8A000000</color>
+    <color name="black_87">#DF000000</color>
+
+    <!-- Text contrasts -->
+    <color name="text_display4">@color/black_54</color>
+    <color name="text_display3">@color/black_54</color>
+    <color name="text_display2">@color/black_54</color>
+    <color name="text_display1">@color/black_54</color>
+    <color name="text_headline">@color/black_87</color>
+    <color name="text_title">@color/black_87</color>
+    <color name="text_subheading">@color/black_87</color>
+    <color name="text_body2">@color/black_87</color>
+    <color name="text_body1">@color/black_87</color>
+    <color name="text_caption">@color/black_54</color>
+    <color name="text_menu">@color/black_87</color>
+    <color name="text_button">@color/black_87</color>
 
 </resources>

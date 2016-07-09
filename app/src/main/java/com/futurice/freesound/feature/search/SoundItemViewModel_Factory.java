@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-class SoundItemViewModel_Factory {
+final class SoundItemViewModel_Factory {
 
     private final Navigator navigator;
 
