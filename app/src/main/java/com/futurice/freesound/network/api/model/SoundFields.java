@@ -45,8 +45,9 @@ public final class SoundFields {
         return RequestHelper.asCommaSeparated(fields);
     }
 
-    public static class Builder {
+    private static class Builder {
 
+        @NonNull
         private final Set<String> fields = new HashSet<>();
 
         Builder id() {
@@ -89,12 +90,12 @@ public final class SoundFields {
             return this;
         }
 
-        SoundFields build() {
-            return new SoundFields(Collections.unmodifiableSet(fields));
-        }
-
         private void add(String field) {
             fields.add(field);
+        }
+
+        SoundFields build() {
+            return new SoundFields(Collections.unmodifiableSet(fields));
         }
 
     }
