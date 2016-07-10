@@ -1,5 +1,6 @@
 package com.futurice.freesound.network.api;
 
+import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
@@ -15,5 +16,5 @@ public interface FreeSoundApi {
     @GET("/apiv2/search/text/")
     Observable<SoundSearchResult> search(@Query("query") @NonNull final String query,
                                          @Query("filter") @Nullable final String filter,
-                                         @Query("fields") @Nullable final String fields);
+                                         @Query("fields") @NonNull final SoundFields fields);
 }

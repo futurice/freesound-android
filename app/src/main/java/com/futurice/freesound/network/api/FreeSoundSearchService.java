@@ -6,10 +6,6 @@ import android.support.annotation.NonNull;
 
 import rx.Observable;
 
-/**
- * @author Peter Tackage
- * @since 08/07/16
- */
 public interface FreeSoundSearchService {
 
     @NonNull
