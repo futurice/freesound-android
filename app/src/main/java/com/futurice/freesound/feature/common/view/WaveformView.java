@@ -61,8 +61,7 @@ public class WaveformView extends View {
     }
 
     public void setWaveform(float[] waveform) {
-        this.waveform = waveform;
-        setDrawingCacheEnabled(false);
+        this.waveform = waveform.clone();
         invalidate();
     }
 
