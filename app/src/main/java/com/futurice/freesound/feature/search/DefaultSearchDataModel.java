@@ -8,6 +8,7 @@ import com.jakewharton.rxrelay.BehaviorRelay;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -43,7 +44,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
     public Observable<Unit> clear() {
-        // TODO Implement clear
-        return Observable.just(Unit.DEFAULT);
+        return Observable.just(Collections.<Sound>emptyList())
+                         .doOnNext(lastResults)
+                         .map(__ -> Unit.DEFAULT);
     }
 }

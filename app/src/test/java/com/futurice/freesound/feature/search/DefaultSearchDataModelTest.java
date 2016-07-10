@@ -17,9 +17,9 @@ import rx.Observable;
 import rx.observers.TestObserver;
 import rx.observers.TestSubscriber;
 
+import static com.futurice.freesound.test.assertion.IsEmptyListCondition.empty;
 import static com.futurice.freesound.test.utils.TestSubscriberUtils.subscribe;
 import static com.petertackage.assertrx.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -44,24 +44,23 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultsFor(query, TestData.searchResult(5));
 
-        defaultSearchDataModel.querySearch(query).subscribe();
+        subscribe(defaultSearchDataModel.querySearch(query));
 
         verify(freeSoundSearchService).search(eq(query));
     }
 
     @Test
-    public void querySearch_returnsResults() {
+    public void getSearchResults_returnsResults_whenQuerySearch() {
         final String query = "trains";
         final SoundSearchResult result = TestData.searchResult(5);
         new Arrangement()
                 .withSearchResultsFor(query, result);
         TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
 
-        defaultSearchDataModel.querySearch(query).subscribe();
+        subscribe(defaultSearchDataModel.querySearch(query));
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(result.results());
-
     }
 
     @Test
@@ -77,7 +76,7 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
-    public void querySearch_doesNotError_whenSearchErrors() {
+    public void getSearchResults_doesNotError_whenQuerySearchErrors() {
         new Arrangement()
                 .withSearchResultError(new Exception());
         TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
@@ -88,13 +87,42 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
-    public void getSearchResults() {
-        fail("Not implemented");
+    public void getSearchResults_hasNoDefaultResults() {
+        TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
+
+        assertThat(ts).hasNoErrors()
+                      .hasNoValues();
     }
 
     @Test
-    public void clear() {
-        fail("Not implemented");
+    public void getSearchResults_hasNoTerminalEvent() {
+        TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
+
+        assertThat(ts).hasNoTerminalEvent();
+    }
+
+    @Test
+    public void getSearchResults_cachesLastResult() {
+        final String query = "trains";
+        final SoundSearchResult result = TestData.searchResult(5);
+        new Arrangement()
+                .withSearchResultsFor(query, result)
+                .act().querySearch(query);
+
+        TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValue(result.results());
+    }
+
+    @Test
+    public void getSearchResults_emitsEmptyList_whenCleared() {
+        TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
+
+        subscribe(defaultSearchDataModel.clear());
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValueWhich().is(empty());
     }
 
     private class Arrangement {
@@ -107,6 +135,17 @@ public class DefaultSearchDataModelTest {
         Arrangement withSearchResultError(Exception exception) {
             when(freeSoundSearchService.search(any())).thenReturn(Observable.error(exception));
             return this;
+        }
+
+        Act act() {
+            return new Act();
+        }
+    }
+
+    private class Act {
+
+        void querySearch(String query) {
+            defaultSearchDataModel.querySearch(query).subscribe(new TestObserver<>());
         }
     }
 
