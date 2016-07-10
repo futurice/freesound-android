@@ -11,7 +11,7 @@ public abstract class WaveformExtractor {
     private static final String TAG = WaveformExtractor.class.getSimpleName();
 
     public final float[] extract(@NonNull final Bitmap bitmap) {
-        final long startTime = System.currentTimeMillis();
+        final long debugStartTime = System.currentTimeMillis();
 
         final int width = bitmap.getWidth();
         final float centreLine = (float) bitmap.getHeight() / 2f;
@@ -26,7 +26,8 @@ public abstract class WaveformExtractor {
                 }
             }
         }
-        Log.d(TAG, "Waveform extraction took: " + (System.currentTimeMillis() - startTime) + " ms");
+        Log.d(TAG,
+              "Waveform extraction took: " + (System.currentTimeMillis() - debugStartTime) + " ms");
         return normalizedAmplitudes;
     }
 

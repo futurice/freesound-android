@@ -57,4 +57,32 @@ public abstract class Sound implements Parcelable {
         return new AutoValue_Sound.GsonTypeAdapter(get(gson));
     }
 
+    @AutoValue.Builder
+    public abstract static class Builder {
+
+        public abstract Builder id(@NonNull final Long id);
+
+        public abstract Builder url(@NonNull final String url);
+
+        public abstract Builder name(@NonNull final String name);
+
+        public abstract Builder tags(@NonNull final List<String> tags);
+
+        public abstract Builder description(@NonNull final String description);
+
+        public abstract Builder geotag(@NonNull final GeoLocation geoLocation);
+
+        public abstract Builder username(@NonNull final String username);
+
+        public abstract Builder images(@NonNull final Map<SoundImageFormat, String> images);
+
+        @NonNull
+        public abstract Sound build();
+    }
+
+    @NonNull
+    public static Sound.Builder builder() {
+        return new AutoValue_Sound.Builder();
+    }
+
 }
