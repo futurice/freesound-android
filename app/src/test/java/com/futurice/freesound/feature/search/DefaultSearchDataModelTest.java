@@ -50,6 +50,29 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
+    public void querySearch_emitsSingleUnit_whenQuerySearchSuccessful() {
+        final String query = "trains";
+        new Arrangement()
+                .withSearchResultsFor("trains", TestData.searchResult(5));
+
+        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.querySearch(query));
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValue(Unit.DEFAULT)
+                      .hasCompleted();
+    }
+
+    @Test
+    public void querySearch_emitsError_whenQuerySearchErrors() {
+        final Exception expected = new Exception();
+        new Arrangement().withSearchResultError(expected);
+
+        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.querySearch("query"));
+
+        assertThat(ts).hasError(expected);
+    }
+
+    @Test
     public void getSearchResults_returnsResults_whenQuerySearch() {
         final String query = "trains";
         final SoundSearchResult result = TestData.searchResult(5);
@@ -61,18 +84,6 @@ public class DefaultSearchDataModelTest {
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(result.results());
-    }
-
-    @Test
-    public void querySearch_emitsSingleUnit() {
-        final String query = "trains";
-        new Arrangement()
-                .withSearchResultsFor("trains", TestData.searchResult(5));
-
-        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.querySearch(query));
-
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Unit.DEFAULT);
     }
 
     @Test
@@ -123,6 +134,15 @@ public class DefaultSearchDataModelTest {
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValueWhich().is(empty());
+    }
+
+    @Test
+    public void clear_emitsSingleUnit() {
+        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.clear());
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValue(Unit.DEFAULT)
+                      .hasCompleted();
     }
 
     private class Arrangement {
