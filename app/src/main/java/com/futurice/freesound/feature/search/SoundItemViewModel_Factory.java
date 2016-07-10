@@ -9,6 +9,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
 
 final class SoundItemViewModel_Factory {
 
+    @NonNull
     private final Navigator navigator;
 
     SoundItemViewModel_Factory(@NonNull final Navigator navigator) {
@@ -17,6 +18,6 @@ final class SoundItemViewModel_Factory {
 
     @NonNull
     SoundItemViewModel create(@NonNull final Sound sound) {
-        return new SoundItemViewModel(sound, navigator);
+        return new SoundItemViewModel(get(sound), navigator);
     }
 }

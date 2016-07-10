@@ -12,7 +12,7 @@ import rx.Observable;
 public interface SearchDataModel {
 
     @NonNull
-    Observable<Unit> querySearch(@NonNull final String query);
+    Observable<Unit> querySearch(@NonNull String query);
 
     @NonNull
     Observable<List<Sound>> getSearchResults();

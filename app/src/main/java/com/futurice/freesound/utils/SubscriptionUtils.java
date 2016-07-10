@@ -6,7 +6,6 @@ import android.widget.TextView;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 public final class SubscriptionUtils {
 
@@ -15,12 +14,7 @@ public final class SubscriptionUtils {
                                                      @NonNull final TextView textView) {
         return observable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        textView.setText(s);
-                    }
-                });
+                .subscribe(textView::setText);
     }
 
     private SubscriptionUtils() {

@@ -1,5 +1,6 @@
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.common.DefaultNavigator;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.Activity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
@@ -25,7 +26,7 @@ class SearchActivityModule {
     @Provides
     @PerActivity
     Navigator provideNavigator(@Activity Context context) {
-        return new Navigator(context);
+        return new DefaultNavigator(context);
     }
 
     @Provides

@@ -17,8 +17,13 @@ import static com.futurice.freesound.utils.Preconditions.get;
 
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
+    @NonNull
     private final List<Sound> items;
+
+    @NonNull
     private final SoundItemViewModel_Factory viewModelFactory;
+
+    @NonNull
     private final Picasso picasso;
 
     SoundItemAdapter(@NonNull final Picasso picasso,
@@ -54,13 +59,13 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     }
 
     void addItems(@NonNull final List<Sound> items) {
-        this.items.addAll(items);
+        this.items.addAll(get(items));
         notifyDataSetChanged();
     }
 
     void setItems(@NonNull final List<Sound> items) {
         this.items.clear();
-        addItems(items);
+        addItems(get(items));
     }
 
     @Override
