@@ -21,6 +21,7 @@ public class FreeSoundApiInterceptorTest {
     @Test
     public void intercept_addsTokenQueryParameter() {
         RequestFacade requestFacade = mock(RequestFacade.class);
+
         freeSoundApiInterceptor.intercept(requestFacade);
 
         verify(requestFacade).addQueryParam(eq(ApiConstants.TOKEN_QUERY_PARAM), eq(DUMMY_TOKEN));
