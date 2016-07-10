@@ -41,7 +41,7 @@
         <com.futurice.freesound.feature.common.view.WaveformView
                 android:id="@+id/waveformView_soundItem"
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
+                android:layout_height="128dp"
                 app:waveformColor="@color/brand"
                 app:columnWidth="4dp"
                 app:columnGap="1dp"

@@ -27,7 +27,6 @@ public class WaveformView extends View {
     private static final int DEFAULT_WAVEFORM_COLOR = Color.BLACK;
 
     private final Rect rect = new Rect();
-    private final Paint backgroundPaint;
     private final Paint waveformPaint;
 
     private final int columnWidthPx; // waveform column
@@ -59,11 +58,6 @@ public class WaveformView extends View {
         } finally {
             a.recycle();
         }
-
-        backgroundPaint = createBackgroundPaint(DEFAULT_BACKGROUND_COLOR);
-
-        logV(TAG, "View isHardwareAccelerated: " + isHardwareAccelerated());
-
     }
 
     public void setWaveform(float[] waveform) {
@@ -97,7 +91,8 @@ public class WaveformView extends View {
         logV(TAG, "onDraw() - usableWidth: " + drawableWidth);
 
         // The number of whole columns that fit in the drawable width with the desired column spacing
-        final int columnCount = (int) (drawableWidth / (columnWidthPx + columnGapPx));
+        final int columnCount = Math.min(waveform.length,
+                                         (int) (drawableWidth / (columnWidthPx + columnGapPx)));
         logV(TAG, "onDraw() - columns: " + columnCount);
 
         // The remainder, we want to shift the columns to the centre of the available width.
@@ -119,15 +114,15 @@ public class WaveformView extends View {
         final long iterationStart = System.currentTimeMillis();
 
         for (int currentColumn = 0; currentColumn < columnCount; currentColumn++) {
-        //    logV(TAG, "onDraw() - drawing column: " + currentColumn);
-         //   logV(TAG, "onDraw() - waveform value: " + waveform[currentColumn * datapoints]);
+            //    logV(TAG, "onDraw() - drawing column: " + currentColumn);
+            //   logV(TAG, "onDraw() - waveform value: " + waveform[currentColumn * datapoints]);
             final int columnLength = (int) (waveform[currentColumn * datapoints]
                                             * heightScalingFactor);
             final int top = centreLine - (columnLength / 2);
             final int bottom = top + columnLength;
 
-        //    logV(TAG, "onDraw() - left: " + left + " right: " + right + " top: " + top + " bottom: "
-        //              + bottom);
+            //    logV(TAG, "onDraw() - left: " + left + " right: " + right + " top: " + top + " bottom: "
+            //              + bottom);
 
             rect.set(left, top, right, bottom);
             canvas.drawRect(rect, waveformPaint);
@@ -136,9 +131,8 @@ public class WaveformView extends View {
             left = right + columnGapPx;
             right = left + columnWidthPx;
         }
-        Log.d(TAG, "onDraw() iteration took: " + (System.currentTimeMillis() - iterationStart) + "ms");
-
-
+        Log.d(TAG,
+              "onDraw() iteration took: " + (System.currentTimeMillis() - iterationStart) + "ms");
 
         Log.d(TAG, "onDraw() took: " + (System.currentTimeMillis() - start) + "ms");
     }
