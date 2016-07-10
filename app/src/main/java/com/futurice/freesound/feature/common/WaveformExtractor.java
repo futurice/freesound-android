@@ -14,7 +14,6 @@ public abstract class WaveformExtractor {
         final int width = bitmap.getWidth();
         final float centreLine = (float) bitmap.getHeight() / 2f;
         final float[] normalizedAmplitudes = new float[width];
-        //  Arrays.fill(normalizedAmplitudes, 0f); // assume no amplitude
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < centreLine; y++) {
@@ -22,7 +21,6 @@ public abstract class WaveformExtractor {
                     normalizedAmplitudes[x] = (centreLine - y) / centreLine;
                     break; // next sample in x.
                 }
-                normalizedAmplitudes[x] = 0;
             }
         }
         Log.d(TAG,
