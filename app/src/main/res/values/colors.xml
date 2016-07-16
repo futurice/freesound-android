@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Material Design Colors -->
+    <color name="colorPrimary">@color/brand</color>
+    <color name="colorPrimaryDark">@color/brandDark</color>
+    <color name="colorAccent">@color/white</color>
+
     <!-- Brand Colors -->
     <color name="brand">#CB3D44</color>
     <color name="brandDark">#BA2C33</color>
@@ -10,15 +15,12 @@
     <color name="gray_light">#DFDFDF</color>
     <color name="gray_dark">#5F5F5F</color>
 
-    <color name="colorPrimary">@color/brand</color>
-    <color name="colorPrimaryDark">@color/brandDark</color>
-    <color name="colorAccent">@android:color/white</color>
-
     <!-- Basic colors -->
     <color name="green">#27D34D</color>
     <color name="blue">#2A91BD</color>
     <color name="orange">#FF9D2F</color>
     <color name="red">#FF432F</color>
+    <color name="white">@android:color/white</color>
 
     <!-- Contrasts -->
     <color name="black_54">#8A000000</color>
