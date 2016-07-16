@@ -49,7 +49,7 @@ public class DefaultFreeSoundSearchServiceTest {
         new Arrangement().withApiResultResult(RESULT);
 
         TestSubscriber<SoundSearchResult> ts =
-                subscribe(defaultFreeSoundSearchService.search("query"));
+                subscribe(defaultFreeSoundSearchService.search(QUERY));
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(RESULT);
