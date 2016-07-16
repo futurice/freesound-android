@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 
 public class DefaultSearchDataModelTest {
 
+    private static final String QUERY = "trains";
+
     @Mock
     private FreeSoundSearchService freeSoundSearchService;
 
@@ -40,22 +42,20 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void querySearch_queriesSearchDataModelWithTerm() {
-        final String query = "trains";
         new Arrangement()
-                .withSearchResultsFor(query, TestData.searchResult(5));
+                .withSearchResultsFor(QUERY, TestData.searchResult(5));
 
-        subscribe(defaultSearchDataModel.querySearch(query));
+        subscribe(defaultSearchDataModel.querySearch(QUERY));
 
-        verify(freeSoundSearchService).search(eq(query));
+        verify(freeSoundSearchService).search(eq(QUERY));
     }
 
     @Test
     public void querySearch_emitsSingleUnit_whenQuerySearchSuccessful() {
-        final String query = "trains";
         new Arrangement()
-                .withSearchResultsFor("trains", TestData.searchResult(5));
+                .withSearchResultsFor(QUERY, TestData.searchResult(5));
 
-        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.querySearch(query));
+        TestSubscriber<Unit> ts = subscribe(defaultSearchDataModel.querySearch(QUERY));
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(Unit.DEFAULT)
@@ -74,13 +74,12 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void getSearchResults_returnsResults_whenQuerySearch() {
-        final String query = "trains";
         final SoundSearchResult result = TestData.searchResult(5);
         new Arrangement()
-                .withSearchResultsFor(query, result);
+                .withSearchResultsFor(QUERY, result);
         TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
 
-        subscribe(defaultSearchDataModel.querySearch(query));
+        subscribe(defaultSearchDataModel.querySearch(QUERY));
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(result.results());
@@ -114,11 +113,10 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void getSearchResults_cachesLastResult() {
-        final String query = "trains";
         final SoundSearchResult result = TestData.searchResult(5);
         new Arrangement()
-                .withSearchResultsFor(query, result)
-                .act().querySearch(query);
+                .withSearchResultsFor(QUERY, result)
+                .act().querySearch(QUERY);
 
         TestSubscriber<List<Sound>> ts = subscribe(defaultSearchDataModel.getSearchResults());
 
