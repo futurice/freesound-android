@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -41,6 +42,9 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
     @Nullable
     private RecyclerView searchResultsRecyclerView;
 
+    @Nullable
+    private TextView noSearchResultsTextView;
+
     @NonNull
     private final Binder binder = new Binder() {
 
@@ -49,7 +53,7 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
             subscription.add(viewModel().getSounds()
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(SearchFragment.this::setItems,
+                                        .subscribe(SearchFragment.this::handleResults,
                                                    e -> Log.e(TAG, "Error setting Sound items",
                                                               e)));
         }
@@ -60,11 +64,6 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
         }
 
     };
-
-    private void setItems(@NonNull final List<Sound> sounds) {
-        Log.d(TAG, "#### Setting items: " + sounds);
-        get(soundItemAdapter).setItems(get(sounds));
-    }
 
     @NonNull
     public static SearchFragment create() {
@@ -87,21 +86,14 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
         super.onViewCreated(view, savedInstanceState);
         searchResultsRecyclerView = (RecyclerView) view
                 .findViewById(R.id.recyclerView_searchResults);
-
-        // TODO
         get(searchResultsRecyclerView).setLayoutManager(new LinearLayoutManager(getActivity()));
+        noSearchResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
     }
 
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         get(searchResultsRecyclerView).setAdapter(get(soundItemAdapter));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel().search("train");
     }
 
     @Override
@@ -130,6 +122,17 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
     @Override
     protected Binder binder() {
         return binder;
+    }
+
+    private void handleResults(@NonNull final List<Sound> sounds) {
+        if (sounds.isEmpty()) {
+            get(noSearchResultsTextView).setVisibility(View.VISIBLE);
+            get(searchResultsRecyclerView).setVisibility(View.GONE);
+        } else {
+            get(noSearchResultsTextView).setVisibility(View.GONE);
+            get(searchResultsRecyclerView).setVisibility(View.VISIBLE);
+            get(soundItemAdapter).setItems(get(sounds));
+        }
     }
 
 }

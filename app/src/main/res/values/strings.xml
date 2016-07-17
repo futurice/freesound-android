@@ -4,5 +4,6 @@
     <string name="app_name">Freesound</string>
     <string name="action_about">About</string>
     <string name="sound_item_image">Sound item image</string>
+    <string name="menu_search_label">Search</string>
 
 </resources>

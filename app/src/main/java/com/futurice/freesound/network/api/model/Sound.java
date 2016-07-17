@@ -13,6 +13,9 @@ import java.util.Map;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
+/**
+ * Refer to: http://www.freesound.org/docs/api/resources_apiv2.html#sound-resources
+ */
 @AutoValue
 public abstract class Sound implements Parcelable {
 
@@ -52,6 +55,10 @@ public abstract class Sound implements Parcelable {
     @Nullable
     public abstract Map<SoundImageFormat, String> images();
 
+    // Duration in seconds
+    @Nullable
+    public abstract Float duration();
+
     @NonNull
     public static TypeAdapter<Sound> typeAdapter(@NonNull final Gson gson) {
         return new AutoValue_Sound.GsonTypeAdapter(get(gson));
@@ -75,6 +82,8 @@ public abstract class Sound implements Parcelable {
         public abstract Builder username(@NonNull final String username);
 
         public abstract Builder images(@NonNull final Map<SoundImageFormat, String> images);
+
+        public abstract Builder duration(@NonNull final Float duration);
 
         @NonNull
         public abstract Sound build();

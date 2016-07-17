@@ -54,11 +54,10 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
 
-
     testCompile 'com.github.peter-tackage:assert-rx:0.9.3-beta'
 }
 
-def STR = "String"
+def STRING = "String"
 
 android {
     compileSdkVersion 23
@@ -70,8 +69,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField(STR, "FREESOUND_API_URL", project.ext.freesound_api_url)
-        buildConfigField(STR, "FREESOUND_API_KEY", project.ext.freesound_api_key)
+        buildConfigField(STRING, "FREESOUND_API_URL", project.ext.freesound_api_url)
+        buildConfigField(STRING, "FREESOUND_API_KEY", project.ext.freesound_api_key)
     }
     signingConfigs {
         release {
