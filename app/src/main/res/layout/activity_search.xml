@@ -5,7 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white"
         tools:context=".feature.search.SearchActivity"
         tools:ignore="MergeRootFrame">
 
@@ -17,12 +16,14 @@
         <android.support.v7.widget.Toolbar android:layout_width="match_parent"
                                            android:layout_height="?attr/actionBarSize"
                                            android:id="@+id/toolbar_search"
-                                           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                                           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                                           app:layout_scrollFlags="scroll|enterAlways"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="match_parent"
+                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                  android:id="@+id/container"/>
 
 </android.support.design.widget.CoordinatorLayout>
