@@ -5,19 +5,21 @@ import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import javax.inject.Inject;
 
 import polanski.option.Option;
+
+import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 
 public class SearchActivity extends BaseActivity<SearchActivityComponent> {
 
@@ -26,6 +28,12 @@ public class SearchActivity extends BaseActivity<SearchActivityComponent> {
 
     @Nullable
     private SearchView searchView;
+
+    public static void open(@NonNull final Context context) {
+        checkNotNull(context, "Launching context cannot be null");
+        Intent intent = new Intent(context, SearchActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,39 +49,7 @@ public class SearchActivity extends BaseActivity<SearchActivityComponent> {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        //   searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //  searchView.setIconifiedByDefault(true);
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (v == searchView && !hasFocus) {
-                    searchView.setIconified(true);
-                }
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                searchViewModel.search(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                return false;
-            }
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                searchViewModel.clear();
-                return false;
-            }
-        });
+        getMenuInflater().inflate(R.menu.home, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

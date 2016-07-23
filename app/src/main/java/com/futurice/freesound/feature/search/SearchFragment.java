@@ -40,10 +40,10 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
     SoundItemAdapter soundItemAdapter;
 
     @Nullable
-    private RecyclerView searchResultsRecyclerView;
+    private RecyclerView resultsRecyclerView;
 
     @Nullable
-    private TextView noSearchResultsTextView;
+    private TextView noResultsTextView;
 
     @NonNull
     private final Binder binder = new Binder() {
@@ -82,18 +82,24 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        viewModel().search("trains");
+    }
+
+    @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        searchResultsRecyclerView = (RecyclerView) view
+        resultsRecyclerView = (RecyclerView) view
                 .findViewById(R.id.recyclerView_searchResults);
-        get(searchResultsRecyclerView).setLayoutManager(new LinearLayoutManager(getActivity()));
-        noSearchResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
+        get(resultsRecyclerView).setLayoutManager(new LinearLayoutManager(getActivity()));
+        noResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
     }
 
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        get(searchResultsRecyclerView).setAdapter(get(soundItemAdapter));
+        get(resultsRecyclerView).setAdapter(get(soundItemAdapter));
     }
 
     @Override
@@ -126,11 +132,11 @@ public final class SearchFragment extends BaseBindingFragment<SearchFragmentComp
 
     private void handleResults(@NonNull final List<Sound> sounds) {
         if (sounds.isEmpty()) {
-            get(noSearchResultsTextView).setVisibility(View.VISIBLE);
-            get(searchResultsRecyclerView).setVisibility(View.GONE);
+            get(noResultsTextView).setVisibility(View.VISIBLE);
+            get(resultsRecyclerView).setVisibility(View.GONE);
         } else {
-            get(noSearchResultsTextView).setVisibility(View.GONE);
-            get(searchResultsRecyclerView).setVisibility(View.VISIBLE);
+            get(noResultsTextView).setVisibility(View.GONE);
+            get(resultsRecyclerView).setVisibility(View.VISIBLE);
             get(soundItemAdapter).setItems(get(sounds));
         }
     }

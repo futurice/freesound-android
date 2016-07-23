@@ -4,7 +4,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".feature.search.SearchActivity"
         tools:ignore="MergeRootFrame">
 
@@ -17,7 +16,14 @@
                                            android:layout_height="?attr/actionBarSize"
                                            android:id="@+id/toolbar_search"
                                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                                           app:layout_scrollFlags="scroll|enterAlways"/>
+                                           app:layout_scrollFlags="scroll|enterAlways">
+            <android.support.v7.widget.SearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionSearch|flagNoExtractUi"/>
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 

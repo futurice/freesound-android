@@ -62,6 +62,7 @@ final class SearchViewModel extends BaseViewModel {
 
         searchTermRelay.subscribeOn(AndroidSchedulers.mainThread())
                        .observeOn(Schedulers.computation())
+                       //      .debounce(2, TimeUnit.SECONDS)
                        .map(String::trim)
                        .switchMap(searchDataModel::querySearch)
                        .subscribe(Functions.nothing1(),

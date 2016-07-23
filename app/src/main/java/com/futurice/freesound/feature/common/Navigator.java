@@ -6,5 +6,7 @@ import android.support.annotation.NonNull;
 
 public interface Navigator {
 
+    void openSearch();
+
     void openSoundDetails(@NonNull Sound sound);
 }

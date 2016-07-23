@@ -46,7 +46,7 @@
                 app:columnWidth="4dp"
                 app:columnGap="1dp"
                 android:background="@color/gray_very_light"
-                android:contentDescription="@string/sound_item_image"/>
+                android:contentDescription="@string/accessibility_sound_item_image"/>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

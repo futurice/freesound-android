@@ -9,4 +9,6 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
+    <style name="AppToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
 </resources>

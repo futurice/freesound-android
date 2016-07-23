@@ -16,6 +16,6 @@
               android:layout_gravity="center"
               android:textSize="@dimen/text_title"
               android:visibility="gone"
-              android:text="No results found"/>
+              android:text="@string/search_no_results_found"/>
 
 </FrameLayout>
