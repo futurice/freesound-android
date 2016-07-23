@@ -5,17 +5,13 @@ import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import rx.subscriptions.CompositeSubscription;
 
-/**
- * The base Fragment to be used when the Fragment View is to be bound to a ViewModel.
- */
-public abstract class BaseBindingFragment<T> extends BaseFragment<T> {
-
-    // TODO This binder is a good candidate for a trait in Kotlin
+public abstract class BindingBaseActivity<T> extends BaseActivity<T> {
 
     @NonNull
     private final BaseLifecycleViewBinder lifecycleBinder = new BaseLifecycleViewBinder() {
@@ -33,39 +29,38 @@ public abstract class BaseBindingFragment<T> extends BaseFragment<T> {
         @NonNull
         @Override
         public ViewModel viewModel() {
-            return BaseBindingFragment.this.viewModel();
+            return BindingBaseActivity.this.viewModel();
         }
 
     };
 
+    @CallSuper
     @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         lifecycleBinder.onCreate();
     }
 
+    @CallSuper
     @Override
     public void onResume() {
         super.onResume();
         lifecycleBinder.onResume();
     }
 
+    @CallSuper
     @Override
     public void onPause() {
-        super.onPause();
         lifecycleBinder.onPause();
+        super.onPause();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        lifecycleBinder.onDestroyView();
-    }
-
+    @CallSuper
     @Override
     public void onDestroy() {
-        super.onDestroyView();
+        lifecycleBinder.onDestroyView();
         lifecycleBinder.onDestroy();
+        super.onDestroy();
     }
 
     @NonNull

@@ -1,8 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       tools:context=".feature.home.HomeActivity">
 
     <item android:id="@+id/action_about"
           android:title="@string/action_about"/>
+
+    <item android:id="@+id/action_search"
+          android:title="@string/menu_item_title_search"
+          app:showAsAction="always"
+          android:icon="@drawable/ic_search_white_24px"/>
 
 </menu>

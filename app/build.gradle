@@ -69,6 +69,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        vectorDrawables.useSupportLibrary = true
+
         buildConfigField(STRING, "FREESOUND_API_URL", project.ext.freesound_api_url)
         buildConfigField(STRING, "FREESOUND_API_KEY", project.ext.freesound_api_key)
     }

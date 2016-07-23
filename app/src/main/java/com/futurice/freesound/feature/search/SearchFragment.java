@@ -1,7 +1,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.core.BaseBindingFragment;
+import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.Binder;
@@ -27,7 +27,7 @@ import rx.subscriptions.CompositeSubscription;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-public final class SearchFragment extends BaseBindingFragment<SearchFragmentComponent> {
+public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {
 
     private static final String TAG = SearchFragment.class.getSimpleName();
 

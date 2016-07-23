@@ -2,8 +2,10 @@ package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.app.FreesoundApplication;
-import com.futurice.freesound.core.BaseActivity;
+import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
+import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,19 +16,50 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-public class HomeActivity extends BaseActivity<HomeActivityComponent> {
+import rx.subscriptions.CompositeSubscription;
+
+import static com.futurice.freesound.utils.Preconditions.get;
+
+public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
 
     @Inject
     @Nullable
     HomeViewModel homeViewModel;
 
+    @NonNull
+    private final Binder binder = new Binder() {
+
+        @Override
+        public void bind(@NonNull final CompositeSubscription subscription) {
+            // Nothing
+        }
+
+        @Override
+        public void unbind() {
+            // Nothing to do here
+        }
+
+    };
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
+    }
+
+    @NonNull
+    @Override
+    protected ViewModel viewModel() {
+        return get(homeViewModel);
+    }
+
+    @NonNull
+    @Override
+    protected Binder binder() {
+        return binder;
     }
 
     @Override
@@ -38,7 +71,15 @@ public class HomeActivity extends BaseActivity<HomeActivityComponent> {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        return id == R.id.action_about || super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_about:
+                return true;
+            case R.id.action_search:
+                get(homeViewModel).openSearch();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @NonNull
