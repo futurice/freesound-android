@@ -18,7 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".feature.search.SearchActivity"/>
+        <activity android:name=".feature.search.SearchActivity">
+            <!-- Have to use the full classname here otherwise get error in debug
+            "E/NavUtils: getParentActivityIntent: bad parentActivityName 'com.futurice.freesound.debug.feature.home.HomeActivity'" -->
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value="com.futurice.freesound.feature.home.HomeActivity"/>
+        </activity>
     </application>
 
 </manifest>

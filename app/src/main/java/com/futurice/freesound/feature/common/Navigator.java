@@ -9,4 +9,6 @@ public interface Navigator {
     void openSearch();
 
     void openSoundDetails(@NonNull Sound sound);
+
+    void pop();
 }

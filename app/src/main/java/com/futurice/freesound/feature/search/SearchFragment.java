@@ -82,12 +82,6 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        viewModel().search("trains");
-    }
-
-    @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         resultsRecyclerView = (RecyclerView) view
