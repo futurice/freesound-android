@@ -10,5 +10,4 @@ public interface Navigator {
 
     void openSoundDetails(@NonNull Sound sound);
 
-    void pop();
 }

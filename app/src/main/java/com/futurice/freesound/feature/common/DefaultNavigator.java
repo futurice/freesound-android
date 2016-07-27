@@ -27,8 +27,4 @@ public final class DefaultNavigator implements Navigator {
         // TODO Via the DetailsActivity.open
     }
 
-    @Override
-    public void pop() {
-        this.activity.finish();
-    }
 }
