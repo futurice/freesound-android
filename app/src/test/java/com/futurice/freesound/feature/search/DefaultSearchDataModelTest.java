@@ -77,10 +77,8 @@ public class DefaultSearchDataModelTest {
     @Test
     public void querySearch_returnsResults_whenQuerySearch_withEmptyTerm() {
         final SoundSearchResult result = dummyResults();
-
         new Arrangement()
                 .withSearchResultsFor("", result);
-
         TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
                 defaultSearchDataModel.getSearchResults());
 
