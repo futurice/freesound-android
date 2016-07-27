@@ -8,9 +8,9 @@ import com.jakewharton.rxrelay.BehaviorRelay;
 
 import android.support.annotation.NonNull;
 
-import java.util.Collections;
 import java.util.List;
 
+import polanski.option.Option;
 import rx.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -21,7 +21,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
-    private final BehaviorRelay<List<Sound>> lastResults = BehaviorRelay.create();
+    private final BehaviorRelay<Option<List<Sound>>> lastResults = BehaviorRelay.create();
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
@@ -32,19 +32,20 @@ final class DefaultSearchDataModel implements SearchDataModel {
     public Observable<Unit> querySearch(@NonNull final String query) {
         return freeSoundSearchService.search(get(query))
                                      .map(SoundSearchResult::results)
+                                     .map(Option::ofObj)
                                      .doOnNext(lastResults)
                                      .map(Unit::asUnit);
     }
 
     @Override
     @NonNull
-    public Observable<List<Sound>> getSearchResults() {
+    public Observable<Option<List<Sound>>> getSearchResults() {
         return this.lastResults.asObservable();
     }
 
     @NonNull
     public Observable<Unit> clear() {
-        return Observable.just(Collections.<Sound>emptyList())
+        return Observable.just(Option.<List<Sound>>none())
                          .doOnNext(lastResults)
                          .map(__ -> Unit.DEFAULT);
     }

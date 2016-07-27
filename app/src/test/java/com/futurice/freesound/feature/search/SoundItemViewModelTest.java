@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import rx.observers.TestSubscriber;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.subscribe;
+import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
 import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -34,7 +34,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
-        TestSubscriber<String> ts = subscribe(soundItemViewModel.thumbnailImageUrl());
+        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.thumbnailImageUrl());
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(SOUND.images().get(SoundImageFormat.waveform_m));
@@ -42,7 +42,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void name_emitsSoundName() {
-        TestSubscriber<String> ts = subscribe(soundItemViewModel.name());
+        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.name());
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(SOUND.name());
@@ -50,7 +50,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void description_emitsSoundDescription() {
-        TestSubscriber<String> ts = subscribe(soundItemViewModel.description());
+        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.description());
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(SOUND.description());

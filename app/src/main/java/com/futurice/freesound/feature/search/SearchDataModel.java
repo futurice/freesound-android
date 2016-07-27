@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import polanski.option.Option;
 import rx.Observable;
 
 public interface SearchDataModel {
@@ -15,7 +16,7 @@ public interface SearchDataModel {
     Observable<Unit> querySearch(@NonNull String query);
 
     @NonNull
-    Observable<List<Sound>> getSearchResults();
+    Observable<Option<List<Sound>>> getSearchResults();
 
     @NonNull
     Observable<Unit> clear();

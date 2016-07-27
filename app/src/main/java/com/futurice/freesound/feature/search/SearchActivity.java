@@ -4,6 +4,7 @@ import com.futurice.freesound.R;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
+import com.futurice.freesound.utils.Preconditions;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.ViewModel;
 
@@ -45,13 +46,14 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     private final Binder binder = new Binder() {
         @Override
         public void bind(final CompositeSubscription subscriptions) {
-            subscriptions.add(searchViewModel.getQuery()
+            subscriptions.add(searchViewModel.getClearButtonVisibleStream()
                                              .subscribeOn(Schedulers.computation())
                                              .observeOn(AndroidSchedulers.mainThread())
-                                             .subscribe(query -> setQuery(query),
-                                                        err -> Log.e(TAG,
-                                                                     "Error setting query string",
-                                                                     err)));
+                                             .subscribe(
+                                                     isVisible -> setClearSearchVisible(isVisible),
+                                                     err -> Log.e(TAG,
+                                                                  "Error setting query string",
+                                                                  err)));
         }
 
         @Override
@@ -60,9 +62,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         }
     };
 
-    private void setQuery(final SearchQuery query) {
-        get(searchView).setQuery(query.query(), false);
-        get(closeButton).setVisibility(query.clearEnabled() ? View.VISIBLE : View.GONE);
+    private void setClearSearchVisible(@NonNull final Boolean clearVisible) {
+        Preconditions.checkNotNull(closeButton, "Close Button has not been bound");
+
+        get(closeButton).setVisibility(clearVisible ? View.VISIBLE : View.GONE);
     }
 
     public static void open(@NonNull final Context context) {
@@ -86,7 +89,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         searchView.setIconified(false);
         closeButton = (ImageView) searchView
                 .findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-//        closeButton.setVisibility(View.INVISIBLE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
@@ -99,8 +101,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                 return true;
             }
         });
-        searchView.setOnCloseListener(
-                () -> searchViewModel.onCloseSearch(searchView.getQuery()));
+        searchView.setOnCloseListener(() -> {
+            searchView.setQuery(SearchViewModel.NO_SEARCH, true);
+            return true;
+        });
 
     }
 

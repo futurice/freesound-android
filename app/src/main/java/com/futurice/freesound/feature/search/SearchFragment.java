@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import polanski.option.Option;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -124,7 +125,16 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         return binder;
     }
 
-    private void handleResults(@NonNull final List<Sound> sounds) {
+    private void handleResults(@NonNull final Option<List<Sound>> sounds) {
+        sounds.matchAction(this::showResults, this::showNothing);
+    }
+
+    private void showNothing() {
+        get(noResultsTextView).setVisibility(View.GONE);
+        get(resultsRecyclerView).setVisibility(View.GONE);
+    }
+
+    private void showResults(@NonNull final List<Sound> sounds) {
         if (sounds.isEmpty()) {
             get(noResultsTextView).setVisibility(View.VISIBLE);
             get(resultsRecyclerView).setVisibility(View.GONE);

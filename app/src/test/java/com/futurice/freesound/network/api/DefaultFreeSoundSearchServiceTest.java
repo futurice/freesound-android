@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.subscribe;
+import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
 import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -49,7 +49,7 @@ public class DefaultFreeSoundSearchServiceTest {
         new Arrangement().withApiResultResult(RESULT);
 
         TestSubscriber<SoundSearchResult> ts =
-                subscribe(defaultFreeSoundSearchService.search(QUERY));
+                testSubscribe(defaultFreeSoundSearchService.search(QUERY));
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(RESULT);
@@ -59,7 +59,7 @@ public class DefaultFreeSoundSearchServiceTest {
     public void search_invokesApiWithCorrectParameters() {
         new Arrangement().withApiResultResult(RESULT);
 
-        subscribe(defaultFreeSoundSearchService.search(QUERY));
+        testSubscribe(defaultFreeSoundSearchService.search(QUERY));
 
         verify(freeSoundApi).search(eq(QUERY), isNull(String.class), eq(SoundFields.BASE));
     }
@@ -69,7 +69,7 @@ public class DefaultFreeSoundSearchServiceTest {
         new Arrangement().withApiError(ERROR);
 
         TestSubscriber<SoundSearchResult> ts =
-                subscribe(defaultFreeSoundSearchService.search(QUERY));
+                testSubscribe(defaultFreeSoundSearchService.search(QUERY));
 
         assertThat(ts).hasNoValues()
                       .hasError(ERROR);

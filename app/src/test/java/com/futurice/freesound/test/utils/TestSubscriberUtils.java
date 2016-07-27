@@ -10,7 +10,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
 public final class TestSubscriberUtils {
 
     @NonNull
-    public static <T> TestSubscriber<T> subscribe(@NonNull final Observable<T> observable) {
+    public static <T> TestSubscriber<T> testSubscribe(@NonNull final Observable<T> observable) {
         TestSubscriber<T> ts = new TestSubscriber<>();
         get(observable).subscribe(ts);
         return ts;
