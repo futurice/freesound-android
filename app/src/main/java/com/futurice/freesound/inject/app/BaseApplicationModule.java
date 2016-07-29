@@ -1,5 +1,8 @@
 package com.futurice.freesound.inject.app;
 
+import com.futurice.freesound.feature.common.Analytics;
+import com.futurice.freesound.feature.common.DefaultAnalytics;
+
 import android.content.Context;
 
 import javax.inject.Singleton;
@@ -27,6 +30,12 @@ public class BaseApplicationModule {
     @Singleton
     public android.app.Application provideApplication() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    public Analytics provideAnalytics(DefaultAnalytics analytics) {
+        return analytics;
     }
 
 }

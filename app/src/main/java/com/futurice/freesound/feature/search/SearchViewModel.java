@@ -1,5 +1,6 @@
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.common.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.functional.StringFunctions;
 import com.futurice.freesound.functional.Unit;
@@ -35,12 +36,17 @@ final class SearchViewModel extends BaseViewModel {
     private final Navigator navigator;
 
     @NonNull
+    private final Analytics analytics;
+
+    @NonNull
     private final BehaviorRelay<String> searchTermRelay = BehaviorRelay.create(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
-                    @NonNull final Navigator navigator) {
+                    @NonNull final Navigator navigator,
+                    @NonNull final Analytics analytics) {
         this.searchDataModel = get(searchDataModel);
         this.navigator = get(navigator);
+        this.analytics = get(analytics);
     }
 
     @NonNull
@@ -51,6 +57,7 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     void search(@NonNull final String query) {
+        analytics.log("SearchPressedEvent");
         searchTermRelay.call(query);
     }
 
@@ -70,7 +77,6 @@ final class SearchViewModel extends BaseViewModel {
                        .switchMap(this::searchOrClear)
                        .subscribe(nothing1(),
                                   e -> Log.e(TAG, "Error when setting search term", e));
-
     }
 
     private Observable<Unit> searchOrClear(@NonNull final String s) {

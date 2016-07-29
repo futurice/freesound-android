@@ -1,5 +1,6 @@
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.common.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.inject.activity.PerActivity;
@@ -16,8 +17,9 @@ class SearchActivityModule {
     @Provides
     @PerActivity
     SearchViewModel provideSearchViewModel(SearchDataModel searchDataModel,
-                                           Navigator navigator) {
-        return new SearchViewModel(searchDataModel, navigator);
+                                           Navigator navigator,
+                                           Analytics analytics) {
+        return new SearchViewModel(searchDataModel, navigator, analytics);
     }
 
     @Provides
