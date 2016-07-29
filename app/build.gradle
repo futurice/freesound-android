@@ -118,3 +118,5 @@ task checkstyle(type: Checkstyle) {
     exclude '**/gen/**'
     classpath = files() // empty because unnecessary for checkstyle
 }
+
+apply plugin: 'com.google.gms.google-services'
