@@ -15,17 +15,17 @@ public final class DefaultAnalytics implements Analytics {
     private static final String SINGLE_TEST_EVENT = "SingleEvent";
 
     @NonNull
-    private final FirebaseAnalytics mFirebaseAnalytics;
+    private final FirebaseAnalytics firebaseAnalytics;
 
     @Inject
     public DefaultAnalytics(@Application @NonNull final Context context) {
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context);
     }
 
     @Override
     public void log(@NonNull final String event) {
         Bundle bundle = new Bundle();
         bundle.putString(SINGLE_TEST_EVENT, event);
-        mFirebaseAnalytics.logEvent(SINGLE_TEST_EVENT, bundle);
+        firebaseAnalytics.logEvent(SINGLE_TEST_EVENT, bundle);
     }
 }
