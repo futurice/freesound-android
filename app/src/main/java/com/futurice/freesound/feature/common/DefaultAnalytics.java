@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-public class DefaultAnalytics implements Analytics {
+public final class DefaultAnalytics implements Analytics {
 
     private static final String SINGLE_TEST_EVENT = "SingleEvent";
 
