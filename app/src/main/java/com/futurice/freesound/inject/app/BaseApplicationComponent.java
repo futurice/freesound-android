@@ -1,6 +1,6 @@
 package com.futurice.freesound.inject.app;
 
-import com.futurice.freesound.feature.common.Analytics;
+import com.futurice.freesound.feature.analytics.Analytics;
 
 import android.content.Context;
 
@@ -16,7 +16,5 @@ public interface BaseApplicationComponent {
 
     @Application
     Context getApplicationContext();
-
-    Analytics getAnalytics();
 
 }

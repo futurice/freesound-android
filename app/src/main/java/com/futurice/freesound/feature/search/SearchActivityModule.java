@@ -1,6 +1,6 @@
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.feature.common.Analytics;
+import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.inject.activity.PerActivity;
