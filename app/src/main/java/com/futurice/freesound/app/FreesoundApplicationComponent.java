@@ -1,5 +1,6 @@
 package com.futurice.freesound.app;
 
+import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.inject.app.Application;
 import com.futurice.freesound.inject.app.BaseApplicationComponent;
 import com.futurice.freesound.network.api.FreeSoundApi;
@@ -23,6 +24,8 @@ public interface FreesoundApplicationComponent extends BaseApplicationComponent 
     FreeSoundApi getApi();
 
     Picasso getPicasso();
+
+    Analytics getAnalytics();
 
     void inject(final FreesoundApplication application);
 }

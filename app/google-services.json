@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "922134086853",
+    "firebase_url": "https://freesound-3cb57.firebaseio.com",
+    "project_id": "freesound-3cb57",
+    "storage_bucket": "freesound-3cb57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922134086853:android:4de0d66623460057",
+        "android_client_info": {
+          "package_name": "com.futurice.freesound"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "922134086853-pddgj9u46rrrj6lm8lgdahf16hknqu10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOuH2Vs40j602-X_d9uIR9lgPLvnyBySg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922134086853:android:b630009f5ca23311",
+        "android_client_info": {
+          "package_name": "com.futurice.freesound.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "922134086853-pddgj9u46rrrj6lm8lgdahf16hknqu10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOuH2Vs40j602-X_d9uIR9lgPLvnyBySg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
