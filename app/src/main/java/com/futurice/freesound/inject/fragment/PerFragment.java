@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.inject.activity;
+package com.futurice.freesound.inject.fragment;
 
 import java.lang.annotation.Retention;
 
@@ -24,5 +24,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Scope
 @Retention(RUNTIME)
-public @interface ActivityScope {
+public @interface PerFragment {
 }
