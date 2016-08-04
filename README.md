@@ -5,6 +5,14 @@ Android client for the [Freesound Project](http://freesound.org/).
 
 API is defined as per the [Freesound Project API documentation](http://freesound.org/docs/api/).
 
+# IDE Configuration
+
+## Android Studio
+To ensure you that your source files match the project style, import the settings in the `ide` directory. These include:
+
+1. Code style formatting settings
+2. Copyright header
+
 ## Deliverables
 
 TODO Delivery process
