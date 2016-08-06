@@ -3,7 +3,6 @@ package com.futurice.freesound.inject.activity;
 import com.futurice.freesound.feature.common.DefaultNavigator;
 import com.futurice.freesound.feature.common.Navigator;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -21,7 +20,7 @@ public class BaseActivityModule {
 
     @Provides
     @ActivityScope
-    @ForActivity
+    @Activity
     Context provideActivityContext() {
         return activity;
     }
@@ -34,7 +33,7 @@ public class BaseActivityModule {
 
     @Provides
     @ActivityScope
-    Navigator provideNavigator(Activity activity) {
+    Navigator provideNavigator(android.app.Activity activity) {
         return new DefaultNavigator(activity);
     }
 
