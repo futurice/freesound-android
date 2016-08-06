@@ -1,8 +1,8 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.inject.activity.PerActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,7 +11,7 @@ import dagger.Provides;
 class HomeActivityModule {
 
     @Provides
-    @PerActivity
+    @ActivityScope
     HomeViewModel provideHomeViewModel(Navigator navigator) {
         return new HomeViewModel(navigator);
     }

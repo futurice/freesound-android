@@ -20,20 +20,20 @@ public class BaseActivityModule {
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
     @ForActivity
     Context provideActivityContext() {
         return activity;
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
     android.app.Activity provideActivity() {
         return activity;
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
     Navigator provideNavigator(Activity activity) {
         return new DefaultNavigator(activity);
     }

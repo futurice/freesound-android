@@ -2,8 +2,8 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.inject.activity.PerActivity;
 import com.futurice.freesound.network.api.DefaultFreeSoundSearchService;
 import com.futurice.freesound.network.api.FreeSoundApi;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
@@ -15,7 +15,7 @@ import dagger.Provides;
 class SearchActivityModule {
 
     @Provides
-    @PerActivity
+    @ActivityScope
     SearchViewModel provideSearchViewModel(SearchDataModel searchDataModel,
                                            Navigator navigator,
                                            Analytics analytics) {
@@ -23,13 +23,13 @@ class SearchActivityModule {
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
     SearchDataModel provideSearchDataModel(FreeSoundSearchService freeSoundSearchService) {
         return new DefaultSearchDataModel(freeSoundSearchService);
     }
 
     @Provides
-    @PerActivity
+    @ActivityScope
     FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
         return new DefaultFreeSoundSearchService(freeSoundApi);
     }
