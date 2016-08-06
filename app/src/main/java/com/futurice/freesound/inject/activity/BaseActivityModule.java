@@ -20,7 +20,7 @@ public class BaseActivityModule {
 
     @Provides
     @ActivityScope
-    @Activity
+    @ForActivity
     Context provideActivityContext() {
         return activity;
     }

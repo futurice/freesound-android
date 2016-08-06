@@ -18,7 +18,7 @@ public class BaseApplicationModule {
 
     @Provides
     @Singleton
-    @Application
+    @ForApplication
     public Context provideApplicationContext() {
         return application.getApplicationContext();
     }

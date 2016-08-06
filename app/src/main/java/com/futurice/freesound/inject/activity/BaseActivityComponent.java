@@ -12,6 +12,6 @@ public interface BaseActivityComponent {
 
     android.app.Activity getActivity();
 
-    @Activity
+    @ForActivity
     Context getActivityContext();
 }

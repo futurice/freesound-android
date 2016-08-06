@@ -1,8 +1,8 @@
 package com.futurice.freesound.app;
 
 import com.futurice.freesound.feature.analytics.Analytics;
-import com.futurice.freesound.inject.app.Application;
 import com.futurice.freesound.inject.app.BaseApplicationComponent;
+import com.futurice.freesound.inject.app.ForApplication;
 import com.futurice.freesound.network.api.FreeSoundApi;
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +18,7 @@ public interface FreesoundApplicationComponent extends BaseApplicationComponent 
 
     android.app.Application getApplication();
 
-    @Application
+    @ForApplication
     Context getApplicationContext();
 
     FreeSoundApi getApi();
