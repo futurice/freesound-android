@@ -18,6 +18,7 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.network.api.model.Sound;
+import com.futurice.freesound.ui.adapter.base.IAdapterInteractor;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;
@@ -26,15 +27,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import polanski.option.function.Func0;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     @NonNull
-    private final List<Sound> items;
+    private final IAdapterInteractor<Sound> adapterInteractor;
 
     @NonNull
     private final SoundItemViewModel_Factory viewModelFactory;
@@ -42,15 +44,10 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     @NonNull
     private final Picasso picasso;
 
-    SoundItemAdapter(@NonNull final Picasso picasso,
+    SoundItemAdapter(@NonNull final IAdapterInteractor<Sound> adapterInteractor,
+                     @NonNull final Picasso picasso,
                      @NonNull final SoundItemViewModel_Factory viewModelFactory) {
-        this(new ArrayList<>(), picasso, viewModelFactory);
-    }
-
-    private SoundItemAdapter(@NonNull final List<Sound> initialItems,
-                             @NonNull final Picasso picasso,
-                             @NonNull final SoundItemViewModel_Factory viewModelFactory) {
-        this.items = get(initialItems);
+        this.adapterInteractor = get(adapterInteractor);
         this.viewModelFactory = get(viewModelFactory);
         this.picasso = get(picasso);
     }
@@ -65,7 +62,8 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     @Override
     public void onBindViewHolder(SoundItemViewHolder holder, int position) {
-        holder.bind(viewModelFactory.create(items.get(position)));
+        adapterInteractor.getItem(position)
+                         .ifSome(item -> holder.bind(viewModelFactory.create(item)));
     }
 
     @Override
@@ -74,19 +72,32 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
         holder.unbind();
     }
 
+    /**
+     * Appends new items to currently existing ones.
+     *
+     * @param items collection to append
+     */
     void addItems(@NonNull final List<Sound> items) {
-        this.items.addAll(get(items));
-        notifyDataSetChanged();
+        applyChanges(() -> adapterInteractor.append(get(items)));
     }
 
+    /**
+     * Replaces items currently stored in the adapter with new items.
+     *
+     * @param items collection to update the previous values
+     */
     void setItems(@NonNull final List<Sound> items) {
-        this.items.clear();
-        addItems(get(items));
+        applyChanges(() -> adapterInteractor.update(get(items)));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return adapterInteractor.getCount();
     }
 
+    private void applyChanges(@NonNull final Func0<Boolean> applyFunction) {
+        if (applyFunction.call()) {
+            notifyDataSetChanged();
+        }
+    }
 }

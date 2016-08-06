@@ -19,6 +19,9 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.network.api.model.Sound;
+import com.futurice.freesound.ui.adapter.AdapterInteractor;
+import com.futurice.freesound.ui.adapter.base.IAdapterInteractor;
 import com.squareup.picasso.Picasso;
 
 import dagger.Module;
@@ -29,14 +32,21 @@ public class SearchFragmentModule {
 
     @Provides
     @FragmentScope
-    SoundItemAdapter provideSoundItemAdapter(Picasso picasso,
+    SoundItemAdapter provideSoundItemAdapter(IAdapterInteractor<Sound> adapterInteractor,
+                                             Picasso picasso,
                                              SoundItemViewModel_Factory viewModelFactory) {
-        return new SoundItemAdapter(picasso, viewModelFactory);
+        return new SoundItemAdapter(adapterInteractor, picasso, viewModelFactory);
     }
 
     @Provides
     @FragmentScope
     SoundItemViewModel_Factory provideSoundItemViewModelFactory(Navigator navigator) {
         return new SoundItemViewModel_Factory(navigator);
+    }
+
+    @Provides
+    @FragmentScope
+    IAdapterInteractor<Sound> provideAdapterInteractor() {
+        return new AdapterInteractor<>();
     }
 }
