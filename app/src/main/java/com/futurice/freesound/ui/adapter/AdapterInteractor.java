@@ -25,22 +25,20 @@ public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
 
     @Override
     public boolean reset() {
-        if (!models.isEmpty()) {
-            models.clear();
-            return true;
+        if (models.isEmpty()) {
+            return false;
         }
-        return false;
+        models.clear();
+        return true;
     }
 
     @Override
     public boolean update(@NonNull final Collection<T> items) {
         boolean changed = !CollectionUtils.areEqual(models, items);
-
         if (changed) {
             models.clear();
             models.addAll(items);
         }
-
         return changed;
     }
 
@@ -50,25 +48,20 @@ public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
             models.addAll(items);
             return true;
         }
-
         return false;
     }
 
     @Override
     public boolean insert(@NonNull final T item, @IntRange(from = 0) final int position) {
         assertValidPosition(position);
-
         models.add(position, item);
-
         return true;
     }
 
     @Override
     public boolean remove(@IntRange(from = 0) final int position) {
         assertValidPosition(position);
-
         models.remove(position);
-
         return true;
     }
 
@@ -91,7 +84,6 @@ public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
     @Override
     public Option<T> getItem(@IntRange(from = 0) final int position) {
         assertValidPosition(position);
-
         return ofObj(models.get(position));
     }
 
@@ -99,7 +91,6 @@ public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
     @Override
     public Option<Integer> getItemPosition(@NonNull final T item) {
         int position = models.indexOf(item);
-
         return position < 0 ? Option.NONE : ofObj(position);
     }
 

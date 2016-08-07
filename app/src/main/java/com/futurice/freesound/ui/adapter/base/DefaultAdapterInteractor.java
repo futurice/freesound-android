@@ -18,7 +18,7 @@ public interface DefaultAdapterInteractor<T> {
      * @param items Items to be used to change the collection
      * @return {@code true} if the adapter has been changed
      */
-    boolean update(@NonNull final Collection<T> items);
+    boolean update(@NonNull Collection<T> items);
 
     /**
      * Appends new items to currently existing ones.
@@ -26,7 +26,7 @@ public interface DefaultAdapterInteractor<T> {
      * @param items collection of items that should be added to the list
      * @return {@code true} if the adapter has been changed
      */
-    boolean append(@NonNull final Collection<T> items);
+    boolean append(@NonNull Collection<T> items);
 
     /**
      * Removes an item at the specified position.
@@ -34,7 +34,7 @@ public interface DefaultAdapterInteractor<T> {
      * @param position of the item to be removed
      * @return {@code true} if the adapter has been changed
      */
-    boolean remove(@IntRange(from = 0) final int position);
+    boolean remove(@IntRange(from = 0) int position);
 
     /**
      * Removes specific item.
@@ -42,7 +42,7 @@ public interface DefaultAdapterInteractor<T> {
      * @param item to be removed
      * @return {@code true} if the adapter has been changed
      */
-    boolean remove(@NonNull final T item);
+    boolean remove(@NonNull T item);
 
     /**
      * Removes a collection of items.
@@ -50,7 +50,7 @@ public interface DefaultAdapterInteractor<T> {
      * @param items to be removed
      * @return {@code true} if the adapter has been changed
      */
-    boolean removeAll(@NonNull final Collection<T> items);
+    boolean removeAll(@NonNull Collection<T> items);
 
     /**
      * Removes all the current items.
@@ -71,7 +71,7 @@ public interface DefaultAdapterInteractor<T> {
      * @return option of the model object at the position.
      */
     @NonNull
-    Option<T> getItem(@IntRange(from = 0) final int position);
+    Option<T> getItem(@IntRange(from = 0) int position);
 
     /**
      * Returns an option of the index where the item exists.
@@ -80,7 +80,7 @@ public interface DefaultAdapterInteractor<T> {
      * @return Option of index of item or {@link Option#NONE} if wasn't found
      */
     @NonNull
-    Option<Integer> getItemPosition(@NonNull final T item);
+    Option<Integer> getItemPosition(@NonNull T item);
 
     /**
      * Inserts an item at the specified position.
@@ -88,5 +88,5 @@ public interface DefaultAdapterInteractor<T> {
      * @param item     the item to insert
      * @param position the position the item needs to be
      */
-    boolean insert(final T item, final int position);
+    boolean insert(@NonNull T item, int position);
 }
