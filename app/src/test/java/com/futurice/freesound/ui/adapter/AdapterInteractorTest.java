@@ -20,36 +20,36 @@ import static polanski.option.Option.ofObj;
 
 public class AdapterInteractorTest {
 
-    private AdapterInteractor<String> mAdapter;
+    private AdapterInteractor<String> adapter;
 
     @Before
     public void setUp() {
-        mAdapter = new AdapterInteractor<>();
+        adapter = new AdapterInteractor<>();
     }
 
     @Test
     public void reset_emptiesTheAdapter_whenAdapterIsNotEmpty() {
-        mAdapter.append(rangeStringCollection(0, 5));
+        adapter.append(rangeStringCollection(0, 5));
 
-        boolean reset = mAdapter.reset();
+        boolean reset = adapter.reset();
 
         assertThat(reset).isTrue();
-        assertThat(mAdapter.getCount()).isZero();
+        assertThat(adapter.getCount()).isZero();
     }
 
     @Test
     public void reset_returnsFalse_whenAdapterIsEmpty() {
-        mAdapter.append(emptyStringCollection());
+        adapter.append(emptyStringCollection());
 
-        boolean reset = mAdapter.reset();
+        boolean reset = adapter.reset();
 
         assertThat(reset).isFalse();
-        assertThat(mAdapter.getCount()).isZero();
+        assertThat(adapter.getCount()).isZero();
     }
 
     @Test
     public void reset_returnsFalse_whenNoInteractionsWithAdapter() {
-        boolean reset = mAdapter.reset();
+        boolean reset = adapter.reset();
 
         assertThat(reset).isFalse();
     }
@@ -58,9 +58,9 @@ public class AdapterInteractorTest {
     public void update_returnsFalse_whenAdapterContainsSameItems_inSameOrder() {
         Collection<String> stringCollectionA = rangeStringCollection(0, 5);
         Collection<String> stringCollectionB = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean changed = mAdapter.update(stringCollectionB);
+        boolean changed = adapter.update(stringCollectionB);
 
         assertThat(changed).isFalse();
     }
@@ -69,181 +69,181 @@ public class AdapterInteractorTest {
     public void update_replacesItems_whenAdapterContainsSameItems_inDifferentOrder() {
         List<String> stringCollectionA = rangeStringCollection(0, 5);
         List<String> stringCollectionB = rangeStringCollection(5, 0);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean changed = mAdapter.update(stringCollectionB);
+        boolean changed = adapter.update(stringCollectionB);
 
         assertThat(changed).isTrue();
-        assertAdapterItems(stringCollectionB, mAdapter);
+        assertAdapterItems(stringCollectionB, adapter);
     }
 
     @Test
     public void update_replacesItems_whenAdapterContainsDifferentItems() {
         List<String> stringCollectionA = rangeStringCollection(0, 5);
         List<String> stringCollectionB = rangeStringCollection(6, 10);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean changed = mAdapter.update(stringCollectionB);
+        boolean changed = adapter.update(stringCollectionB);
 
         assertThat(changed).isTrue();
-        assertAdapterItems(stringCollectionB, mAdapter);
+        assertAdapterItems(stringCollectionB, adapter);
     }
 
     @Test
     public void update_emptiesAdapter_whenAdapterHasItems_andUpdatedWithEmptyList() {
-        mAdapter.append(rangeStringCollection(0, 5));
+        adapter.append(rangeStringCollection(0, 5));
 
-        boolean changed = mAdapter.update(emptyStringCollection());
+        boolean changed = adapter.update(emptyStringCollection());
 
         assertThat(changed).isTrue();
-        assertThat(mAdapter.getCount()).isZero();
+        assertThat(adapter.getCount()).isZero();
     }
 
     @Test
     public void update_putsItemsInAdapter_whenAdapterIsEmpty() {
         List<String> stringCollection = rangeStringCollection(0, 5);
 
-        boolean changed = mAdapter.update(stringCollection);
+        boolean changed = adapter.update(stringCollection);
 
         assertThat(changed).isTrue();
-        assertAdapterItems(stringCollection, mAdapter);
+        assertAdapterItems(stringCollection, adapter);
     }
 
     @Test
     public void append_appendsItemsInAdapter_whenAdapterIsEmpty() {
         List<String> stringCollection = rangeStringCollection(0, 5);
 
-        boolean appended = mAdapter.append(stringCollection);
+        boolean appended = adapter.append(stringCollection);
 
         assertThat(appended).isTrue();
-        assertAdapterItems(stringCollection, mAdapter);
+        assertAdapterItems(stringCollection, adapter);
     }
 
     @Test
     public void append_appendsItems_whenAdapterHasDifferentItems() {
         List<String> stringCollectionA = rangeStringCollection(0, 5);
         List<String> stringCollectionB = rangeStringCollection(6, 10);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean appended = mAdapter.append(stringCollectionB);
+        boolean appended = adapter.append(stringCollectionB);
 
         List<String> expectedItems = new ArrayList<String>() {{
             addAll(stringCollectionA);
             addAll(stringCollectionB);
         }};
         assertThat(appended).isTrue();
-        assertAdapterItems(expectedItems, mAdapter);
+        assertAdapterItems(expectedItems, adapter);
     }
 
     @Test
     public void append_appendsItems_whenAdapterHasSameItems() {
         List<String> stringCollectionA = rangeStringCollection(0, 5);
         List<String> stringCollectionB = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean appended = mAdapter.append(stringCollectionB);
+        boolean appended = adapter.append(stringCollectionB);
 
         List<String> expectedItems = new ArrayList<String>() {{
             addAll(stringCollectionA);
             addAll(stringCollectionB);
         }};
         assertThat(appended).isTrue();
-        assertAdapterItems(expectedItems, mAdapter);
+        assertAdapterItems(expectedItems, adapter);
     }
 
     @Test
     public void append_appendsItems_whenAdapterContainsItems() {
         List<String> stringCollectionA = rangeStringCollection(0, 10);
         List<String> stringCollectionB = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollectionA);
+        adapter.append(stringCollectionA);
 
-        boolean appended = mAdapter.append(stringCollectionB);
+        boolean appended = adapter.append(stringCollectionB);
 
         List<String> expectedItems = new ArrayList<String>() {{
             addAll(stringCollectionA);
             addAll(stringCollectionB);
         }};
         assertThat(appended).isTrue();
-        assertAdapterItems(expectedItems, mAdapter);
+        assertAdapterItems(expectedItems, adapter);
     }
 
     @Test
     public void append_doesNotChangeAdapterItems_whenEmptyCollectionIsAppended() {
         List<String> stringCollection = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean appended = mAdapter.append(emptyStringCollection());
+        boolean appended = adapter.append(emptyStringCollection());
 
         assertThat(appended).isFalse();
-        assertAdapterItems(stringCollection, mAdapter);
+        assertAdapterItems(stringCollection, adapter);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void insert_throws_whenPositionIsTooBig() {
-        mAdapter.insert("", mAdapter.getCount());
+        adapter.insert("", adapter.getCount());
     }
 
     @Test
     public void insert_insertsItemInPosition() {
         List<String> stringCollection = rangeStringCollection(0, 5);
         String item = "10";
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean inserted = mAdapter.insert(item, 2);
+        boolean inserted = adapter.insert(item, 2);
 
         assertThat(inserted).isTrue();
-        assertThat(mAdapter.getCount()).isEqualTo(stringCollection.size() + 1);
-        assertThat(mAdapter.getItem(2)).isEqualTo(ofObj(item));
+        assertThat(adapter.getCount()).isEqualTo(stringCollection.size() + 1);
+        assertThat(adapter.getItem(2)).isEqualTo(ofObj(item));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void remove_throws_whenPositionIsTooBig() {
-        mAdapter.remove(mAdapter.getCount());
+        adapter.remove(adapter.getCount());
     }
 
     @Test
     public void remove_removesItemInPosition() {
         List<String> stringCollection = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.remove(2);
+        boolean removed = adapter.remove(2);
 
         assertThat(removed).isTrue();
-        assertThat(mAdapter.getCount()).isEqualTo(stringCollection.size() - 1);
+        assertThat(adapter.getCount()).isEqualTo(stringCollection.size() - 1);
     }
 
     @Test
     public void remove_removesItem_whenExists() {
         List<String> stringCollection = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.remove("2");
+        boolean removed = adapter.remove("2");
 
         assertThat(removed).isTrue();
-        assertThat(mAdapter.getCount()).isEqualTo(stringCollection.size() - 1);
+        assertThat(adapter.getCount()).isEqualTo(stringCollection.size() - 1);
     }
 
     @Test
     public void remove_doesNotRemove_whenItemDoesNotExist() {
         List<String> stringCollection = rangeStringCollection(0, 5);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.remove("10");
+        boolean removed = adapter.remove("10");
 
         assertThat(removed).isFalse();
-        assertThat(mAdapter.getCount()).isEqualTo(stringCollection.size());
+        assertThat(adapter.getCount()).isEqualTo(stringCollection.size());
     }
 
     @Test
     public void removeAll_removesItems_whenTheyExist() {
         List<String> stringCollection = rangeStringCollection(0, 5);
         List<String> removeCollection = rangeStringCollection(0, 2);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.removeAll(removeCollection);
+        boolean removed = adapter.removeAll(removeCollection);
 
         assertThat(removed).isTrue();
-        assertThat(mAdapter.getCount())
+        assertThat(adapter.getCount())
                 .isEqualTo(stringCollection.size() - removeCollection.size());
     }
 
@@ -251,34 +251,34 @@ public class AdapterInteractorTest {
     public void removeAll_removesItems_whenOnlySomeOfThemExist() {
         List<String> stringCollection = rangeStringCollection(0, 5);
         List<String> removeCollection = rangeStringCollection(3, 8);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.removeAll(removeCollection);
+        boolean removed = adapter.removeAll(removeCollection);
 
         assertThat(removed).isTrue();
-        assertThat(mAdapter.getCount()).isEqualTo(3);
+        assertThat(adapter.getCount()).isEqualTo(3);
     }
 
     @Test
     public void removeAll_doesNotRemove_whenItemsDoNotExist() {
         List<String> stringCollection = rangeStringCollection(0, 5);
         List<String> removeCollection = rangeStringCollection(6, 10);
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        boolean removed = mAdapter.removeAll(removeCollection);
+        boolean removed = adapter.removeAll(removeCollection);
 
         assertThat(removed).isFalse();
-        assertThat(mAdapter.getCount()).isEqualTo(stringCollection.size());
+        assertThat(adapter.getCount()).isEqualTo(stringCollection.size());
     }
 
     @Test
     public void getCount_returnsZero_whenNoInteractionsWithAdapter() {
-        assertThat(mAdapter.getCount()).isZero();
+        assertThat(adapter.getCount()).isZero();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getItem_throws_whenPositionIsTooBig() {
-        mAdapter.getItem(mAdapter.getCount());
+        adapter.getItem(adapter.getCount());
     }
 
     @Test
@@ -286,36 +286,36 @@ public class AdapterInteractorTest {
         List<String> stringCollection = rangeStringCollection(0, 5);
         stringCollection.set(0, null);
 
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        assertThat(mAdapter.getItem(0)).isEqualTo(NONE);
+        assertThat(adapter.getItem(0)).isEqualTo(NONE);
     }
 
     @Test
     public void getItem_returnsOptionOfItem_whenThePositionIsValid() {
         List<String> stringCollection = rangeStringCollection(0, 5);
 
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        assertThat(mAdapter.getItem(2)).isEqualTo(ofObj(stringCollection.get(2)));
+        assertThat(adapter.getItem(2)).isEqualTo(ofObj(stringCollection.get(2)));
     }
 
     @Test
     public void getItemPosition_returnsOptionOfPosition_whenItemExists() {
         List<String> stringCollection = rangeStringCollection(0, 5);
 
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        assertThat(mAdapter.getItemPosition("2")).isEqualTo(ofObj(2));
+        assertThat(adapter.getItemPosition("2")).isEqualTo(ofObj(2));
     }
 
     @Test
     public void getItemPosition_returnsNone_whenItemDoesNotExists() {
         List<String> stringCollection = rangeStringCollection(0, 5);
 
-        mAdapter.append(stringCollection);
+        adapter.append(stringCollection);
 
-        assertThat(mAdapter.getItemPosition("10")).isEqualTo(NONE);
+        assertThat(adapter.getItemPosition("10")).isEqualTo(NONE);
     }
 
     private static List<String> rangeStringCollection(final int from, final int to) {
