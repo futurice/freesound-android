@@ -16,7 +16,7 @@ public class BaseFragmentModule {
     }
 
     @Provides
-    @PerFragment
+    @FragmentScope
     Fragment provideFragment() {
         return fragment;
     }

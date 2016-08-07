@@ -1,6 +1,6 @@
 package com.futurice.freesound.feature.analytics;
 
-import com.futurice.freesound.inject.app.Application;
+import com.futurice.freesound.inject.app.ForApplication;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ final class FirebaseAnalytics implements Analytics {
     private final com.google.firebase.analytics.FirebaseAnalytics firebaseAnalytics;
 
     @Inject
-    FirebaseAnalytics(@Application @NonNull final Context context) {
+    FirebaseAnalytics(@ForApplication @NonNull final Context context) {
         firebaseAnalytics =
                 com.google.firebase.analytics.FirebaseAnalytics.getInstance(get(context));
     }

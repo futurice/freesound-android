@@ -1,13 +1,12 @@
-package com.futurice.freesound.inject.fragment;
+package com.futurice.freesound.inject.app;
 
 import java.lang.annotation.Retention;
 
-import javax.inject.Scope;
+import javax.inject.Qualifier;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
-@Scope
+@Qualifier
 @Retention(RUNTIME)
-public @interface PerFragment {
+public @interface ForApplication {
 }

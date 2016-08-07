@@ -6,7 +6,7 @@ import android.content.Context;
 
 import dagger.Component;
 
-@PerActivity
+@ActivityScope
 @Component(dependencies = FreesoundApplicationComponent.class, modules = BaseActivityModule.class)
 public interface BaseActivityComponent {
 

@@ -4,11 +4,11 @@ import com.futurice.freesound.inject.activity.BaseActivityModule;
 
 import dagger.Component;
 
-@PerFragment
+@FragmentScope
 @Component(dependencies = BaseActivityModule.class, modules = BaseFragmentModule.class)
 public interface BaseFragmentComponent {
 
-    @PerFragment
+    @FragmentScope
     android.support.v4.app.Fragment getFragment();
 
 }

@@ -2,12 +2,12 @@ package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.app.FreesoundApplicationComponent;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
-import com.futurice.freesound.inject.activity.PerActivity;
 
 import dagger.Component;
 
-@PerActivity
+@ActivityScope
 @Component(dependencies = FreesoundApplicationComponent.class,
         modules = HomeActivityModule.class)
 public interface HomeActivityComponent extends BaseActivityComponent {
