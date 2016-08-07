@@ -27,10 +27,6 @@ import java.util.Objects;
  */
 public final class Preconditions {
 
-    private Preconditions() {
-        throw new AssertionError("Don't create instances of this object");
-    }
-
     /**
      * Checks if the reference is not null.
      *
@@ -110,5 +106,9 @@ public final class Preconditions {
 
     private static boolean isMainThread() {
         return Objects.equals(Looper.getMainLooper(), Looper.myLooper());
+    }
+
+    private Preconditions() {
+        throw new AssertionError("No instances allowed");
     }
 }
