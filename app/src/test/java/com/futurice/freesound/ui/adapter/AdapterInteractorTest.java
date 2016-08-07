@@ -1,6 +1,6 @@
 package com.futurice.freesound.ui.adapter;
 
-import com.futurice.freesound.ui.adapter.base.IAdapterInteractor;
+import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -331,7 +331,7 @@ public class AdapterInteractorTest {
     }
 
     private static <T> void assertAdapterItems(@NonNull final List<T> items,
-                                               @NonNull final IAdapterInteractor<T> adapter) {
+                                               @NonNull final DefaultAdapterInteractor<T> adapter) {
         assertThat(adapter.getCount()).isEqualTo(items.size());
 
         for (int i = 0; i < items.size(); i++) {

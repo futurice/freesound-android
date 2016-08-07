@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.ui.adapter.base.IAdapterInteractor;
+import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;
@@ -36,7 +36,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     @NonNull
-    private final IAdapterInteractor<Sound> adapterInteractor;
+    private final DefaultAdapterInteractor<Sound> adapterInteractor;
 
     @NonNull
     private final SoundItemViewModel_Factory viewModelFactory;
@@ -44,7 +44,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     @NonNull
     private final Picasso picasso;
 
-    SoundItemAdapter(@NonNull final IAdapterInteractor<Sound> adapterInteractor,
+    SoundItemAdapter(@NonNull final DefaultAdapterInteractor<Sound> adapterInteractor,
                      @NonNull final Picasso picasso,
                      @NonNull final SoundItemViewModel_Factory viewModelFactory) {
         this.adapterInteractor = get(adapterInteractor);

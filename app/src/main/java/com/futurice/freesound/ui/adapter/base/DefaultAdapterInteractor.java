@@ -10,7 +10,7 @@ import polanski.option.Option;
 /**
  * Helper interface that aids an adapter with holding the model.
  */
-public interface IAdapterInteractor<T> {
+public interface DefaultAdapterInteractor<T> {
 
     /**
      * Updates the current existing list of items with the given one.

@@ -1,6 +1,6 @@
 package com.futurice.freesound.ui.adapter;
 
-import com.futurice.freesound.ui.adapter.base.IAdapterInteractor;
+import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 import com.futurice.freesound.utils.CollectionUtils;
 
 import android.support.annotation.IntRange;
@@ -18,7 +18,7 @@ import static polanski.option.Option.ofObj;
 /**
  * Handles testable logic for interpreting adapter events.
  */
-public class AdapterInteractor<T> implements IAdapterInteractor<T> {
+public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
 
     @NonNull
     protected final List<T> mModels = new ArrayList<>();
