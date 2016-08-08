@@ -13,34 +13,6 @@ To ensure you that your source files match the project style, import the setting
 1. Code style formatting settings
 2. Copyright header
 
-## Deliverables
-
-TODO Delivery process
-
-## Supported devices
-
-TODO Describe target devices and builds
-
-## Codebase
-
-TODO Describe general branching structure
-
-## Used libraries
-
-TODO List the main used libraries
-
-## Environment Setup
-
-TODO Describe any environmental setup steps.
-
-## Important Gradle tasks
-
-TODO Describe any interesting Gradle tasks.
-
-## Release builds
-
-TODO Describe how to build releases.
-
 # Acknowledgements
 
 Brought to you by the power of the [Chilicorn](http://spiceprogram.org/chilicorn-history/) and the [Futurice Open Source Program](http://spiceprogram.org/).
