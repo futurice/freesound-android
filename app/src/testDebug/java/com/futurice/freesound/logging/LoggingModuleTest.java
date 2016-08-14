@@ -16,25 +16,18 @@
 
 package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import org.junit.Test;
 
-import dagger.Module;
-import dagger.Provides;
 import timber.log.Timber;
 
-@Module
-public class LoggingModule {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Provides
-    @Singleton
-    Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
-        return new FirebaseReleaseTree(firebaseErrorReporter);
-    }
+public class LoggingModuleTest {
 
-    @Provides
-    @Singleton
-    FirebaseErrorReporter provideFirebaseErrorReporter() {
-        return new FirebaseErrorReporter();
+    @Test
+    public void provideLoggingTree_isDebugTree_inDebugVariant() {
+        assertThat(new LoggingModule().provideLoggingTree())
+                .isInstanceOf(Timber.DebugTree.class);
     }
 
 }

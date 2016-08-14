@@ -16,25 +16,19 @@
 
 package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import com.google.firebase.crash.FirebaseCrash;
 
-import dagger.Module;
-import dagger.Provides;
-import timber.log.Timber;
+import android.support.annotation.NonNull;
 
-@Module
-public class LoggingModule {
+import static com.futurice.freesound.utils.Preconditions.get;
 
-    @Provides
-    @Singleton
-    Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
-        return new FirebaseReleaseTree(firebaseErrorReporter);
+/**
+ * A {@Link ErrorReporter} that reports exceptions via Firebase.
+ */
+class FirebaseErrorReporter implements ErrorReporter {
+
+    @Override
+    public void report(@NonNull final Throwable throwable) {
+        FirebaseCrash.report(get(throwable));
     }
-
-    @Provides
-    @Singleton
-    FirebaseErrorReporter provideFirebaseErrorReporter() {
-        return new FirebaseErrorReporter();
-    }
-
 }

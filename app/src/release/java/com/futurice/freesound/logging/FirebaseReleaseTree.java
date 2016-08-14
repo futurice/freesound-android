@@ -16,17 +16,27 @@
 
 package com.futurice.freesound.logging;
 
-import com.google.firebase.crash.FirebaseCrash;
-
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import polanski.option.Option;
 import timber.log.Timber;
 
+import static com.futurice.freesound.utils.Preconditions.get;
+
 /**
  * Timber logging {@link timber.log.Timber.Tree} to be used in release builds.
+ *
+ * Only errors are reported.
  */
 class FirebaseReleaseTree extends Timber.Tree {
+
+    @NonNull
+    private final FirebaseErrorReporter firebaseErrorReporter;
+
+    FirebaseReleaseTree(@NonNull final FirebaseErrorReporter firebaseErrorReporter) {
+        this.firebaseErrorReporter = get(firebaseErrorReporter);
+    }
 
     @Override
     protected void log(final int priority,
@@ -34,6 +44,6 @@ class FirebaseReleaseTree extends Timber.Tree {
                        @Nullable final String message,
                        @Nullable final Throwable throwable) {
         Option.ofObj(throwable)
-              .ifSome(it -> FirebaseCrash.report(throwable));
+              .ifSome(firebaseErrorReporter::report);
     }
 }

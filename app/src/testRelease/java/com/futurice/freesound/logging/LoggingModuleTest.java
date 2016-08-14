@@ -16,25 +16,27 @@
 
 package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import dagger.Module;
-import dagger.Provides;
-import timber.log.Timber;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@Module
-public class LoggingModule {
+public class LoggingModuleTest {
 
-    @Provides
-    @Singleton
-    Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
-        return new FirebaseReleaseTree(firebaseErrorReporter);
+    @Mock
+    private FirebaseErrorReporter mFirebaseErrorReporter;
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
     }
 
-    @Provides
-    @Singleton
-    FirebaseErrorReporter provideFirebaseErrorReporter() {
-        return new FirebaseErrorReporter();
+    @Test
+    public void provideLoggingTree_isFirebaseReleaseTree_inReleaseVariant() {
+        assertThat(new LoggingModule().provideLoggingTree(mFirebaseErrorReporter))
+                .isInstanceOf(FirebaseReleaseTree.class);
     }
 
 }

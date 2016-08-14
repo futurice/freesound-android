@@ -16,25 +16,19 @@
 
 package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import android.support.annotation.NonNull;
 
-import dagger.Module;
-import dagger.Provides;
-import timber.log.Timber;
+/**
+ * Exception reporting mechanism.
+ *
+ * Implmentations should simply delegate to the Exception reporting mechanism of choice.
+ */
+interface ErrorReporter {
 
-@Module
-public class LoggingModule {
-
-    @Provides
-    @Singleton
-    Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
-        return new FirebaseReleaseTree(firebaseErrorReporter);
-    }
-
-    @Provides
-    @Singleton
-    FirebaseErrorReporter provideFirebaseErrorReporter() {
-        return new FirebaseErrorReporter();
-    }
-
+    /**
+     * Report the {@link Throwable}
+     *
+     * @param throwable the {@link Throwable} instance that occurred.
+     */
+    void report(@NonNull Throwable throwable);
 }
