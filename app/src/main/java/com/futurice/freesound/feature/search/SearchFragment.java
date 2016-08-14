@@ -27,7 +27,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +40,11 @@ import polanski.option.Option;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
 public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {
-
-    private static final String TAG = SearchFragment.class.getSimpleName();
 
     @Nullable
     @Inject
@@ -71,8 +69,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(SearchFragment.this::handleResults,
-                                                   e -> Log.e(TAG, "Error setting Sound items",
-                                                              e)));
+                                                   e -> Timber.e("Error setting Sound items", e)));
         }
 
         @Override

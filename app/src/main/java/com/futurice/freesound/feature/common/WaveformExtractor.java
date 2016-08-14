@@ -18,11 +18,10 @@ package com.futurice.freesound.feature.common;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.util.Log;
+
+import timber.log.Timber;
 
 public abstract class WaveformExtractor {
-
-    private static final String TAG = WaveformExtractor.class.getSimpleName();
 
     public final float[] extract(@NonNull final Bitmap bitmap) {
         final long debugStartTime = System.currentTimeMillis();
@@ -39,8 +38,8 @@ public abstract class WaveformExtractor {
                 }
             }
         }
-        Log.d(TAG,
-              "Waveform extraction took: " + (System.currentTimeMillis() - debugStartTime) + " ms");
+        Timber.d("Waveform extraction took: " + (System.currentTimeMillis() - debugStartTime)
+                 + " ms");
         return normalizedAmplitudes;
     }
 

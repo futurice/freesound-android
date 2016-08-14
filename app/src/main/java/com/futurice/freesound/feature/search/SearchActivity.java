@@ -31,7 +31,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -41,13 +40,12 @@ import polanski.option.Option;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
-
-    private static final String TAG = SearchActivity.class.getSimpleName();
 
     @Inject
     SearchViewModel searchViewModel;
@@ -67,9 +65,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                              .observeOn(AndroidSchedulers.mainThread())
                                              .subscribe(
                                                      isVisible -> setClearSearchVisible(isVisible),
-                                                     err -> Log.e(TAG,
-                                                                  "Error setting query string",
-                                                                  err)));
+                                                     e -> Timber.e("Error setting query string",
+                                                                   e)));
         }
 
         @Override

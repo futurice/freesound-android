@@ -23,7 +23,6 @@ import com.squareup.picasso.Target;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -43,7 +42,6 @@ public class WaveformViewTarget implements Target {
 
     @Override
     public void onBitmapLoaded(final Bitmap bitmap, final Picasso.LoadedFrom from) {
-        Log.i("TARGET", "Target" + Thread.currentThread());
         float[] waveform = waveformExtractor.extract(bitmap);
         waveformView.setWaveform(waveform);
     }
