@@ -129,9 +129,9 @@ dependencies {
 
     // Unit Testing
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.0.52-beta'
+    testCompile 'org.mockito:mockito-core:2.0.101-beta'
     testCompile 'org.assertj:assertj-core:1.7.1'
-    testCompile 'com.github.peter-tackage:assert-rx:0.9.4-beta'
+    testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
 }
 
 apply plugin: 'com.google.gms.google-services'
