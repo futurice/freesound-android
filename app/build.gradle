@@ -24,9 +24,27 @@ apply from: 'proguard-config.gradle'
 
 def STRING = "String"
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def apkFileName = applicationName
+            apkFileName += "-${variant.versionName}"
+            apkFileName += ".apk"
+
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    //output.outputFile.name.replace("*", apkFileName)
+                    apkFileName
+            )
+        }
+    }
 
     defaultConfig {
         applicationId "com.futurice.freesound"
@@ -34,10 +52,12 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        signingConfig signingConfigs.debug
-        multiDexEnabled true
+        //suggestion of version naming
+        //versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
+        signingConfig signingConfigs.debug
+        multiDexEnabled true
         buildConfigField(STRING, "FREESOUND_API_KEY", freesound_api_key)
     }
     signingConfigs {
