@@ -24,6 +24,10 @@ Where `type` is one of the following:
 * `fix` - a fix for a bug.
 * `chore` - a technical or documentation task.
 
+Example branch:
+    
+    chore/add-branching-model-to-readme
+
 ### Status
 
 Use labels to show the status of your pull request:
