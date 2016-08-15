@@ -23,15 +23,34 @@ apply from: 'app-config.gradle'
 
 def STRING = "String"
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def apkFileName = applicationName
+            apkFileName += "-${variant.versionName}"
+            apkFileName += ".apk"
+
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    //output.outputFile.name.replace("*", apkFileName)
+                    apkFileName
+            )
+        }
+    }
+
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 23
+
         versionCode 1
-        versionName "1.0"
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         vectorDrawables.useSupportLibrary = true
 
