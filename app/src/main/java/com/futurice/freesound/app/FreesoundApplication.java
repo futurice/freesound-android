@@ -64,6 +64,7 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
     }
 
     private void initLogging() {
+        Timber.uprootAll();
         Timber.plant(get(loggingTree));
     }
 
