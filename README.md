@@ -5,9 +5,39 @@ Android client for the [Freesound Project](http://freesound.org/).
 
 API is defined as per the [Freesound Project API documentation](http://freesound.org/docs/api/).
 
-# IDE Configuration
+# Contributing
 
-## Android Studio
+Feel like getting involved, then look at the list of [issues](https://github.com/futurice/freesound-android/issues) to find a task to work on. If you have an idea of 
+ your own, please add create a new issue and get the conversation started.
+
+## Pull Requests
+
+### Branching
+
+Create a branch from the `master` branch with this format:
+
+    git checkout -b <type>/<title>
+
+Where `type` is one of the following:
+
+* `feature` - a new feature, or part thereof.
+* `fix` - a fix for a bug.
+* `chore` - a technical or documentation task.
+
+### Status
+
+Use labels to show the status of your pull request:
+
+* `in progress` - assigned by contributor: your PR is in progress. Do this as soon as you can.
+* `awaiting review` - assigned by contributor: your PR is now ready for review. Ping some reviewers!
+* `in review` - assigned by reviewer: your PR is being reviewed.
+* `requires rework` - assigned by reviewer: your PR 
+* `conditional merge` -  assigned by reviewer: you may merge your pull request, subject to the reviewer's feedback
+* `merge` -  assigned by reviewer: you may immediately merge your pull request. Hooray!
+
+## IDE Configuration
+
+### Android Studio
 To ensure you that your source files match the project style, import the settings in the `ide` directory. These include:
 
 1. Code style formatting settings
