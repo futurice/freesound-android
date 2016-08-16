@@ -38,6 +38,7 @@ android {
             apkFileName += "-${variant.versionName}"
             apkFileName += ".apk"
 
+            //noinspection GroovyAssignabilityCheck
             output.outputFile = new File(
                     output.outputFile.parent,
                     apkFileName
