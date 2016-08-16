@@ -39,7 +39,6 @@ android {
 
             output.outputFile = new File(
                     output.outputFile.parent,
-                    //output.outputFile.name.replace("*", apkFileName)
                     apkFileName
             )
         }
