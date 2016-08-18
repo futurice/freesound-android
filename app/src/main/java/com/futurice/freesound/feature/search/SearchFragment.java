@@ -103,7 +103,9 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         super.onViewCreated(view, savedInstanceState);
         resultsRecyclerView = (RecyclerView) view
                 .findViewById(R.id.recyclerView_searchResults);
-        get(resultsRecyclerView).setLayoutManager(new LinearLayoutManager(getActivity()));
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setRecycleChildrenOnDetach(true);
+        get(resultsRecyclerView).setLayoutManager(layoutManager);
         noResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
     }
 
