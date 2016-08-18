@@ -21,7 +21,7 @@ import android.support.annotation.NonNull;
 /**
  * Exception reporting mechanism.
  *
- * Implmentations should simply delegate to the Exception reporting mechanism of choice.
+ * Implementations should simply delegate to the Exception reporting mechanism of choice.
  */
 interface ErrorReporter {
 
