@@ -43,7 +43,7 @@ android {
             try {
                 // Define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties
                 // (Only where you do release builds; do NOT commit those into version control.)
-                storeFile file("example.keystore")
+                storeFile file("debug.keystore")
                 storePassword KEYSTORE_PASSWORD
                 keyAlias "client"
                 keyPassword KEY_PASSWORD
