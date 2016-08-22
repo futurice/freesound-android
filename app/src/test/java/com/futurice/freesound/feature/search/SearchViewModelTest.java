@@ -18,12 +18,28 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.network.api.model.Sound;
+import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import polanski.option.Option;
+import rx.observers.TestSubscriber;
+import rx.subjects.BehaviorSubject;
+
+import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
+import static com.futurice.freesound.viewmodel.DisplayableItem.SOUND;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class SearchViewModelTest {
@@ -50,5 +66,51 @@ public class SearchViewModelTest {
         viewModel.search("Query");
 
         verify(analytics).log("SearchPressedEvent");
+    }
+
+    @Test
+    public void getSounds_emitsNone_whenSearchResultsIsNone() {
+        new ArrangeBuilder().enqueueSearchResults(Option.none());
+
+        TestSubscriber<Option<List<DisplayableItem>>> ts = testSubscribe(viewModel.getSounds());
+
+        ts.assertValue(Option.none());
+    }
+
+    @Test
+    public void getSounds_emitsSearchResultsWrappedInDisplayableItems() {
+        List<Sound> sounds = TestData.sounds(10);
+        new ArrangeBuilder().enqueueSearchResults(Option.ofObj(sounds));
+
+        TestSubscriber<Option<List<DisplayableItem>>> ts = testSubscribe(viewModel.getSounds());
+
+        ts.assertValueCount(1);
+        Option<List<DisplayableItem>> displayables = ts.getOnNextEvents().get(0);
+        assertThat(displayables.isSome()).isTrue();
+        assertDisplayableItems(displayables.orDefault(ArrayList::new), sounds);
+    }
+
+    private static void assertDisplayableItems(@NonNull final List<DisplayableItem> displayables,
+                                               @NonNull final List<Sound> sounds) {
+        assertThat(displayables.size()).isEqualTo(sounds.size());
+        for (int i = 0; i < displayables.size(); i++) {
+            assertThat(displayables.get(i).type()).isEqualTo(SOUND);
+            assertThat(displayables.get(i).model()).isEqualTo(sounds.get(i));
+        }
+    }
+
+    private class ArrangeBuilder {
+
+        private final BehaviorSubject<Option<List<Sound>>> searchResultsStream = BehaviorSubject
+                .create();
+
+        ArrangeBuilder() {
+            Mockito.when(searchDataModel.getSearchResults()).thenReturn(searchResultsStream);
+        }
+
+        ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
+            searchResultsStream.onNext(sounds);
+            return this;
+        }
     }
 }

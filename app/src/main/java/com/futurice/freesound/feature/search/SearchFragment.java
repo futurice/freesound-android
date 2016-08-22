@@ -19,8 +19,8 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
-import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -139,7 +139,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         return binder;
     }
 
-    private void handleResults(@NonNull final Option<List<Sound>> sounds) {
+    private void handleResults(@NonNull final Option<List<DisplayableItem>> sounds) {
         sounds.matchAction(this::showResults, this::showNothing);
     }
 
@@ -148,7 +148,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         get(resultsRecyclerView).setVisibility(View.GONE);
     }
 
-    private void showResults(@NonNull final List<Sound> sounds) {
+    private void showResults(@NonNull final List<DisplayableItem> sounds) {
         if (sounds.isEmpty()) {
             get(noResultsTextView).setVisibility(View.VISIBLE);
             get(resultsRecyclerView).setVisibility(View.GONE);

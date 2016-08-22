@@ -22,6 +22,7 @@ import com.futurice.freesound.functional.StringFunctions;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import android.support.annotation.NonNull;
 
@@ -42,6 +43,7 @@ import polanski.option.Unit;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.viewmodel.DisplayableItem.SOUND;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static timber.log.Timber.e;
 
@@ -86,8 +88,17 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Option<List<Sound>>> getSounds() {
-        return searchDataModel.getSearchResults();
+    Observable<Option<List<DisplayableItem>>> getSounds() {
+        return searchDataModel.getSearchResults()
+                              .map(it -> it.map(this::wrapInDisplayableItem));
+    }
+
+    @NonNull
+    private List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
+        return Observable.fromIterable(sounds)
+                         .map(sound -> DisplayableItem.create(sound, SOUND))
+                         .toList()
+                         .blockingFirst();
     }
 
     void openSoundDetails(@NonNull final Sound sound) {
