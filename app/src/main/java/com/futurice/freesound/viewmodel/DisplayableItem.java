@@ -21,16 +21,16 @@ public abstract class DisplayableItem<T> {
 
     @SuppressWarnings("NullableProblems")
     @AutoValue.Builder
-    public abstract static class Builder<T> {
+    public interface Builder<T> {
 
         @NonNull
-        public abstract Builder<T> type(@NonNull int type);
+        Builder<T> type(int type);
 
         @NonNull
-        public abstract Builder<T> model(@NonNull T model);
+        Builder<T> model(@NonNull T model);
 
         @NonNull
-        public abstract DisplayableItem<T> build();
+        DisplayableItem<T> build();
     }
 
     @NonNull

@@ -90,11 +90,11 @@ final class SearchViewModel extends BaseViewModel {
     @NonNull
     Observable<Option<List<DisplayableItem>>> getSounds() {
         return searchDataModel.getSearchResults()
-                              .map(it -> it.map(this::wrapInDisplayableItem));
+                              .map(it -> it.map(SearchViewModel::wrapInDisplayableItem));
     }
 
     @NonNull
-    private List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
+    private static List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
                          .map(sound -> DisplayableItem.create(sound, SOUND))
                          .toList()

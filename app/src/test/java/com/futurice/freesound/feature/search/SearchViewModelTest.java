@@ -39,8 +39,9 @@ import rx.subjects.BehaviorSubject;
 
 import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
 import static com.futurice.freesound.viewmodel.DisplayableItem.SOUND;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static polanski.option.Option.ofObj;
 
 public class SearchViewModelTest {
 
@@ -80,23 +81,21 @@ public class SearchViewModelTest {
     @Test
     public void getSounds_emitsSearchResultsWrappedInDisplayableItems() {
         List<Sound> sounds = TestData.sounds(10);
-        new ArrangeBuilder().enqueueSearchResults(Option.ofObj(sounds));
+        new ArrangeBuilder().enqueueSearchResults(ofObj(sounds));
 
         TestSubscriber<Option<List<DisplayableItem>>> ts = testSubscribe(viewModel.getSounds());
 
-        ts.assertValueCount(1);
-        Option<List<DisplayableItem>> displayables = ts.getOnNextEvents().get(0);
-        assertThat(displayables.isSome()).isTrue();
-        assertDisplayableItems(displayables.orDefault(ArrayList::new), sounds);
+        assertThat(ts).hasReceivedValue(ofObj(expectedDisplayableItems(sounds)));
     }
 
-    private static void assertDisplayableItems(@NonNull final List<DisplayableItem> displayables,
-                                               @NonNull final List<Sound> sounds) {
-        assertThat(displayables.size()).isEqualTo(sounds.size());
-        for (int i = 0; i < displayables.size(); i++) {
-            assertThat(displayables.get(i).type()).isEqualTo(SOUND);
-            assertThat(displayables.get(i).model()).isEqualTo(sounds.get(i));
+    @NonNull
+    private static List<DisplayableItem> expectedDisplayableItems(
+            @NonNull final List<Sound> sounds) {
+        List<DisplayableItem> displayableItems = new ArrayList<>();
+        for (Sound sound : sounds) {
+            displayableItems.add(DisplayableItem.create(sound, SOUND));
         }
+        return displayableItems;
     }
 
     private class ArrangeBuilder {
