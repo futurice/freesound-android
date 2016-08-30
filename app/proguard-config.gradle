@@ -20,7 +20,6 @@ ext {
             './proguard/autovalue-rules.pro',
             './proguard/okhttp2-rules.pro',
             './proguard/picasso-rules.pro',
-            './proguard/proguard-rules.pro',
             './proguard/retrofit-rules.pro',
             './proguard/retrolambda-rules.pro',
             './proguard/rxjava-rules.pro'
