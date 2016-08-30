@@ -63,21 +63,19 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
-        lintConfig file('lint.xml')
-    }
 }
 
 task checkstyle(type: Checkstyle) {
-    description 'Checks if the code is somewhat acceptable'
-    configFile file('./checkstyle.xml')
+    group 'verification'
+    description 'Checks if the code adheres to the coding standards'
+    configFile file('quality/checkstyle.xml')
     source 'src/main/java'
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files() // empty because unnecessary for checkstyle
 }
 dependencies {
-    
+
     // Android Support
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:support-annotations:23.3.0'
