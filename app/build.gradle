@@ -29,6 +29,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
+        applicationId "com.futurice.freesound"
         minSdkVersion 22
         targetSdkVersion 23
         versionCode 1
