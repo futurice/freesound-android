@@ -16,12 +16,12 @@
 
 ext {
     releaseProguardFiles = [
-            './proguard/android-support-rules.pro',
-            './proguard/autovalue-rules.pro',
-            './proguard/okhttp2-rules.pro',
-            './proguard/picasso-rules.pro',
-            './proguard/retrofit-rules.pro',
-            './proguard/retrolambda-rules.pro',
-            './proguard/rxjava-rules.pro'
+            './proguard-rules/android-support-rules.pro',
+            './proguard-rules/autovalue-rules.pro',
+            './proguard-rules/okhttp2-rules.pro',
+            './proguard-rules/picasso-rules.pro',
+            './proguard-rules/retrofit-rules.pro',
+            './proguard-rules/retrolambda-rules.pro',
+            './proguard-rules/rxjava-rules.pro'
     ]
 }
