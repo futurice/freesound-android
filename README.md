@@ -5,10 +5,17 @@ Android client for the [Freesound Project](http://freesound.org/).
 
 API is defined as per the [Freesound Project API documentation](http://freesound.org/docs/api/).
 
+# Disclaimer
+
+If you've stumbled across this repository - welcome!
+
+This project is intended as a way for Futurice developers to hone their Android skills, learn from colleagues and experiment. We're only just getting started, so expect plenty of rough edges; we're not yet making any bold claims about using best practices that you should follow. Feel free to have a look at the code and be inspired or be appalled.
+
+Thanks for your interest!
+
 # Contributing
 
-Feel like getting involved, then look at the list of [issues](https://github.com/futurice/freesound-android/issues) to find a task to work on. If you have an idea of 
- your own, please add create a new issue and get the conversation started.
+If you're a Futuricean and feel like getting involved, then look at the list of [issues](https://github.com/futurice/freesound-android/issues) to find a task to work on. If you have an idea of your own, please add create a new issue and get the conversation started.
 
 ## Pull Requests
 
