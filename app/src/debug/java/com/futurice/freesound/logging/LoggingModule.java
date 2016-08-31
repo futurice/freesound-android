@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
+package com.futurice.freesound.logging;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import timber.log.Timber;
 
 @Module
-public class AnalyticsModule {
+public class LoggingModule {
 
     @Provides
     @Singleton
-    Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        return firebaseAnalytics;
+    Timber.Tree provideLoggingTree() {
+        return new Timber.DebugTree();
     }
 }

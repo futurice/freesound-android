@@ -26,7 +26,6 @@ import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.jakewharton.rxrelay.BehaviorRelay;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +34,7 @@ import polanski.option.Option;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -92,7 +92,7 @@ final class SearchViewModel extends BaseViewModel {
                        .map(String::trim)
                        .switchMap(this::searchOrClear)
                        .subscribe(nothing1(),
-                                  e -> Log.e(TAG, "Error when setting search term", e));
+                                  e -> Timber.e("Error when setting search term", e));
     }
 
     private Observable<Unit> searchOrClear(@NonNull final String s) {

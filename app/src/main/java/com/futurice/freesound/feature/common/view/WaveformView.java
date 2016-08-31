@@ -27,13 +27,12 @@ import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
-public class WaveformView extends View {
+import timber.log.Timber;
 
-    private static final String TAG = WaveformView.class.getSimpleName();
+public class WaveformView extends View {
 
     private static final boolean VERBOSE_LOGGING = true;
 
@@ -92,30 +91,21 @@ public class WaveformView extends View {
 
         // Don't draw if we haven't got anything to draw!
         if (waveform == null || waveform.length == 0) {
-            Log.w(TAG, "Empty waveform!");
+            Timber.w("Empty waveform!");
             return;
         }
 
-        //    logV(TAG, "onDraw() - data width: " + waveform.length);
-        //    logV(TAG, "onDraw() - canvas width: " + canvas.getWidth());
-        //    logV(TAG, "onDraw() - column width & padding width: " +
-        //             columnWidthPx + "," + columnGapPx);
-
         final float drawableWidth = canvas.getWidth();
-        //   logV(TAG, "onDraw() - usableWidth: " + drawableWidth);
 
         // The number of whole columns that fit in the drawable width with the desired column spacing
         final int columnCount = Math.min(waveform.length,
                                          (int) (drawableWidth / (columnWidthPx + columnGapPx)));
-        //   logV(TAG, "onDraw() - columns: " + columnCount);
 
         // The remainder, we want to shift the columns to the centre of the available width.
         final float remainder = drawableWidth % columnCount;
-        //   logV(TAG, "onDraw() - remainder: " + remainder);
 
         // The number of datapoints that contribute to a column
         final int datapoints = waveform.length / columnCount;
-        //   logV(TAG, "onDraw() - datapoint per column: " + datapoints);
 
         // Max height to be used by the waveform
         final int heightScalingFactor = canvas.getHeight() / 2;
@@ -128,17 +118,11 @@ public class WaveformView extends View {
         final long iterationStart = System.currentTimeMillis();
 
         for (int currentColumn = 0; currentColumn < columnCount; currentColumn++) {
-            //    logV(TAG, "onDraw() - drawing column: " + currentColumn);
-            //   logV(TAG, "onDraw() - waveform value: " + waveform[currentColumn * datapoints]);
-
             final int columnLength = (int) (waveform[currentColumn * datapoints]
                                             * heightScalingFactor);
 
             final int top = centreLine - (columnLength / 2);
             final int bottom = top + columnLength;
-
-            //    logV(TAG, "onDraw() - left: " + left + " right: " + right + " top: " + top + " bottom: "
-            //              + bottom);
 
             rect.set(left, top, right, bottom);
             canvas.drawRect(rect, waveformPaint);
@@ -147,10 +131,10 @@ public class WaveformView extends View {
             left = right + columnGapPx;
             right = left + columnWidthPx;
         }
-        Log.d(TAG,
-              "onDraw() iteration took: " + (System.currentTimeMillis() - iterationStart) + "ms");
+        Timber.d(
+                "onDraw() iteration took: " + (System.currentTimeMillis() - iterationStart) + "ms");
 
-        Log.d(TAG, "onDraw() took: " + (System.currentTimeMillis() - startTime) + "ms");
+        Timber.d("onDraw() took: " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
     @NonNull
@@ -158,12 +142,6 @@ public class WaveformView extends View {
         Paint paint = new Paint();
         paint.setColor(color);
         return paint;
-    }
-
-    private static void logV(String tag, String msg) {
-        if (VERBOSE_LOGGING) {
-            Log.v(tag, msg);
-        }
     }
 
 }

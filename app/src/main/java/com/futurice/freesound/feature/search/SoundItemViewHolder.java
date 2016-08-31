@@ -31,13 +31,11 @@ import android.widget.TextView;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
-import static android.util.Log.e;
 import static com.futurice.freesound.utils.Preconditions.get;
 
 class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
-
-    private static final String TAG = SoundItemViewHolder.class.getSimpleName();
 
     private final View rootView;
     private final TextView titleTextView;
@@ -55,23 +53,20 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             subscriptions.add(vm.name()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(titleTextView::setText,
-                                           error -> e(TAG,
-                                                      "Unable to set SoundItem name",
-                                                      error)));
+                                           error -> Timber.e("Unable to set SoundItem name",
+                                                             error)));
             subscriptions.add(vm.description()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(descriptionTextView::setText,
-                                           error -> e(TAG,
-                                                      "Unable to set SoundItem description",
-                                                      error)));
+                                           error -> Timber.e("Unable to set SoundItem description",
+                                                             error)));
 
             subscriptions.add(vm.thumbnailImageUrl()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(url -> picasso.load(url)
                                                          .into(waveformViewTarget),
-                                           error -> e(TAG,
-                                                      "Unable to set SoundItem thumbnail",
-                                                      error)));
+                                           error -> Timber.e("Unable to set SoundItem thumbnail",
+                                                             error)));
 
             rootView.setOnClickListener(__ -> vm.openDetails());
         }

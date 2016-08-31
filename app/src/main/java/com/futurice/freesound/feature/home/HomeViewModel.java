@@ -22,17 +22,15 @@ import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.jakewharton.rxrelay.PublishRelay;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
 final class HomeViewModel extends BaseViewModel {
-
-    private static final String TAG = HomeViewModel.class.getSimpleName();
 
     @NonNull
     private final Navigator navigator;
@@ -53,7 +51,7 @@ final class HomeViewModel extends BaseViewModel {
         openSearch.subscribeOn(AndroidSchedulers.mainThread())
                   .observeOn(Schedulers.computation())
                   .subscribe(__ -> navigator.openSearch(),
-                             e -> Log.e(TAG, "Error clearing search", e));
+                             e -> Timber.e("Error clearing search", e));
 
     }
 }

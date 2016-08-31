@@ -23,13 +23,24 @@ import com.futurice.freesound.core.BaseApplication;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import javax.inject.Inject;
+
+import timber.log.Timber;
+
+import static com.futurice.freesound.utils.Preconditions.get;
 
 public class FreesoundApplication extends BaseApplication<FreesoundApplicationComponent> {
+
+    @Inject
+    @Nullable
+    Timber.Tree loggingTree;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        initStetho();
+        initialize();
     }
 
     @Override
@@ -41,10 +52,20 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
     protected FreesoundApplicationComponent createComponent() {
         return DaggerFreesoundApplicationComponent.builder()
                                                   .baseApplicationModule(
-                                                       new BaseApplicationModule(this))
+                                                          new BaseApplicationModule(this))
                                                   .apiModule(new ApiModule())
                                                   .imagesModule(new ImagesModule())
                                                   .build();
+    }
+
+    private void initialize() {
+        initLogging();
+        initStetho();
+    }
+
+    private void initLogging() {
+        Timber.uprootAll();
+        Timber.plant(get(loggingTree));
     }
 
     private void initStetho() {

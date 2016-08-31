@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
+package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import com.google.firebase.crash.FirebaseCrash;
 
-import dagger.Module;
-import dagger.Provides;
+import android.support.annotation.NonNull;
 
-@Module
-public class AnalyticsModule {
+import static com.futurice.freesound.utils.Preconditions.get;
 
-    @Provides
-    @Singleton
-    Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        return firebaseAnalytics;
+/**
+ * A {@Link ErrorReporter} that reports exceptions via Firebase.
+ */
+class FirebaseErrorReporter implements ErrorReporter {
+
+    @Override
+    public void report(@NonNull final Throwable throwable) {
+        FirebaseCrash.report(get(throwable));
     }
 }

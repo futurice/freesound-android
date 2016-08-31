@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
+package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import org.junit.Test;
 
-import dagger.Module;
-import dagger.Provides;
+import timber.log.Timber;
 
-@Module
-public class AnalyticsModule {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Provides
-    @Singleton
-    Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        return firebaseAnalytics;
+public class LoggingModuleTest {
+
+    @Test
+    public void provideLoggingTree_isDebugTree_inDebugVariant() {
+        assertThat(new LoggingModule().provideLoggingTree())
+                .isInstanceOf(Timber.DebugTree.class);
     }
+
 }

@@ -21,6 +21,7 @@ import com.futurice.freesound.app.module.DataModule;
 import com.futurice.freesound.app.module.ImagesModule;
 import com.futurice.freesound.feature.analytics.AnalyticsModule;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
+import com.futurice.freesound.logging.LoggingModule;
 
 import dagger.Module;
 
@@ -28,6 +29,7 @@ import dagger.Module;
                     ApiModule.class,
                     ImagesModule.class,
                     DataModule.class,
-                    AnalyticsModule.class})
+                    AnalyticsModule.class,
+                    LoggingModule.class})
 class FreesoundApplicationModule {
 }

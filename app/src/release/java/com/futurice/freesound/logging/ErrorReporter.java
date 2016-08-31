@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
+package com.futurice.freesound.logging;
 
-import javax.inject.Singleton;
+import android.support.annotation.NonNull;
 
-import dagger.Module;
-import dagger.Provides;
+/**
+ * Exception reporting mechanism.
+ *
+ * Implementations should simply delegate to the Exception reporting mechanism of choice.
+ */
+interface ErrorReporter {
 
-@Module
-public class AnalyticsModule {
-
-    @Provides
-    @Singleton
-    Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        return firebaseAnalytics;
-    }
+    /**
+     * Report the {@link Throwable}
+     *
+     * @param throwable the {@link Throwable} instance that occurred.
+     */
+    void report(@NonNull Throwable throwable);
 }
