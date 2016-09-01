@@ -43,8 +43,8 @@ Use labels to show the status of your pull request:
 * `awaiting review` - assigned by contributor: your PR is now ready for review. Ping some reviewers!
 * `in review` - assigned by reviewer: your PR is being reviewed.
 * `requires rework` - assigned by reviewer: you need to address the reviewer's feedback.
-* `conditional merge` -  assigned by reviewer: you may merge your pull request, subject to addressing the reviewer's feedback.
-* `merge` -  assigned by reviewer: you may immediately merge your pull request. Hooray!
+* `conditionally approved` -  assigned by reviewer: you may merge your pull request, subject to addressing the reviewer's feedback.
+* `approved` -  assigned by reviewer: you may immediately merge your pull request. Hooray!
 
 ## IDE Configuration
 
