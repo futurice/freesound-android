@@ -24,10 +24,10 @@ import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.lang.annotation.Retention;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Named;
@@ -36,14 +36,15 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.Endpoint;
-import retrofit.Endpoints;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.client.Client;
-import retrofit.client.OkClient;
-import retrofit.converter.Converter;
-import retrofit.converter.GsonConverter;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -55,16 +56,14 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    FreeSoundApi provideFreeSoundApi(Endpoint endpoint,
-                                     Client client,
-                                     Converter converter,
-                                     RequestInterceptor requestInterceptor) {
-        return new RestAdapter.Builder()
-                .setEndpoint(endpoint)
-                .setClient(client)
-                .setConverter(converter)
-                .setRequestInterceptor(requestInterceptor)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+    FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
+                                     Gson gson,
+                                     OkHttpClient client) {
+        return new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .baseUrl(url)
                 .build()
                 .create(FreeSoundApi.class);
     }
@@ -73,27 +72,32 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    Endpoint provideEndpoint(@Named(URL_CONFIG) String url) {
-        return Endpoints.newFixedEndpoint(url);
+    @AppInterceptors
+    List<Interceptor> provideAppInterceptor(FreeSoundApiInterceptor apiInterceptor,
+                                            HttpLoggingInterceptor loggingInterceptor) {
+        return Arrays.asList(apiInterceptor, loggingInterceptor);
     }
 
     @Provides
     @Singleton
-    OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
-                                        @NetworkInterceptors List<Interceptor> networkInterceptor) {
-        return createOkHttpClient(appInterceptor, networkInterceptor);
+    @NetworkInterceptors
+    List<Interceptor> provideNetworkInterceptor() {
+        return Collections.emptyList();
     }
 
     @Provides
     @Singleton
-    Client provideClient(OkHttpClient okHttpClient) {
-        return new OkClient(okHttpClient);
+    FreeSoundApiInterceptor provideApiInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
+        return new FreeSoundApiInterceptor(apiToken);
     }
 
     @Provides
     @Singleton
-    Converter provideConverter(Gson gson) {
-        return new GsonConverter(gson);
+    HttpLoggingInterceptor provideLoggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
+                message -> Timber.tag("OkHttp").d(message));
+        interceptor.setLevel(Level.HEADERS); // TODO Bug in HttpLoggingInterceptor, uses not public api
+        return interceptor;
     }
 
     @Provides
@@ -107,19 +111,18 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    RequestInterceptor provideRequestInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
-        return new FreeSoundApiInterceptor(apiToken);
+    OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
+                                        @NetworkInterceptors List<Interceptor> networkInterceptor) {
+        return createOkHttpClient(appInterceptor, networkInterceptor);
     }
 
     private static OkHttpClient createOkHttpClient(List<Interceptor> appInterceptors,
                                                    List<Interceptor> networkInterceptors) {
-        OkHttpClient client = new OkHttpClient();
+        Builder okBuilder = new Builder();
+        okBuilder.interceptors().addAll(appInterceptors);
+        okBuilder.networkInterceptors().addAll(networkInterceptors);
 
-        // Install interceptors
-        client.interceptors().addAll(appInterceptors);
-        client.networkInterceptors().addAll(networkInterceptors);
-
-        return client;
+        return okBuilder.build();
     }
 
     @Qualifier
