@@ -114,7 +114,7 @@ dependencies {
     apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.3-rc2'
 
     // Optionals for Java 6/7
-    compile 'com.github.tomaszpolanski:options:1.1.1'
+    compile 'com.github.tomaszpolanski:options:1.2.0'
 
     // Timber
     compile 'com.jakewharton.timber:timber:4.2.0'
