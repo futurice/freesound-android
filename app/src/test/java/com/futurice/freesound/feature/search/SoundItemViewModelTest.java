@@ -21,6 +21,7 @@ import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundImageFormat;
 import com.futurice.freesound.test.data.TestData;
 
+import org.assertj.core.util.Maps;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,7 +32,9 @@ import rx.observers.TestSubscriber;
 import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
 import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class SoundItemViewModelTest {
 
@@ -46,6 +49,30 @@ public class SoundItemViewModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         soundItemViewModel = new SoundItemViewModel(SOUND, navigator);
+    }
+
+    @Test
+    public void thumbnailImageUrl_ifNoImages_returnEmptyString() {
+        Sound sound = mock(Sound.class);
+        when(sound.images()).thenReturn(null);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
+
+        TestSubscriber<String> ts = testSubscribe(vm.thumbnailImageUrl());
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValue("");
+    }
+
+    @Test
+    public void thumbnailImageUrl_ifNoWaveFormat_returnEmptyString() {
+        Sound sound = mock(Sound.class);
+        when(sound.images()).thenReturn(Maps.newHashMap());
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
+
+        TestSubscriber<String> ts = testSubscribe(vm.thumbnailImageUrl());
+
+        assertThat(ts).hasNoErrors()
+                      .hasReceivedValue("");
     }
 
     @Test

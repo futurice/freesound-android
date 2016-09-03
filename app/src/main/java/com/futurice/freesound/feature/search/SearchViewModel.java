@@ -19,7 +19,6 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.functional.StringFunctions;
-import com.futurice.freesound.functional.Unit;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import polanski.option.Option;
+import polanski.option.Unit;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

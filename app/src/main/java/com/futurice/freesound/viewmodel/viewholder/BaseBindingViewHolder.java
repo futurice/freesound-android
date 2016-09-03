@@ -38,7 +38,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     @NonNull
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-    public BaseBindingViewHolder(@NonNull final View view) {
+    protected BaseBindingViewHolder(@NonNull final View view) {
         super(get(view));
     }
 
@@ -68,7 +68,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
         getViewBinder().bind(subscriptions);
     }
 
-    private void setAndBindDataModel(final @NonNull T viewModel) {
+    private void setAndBindDataModel(@NonNull final T viewModel) {
         this.viewModel = viewModel;
         viewModel.bindToDataModel();
     }

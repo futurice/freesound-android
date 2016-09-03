@@ -16,26 +16,24 @@
 
 package com.futurice.freesound.viewmodel;
 
-import android.support.annotation.NonNull;
-
 import rx.subscriptions.CompositeSubscription;
 
 public abstract class BaseViewModel implements ViewModel {
 
     private final CompositeSubscription dataSubscription = new CompositeSubscription();
 
+    @Override
     public final void bindToDataModel() {
         bind(dataSubscription);
     }
 
+    @Override
     public final void unbindDataModel() {
         dataSubscription.clear();
     }
 
-    public abstract void bind(@NonNull final CompositeSubscription subscriptions);
-
+    @Override
     public final void destroy() {
-        dataSubscription.clear(); // TODO Needed?
-        dataSubscription.unsubscribe();
+        dataSubscription.clear();
     }
 }

@@ -27,7 +27,7 @@ public abstract class WaveformExtractor {
         final long debugStartTime = System.currentTimeMillis();
 
         final int width = bitmap.getWidth();
-        final float centreLine = (float) bitmap.getHeight() / 2f;
+        final float centreLine = bitmap.getHeight() / 2.0f;
         final float[] normalizedAmplitudes = new float[width];
 
         for (int x = 0; x < width; x++) {
@@ -38,8 +38,7 @@ public abstract class WaveformExtractor {
                 }
             }
         }
-        Timber.d("Waveform extraction took: " + (System.currentTimeMillis() - debugStartTime)
-                 + " ms");
+        Timber.d("Waveform extraction took: %d ms", System.currentTimeMillis() - debugStartTime);
         return normalizedAmplitudes;
     }
 

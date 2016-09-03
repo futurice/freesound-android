@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import rx.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
+import static polanski.option.Option.ofObj;
 
 final class SoundItemViewModel extends SimpleViewModel {
 
@@ -43,7 +44,14 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     Observable<String> thumbnailImageUrl() {
-        return Observable.just(sound.images().get(SoundImageFormat.waveform_m));
+        return Observable.just(getThumbnail());
+    }
+
+    @NonNull
+    private String getThumbnail() {
+        return ofObj(sound.images())
+                .flatMap(it -> ofObj(it.get(SoundImageFormat.waveform_m)))
+                .orDefault(() -> "");
     }
 
     @NonNull
