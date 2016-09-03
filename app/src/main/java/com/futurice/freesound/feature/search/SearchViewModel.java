@@ -38,6 +38,7 @@ import timber.log.Timber;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
+import static rx.android.schedulers.AndroidSchedulers.mainThread;
 
 final class SearchViewModel extends BaseViewModel {
 
@@ -89,10 +90,12 @@ final class SearchViewModel extends BaseViewModel {
     @Override
     public void bind(@NonNull final CompositeSubscription subscriptions) {
         searchTermRelay.subscribeOn(Schedulers.computation())
+                       .observeOn(Schedulers.computation())
                        .map(String::trim)
                        .switchMap(this::searchOrClear)
+                       .observeOn(mainThread())
                        .subscribe(nothing1(),
-                                  e -> Timber.e("Error when setting search term", e));
+                                  e -> Timber.e(e, "Error when setting search term"));
     }
 
     private Observable<Unit> searchOrClear(@NonNull final String s) {
