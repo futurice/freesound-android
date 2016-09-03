@@ -49,7 +49,7 @@ public class BaseActivityModule {
 
     @Provides
     @ActivityScope
-    Navigator provideNavigator(android.app.Activity activity) {
+    static Navigator provideNavigator(android.app.Activity activity) {
         return new DefaultNavigator(activity);
     }
 

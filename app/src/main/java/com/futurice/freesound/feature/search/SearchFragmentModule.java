@@ -32,21 +32,22 @@ public class SearchFragmentModule {
 
     @Provides
     @FragmentScope
-    SoundItemAdapter provideSoundItemAdapter(DefaultAdapterInteractor<Sound> adapterInteractor,
-                                             Picasso picasso,
-                                             SoundItemViewModel_Factory viewModelFactory) {
+    static SoundItemAdapter provideSoundItemAdapter(
+            DefaultAdapterInteractor<Sound> adapterInteractor,
+            Picasso picasso,
+            SoundItemViewModel_Factory viewModelFactory) {
         return new SoundItemAdapter(adapterInteractor, picasso, viewModelFactory);
     }
 
     @Provides
     @FragmentScope
-    SoundItemViewModel_Factory provideSoundItemViewModelFactory(Navigator navigator) {
+    static SoundItemViewModel_Factory provideSoundItemViewModelFactory(Navigator navigator) {
         return new SoundItemViewModel_Factory(navigator);
     }
 
     @Provides
     @FragmentScope
-    DefaultAdapterInteractor<Sound> provideAdapterInteractor() {
+    static DefaultAdapterInteractor<Sound> provideAdapterInteractor() {
         return new AdapterInteractor<>();
     }
 }
