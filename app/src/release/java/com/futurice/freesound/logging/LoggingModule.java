@@ -27,13 +27,13 @@ public class LoggingModule {
 
     @Provides
     @Singleton
-    Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
+    static Timber.Tree provideLoggingTree(FirebaseErrorReporter firebaseErrorReporter) {
         return new FirebaseReleaseTree(firebaseErrorReporter);
     }
 
     @Provides
     @Singleton
-    FirebaseErrorReporter provideFirebaseErrorReporter() {
+    static FirebaseErrorReporter provideFirebaseErrorReporter() {
         return new FirebaseErrorReporter();
     }
 

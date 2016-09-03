@@ -30,14 +30,14 @@ public class ConfigModule {
     @Provides
     @Singleton
     @Named(ApiModule.URL_CONFIG)
-    String provideApiModuleUrlConfig() {
+    static String provideApiModuleUrlConfig() {
         return BuildConfig.FREESOUND_API_URL;
     }
 
     @Provides
     @Singleton
     @Named(ApiModule.API_TOKEN_CONFIG)
-    String provideApiModuleApiTokenConfig() {
+    static String provideApiModuleApiTokenConfig() {
         return BuildConfig.FREESOUND_API_KEY;
     }
 

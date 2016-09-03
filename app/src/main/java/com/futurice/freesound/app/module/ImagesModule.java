@@ -31,7 +31,7 @@ public class ImagesModule {
 
     @Provides
     @Singleton
-    Picasso providePicasso(@ForApplication Context context) {
+    static Picasso providePicasso(@ForApplication Context context) {
         return Picasso.with(context);
     }
 

@@ -27,7 +27,7 @@ public class LoggingModule {
 
     @Provides
     @Singleton
-    Timber.Tree provideLoggingTree() {
+    static Timber.Tree provideLoggingTree() {
         return new Timber.DebugTree();
     }
 }

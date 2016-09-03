@@ -35,7 +35,7 @@ public class LoggingModuleTest {
 
     @Test
     public void provideLoggingTree_isFirebaseReleaseTree_inReleaseVariant() {
-        assertThat(new LoggingModule().provideLoggingTree(mFirebaseErrorReporter))
+        assertThat(LoggingModule.provideLoggingTree(mFirebaseErrorReporter))
                 .isInstanceOf(FirebaseReleaseTree.class);
     }
 
