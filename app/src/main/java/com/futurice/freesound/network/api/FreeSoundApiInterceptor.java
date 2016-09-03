@@ -39,17 +39,21 @@ public final class FreeSoundApiInterceptor implements Interceptor {
 
     @Override
     public Response intercept(final Chain chain) throws IOException {
-        HttpUrl url = chain.request()
-                           .url()
-                           .newBuilder()
-                           .addQueryParameter(TOKEN_QUERY_PARAM,
-                                              apiToken)
-                           .build();
         Request requestWithToken = chain.request()
                                         .newBuilder()
-                                        .url(url)
+                                        .url(getUrlWithApiToken(chain))
                                         .build();
 
         return chain.proceed(requestWithToken);
+    }
+
+    @NonNull
+    private HttpUrl getUrlWithApiToken(final Chain chain) {
+        return chain.request()
+                    .url()
+                    .newBuilder()
+                    .addQueryParameter(TOKEN_QUERY_PARAM,
+                                       apiToken)
+                    .build();
     }
 }
