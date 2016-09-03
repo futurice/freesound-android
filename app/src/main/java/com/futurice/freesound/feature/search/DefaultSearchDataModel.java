@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.functional.Unit;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
@@ -27,6 +26,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import polanski.option.Option;
+import polanski.option.Unit;
 import rx.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -56,9 +56,10 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResults() {
-        return this.lastResults.asObservable();
+        return lastResults.asObservable();
     }
 
+    @Override
     @NonNull
     public Observable<Unit> clear() {
         return Observable.just(Option.<List<Sound>>none())

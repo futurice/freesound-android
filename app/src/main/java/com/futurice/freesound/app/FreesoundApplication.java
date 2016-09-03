@@ -48,6 +48,7 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
         component().inject(this);
     }
 
+    @Override
     @NonNull
     protected FreesoundApplicationComponent createComponent() {
         return DaggerFreesoundApplicationComponent.builder()

@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.functional.Unit;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
@@ -32,6 +31,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import polanski.option.Option;
+import polanski.option.Unit;
 import rx.Observable;
 import rx.observers.TestObserver;
 import rx.observers.TestSubscriber;

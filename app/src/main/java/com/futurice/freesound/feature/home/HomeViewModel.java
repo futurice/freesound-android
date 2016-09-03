@@ -17,12 +17,12 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.functional.Unit;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.jakewharton.rxrelay.PublishRelay;
 
 import android.support.annotation.NonNull;
 
+import polanski.option.Unit;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
