@@ -67,6 +67,7 @@ public class CollectionUtilsTest {
         assertThat(areEqual).isFalse();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void areEqual_returnsFalse_whenOneCollectionIsNull() {
         Collection collection1 = createRangeCollection(0, 5);
@@ -77,6 +78,7 @@ public class CollectionUtilsTest {
         assertThat(areEqual).isFalse();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void areEqual_returnsFalse_whenBothCollectionsAreNull() {
         Collection collection1 = null;
