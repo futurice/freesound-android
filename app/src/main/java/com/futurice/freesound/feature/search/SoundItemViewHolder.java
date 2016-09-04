@@ -53,20 +53,18 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             subscriptions.add(vm.name()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(titleTextView::setText,
-                                           error -> Timber.e("Unable to set SoundItem name",
-                                                             error)));
+                                           e -> Timber.e(e, "Unable to set SoundItem name")));
             subscriptions.add(vm.description()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(descriptionTextView::setText,
-                                           error -> Timber.e("Unable to set SoundItem description",
-                                                             error)));
+                                           e -> Timber
+                                                   .e(e, "Unable to set SoundItem description")));
 
             subscriptions.add(vm.thumbnailImageUrl()
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(url -> picasso.load(url)
                                                          .into(waveformViewTarget),
-                                           error -> Timber.e("Unable to set SoundItem thumbnail",
-                                                             error)));
+                                           e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
             rootView.setOnClickListener(__ -> vm.openDetails());
         }

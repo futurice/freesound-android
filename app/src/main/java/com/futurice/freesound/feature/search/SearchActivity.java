@@ -65,8 +65,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                              .observeOn(AndroidSchedulers.mainThread())
                                              .subscribe(
                                                      isVisible -> setClearSearchVisible(isVisible),
-                                                     e -> Timber.e("Error setting query string",
-                                                                   e)));
+                                                     e -> Timber
+                                                             .e(e, "Error setting query string")));
         }
 
         @Override

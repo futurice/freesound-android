@@ -92,7 +92,7 @@ final class SearchViewModel extends BaseViewModel {
                        .map(String::trim)
                        .switchMap(this::searchOrClear)
                        .subscribe(nothing1(),
-                                  e -> Timber.e("Error when setting search term", e));
+                                  e -> Timber.e(e, "Error when setting search term"));
     }
 
     private Observable<Unit> searchOrClear(@NonNull final String s) {

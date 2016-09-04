@@ -51,7 +51,7 @@ final class HomeViewModel extends BaseViewModel {
         openSearch.subscribeOn(AndroidSchedulers.mainThread())
                   .observeOn(Schedulers.computation())
                   .subscribe(__ -> navigator.openSearch(),
-                             e -> Timber.e("Error clearing search", e));
+                             e -> Timber.e(e, "Error clearing search"));
 
     }
 }
