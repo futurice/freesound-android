@@ -40,6 +40,7 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                        android:value="com.futurice.freesound.feature.home.HomeActivity"/>
         </activity>
+        <activity android:name=".feature.details.DetailsActivity"/>
     </application>
 
 </manifest>
