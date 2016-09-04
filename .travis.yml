@@ -9,6 +9,7 @@ android:
     - tools
     - android-23
     - build-tools-23.0.3
+    - extra-google-m2repository
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-23
 
@@ -20,6 +21,9 @@ before_script:
   - adb shell settings put global transition_animation_scale 0 &
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
+
+script:
+  - ./gradlew check
 
 env:
   global:
