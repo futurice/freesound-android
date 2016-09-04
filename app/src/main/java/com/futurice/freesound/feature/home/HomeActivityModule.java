@@ -28,7 +28,7 @@ class HomeActivityModule {
 
     @Provides
     @ActivityScope
-    HomeViewModel provideHomeViewModel(Navigator navigator) {
+    static HomeViewModel provideHomeViewModel(Navigator navigator) {
         return new HomeViewModel(navigator);
     }
 

@@ -26,7 +26,7 @@ public class LoggingModuleTest {
 
     @Test
     public void provideLoggingTree_isDebugTree_inDebugVariant() {
-        assertThat(new LoggingModule().provideLoggingTree())
+        assertThat(LoggingModule.provideLoggingTree())
                 .isInstanceOf(Timber.DebugTree.class);
     }
 

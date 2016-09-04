@@ -32,21 +32,21 @@ class SearchActivityModule {
 
     @Provides
     @ActivityScope
-    SearchViewModel provideSearchViewModel(SearchDataModel searchDataModel,
-                                           Navigator navigator,
-                                           Analytics analytics) {
+    static SearchViewModel provideSearchViewModel(SearchDataModel searchDataModel,
+                                                  Navigator navigator,
+                                                  Analytics analytics) {
         return new SearchViewModel(searchDataModel, navigator, analytics);
     }
 
     @Provides
     @ActivityScope
-    SearchDataModel provideSearchDataModel(FreeSoundSearchService freeSoundSearchService) {
+    static SearchDataModel provideSearchDataModel(FreeSoundSearchService freeSoundSearchService) {
         return new DefaultSearchDataModel(freeSoundSearchService);
     }
 
     @Provides
     @ActivityScope
-    FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
+    static FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
         return new DefaultFreeSoundSearchService(freeSoundApi);
     }
 }

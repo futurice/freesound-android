@@ -26,7 +26,7 @@ public class AnalyticsModule {
 
     @Provides
     @Singleton
-    Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
+    static Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
         return firebaseAnalytics;
     }
 }

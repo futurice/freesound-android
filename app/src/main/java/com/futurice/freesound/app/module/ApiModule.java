@@ -55,10 +55,10 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    FreeSoundApi provideFreeSoundApi(Endpoint endpoint,
-                                     Client client,
-                                     Converter converter,
-                                     RequestInterceptor requestInterceptor) {
+    static FreeSoundApi provideFreeSoundApi(Endpoint endpoint,
+                                            Client client,
+                                            Converter converter,
+                                            RequestInterceptor requestInterceptor) {
         return new RestAdapter.Builder()
                 .setEndpoint(endpoint)
                 .setClient(client)
@@ -73,32 +73,32 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    Endpoint provideEndpoint(@Named(URL_CONFIG) String url) {
+    static Endpoint provideEndpoint(@Named(URL_CONFIG) String url) {
         return Endpoints.newFixedEndpoint(url);
     }
 
     @Provides
     @Singleton
-    OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
-                                        @NetworkInterceptors List<Interceptor> networkInterceptor) {
+    static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
+                                               @NetworkInterceptors List<Interceptor> networkInterceptor) {
         return createOkHttpClient(appInterceptor, networkInterceptor);
     }
 
     @Provides
     @Singleton
-    Client provideClient(OkHttpClient okHttpClient) {
+    static Client provideClient(OkHttpClient okHttpClient) {
         return new OkClient(okHttpClient);
     }
 
     @Provides
     @Singleton
-    Converter provideConverter(Gson gson) {
+    static Converter provideConverter(Gson gson) {
         return new GsonConverter(gson);
     }
 
     @Provides
     @Singleton
-    Gson provideGson() {
+    static Gson provideGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
                 .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
@@ -107,7 +107,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    RequestInterceptor provideRequestInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
+    static RequestInterceptor provideRequestInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
         return new FreeSoundApiInterceptor(apiToken);
     }
 
