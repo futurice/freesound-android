@@ -77,6 +77,7 @@ public class DefaultFreeSoundSearchServiceTest {
 
         testSubscribe(defaultFreeSoundSearchService.search(QUERY));
 
+        //noinspection deprecation
         verify(freeSoundApi).search(eq(QUERY), isNull(String.class), eq(SoundFields.BASE));
     }
 

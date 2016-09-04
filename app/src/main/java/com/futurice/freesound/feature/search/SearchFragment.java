@@ -124,7 +124,6 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                             .searchActivityComponent(
                                                     ((SearchActivity) getActivity()).component())
                                             .baseFragmentModule(new BaseFragmentModule(this))
-                                            .searchFragmentModule(new SearchFragmentModule())
                                             .build();
     }
 

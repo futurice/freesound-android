@@ -17,8 +17,6 @@
 package com.futurice.freesound.app;
 
 import com.facebook.stetho.Stetho;
-import com.futurice.freesound.app.module.ApiModule;
-import com.futurice.freesound.app.module.ImagesModule;
 import com.futurice.freesound.core.BaseApplication;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 
@@ -54,8 +52,6 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
         return DaggerFreesoundApplicationComponent.builder()
                                                   .baseApplicationModule(
                                                           new BaseApplicationModule(this))
-                                                  .apiModule(new ApiModule())
-                                                  .imagesModule(new ImagesModule())
                                                   .build();
     }
 
