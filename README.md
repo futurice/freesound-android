@@ -1,5 +1,6 @@
 
 # Futurice Freesound
+[![Build Status](https://travis-ci.org/futurice/freesound-android.svg?branch=master)](https://travis-ci.org/futurice/freesound-android)
 
 Android client for the [Freesound Project](http://freesound.org/).
 
