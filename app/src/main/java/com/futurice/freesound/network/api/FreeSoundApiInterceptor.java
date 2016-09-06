@@ -18,11 +18,17 @@ package com.futurice.freesound.network.api;
 
 import android.support.annotation.NonNull;
 
-import retrofit.RequestInterceptor;
+import java.io.IOException;
 
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.futurice.freesound.network.api.ApiConstants.TOKEN_QUERY_PARAM;
 import static com.futurice.freesound.utils.Preconditions.get;
 
-public final class FreeSoundApiInterceptor implements RequestInterceptor {
+public final class FreeSoundApiInterceptor implements Interceptor {
 
     @NonNull
     private final String apiToken;
@@ -32,7 +38,22 @@ public final class FreeSoundApiInterceptor implements RequestInterceptor {
     }
 
     @Override
-    public void intercept(RequestFacade request) {
-        request.addQueryParam(ApiConstants.TOKEN_QUERY_PARAM, apiToken);
+    public Response intercept(final Chain chain) throws IOException {
+        Request requestWithToken = chain.request()
+                                        .newBuilder()
+                                        .url(getUrlWithApiToken(chain))
+                                        .build();
+
+        return chain.proceed(requestWithToken);
+    }
+
+    @NonNull
+    private HttpUrl getUrlWithApiToken(final Chain chain) {
+        return chain.request()
+                    .url()
+                    .newBuilder()
+                    .addQueryParameter(TOKEN_QUERY_PARAM,
+                                       apiToken)
+                    .build();
     }
 }

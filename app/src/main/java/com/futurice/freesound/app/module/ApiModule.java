@@ -24,10 +24,10 @@ import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.lang.annotation.Retention;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Named;
@@ -36,65 +36,42 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.Endpoint;
-import retrofit.Endpoints;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
-import retrofit.client.Client;
-import retrofit.client.OkClient;
-import retrofit.converter.Converter;
-import retrofit.converter.GsonConverter;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Module(includes = {ConfigModule.class, InstrumentationModule.class})
-public class ApiModule {
+public final class ApiModule {
 
     static final String URL_CONFIG = "ApiModule.URL_CONFIG";
     static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";
 
     @Provides
     @Singleton
-    static FreeSoundApi provideFreeSoundApi(Endpoint endpoint,
-                                            Client client,
-                                            Converter converter,
-                                            RequestInterceptor requestInterceptor) {
-        return new RestAdapter.Builder()
-                .setEndpoint(endpoint)
-                .setClient(client)
-                .setConverter(converter)
-                .setRequestInterceptor(requestInterceptor)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+    static FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
+                                     Gson gson,
+                                     OkHttpClient client) {
+        return new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .baseUrl(url)
                 .build()
                 .create(FreeSoundApi.class);
     }
 
     // Internal //
 
-    @Provides
-    @Singleton
-    static Endpoint provideEndpoint(@Named(URL_CONFIG) String url) {
-        return Endpoints.newFixedEndpoint(url);
-    }
 
-    @Provides
-    @Singleton
-    static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
-                                               @NetworkInterceptors List<Interceptor> networkInterceptor) {
-        return createOkHttpClient(appInterceptor, networkInterceptor);
-    }
 
-    @Provides
-    @Singleton
-    static Client provideClient(OkHttpClient okHttpClient) {
-        return new OkClient(okHttpClient);
-    }
-
-    @Provides
-    @Singleton
-    static Converter provideConverter(Gson gson) {
-        return new GsonConverter(gson);
-    }
 
     @Provides
     @Singleton
@@ -107,19 +84,18 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    static RequestInterceptor provideRequestInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
-        return new FreeSoundApiInterceptor(apiToken);
+    static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
+                                               @NetworkInterceptors List<Interceptor> networkInterceptor) {
+        return createOkHttpClient(appInterceptor, networkInterceptor);
     }
 
     private static OkHttpClient createOkHttpClient(List<Interceptor> appInterceptors,
                                                    List<Interceptor> networkInterceptors) {
-        OkHttpClient client = new OkHttpClient();
+        Builder okBuilder = new Builder();
+        okBuilder.interceptors().addAll(appInterceptors);
+        okBuilder.networkInterceptors().addAll(networkInterceptors);
 
-        // Install interceptors
-        client.interceptors().addAll(appInterceptors);
-        client.networkInterceptors().addAll(networkInterceptors);
-
-        return client;
+        return okBuilder.build();
     }
 
     @Qualifier
