@@ -49,14 +49,14 @@ import timber.log.Timber;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Module(includes = {ConfigModule.class, InstrumentationModule.class})
-public class ApiModule {
+public final class ApiModule {
 
     static final String URL_CONFIG = "ApiModule.URL_CONFIG";
     static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";
 
     @Provides
     @Singleton
-    FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
+    static FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
                                      Gson gson,
                                      OkHttpClient client) {
         return new Retrofit.Builder()
@@ -70,35 +70,8 @@ public class ApiModule {
 
     // Internal //
 
-    @Provides
-    @Singleton
-    @AppInterceptors
-    List<Interceptor> provideAppInterceptor(FreeSoundApiInterceptor apiInterceptor,
-                                            HttpLoggingInterceptor loggingInterceptor) {
-        return Arrays.asList(apiInterceptor, loggingInterceptor);
-    }
 
-    @Provides
-    @Singleton
-    @NetworkInterceptors
-    List<Interceptor> provideNetworkInterceptor() {
-        return Collections.emptyList();
-    }
 
-    @Provides
-    @Singleton
-    FreeSoundApiInterceptor provideApiInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
-        return new FreeSoundApiInterceptor(apiToken);
-    }
-
-    @Provides
-    @Singleton
-    HttpLoggingInterceptor provideLoggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
-                message -> Timber.tag("OkHttp").d(message));
-        interceptor.setLevel(Level.HEADERS); // TODO Bug in HttpLoggingInterceptor, uses not public api
-        return interceptor;
-    }
 
     @Provides
     @Singleton
@@ -111,8 +84,8 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
-                                        @NetworkInterceptors List<Interceptor> networkInterceptor) {
+    static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
+                                               @NetworkInterceptors List<Interceptor> networkInterceptor) {
         return createOkHttpClient(appInterceptor, networkInterceptor);
     }
 
