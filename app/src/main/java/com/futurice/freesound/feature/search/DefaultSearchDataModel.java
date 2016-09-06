@@ -19,15 +19,16 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
-import com.jakewharton.rxrelay.BehaviorRelay;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 import polanski.option.Unit;
-import rx.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -37,7 +38,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
-    private final BehaviorRelay<Option<List<Sound>>> lastResults = BehaviorRelay.create();
+    private final BehaviorSubject<Option<List<Sound>>> lastResults = BehaviorSubject.create();
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
@@ -45,25 +46,25 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
-    public Observable<Unit> querySearch(@NonNull final String query) {
+    public Single<Unit> querySearch(@NonNull final String query) {
         return freeSoundSearchService.search(get(query))
                                      .map(SoundSearchResult::results)
                                      .map(Option::ofObj)
-                                     .doOnNext(lastResults)
-                                     .map(Unit::asUnit);
+                                     .doOnSuccess(lastResults::onNext)
+                                     .map(it -> Unit.DEFAULT);
     }
 
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResults() {
-        return lastResults.asObservable();
+        return lastResults;
     }
 
     @Override
     @NonNull
-    public Observable<Unit> clear() {
-        return Observable.just(Option.<List<Sound>>none())
-                         .doOnNext(lastResults)
-                         .map(__ -> Unit.DEFAULT);
+    public Single<Unit> clear() {
+        return Single.just(Option.<List<Sound>>none())
+                     .doOnSuccess(lastResults::onNext)
+                     .map(__ -> Unit.DEFAULT);
     }
 }

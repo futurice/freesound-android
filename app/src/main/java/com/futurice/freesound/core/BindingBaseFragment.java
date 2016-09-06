@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * The base Fragment to be used when the Fragment View is to be bound to a ViewModel.
@@ -37,7 +37,7 @@ public abstract class BindingBaseFragment<T> extends BaseFragment<T> {
     private final BaseLifecycleViewBinder lifecycleBinder = new BaseLifecycleViewBinder() {
 
         @Override
-        public void bind(@NonNull final CompositeSubscription subscription) {
+        public void bind(@NonNull final CompositeDisposable subscription) {
             binder().bind(subscription);
         }
 

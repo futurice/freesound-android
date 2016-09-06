@@ -31,10 +31,9 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.subscribers.TestSubscriber;
 import polanski.option.Option;
 import polanski.option.Unit;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
 import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
 import static com.petertackage.assertrx.Assertions.assertThat;
@@ -63,7 +62,7 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultsFor(QUERY, dummyResults());
 
-        testSubscribe(defaultSearchDataModel.querySearch(QUERY));
+        defaultSearchDataModel.querySearch(QUERY).test();
 
         verify(freeSoundSearchService).search(eq(QUERY));
     }
@@ -73,7 +72,7 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultsFor(QUERY, dummyResults());
 
-        TestSubscriber<Unit> ts = testSubscribe(defaultSearchDataModel.querySearch(QUERY));
+        TestSubscriber<Unit> ts = defaultSearchDataModel.querySearch(QUERY).test();
 
         assertThat(ts).hasNoErrors()
                       .hasReceivedValue(Unit.DEFAULT)

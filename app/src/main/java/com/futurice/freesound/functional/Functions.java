@@ -18,12 +18,12 @@ package com.futurice.freesound.functional;
 
 import android.support.annotation.NonNull;
 
-import rx.functions.Action1;
+import io.reactivex.functions.Consumer;
 
 public final class Functions {
 
     @NonNull
-    public static <T> Action1<T> nothing1() {
+    public static <T> Consumer<T> nothing1() {
         return __ -> {
         };
     }

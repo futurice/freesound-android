@@ -16,11 +16,11 @@
 
 package com.futurice.freesound.viewmodel;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 public interface Binder {
 
-    void bind(final CompositeSubscription subscriptions);
+    void bind(final CompositeDisposable subscriptions);
 
     void unbind();
 

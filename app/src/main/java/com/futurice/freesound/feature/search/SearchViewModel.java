@@ -22,23 +22,25 @@ import com.futurice.freesound.functional.StringFunctions;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
-import com.jakewharton.rxrelay.BehaviorRelay;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 import polanski.option.Unit;
-import rx.Observable;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
-import static rx.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 final class SearchViewModel extends BaseViewModel {
 
@@ -56,7 +58,8 @@ final class SearchViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
-    private final BehaviorRelay<String> searchTermRelay = BehaviorRelay.create(NO_SEARCH);
+    private final BehaviorSubject<String> searchTermRelay = BehaviorSubject
+            .createDefault(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
                     @NonNull final Navigator navigator,
@@ -68,14 +71,13 @@ final class SearchViewModel extends BaseViewModel {
 
     @NonNull
     Observable<Boolean> getClearButtonVisibleStream() {
-        return searchTermRelay.asObservable()
-                              .map(SearchViewModel::isCloseEnabled);
+        return searchTermRelay.map(SearchViewModel::isCloseEnabled);
 
     }
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        searchTermRelay.call(query);
+        searchTermRelay.onNext(query);
     }
 
     @NonNull
@@ -88,23 +90,23 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeSubscription subscriptions) {
+    public void bind(@NonNull final CompositeDisposable subscriptions) {
         searchTermRelay.subscribeOn(Schedulers.computation())
                        .observeOn(Schedulers.computation())
                        .map(String::trim)
-                       .switchMap(this::searchOrClear)
+                       .debounce(2, TimeUnit.SECONDS)
+                       .switchMap(it -> searchOrClear(it).toObservable())
                        .observeOn(mainThread())
                        .subscribe(nothing1(),
                                   e -> Timber.e(e, "Error when setting search term"));
     }
 
-    private Observable<Unit> searchOrClear(@NonNull final String s) {
+    private Maybe<Unit> searchOrClear(@NonNull final String s) {
         return TextUtils.isNullOrEmpty(s) ?
-                searchDataModel.clear() :
-                Observable.just(s)
-                          .filter(StringFunctions.isNotEmpty())
-                          .debounce(2, TimeUnit.SECONDS)
-                          .switchMap(searchDataModel::querySearch);
+                searchDataModel.clear().toMaybe() :
+                Single.just(s)
+                      .filter(StringFunctions.isNotEmpty())
+                      .flatMap(it -> searchDataModel.querySearch(it).toMaybe());
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

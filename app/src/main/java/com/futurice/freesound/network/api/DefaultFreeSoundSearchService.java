@@ -21,7 +21,7 @@ import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Single;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -36,7 +36,7 @@ public final class DefaultFreeSoundSearchService implements FreeSoundSearchServi
 
     @Override
     @NonNull
-    public Observable<SoundSearchResult> search(@NonNull final String query) {
+    public Single<SoundSearchResult> search(@NonNull final String query) {
         return freeSoundApi.search(get(query), null, SoundFields.BASE);
     }
 

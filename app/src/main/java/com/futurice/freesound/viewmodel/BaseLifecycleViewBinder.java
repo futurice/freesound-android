@@ -18,7 +18,7 @@ package com.futurice.freesound.viewmodel;
 
 import android.support.annotation.NonNull;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Abstracts the view-to-viewmodel binding mechanism from the views associated lifecycle triggers.
@@ -26,7 +26,7 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
 
     @NonNull
-    private final CompositeSubscription subscription = new CompositeSubscription();
+    private final CompositeDisposable subscription = new CompositeDisposable();
 
     @Override
     public void onCreate() {
@@ -51,7 +51,7 @@ public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
 
     @Override
     public void onDestroy() {
-        subscription.unsubscribe();
+        subscription.dispose();
     }
 
     @NonNull

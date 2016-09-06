@@ -18,17 +18,19 @@ package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.viewmodel.BaseViewModel;
-import com.jakewharton.rxrelay.PublishRelay;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.PublishSubject;
 import polanski.option.Unit;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
+
+
 import static com.futurice.freesound.utils.Preconditions.get;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.computation;
 
 final class HomeViewModel extends BaseViewModel {
 
@@ -36,20 +38,20 @@ final class HomeViewModel extends BaseViewModel {
     private final Navigator navigator;
 
     @NonNull
-    private final PublishRelay<Unit> openSearch = PublishRelay.create();
+    private final PublishSubject<Unit> openSearch = PublishSubject.create();
 
     HomeViewModel(@NonNull final Navigator navigator) {
         this.navigator = get(navigator);
     }
 
     void openSearch() {
-        openSearch.call(Unit.DEFAULT);
+        openSearch.onNext(Unit.DEFAULT);
     }
 
     @Override
-    public void bind(@NonNull final CompositeSubscription subscriptions) {
-        openSearch.subscribeOn(AndroidSchedulers.mainThread())
-                  .observeOn(Schedulers.computation())
+    public void bind(@NonNull final CompositeDisposable subscriptions) {
+        openSearch.subscribeOn(mainThread())
+                  .observeOn(computation())
                   .subscribe(__ -> navigator.openSearch(),
                              e -> Timber.e(e, "Error clearing search"));
 
