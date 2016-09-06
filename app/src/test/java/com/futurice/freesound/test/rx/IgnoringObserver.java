@@ -23,7 +23,7 @@ import rx.Observer;
 /**
  * An {@link Observer} which swallows all events without side effects.
  */
-public class IgnoringObserver<T> implements Observer<T> {
+public final class IgnoringObserver<T> implements Observer<T> {
 
     @NonNull
     public static <T> Observer<T> create() {
