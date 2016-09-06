@@ -63,6 +63,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    lintOptions {
+        lintConfig file('./quality/lint.xml')
+    }
+
 }
 
 task checkstyle(type: Checkstyle) {

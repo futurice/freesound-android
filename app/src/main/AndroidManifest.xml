@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.futurice.freesound">
+          xmlns:tools="http://schemas.android.com/tools" package="com.futurice.freesound">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -25,7 +25,8 @@
             android:allowBackup="false"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".feature.home.HomeActivity"
                   android:label="@string/app_name">
             <intent-filter>
@@ -40,6 +41,7 @@
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                        android:value="com.futurice.freesound.feature.home.HomeActivity"/>
         </activity>
+        <activity android:name=".feature.details.DetailsActivity"/>
     </application>
 
 </manifest>

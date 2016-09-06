@@ -15,9 +15,23 @@
  */
 
 ext {
-    def Properties props = new Properties()
-    props.load(new FileInputStream("$projectDir/freesound-api.properties"))
+    // CI Build
+    isCiBuild = System.getenv("TRAVIS") == "true"
 
-    freesound_api_key = props.getProperty("freesound.api.key")
+    // Freesound API
+    Properties apiProperties = loadFileProperties("$projectDir/freesound-api.properties")
+    freesound_api_key = apiProperties.getProperty("freesound.api.key", "null")
     freesound_api_url = "\"https://www.freesound.org/\""
+}
+
+def Properties loadFileProperties(String fileLocation) {
+    def Properties properties = new Properties()
+    try {
+        properties.load(new FileInputStream(fileLocation))
+    } catch (FileNotFoundException fnf) {
+        logger.log(LogLevel.ERROR,
+                String.format("Unable to load properties file: %s", fileLocation),
+                fnf)
+    }
+    return properties
 }

@@ -69,7 +69,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                         .subscribeOn(Schedulers.computation())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(SearchFragment.this::handleResults,
-                                                   e -> Timber.e("Error setting Sound items", e)));
+                                                   e -> Timber.e(e, "Error setting Sound items")));
         }
 
         @Override
