@@ -106,7 +106,6 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
                                                   ((FreesoundApplication) getApplication())
                                                           .component())
                                           .baseActivityModule(new BaseActivityModule(this))
-                                          .homeActivityModule(new HomeActivityModule())
                                           .build();
     }
 

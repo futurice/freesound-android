@@ -151,7 +151,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                                     ((FreesoundApplication) this
                                                             .getApplication()).component())
                                             .baseActivityModule(new BaseActivityModule(this))
-                                            .searchActivityModule(new SearchActivityModule())
                                             .build();
     }
 

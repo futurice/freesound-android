@@ -20,6 +20,7 @@ import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.test.rx.IgnoringObserver;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,6 @@ import java.util.List;
 import polanski.option.Option;
 import polanski.option.Unit;
 import rx.Observable;
-import rx.observers.TestObserver;
 import rx.observers.TestSubscriber;
 
 import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
@@ -125,7 +125,7 @@ public class DefaultSearchDataModelTest {
         TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
                 defaultSearchDataModel.getSearchResults());
 
-        defaultSearchDataModel.querySearch("dummy").subscribe(new TestObserver<>());
+        defaultSearchDataModel.querySearch("dummy").subscribe(IgnoringObserver.create());
 
         assertThat(ts).hasNoErrors();
     }
@@ -206,7 +206,7 @@ public class DefaultSearchDataModelTest {
     private class Act {
 
         void querySearch(String query) {
-            defaultSearchDataModel.querySearch(query).subscribe(new TestObserver<>());
+            defaultSearchDataModel.querySearch(query).subscribe();
         }
     }
 
