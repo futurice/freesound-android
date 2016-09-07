@@ -4,6 +4,8 @@
 
 Android client for the [Freesound Project](http://freesound.org/).
 
+![Searching for Berlin sounds](https://github.com/peter-tackage/freesound-android/raw/master/screenshots/screenshot1.png)
+
 API is defined as per the [Freesound Project API documentation](http://freesound.org/docs/api/).
 
 # Disclaimer
