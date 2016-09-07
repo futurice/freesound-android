@@ -24,10 +24,10 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class FunctionsTest {
 
     @Test
-    public void nothing1_doesNotInteractWithValue() {
+    public void nothing1_doesNotInteractWithValue() throws Exception{
         Object value = mock(Object.class);
 
-        Functions.nothing1().call(value);
+        Functions.nothing1().accept(value);
 
         verifyZeroInteractions(value);
     }

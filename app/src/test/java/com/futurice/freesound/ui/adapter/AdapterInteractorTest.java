@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static polanski.option.Option.NONE;
@@ -338,8 +338,7 @@ public class AdapterInteractorTest {
         return Observable.range(from, to)
                          .map(Object::toString)
                          .toList()
-                         .toBlocking()
-                         .single();
+                         .blockingFirst();
     }
 
     private static Collection<String> emptyStringCollection() {

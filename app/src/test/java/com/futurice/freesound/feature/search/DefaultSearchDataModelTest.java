@@ -20,7 +20,7 @@ import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
-import com.futurice.freesound.test.rx.IgnoringObserver;
+import com.futurice.freesound.test.rx.IgnoringSingleObserver;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +31,12 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.observers.TestObserver;
 import io.reactivex.subscribers.TestSubscriber;
 import polanski.option.Option;
 import polanski.option.Unit;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
-import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
@@ -74,9 +74,7 @@ public class DefaultSearchDataModelTest {
 
         TestSubscriber<Unit> ts = defaultSearchDataModel.querySearch(QUERY).test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Unit.DEFAULT)
-                      .hasCompleted();
+        ts.assertValue(Unit.DEFAULT);
     }
 
     @Test
@@ -84,9 +82,9 @@ public class DefaultSearchDataModelTest {
         final Exception expected = new Exception();
         new Arrangement().withSearchResultError(expected);
 
-        TestSubscriber<Unit> ts = testSubscribe(defaultSearchDataModel.querySearch("query"));
+        TestSubscriber<Unit> ts = defaultSearchDataModel.querySearch("query").test();
 
-        assertThat(ts).hasError(expected);
+        ts.assertError(expected);
     }
 
     @Test
@@ -94,13 +92,13 @@ public class DefaultSearchDataModelTest {
         final SoundSearchResult result = dummyResults();
         new Arrangement()
                 .withSearchResultsFor("", result);
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        testSubscribe(defaultSearchDataModel.querySearch(""));
+        defaultSearchDataModel.querySearch("").subscribe();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Option.ofObj(result.results()));
+        ts.assertNoErrors()
+          .assertValue(Option.ofObj(result.results()));
     }
 
     @Test
@@ -108,42 +106,42 @@ public class DefaultSearchDataModelTest {
         final SoundSearchResult result = dummyResults();
         new Arrangement()
                 .withSearchResultsFor(QUERY, result);
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        testSubscribe(defaultSearchDataModel.querySearch(QUERY));
+        defaultSearchDataModel.querySearch(QUERY).subscribe();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Option.ofObj(result.results()));
+        ts.assertNoErrors()
+          .assertValue(Option.ofObj(result.results()));
     }
 
     @Test
     public void getSearchResults_doesNotError_whenQuerySearchErrors() {
         new Arrangement()
                 .withSearchResultError(new Exception());
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        defaultSearchDataModel.querySearch("dummy").subscribe(IgnoringObserver.create());
+        defaultSearchDataModel.querySearch("dummy").subscribe(IgnoringSingleObserver.create());
 
-        assertThat(ts).hasNoErrors();
+        ts.assertNoErrors();
     }
 
     @Test
     public void getSearchResults_hasNoDefaultResults() {
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasNoValues();
+        ts.assertNoErrors()
+          .assertNoValues();
     }
 
     @Test
     public void getSearchResults_hasNoTerminalEvent() {
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        assertThat(ts).hasNoTerminalEvent();
+        ts.assertNotTerminated();
     }
 
     @Test
@@ -153,31 +151,31 @@ public class DefaultSearchDataModelTest {
                 .withSearchResultsFor(QUERY, result)
                 .act().querySearch(QUERY);
 
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Option.ofObj(result.results()));
+        ts.assertNoErrors()
+          .assertValue(Option.ofObj(result.results()));
     }
 
     @Test
     public void getSearchResults_emitsEmptyList_whenCleared() {
-        TestSubscriber<Option<List<Sound>>> ts = testSubscribe(
-                defaultSearchDataModel.getSearchResults());
+        TestObserver<Option<List<Sound>>> ts =
+                defaultSearchDataModel.getSearchResults().test();
 
-        testSubscribe(defaultSearchDataModel.clear());
+        defaultSearchDataModel.clear().subscribe();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValueWhich().isEqualTo(Option.none());
+        ts.assertNoErrors()
+          .assertValue(Option.none());
     }
 
     @Test
     public void clear_emitsSingleUnit() {
-        TestSubscriber<Unit> ts = testSubscribe(defaultSearchDataModel.clear());
+        TestSubscriber<Unit> ts = defaultSearchDataModel.clear().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(Unit.DEFAULT)
-                      .hasCompleted();
+        ts.assertNoErrors()
+          .assertValue(Unit.DEFAULT)
+          .assertComplete();
     }
 
     @NonNull
@@ -188,12 +186,12 @@ public class DefaultSearchDataModelTest {
     private class Arrangement {
 
         Arrangement withSearchResultsFor(String query, SoundSearchResult results) {
-            when(freeSoundSearchService.search(eq(query))).thenReturn(Observable.just(results));
+            when(freeSoundSearchService.search(eq(query))).thenReturn(Single.just(results));
             return this;
         }
 
         Arrangement withSearchResultError(Exception exception) {
-            when(freeSoundSearchService.search(any())).thenReturn(Observable.error(exception));
+            when(freeSoundSearchService.search(any())).thenReturn(Single.error(exception));
             return this;
         }
 
