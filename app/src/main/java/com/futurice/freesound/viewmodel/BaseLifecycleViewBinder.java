@@ -26,7 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
 
     @NonNull
-    private final CompositeDisposable subscription = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     @Override
     public void onCreate() {
@@ -35,12 +35,12 @@ public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
 
     @Override
     public void onResume() {
-        bind(subscription);
+        bind(disposable);
     }
 
     @Override
     public void onPause() {
-        subscription.clear();
+        disposable.clear();
         unbind();
     }
 
@@ -51,7 +51,7 @@ public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
 
     @Override
     public void onDestroy() {
-        subscription.dispose();
+        disposable.dispose();
     }
 
     @NonNull

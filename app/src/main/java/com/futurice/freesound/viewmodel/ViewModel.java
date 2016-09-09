@@ -27,7 +27,7 @@ public interface ViewModel {
     void unbindDataModel();
 
     // TODO This should be protected ideally
-    void bind(@NonNull final CompositeDisposable subscriptions);
+    void bind(@NonNull final CompositeDisposable disposables);
 
     void destroy();
 }

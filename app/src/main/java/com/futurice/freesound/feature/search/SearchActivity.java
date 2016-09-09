@@ -59,8 +59,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @NonNull
     private final Binder binder = new Binder() {
         @Override
-        public void bind(final CompositeDisposable subscriptions) {
-            subscriptions.add(searchViewModel.getClearButtonVisibleStream()
+        public void bind(final CompositeDisposable disposables) {
+            disposables.add(searchViewModel.getClearButtonVisibleStream()
                                              .subscribeOn(Schedulers.computation())
                                              .observeOn(mainThread())
                                              .subscribe(

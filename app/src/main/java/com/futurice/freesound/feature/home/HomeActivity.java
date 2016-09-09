@@ -46,7 +46,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     private final Binder binder = new Binder() {
 
         @Override
-        public void bind(@NonNull final CompositeDisposable subscription) {
+        public void bind(@NonNull final CompositeDisposable disposables) {
             // Nothing
         }
 

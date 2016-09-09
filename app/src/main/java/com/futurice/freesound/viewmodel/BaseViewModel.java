@@ -20,20 +20,20 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseViewModel implements ViewModel {
 
-    private final CompositeDisposable dataSubscription = new CompositeDisposable();
+    private final CompositeDisposable dataDisposable = new CompositeDisposable();
 
     @Override
     public final void bindToDataModel() {
-        bind(dataSubscription);
+        bind(dataDisposable);
     }
 
     @Override
     public final void unbindDataModel() {
-        dataSubscription.clear();
+        dataDisposable.clear();
     }
 
     @Override
     public final void destroy() {
-        dataSubscription.clear();
+        dataDisposable.clear();
     }
 }

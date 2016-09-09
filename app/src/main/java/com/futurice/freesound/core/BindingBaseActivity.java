@@ -33,8 +33,8 @@ public abstract class BindingBaseActivity<T> extends BaseActivity<T> {
     private final BaseLifecycleViewBinder lifecycleBinder = new BaseLifecycleViewBinder() {
 
         @Override
-        public void bind(@NonNull final CompositeDisposable subscription) {
-            binder().bind(subscription);
+        public void bind(@NonNull final CompositeDisposable disposables) {
+            binder().bind(disposables);
         }
 
         @Override

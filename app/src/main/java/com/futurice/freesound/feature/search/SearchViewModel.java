@@ -90,7 +90,7 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable subscriptions) {
+    public void bind(@NonNull final CompositeDisposable disposables) {
         searchTermRelay.subscribeOn(Schedulers.computation())
                        .observeOn(Schedulers.computation())
                        .map(String::trim)

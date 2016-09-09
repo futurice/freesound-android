@@ -49,7 +49,7 @@ final class HomeViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable subscriptions) {
+    public void bind(@NonNull final CompositeDisposable disposables) {
         openSearch.subscribeOn(mainThread())
                   .observeOn(computation())
                   .subscribe(__ -> navigator.openSearch(),
