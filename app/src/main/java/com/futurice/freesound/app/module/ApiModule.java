@@ -20,14 +20,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.futurice.freesound.network.api.FreeSoundApi;
-import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 
 import java.lang.annotation.Retention;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Named;
@@ -39,12 +36,9 @@ import dagger.Provides;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import timber.log.Timber;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -57,8 +51,8 @@ public final class ApiModule {
     @Provides
     @Singleton
     static FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
-                                     Gson gson,
-                                     OkHttpClient client) {
+                                            @ForFreeSoundApi Gson gson,
+                                            @ForFreeSoundApi OkHttpClient client) {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -70,11 +64,9 @@ public final class ApiModule {
 
     // Internal //
 
-
-
-
     @Provides
     @Singleton
+    @ForFreeSoundApi
     static Gson provideGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
@@ -84,6 +76,7 @@ public final class ApiModule {
 
     @Provides
     @Singleton
+    @ForFreeSoundApi
     static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
                                                @NetworkInterceptors List<Interceptor> networkInterceptor) {
         return createOkHttpClient(appInterceptor, networkInterceptor);
@@ -106,6 +99,11 @@ public final class ApiModule {
     @Qualifier
     @Retention(RUNTIME)
     @interface NetworkInterceptors {
+    }
+
+    @Qualifier
+    @Retention(RUNTIME)
+    @interface ForFreeSoundApi {
     }
 
 }
