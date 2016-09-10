@@ -142,6 +142,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.101-beta'
     testCompile 'org.assertj:assertj-core:1.7.1'
+
+    //TODO: Temporally removing assert lib until it supports Rx2
   //  testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
 }
 
