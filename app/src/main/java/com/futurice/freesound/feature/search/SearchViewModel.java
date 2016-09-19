@@ -49,7 +49,7 @@ final class SearchViewModel extends BaseViewModel {
 
     private static final String TAG = SearchViewModel.class.getSimpleName();
 
-    private static final int SEACH_DEBOUNCE_TIME_SECONDS = 2;
+    private static final int SEARCH_DEBOUNCE_TIME_SECONDS = 2;
 
     static final String NO_SEARCH = "";
 
@@ -99,7 +99,7 @@ final class SearchViewModel extends BaseViewModel {
         searchTermRelay.subscribeOn(Schedulers.computation())
                        .observeOn(Schedulers.computation())
                        .map(String::trim)
-                       .debounce(SEACH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
+                       .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
                        .switchMap(getSearchOrClear())
                        .observeOn(mainThread())
                        .subscribe(nothing1(),
