@@ -45,4 +45,9 @@ public final class CollectionUtils {
         }
         return true;
     }
+
+    private CollectionUtils() {
+        throw new AssertionError("No instances allowed");
+    }
+
 }

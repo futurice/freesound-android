@@ -49,4 +49,8 @@ public final class AndroidPreconditions {
         return Objects.equals(Looper.getMainLooper(), Looper.myLooper());
     }
 
+    private AndroidPreconditions() {
+        throw new AssertionError("No instances allowed");
+    }
+
 }
