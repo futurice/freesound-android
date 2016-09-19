@@ -28,7 +28,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -59,7 +58,7 @@ public class SoundItemViewModelTest {
         TestObserver<String> ts = vm.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
-                      .assertValue("");
+          .assertValue("");
     }
 
     @Test
@@ -71,7 +70,7 @@ public class SoundItemViewModelTest {
         TestObserver<String> ts = vm.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
-                      .assertValue("");
+          .assertValue("");
     }
 
     @Test
@@ -79,7 +78,7 @@ public class SoundItemViewModelTest {
         TestObserver<String> ts = soundItemViewModel.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
-                      .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
+          .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
     }
 
     @Test
@@ -87,7 +86,7 @@ public class SoundItemViewModelTest {
         TestObserver<String> ts = soundItemViewModel.name().test();
 
         ts.assertNoErrors()
-                      .assertValue(SOUND.name());
+          .assertValue(SOUND.name());
     }
 
     @Test
@@ -95,7 +94,7 @@ public class SoundItemViewModelTest {
         TestObserver<String> ts = soundItemViewModel.description().test();
 
         ts.assertNoErrors()
-                      .assertValue(SOUND.description());
+          .assertValue(SOUND.description());
     }
 
     @Test

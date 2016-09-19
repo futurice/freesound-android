@@ -21,11 +21,15 @@ import android.support.annotation.NonNull;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
-public class IgnoringSingleObserver<T> implements SingleObserver<T> {
+public final class IgnoringSingleObserver<T> implements SingleObserver<T> {
 
     @NonNull
     public static <T> SingleObserver<T> create() {
         return new IgnoringSingleObserver<>();
+    }
+
+    private IgnoringSingleObserver() {
+
     }
 
     @Override

@@ -30,10 +30,13 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 import polanski.option.Unit;
 import timber.log.Timber;
@@ -45,6 +48,8 @@ import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 final class SearchViewModel extends BaseViewModel {
 
     private static final String TAG = SearchViewModel.class.getSimpleName();
+
+    private static final int SEACH_DEBOUNCE_TIME_SECONDS = 2;
 
     static final String NO_SEARCH = "";
 
@@ -58,7 +63,7 @@ final class SearchViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
-    private final BehaviorSubject<String> searchTermRelay = BehaviorSubject
+    private final Subject<String> searchTermRelay = BehaviorSubject
             .createDefault(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
@@ -94,19 +99,25 @@ final class SearchViewModel extends BaseViewModel {
         searchTermRelay.subscribeOn(Schedulers.computation())
                        .observeOn(Schedulers.computation())
                        .map(String::trim)
-                       .debounce(2, TimeUnit.SECONDS)
-                       .switchMap(it -> searchOrClear(it).toObservable())
+                       .debounce(SEACH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
+                       .switchMap(getSearchOrClear())
                        .observeOn(mainThread())
                        .subscribe(nothing1(),
                                   e -> Timber.e(e, "Error when setting search term"));
     }
 
-    private Maybe<Unit> searchOrClear(@NonNull final String s) {
-        return TextUtils.isNullOrEmpty(s) ?
-                searchDataModel.clear().toMaybe() :
-                Single.just(s)
-                      .filter(StringFunctions.isNotEmpty())
-                      .flatMap(it -> searchDataModel.querySearch(it).toMaybe());
+    @NonNull
+    private Function<String, ObservableSource<Unit>> getSearchOrClear() {
+        return it -> searchOrClear(it).toObservable();
+    }
+
+    @NonNull
+    private Maybe<Unit> searchOrClear(@NonNull final String searchQuery) {
+        return TextUtils.isNullOrEmpty(searchQuery)
+                ? searchDataModel.clear().toMaybe()
+                : Single.just(searchQuery)
+                        .filter(StringFunctions.isNotEmpty())
+                        .flatMap(it -> searchDataModel.querySearch(it).toMaybe());
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

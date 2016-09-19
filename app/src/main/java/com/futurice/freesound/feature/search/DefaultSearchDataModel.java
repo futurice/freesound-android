@@ -51,13 +51,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
                                      .map(SoundSearchResult::results)
                                      .map(Option::ofObj)
                                      .doOnSuccess(lastResults::onNext)
-                                     .map(it -> Unit.DEFAULT);
+                                     .map(Unit::asUnit);
     }
 
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResults() {
-        return lastResults;
+        return lastResults.hide();
     }
 
     @Override
@@ -65,6 +65,6 @@ final class DefaultSearchDataModel implements SearchDataModel {
     public Single<Unit> clear() {
         return Single.just(Option.<List<Sound>>none())
                      .doOnSuccess(lastResults::onNext)
-                     .map(__ -> Unit.DEFAULT);
+                     .map(Unit::asUnit);
     }
 }

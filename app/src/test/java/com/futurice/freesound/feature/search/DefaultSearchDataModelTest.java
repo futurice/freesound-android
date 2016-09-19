@@ -74,7 +74,9 @@ public class DefaultSearchDataModelTest {
 
         TestSubscriber<Unit> ts = defaultSearchDataModel.querySearch(QUERY).test();
 
-        ts.assertValue(Unit.DEFAULT);
+        ts.assertNoErrors()
+          .assertComplete()
+          .assertValue(Unit.DEFAULT);
     }
 
     @Test
