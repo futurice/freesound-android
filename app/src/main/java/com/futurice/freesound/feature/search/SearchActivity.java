@@ -61,12 +61,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         @Override
         public void bind(final CompositeDisposable disposables) {
             disposables.add(searchViewModel.getClearButtonVisibleStream()
-                                             .subscribeOn(Schedulers.computation())
-                                             .observeOn(mainThread())
-                                             .subscribe(
-                                                     isVisible -> setClearSearchVisible(isVisible),
-                                                     e -> Timber
-                                                             .e(e, "Error setting query string")));
+                                           .subscribeOn(Schedulers.computation())
+                                           .observeOn(mainThread())
+                                           .subscribe(
+                                                   isVisible -> setClearSearchVisible(isVisible),
+                                                   e -> Timber
+                                                           .e(e, "Error setting query string")));
         }
 
         @Override

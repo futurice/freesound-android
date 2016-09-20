@@ -51,20 +51,20 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             final SoundItemViewModel vm = get(getViewModel());
 
             disposables.add(vm.name()
-                                .observeOn(mainThread())
-                                .subscribe(titleTextView::setText,
-                                           e -> Timber.e(e, "Unable to set SoundItem name")));
+                              .observeOn(mainThread())
+                              .subscribe(titleTextView::setText,
+                                         e -> Timber.e(e, "Unable to set SoundItem name")));
             disposables.add(vm.description()
-                                .observeOn(mainThread())
-                                .subscribe(descriptionTextView::setText,
-                                           e -> Timber
-                                                   .e(e, "Unable to set SoundItem description")));
+                              .observeOn(mainThread())
+                              .subscribe(descriptionTextView::setText,
+                                         e -> Timber
+                                                 .e(e, "Unable to set SoundItem description")));
 
             disposables.add(vm.thumbnailImageUrl()
-                                .observeOn(mainThread())
-                                .subscribe(url -> picasso.load(url)
-                                                         .into(waveformViewTarget),
-                                           e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
+                              .observeOn(mainThread())
+                              .subscribe(url -> picasso.load(url)
+                                                       .into(waveformViewTarget),
+                                         e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
             rootView.setOnClickListener(__ -> vm.openDetails());
         }

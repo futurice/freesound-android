@@ -67,8 +67,8 @@ public final class InstrumentationModule {
     static HttpLoggingInterceptor provideLoggingInterceptor() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
                 message -> Timber.tag("OkHttp").d(message));
-        interceptor
-                .setLevel(HttpLoggingInterceptor.Level.HEADERS); // TODO Headers only: Bug in HttpLoggingInterceptor, uses not public api
+        // TODO Headers only: Bug in HttpLoggingInterceptor, uses not public api
+        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         return interceptor;
     }
 }

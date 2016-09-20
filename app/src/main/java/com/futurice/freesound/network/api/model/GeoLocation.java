@@ -21,9 +21,6 @@ import com.google.auto.value.AutoValue;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-import java.util.Map;
-
 @AutoValue
 public abstract class GeoLocation implements Parcelable {
 
@@ -48,6 +45,5 @@ public abstract class GeoLocation implements Parcelable {
     public static Builder builder() {
         return new AutoValue_GeoLocation.Builder();
     }
-
 
 }

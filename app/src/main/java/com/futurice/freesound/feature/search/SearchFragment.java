@@ -66,10 +66,10 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
             disposables.add(viewModel().getSounds()
-                                        .subscribeOn(Schedulers.computation())
-                                        .observeOn(mainThread())
-                                        .subscribe(SearchFragment.this::handleResults,
-                                                   e -> Timber.e(e, "Error setting Sound items")));
+                                       .subscribeOn(Schedulers.computation())
+                                       .observeOn(mainThread())
+                                       .subscribe(SearchFragment.this::handleResults,
+                                                  e -> Timber.e(e, "Error setting Sound items")));
         }
 
         @Override
