@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.utils;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -82,6 +84,6 @@ public final class Preconditions {
     }
 
     private Preconditions() {
-        throw new AssertionError("No instances allowed");
+        throw new InstantiationForbiddenError();
     }
 }

@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.functional;
+package com.futurice.freesound.common;
 
-import com.futurice.freesound.common.InstantiationForbiddenError;
+/**
+ * An {@link Error} to be thrown to prevent unwanted instantiation of a class.
+ */
+public class InstantiationForbiddenError extends AssertionError {
 
-import android.support.annotation.NonNull;
+    private static final String MESSAGE = "No instances allowed";
 
-import io.reactivex.functions.Consumer;
-
-public final class Functions {
-
-    @NonNull
-    public static <T> Consumer<T> nothing1() {
-        return __ -> {
-        };
-    }
-
-    private Functions() {
-        throw new InstantiationForbiddenError();
+    public InstantiationForbiddenError() {
+        super(MESSAGE);
     }
 }

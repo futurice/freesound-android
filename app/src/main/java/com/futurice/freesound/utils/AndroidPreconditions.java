@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.utils;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.os.Looper;
 
 import java.util.Objects;
@@ -47,6 +49,10 @@ public final class AndroidPreconditions {
 
     private static boolean isMainThread() {
         return Objects.equals(Looper.getMainLooper(), Looper.myLooper());
+    }
+
+    private AndroidPreconditions() {
+        throw new InstantiationForbiddenError();
     }
 
 }
