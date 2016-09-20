@@ -20,17 +20,17 @@ import com.futurice.freesound.utils.TextUtils;
 
 import android.support.annotation.NonNull;
 
-import rx.functions.Func1;
+import io.reactivex.functions.Predicate;
 
 public final class StringFunctions {
 
     @NonNull
-    public static Func1<String, Boolean> isEmpty() {
+    public static Predicate<String> isEmpty() {
         return TextUtils::isNullOrEmpty;
     }
 
     @NonNull
-    public static Func1<String, Boolean> isNotEmpty() {
+    public static Predicate<String> isNotEmpty() {
         return TextUtils::isNotNullOrEmpty;
     }
 

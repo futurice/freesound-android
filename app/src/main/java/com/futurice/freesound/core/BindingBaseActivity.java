@@ -25,7 +25,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BindingBaseActivity<T> extends BaseActivity<T> {
 
@@ -33,8 +33,8 @@ public abstract class BindingBaseActivity<T> extends BaseActivity<T> {
     private final BaseLifecycleViewBinder lifecycleBinder = new BaseLifecycleViewBinder() {
 
         @Override
-        public void bind(@NonNull final CompositeSubscription subscription) {
-            binder().bind(subscription);
+        public void bind(@NonNull final CompositeDisposable disposables) {
+            binder().bind(disposables);
         }
 
         @Override

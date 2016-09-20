@@ -21,7 +21,7 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.Collections;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -103,14 +103,12 @@ public class CollectionUtilsTest {
         if (start <= end) {
             return Observable.range(start, end - start)
                              .toList()
-                             .toBlocking()
-                             .first();
+                             .blockingFirst();
         } else {
             return Observable.range(end, start - end)
                              .map(it -> (start + end) - it - 1)
                              .toList()
-                             .toBlocking()
-                             .first();
+                             .blockingFirst();
         }
     }
 }

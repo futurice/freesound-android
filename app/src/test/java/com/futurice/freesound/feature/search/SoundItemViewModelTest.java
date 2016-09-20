@@ -27,10 +27,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import rx.observers.TestSubscriber;
+import io.reactivex.observers.TestObserver;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
-import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -57,10 +55,10 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(null);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestSubscriber<String> ts = testSubscribe(vm.thumbnailImageUrl());
+        TestObserver<String> ts = vm.thumbnailImageUrl().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue("");
+        ts.assertNoErrors()
+          .assertValue("");
     }
 
     @Test
@@ -69,34 +67,34 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(Maps.newHashMap());
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestSubscriber<String> ts = testSubscribe(vm.thumbnailImageUrl());
+        TestObserver<String> ts = vm.thumbnailImageUrl().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue("");
+        ts.assertNoErrors()
+          .assertValue("");
     }
 
     @Test
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
-        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.thumbnailImageUrl());
+        TestObserver<String> ts = soundItemViewModel.thumbnailImageUrl().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(SOUND.images().get(SoundImageFormat.waveform_m));
+        ts.assertNoErrors()
+          .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
     }
 
     @Test
     public void name_emitsSoundName() {
-        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.name());
+        TestObserver<String> ts = soundItemViewModel.name().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(SOUND.name());
+        ts.assertNoErrors()
+          .assertValue(SOUND.name());
     }
 
     @Test
     public void description_emitsSoundDescription() {
-        TestSubscriber<String> ts = testSubscribe(soundItemViewModel.description());
+        TestObserver<String> ts = soundItemViewModel.description().test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(SOUND.description());
+        ts.assertNoErrors()
+          .assertValue(SOUND.description());
     }
 
     @Test

@@ -14,25 +14,36 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.test.utils;
+package com.futurice.freesound.test.rx;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 
-import static com.futurice.freesound.utils.Preconditions.get;
-
-public final class TestSubscriberUtils {
+public final class IgnoringSingleObserver<T> implements SingleObserver<T> {
 
     @NonNull
-    public static <T> TestSubscriber<T> testSubscribe(@NonNull final Observable<T> observable) {
-        TestSubscriber<T> ts = new TestSubscriber<>();
-        get(observable).subscribe(ts);
-        return ts;
+    public static <T> SingleObserver<T> create() {
+        return new IgnoringSingleObserver<>();
     }
 
-    public TestSubscriberUtils() {
-        throw new AssertionError("No instances allowed");
+    private IgnoringSingleObserver() {
+
+    }
+
+    @Override
+    public void onSubscribe(final Disposable d) {
+
+    }
+
+    @Override
+    public void onSuccess(final T value) {
+
+    }
+
+    @Override
+    public void onError(final Throwable e) {
+
     }
 }

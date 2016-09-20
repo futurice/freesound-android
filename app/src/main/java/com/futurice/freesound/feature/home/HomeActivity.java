@@ -32,7 +32,7 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -46,7 +46,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     private final Binder binder = new Binder() {
 
         @Override
-        public void bind(@NonNull final CompositeSubscription subscription) {
+        public void bind(@NonNull final CompositeDisposable disposables) {
             // Nothing
         }
 

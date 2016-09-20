@@ -22,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import com.futurice.freesound.network.api.FreeSoundApi;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 
 import java.lang.annotation.Retention;
@@ -37,7 +38,6 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -54,7 +54,7 @@ public final class ApiModule {
                                             @ForFreeSoundApi Gson gson,
                                             @ForFreeSoundApi OkHttpClient client) {
         return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .baseUrl(url)

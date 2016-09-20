@@ -20,10 +20,10 @@ import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Single;
 
 public interface FreeSoundSearchService {
 
     @NonNull
-    Observable<SoundSearchResult> search(@NonNull String query);
+    Single<SoundSearchResult> search(@NonNull String query);
 }

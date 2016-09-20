@@ -16,24 +16,24 @@
 
 package com.futurice.freesound.viewmodel;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseViewModel implements ViewModel {
 
-    private final CompositeSubscription dataSubscription = new CompositeSubscription();
+    private final CompositeDisposable dataDisposable = new CompositeDisposable();
 
     @Override
     public final void bindToDataModel() {
-        bind(dataSubscription);
+        bind(dataDisposable);
     }
 
     @Override
     public final void unbindDataModel() {
-        dataSubscription.clear();
+        dataDisposable.clear();
     }
 
     @Override
     public final void destroy() {
-        dataSubscription.clear();
+        dataDisposable.clear();
     }
 }

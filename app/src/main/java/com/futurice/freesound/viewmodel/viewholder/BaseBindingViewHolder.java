@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -36,7 +36,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     private T viewModel;
 
     @NonNull
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     protected BaseBindingViewHolder(@NonNull final View view) {
         super(get(view));
@@ -65,7 +65,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     }
 
     private void bindViewToViewModel() {
-        getViewBinder().bind(subscriptions);
+        getViewBinder().bind(disposables);
     }
 
     private void setAndBindDataModel(@NonNull final T viewModel) {
@@ -75,7 +75,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
 
     private void unbindViewFromViewModel() {
         // Don't unsubscribe - we need to reuse it!
-        subscriptions.clear();
+        disposables.clear();
         getViewBinder().unbind();
     }
 

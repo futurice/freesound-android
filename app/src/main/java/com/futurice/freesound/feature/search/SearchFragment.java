@@ -36,13 +36,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {
 
@@ -64,10 +64,10 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     private final Binder binder = new Binder() {
 
         @Override
-        public void bind(@NonNull final CompositeSubscription subscription) {
-            subscription.add(viewModel().getSounds()
+        public void bind(@NonNull final CompositeDisposable disposables) {
+            disposables.add(viewModel().getSounds()
                                         .subscribeOn(Schedulers.computation())
-                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .observeOn(mainThread())
                                         .subscribe(SearchFragment.this::handleResults,
                                                    e -> Timber.e(e, "Error setting Sound items")));
         }

@@ -23,33 +23,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StringFunctionsTest {
 
     @Test
-    public void isEmpty_returnsTrue_whenCalled_withEmptyString() {
-        assertThat(StringFunctions.isEmpty().call("")).isTrue();
+    public void isEmpty_returnsTrue_whenCalled_withEmptyString() throws Exception {
+        assertThat(StringFunctions.isEmpty().test("")).isTrue();
     }
 
     @Test
-    public void isEmpty_returnsTrue_whenCalled_withNull() {
-        assertThat(StringFunctions.isEmpty().call(null)).isTrue();
+    public void isEmpty_returnsTrue_whenCalled_withNull() throws Exception {
+        assertThat(StringFunctions.isEmpty().test(null)).isTrue();
     }
 
     @Test
-    public void isEmpty_returnsFalse_whenCalled_withString() {
-        assertThat(StringFunctions.isEmpty().call("dummy")).isFalse();
+    public void isEmpty_returnsFalse_whenCalled_withString() throws Exception {
+        assertThat(StringFunctions.isEmpty().test("dummy")).isFalse();
     }
 
     @Test
-    public void isNotEmpty_returnsFalse_whenCalled_withEmptyString() {
-        assertThat(StringFunctions.isNotEmpty().call("")).isFalse();
+    public void isNotEmpty_returnsFalse_whenCalled_withEmptyString() throws Exception {
+        assertThat(StringFunctions.isNotEmpty().test("")).isFalse();
     }
 
     @Test
-    public void isNotEmpty_returnsFalse_whenCalled_withNull() {
-        assertThat(StringFunctions.isNotEmpty().call(null)).isFalse();
+    public void isNotEmpty_returnsFalse_whenCalled_withNull() throws Exception {
+        assertThat(StringFunctions.isNotEmpty().test(null)).isFalse();
     }
 
     @Test
-    public void isNotEmpty_returnsTrue_whenCalled_withString() {
-        assertThat(StringFunctions.isNotEmpty().call("dummy")).isTrue();
+    public void isNotEmpty_returnsTrue_whenCalled_withString() throws Exception {
+        assertThat(StringFunctions.isNotEmpty().test("dummy")).isTrue();
     }
 
 }

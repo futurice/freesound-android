@@ -23,7 +23,7 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;

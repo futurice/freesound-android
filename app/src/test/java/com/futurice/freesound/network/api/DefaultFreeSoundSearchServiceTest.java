@@ -27,11 +27,9 @@ import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.observers.TestSubscriber;
+import io.reactivex.Single;
+import io.reactivex.subscribers.TestSubscriber;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
-import static com.petertackage.assertrx.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -65,17 +63,17 @@ public class DefaultFreeSoundSearchServiceTest {
         new Arrangement().withApiResultResult(RESULT);
 
         TestSubscriber<SoundSearchResult> ts =
-                testSubscribe(defaultFreeSoundSearchService.search(QUERY));
+                defaultFreeSoundSearchService.search(QUERY).test();
 
-        assertThat(ts).hasNoErrors()
-                      .hasReceivedValue(RESULT);
+        ts.assertNoErrors()
+          .assertValue(RESULT);
     }
 
     @Test
     public void search_invokesApiWithCorrectParameters() {
         new Arrangement().withApiResultResult(RESULT);
 
-        testSubscribe(defaultFreeSoundSearchService.search(QUERY));
+        defaultFreeSoundSearchService.search(QUERY).subscribe();
 
         //noinspection deprecation
         verify(freeSoundApi).search(eq(QUERY), isNull(String.class), eq(SoundFields.BASE));
@@ -86,23 +84,23 @@ public class DefaultFreeSoundSearchServiceTest {
         new Arrangement().withApiError(ERROR);
 
         TestSubscriber<SoundSearchResult> ts =
-                testSubscribe(defaultFreeSoundSearchService.search(QUERY));
+                defaultFreeSoundSearchService.search(QUERY).test();
 
-        assertThat(ts).hasNoValues()
-                      .hasError(ERROR);
+        ts.assertNoValues()
+          .assertError(ERROR);
     }
 
     private class Arrangement {
 
         Arrangement withApiResultResult(@NonNull final SoundSearchResult result) {
             when(freeSoundApi.search(anyString(), any(), any(SoundFields.class)))
-                    .thenReturn(Observable.just(result));
+                    .thenReturn(Single.just(result));
             return this;
         }
 
         Arrangement withApiError(@NonNull final Throwable error) {
             when(freeSoundApi.search(anyString(), any(), any(SoundFields.class)))
-                    .thenReturn(Observable.error(error));
+                    .thenReturn(Single.error(error));
             return this;
         }
 

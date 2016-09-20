@@ -22,18 +22,19 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import polanski.option.Option;
 import polanski.option.Unit;
-import rx.Observable;
 
 public interface SearchDataModel {
 
     @NonNull
-    Observable<Unit> querySearch(@NonNull String query);
+    Single<Unit> querySearch(@NonNull String query);
 
     @NonNull
     Observable<Option<List<Sound>>> getSearchResults();
 
     @NonNull
-    Observable<Unit> clear();
+    Single<Unit> clear();
 }

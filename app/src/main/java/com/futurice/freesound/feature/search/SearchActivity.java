@@ -36,14 +36,14 @@ import android.widget.ImageView;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
 
@@ -59,10 +59,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @NonNull
     private final Binder binder = new Binder() {
         @Override
-        public void bind(final CompositeSubscription subscriptions) {
-            subscriptions.add(searchViewModel.getClearButtonVisibleStream()
+        public void bind(final CompositeDisposable disposables) {
+            disposables.add(searchViewModel.getClearButtonVisibleStream()
                                              .subscribeOn(Schedulers.computation())
-                                             .observeOn(AndroidSchedulers.mainThread())
+                                             .observeOn(mainThread())
                                              .subscribe(
                                                      isVisible -> setClearSearchVisible(isVisible),
                                                      e -> Timber

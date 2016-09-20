@@ -18,7 +18,8 @@ package com.futurice.freesound.test.rx;
 
 import android.support.annotation.NonNull;
 
-import rx.Observer;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * An {@link Observer} which swallows all events without side effects.
@@ -31,12 +32,17 @@ public final class IgnoringObserver<T> implements Observer<T> {
     }
 
     @Override
-    public void onCompleted() {
+    public void onError(final Throwable e) {
 
     }
 
     @Override
-    public void onError(final Throwable e) {
+    public void onComplete() {
+
+    }
+
+    @Override
+    public void onSubscribe(final Disposable d) {
 
     }
 

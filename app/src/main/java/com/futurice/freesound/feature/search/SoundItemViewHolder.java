@@ -29,11 +29,11 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
 
@@ -46,22 +46,22 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     private final Binder viewBinder = new Binder() {
 
         @Override
-        public void bind(@NonNull final CompositeSubscription subscriptions) {
+        public void bind(@NonNull final CompositeDisposable disposables) {
 
             final SoundItemViewModel vm = get(getViewModel());
 
-            subscriptions.add(vm.name()
-                                .observeOn(AndroidSchedulers.mainThread())
+            disposables.add(vm.name()
+                                .observeOn(mainThread())
                                 .subscribe(titleTextView::setText,
                                            e -> Timber.e(e, "Unable to set SoundItem name")));
-            subscriptions.add(vm.description()
-                                .observeOn(AndroidSchedulers.mainThread())
+            disposables.add(vm.description()
+                                .observeOn(mainThread())
                                 .subscribe(descriptionTextView::setText,
                                            e -> Timber
                                                    .e(e, "Unable to set SoundItem description")));
 
-            subscriptions.add(vm.thumbnailImageUrl()
-                                .observeOn(AndroidSchedulers.mainThread())
+            disposables.add(vm.thumbnailImageUrl()
+                                .observeOn(mainThread())
                                 .subscribe(url -> picasso.load(url)
                                                          .into(waveformViewTarget),
                                            e -> Timber.e(e, "Unable to set SoundItem thumbnail")));

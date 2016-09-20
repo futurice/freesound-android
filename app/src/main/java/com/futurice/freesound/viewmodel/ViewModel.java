@@ -18,7 +18,7 @@ package com.futurice.freesound.viewmodel;
 
 import android.support.annotation.NonNull;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 public interface ViewModel {
 
@@ -27,7 +27,7 @@ public interface ViewModel {
     void unbindDataModel();
 
     // TODO This should be protected ideally
-    void bind(@NonNull final CompositeSubscription subscriptions);
+    void bind(@NonNull final CompositeDisposable disposables);
 
     void destroy();
 }
