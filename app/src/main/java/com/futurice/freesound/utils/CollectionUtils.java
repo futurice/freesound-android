@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.utils;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.support.annotation.Nullable;
 
 import java.util.Collection;
@@ -47,7 +49,7 @@ public final class CollectionUtils {
     }
 
     private CollectionUtils() {
-        throw new AssertionError("No instances allowed");
+        throw new InstantiationForbiddenError();
     }
 
 }

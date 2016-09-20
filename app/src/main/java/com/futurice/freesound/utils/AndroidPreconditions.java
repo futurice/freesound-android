@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.utils;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.os.Looper;
 
 import java.util.Objects;
@@ -50,7 +52,7 @@ public final class AndroidPreconditions {
     }
 
     private AndroidPreconditions() {
-        throw new AssertionError("No instances allowed");
+        throw new InstantiationForbiddenError();
     }
 
 }

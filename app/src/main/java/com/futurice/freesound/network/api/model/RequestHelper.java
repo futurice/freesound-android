@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.network.api.model;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.support.annotation.NonNull;
 
 import java.util.Iterator;
@@ -41,6 +43,6 @@ final class RequestHelper {
     }
 
     private RequestHelper() {
-        throw new AssertionError("No instances allowed");
+        throw new InstantiationForbiddenError();
     }
 }

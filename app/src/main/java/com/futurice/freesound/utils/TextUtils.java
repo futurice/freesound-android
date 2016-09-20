@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.utils;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
+
 import android.support.annotation.Nullable;
 
 public final class TextUtils {
@@ -29,6 +31,6 @@ public final class TextUtils {
     }
 
     private TextUtils() {
-        throw new AssertionError("No instances allowed.");
+        throw new InstantiationForbiddenError();
     }
 }

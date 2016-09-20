@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.test.data;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundImageFormat;
@@ -96,6 +97,6 @@ public final class TestData {
     }
 
     private TestData() {
-        throw new AssertionError("No instances allowed");
+        throw new InstantiationForbiddenError();
     }
 }
