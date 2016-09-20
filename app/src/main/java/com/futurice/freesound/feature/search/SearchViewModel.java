@@ -39,11 +39,11 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 import polanski.option.Unit;
-import timber.log.Timber;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static timber.log.Timber.e;
 
 final class SearchViewModel extends BaseViewModel {
 
@@ -96,14 +96,14 @@ final class SearchViewModel extends BaseViewModel {
 
     @Override
     public void bind(@NonNull final CompositeDisposable disposables) {
-        searchTermRelay.subscribeOn(Schedulers.computation())
-                       .observeOn(Schedulers.computation())
-                       .map(String::trim)
-                       .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                       .switchMap(getSearchOrClear())
-                       .observeOn(mainThread())
-                       .subscribe(nothing1(),
-                                  e -> Timber.e(e, "Error when setting search term"));
+        disposables.add(searchTermRelay.subscribeOn(Schedulers.computation())
+                                       .observeOn(Schedulers.computation())
+                                       .map(String::trim)
+                                       .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
+                                       .switchMap(getSearchOrClear())
+                                       .observeOn(mainThread())
+                                       .subscribe(nothing1(),
+                                                  e -> e(e, "Error when setting search term")));
     }
 
     @NonNull
