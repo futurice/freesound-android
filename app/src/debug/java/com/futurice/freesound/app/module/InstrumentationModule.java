@@ -17,13 +17,11 @@
 package com.futurice.freesound.app.module;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -32,20 +30,17 @@ import okhttp3.Interceptor;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
-import static com.futurice.freesound.app.module.ApiModule.API_TOKEN_CONFIG;
-
 @Module
 public final class InstrumentationModule {
 
     @Provides
     @Singleton
     @ApiModule.NetworkInterceptors
-    static List<Interceptor> provideNetworkInterceptors(FreeSoundApiInterceptor apiInterceptor,
-                                                        HttpLoggingInterceptor loggingInterceptor) {
-        List<Interceptor> networkInterceptors = new ArrayList<>(1);
-        networkInterceptors.add(new StethoInterceptor());
-        networkInterceptors.add(apiInterceptor);
+    static List<Interceptor> provideNetworkInterceptors(HttpLoggingInterceptor loggingInterceptor,
+                                                        StethoInterceptor stethoInterceptor) {
+        List<Interceptor> networkInterceptors = new ArrayList<>(2);
         networkInterceptors.add(loggingInterceptor);
+        networkInterceptors.add(stethoInterceptor);
         return networkInterceptors;
     }
 
@@ -58,17 +53,17 @@ public final class InstrumentationModule {
 
     @Provides
     @Singleton
-    static FreeSoundApiInterceptor provideApiInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
-        return new FreeSoundApiInterceptor(apiToken);
-    }
-
-    @Provides
-    @Singleton
     static HttpLoggingInterceptor provideLoggingInterceptor() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
                 message -> Timber.tag("OkHttp").d(message));
         // TODO Headers only: Bug in HttpLoggingInterceptor, uses not public api
         interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         return interceptor;
+    }
+
+    @Provides
+    @Singleton
+    static StethoInterceptor provideStethoInterceptor() {
+        return new StethoInterceptor();
     }
 }
