@@ -19,7 +19,6 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.functional.StringFunctions;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
@@ -29,12 +28,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Single;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
@@ -44,12 +39,9 @@ import polanski.option.Unit;
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static timber.log.Timber.e;
 
 final class SearchViewModel extends BaseViewModel {
-
-    private static final String TAG = SearchViewModel.class.getSimpleName();
 
     private static final int SEARCH_DEBOUNCE_TIME_SECONDS = 2;
 
@@ -111,23 +103,17 @@ final class SearchViewModel extends BaseViewModel {
         disposables.add(searchTermSubject.observeOn(Schedulers.computation())
                                          .map(String::trim)
                                          .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                                         .switchMap(getSearchOrClear())
+                                         .switchMap(this::searchOrClear)
                                          .subscribe(nothing1(),
-                                                  e -> e(e, "Error when setting search term")));
+                                                    e -> e(e, "Error when setting search term")));
     }
 
     @NonNull
-    private Function<String, ObservableSource<Unit>> getSearchOrClear() {
-        return it -> searchOrClear(it).toObservable();
-    }
-
-    @NonNull
-    private Maybe<Unit> searchOrClear(@NonNull final String searchQuery) {
-        return TextUtils.isNullOrEmpty(searchQuery)
-                ? searchDataModel.clear().toMaybe()
-                : Single.just(searchQuery)
-                        .filter(StringFunctions.isNotEmpty())
-                        .flatMap(it -> searchDataModel.querySearch(it).toMaybe());
+    private Observable<Unit> searchOrClear(@NonNull final String searchQuery) {
+        return (TextUtils.isNullOrEmpty(searchQuery)
+                ? searchDataModel.clear()
+                : searchDataModel.querySearch(searchQuery))
+                .toObservable();
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

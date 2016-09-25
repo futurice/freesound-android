@@ -28,7 +28,6 @@ import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
-import static io.reactivex.schedulers.Schedulers.computation;
 
 final class HomeViewModel extends BaseViewModel {
 
@@ -36,22 +35,21 @@ final class HomeViewModel extends BaseViewModel {
     private final Navigator navigator;
 
     @NonNull
-    private final PublishSubject<Unit> openSearch = PublishSubject.create();
+    private final PublishSubject<Unit> openSearchSubject = PublishSubject.create();
 
     HomeViewModel(@NonNull final Navigator navigator) {
         this.navigator = get(navigator);
     }
 
     void openSearch() {
-        openSearch.onNext(Unit.DEFAULT);
+        openSearchSubject.onNext(Unit.DEFAULT);
     }
 
     @Override
     public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(openSearch.subscribeOn(mainThread())
-                                  .observeOn(computation())
-                                  .subscribe(__ -> navigator.openSearch(),
-                                             e -> Timber.e(e, "Error clearing search")));
+        disposables.add(openSearchSubject.observeOn(mainThread())
+                                         .subscribe(__ -> navigator.openSearch(),
+                                                    e -> Timber.e(e, "Error clearing search")));
 
     }
 }

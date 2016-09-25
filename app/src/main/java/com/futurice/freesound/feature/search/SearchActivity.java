@@ -72,7 +72,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                            .subscribe(SearchActivity.this::setClearSearchVisible,
                                                       e -> e(e, "Error setting query string")));
 
-            disposables.add(getQueryChange(searchView)
+            disposables.add(getTextChange(searchView)
                                     .observeOn(computation())
                                     .subscribe(searchViewModel::search,
                                                e -> e(e, "Error getting changed text")));
@@ -92,6 +92,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     public static void open(@NonNull final Context context) {
         checkNotNull(context, "Launching context cannot be null");
+
         Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
     }
@@ -120,7 +121,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @NonNull
-    private static Flowable<String> getQueryChange(@NonNull final SearchView view) {
+    private static Flowable<String> getTextChange(@NonNull final SearchView view) {
         return Flowable.create(new FlowableOnSubscribe<String>() {
             @Override
             public void subscribe(final FlowableEmitter<String> e) throws Exception {
@@ -132,7 +133,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
                     @Override
                     public boolean onQueryTextChange(final String newText) {
-                        e.onNext(newText);
+                        e.onNext(get(newText));
                         return true;
                     }
                 });
