@@ -22,7 +22,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public interface Binder {
 
-    void bind(@NonNull final CompositeDisposable disposables);
+    void bind(@NonNull CompositeDisposable disposables);
 
     void unbind();
 
