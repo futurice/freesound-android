@@ -43,6 +43,8 @@ import static timber.log.Timber.e;
 
 final class SearchViewModel extends BaseViewModel {
 
+    private static final String TAG = SearchViewModel.class.getSimpleName();
+
     private static final int SEARCH_DEBOUNCE_TIME_SECONDS = 2;
 
     static final String NO_SEARCH = "";
@@ -59,6 +61,8 @@ final class SearchViewModel extends BaseViewModel {
     @NonNull
     private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
+    @NonNull
+    private final BehaviorSubject<Option<Throwable>> lastError = BehaviorSubject.create();
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
                     @NonNull final Navigator navigator,
@@ -77,6 +81,7 @@ final class SearchViewModel extends BaseViewModel {
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
+        lastError.onNext(Option.ofObj(null));
         searchTermOnceAndStream.onNext(query);
     }
 
@@ -105,9 +110,8 @@ final class SearchViewModel extends BaseViewModel {
                                      .debounce(SEARCH_DEBOUNCE_TIME_SECONDS,
                                                TimeUnit.SECONDS)
                                      .switchMap(query -> searchOrClear(query).toObservable())
-                                     .subscribe(nothing1(),
-                                                e -> e(e,
-                                                       "Error when setting search term")));
+                                     .subscribe(unit -> lastError.onNext(Option.ofObj(null)),
+                                             e -> lastError.onNext(Option.ofObj(e))));
     }
 
     @NonNull
@@ -121,4 +125,8 @@ final class SearchViewModel extends BaseViewModel {
         return TextUtils.isNotNullOrEmpty(query);
     }
 
+    @NonNull
+    Observable<Option<Throwable>> getSearchErrors() {
+        return lastError.hide();
+    }
 }
