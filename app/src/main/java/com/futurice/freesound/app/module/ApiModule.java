@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.futurice.freesound.network.api.FreeSoundApi;
+import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -78,17 +79,26 @@ public final class ApiModule {
     @Singleton
     @ForFreeSoundApi
     static OkHttpClient provideApiOkHttpClient(@AppInterceptors List<Interceptor> appInterceptor,
-                                               @NetworkInterceptors List<Interceptor> networkInterceptor) {
-        return createOkHttpClient(appInterceptor, networkInterceptor);
+                                               @NetworkInterceptors List<Interceptor> networkInterceptor,
+                                               FreeSoundApiInterceptor apiInterceptor) {
+        return createOkHttpClient(appInterceptor, networkInterceptor, apiInterceptor);
     }
 
     private static OkHttpClient createOkHttpClient(List<Interceptor> appInterceptors,
-                                                   List<Interceptor> networkInterceptors) {
+                                                   List<Interceptor> networkInterceptors,
+                                                   FreeSoundApiInterceptor freeSoundApiInterceptor) {
         Builder okBuilder = new Builder();
         okBuilder.interceptors().addAll(appInterceptors);
         okBuilder.networkInterceptors().addAll(networkInterceptors);
+        okBuilder.interceptors().add(freeSoundApiInterceptor);
 
         return okBuilder.build();
+    }
+
+    @Provides
+    @Singleton
+    static FreeSoundApiInterceptor provideApiInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
+        return new FreeSoundApiInterceptor(apiToken);
     }
 
     @Qualifier
