@@ -16,11 +16,11 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.R;
+import com.futurice.freesound.R.id;
+import com.futurice.freesound.R.layout;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.utils.Preconditions;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.ViewModel;
 
@@ -30,20 +30,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableEmitter.BackpressureMode;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
-import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.computation;
+import static timber.log.Timber.e;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
 
@@ -59,14 +64,18 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @NonNull
     private final Binder binder = new Binder() {
         @Override
-        public void bind(final CompositeDisposable disposables) {
+        public void bind(@NonNull final CompositeDisposable disposables) {
+            checkNotNull(searchView, "Search view cannot be null.");
+
             disposables.add(searchViewModel.getClearButtonVisibleStream()
-                                           .subscribeOn(Schedulers.computation())
                                            .observeOn(mainThread())
-                                           .subscribe(
-                                                   isVisible -> setClearSearchVisible(isVisible),
-                                                   e -> Timber
-                                                           .e(e, "Error setting query string")));
+                                           .subscribe(SearchActivity.this::setClearSearchVisible,
+                                                      e -> e(e, "Error setting query string")));
+
+            disposables.add(getQueryChange(searchView)
+                                    .observeOn(computation())
+                                    .subscribe(searchViewModel::search,
+                                               e -> e(e, "Error getting changed text")));
         }
 
         @Override
@@ -75,8 +84,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         }
     };
 
-    private void setClearSearchVisible(@NonNull final Boolean clearVisible) {
-        Preconditions.checkNotNull(closeButton, "Close Button has not been bound");
+    private void setClearSearchVisible(final boolean clearVisible) {
+        checkNotNull(closeButton, "Close Button has not been bound");
 
         get(closeButton).setVisibility(clearVisible ? View.VISIBLE : View.GONE);
     }
@@ -90,30 +99,19 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(layout.activity_search);
         Option.ofObj(savedInstanceState)
               .ifNone(this::addSearchFragment);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
+        Toolbar toolbar = (Toolbar) findViewById(id.toolbar_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        searchView = (SearchView) findViewById(R.id.search_view);
+        searchView = get((SearchView) findViewById(id.search_view));
         searchView.setIconified(false);
         closeButton = (ImageView) searchView
                 .findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
 
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                search(newText);
-                return true;
-            }
-        });
         searchView.setOnCloseListener(() -> {
             searchView.setQuery(SearchViewModel.NO_SEARCH, true);
             return true;
@@ -121,9 +119,26 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     }
 
-    private boolean search(final String query) {
-        searchViewModel.search(query);
-        return true;
+    @NonNull
+    private static Flowable<String> getQueryChange(@NonNull final SearchView view) {
+        return Flowable.create(new FlowableOnSubscribe<String>() {
+            @Override
+            public void subscribe(final FlowableEmitter<String> e) throws Exception {
+                view.setOnQueryTextListener(new OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(final String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(final String newText) {
+                        e.onNext(newText);
+                        return true;
+                    }
+                });
+            }
+        }, BackpressureMode.LATEST)
+                       .subscribeOn(mainThread());
     }
 
     @NonNull
@@ -148,15 +163,15 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     protected SearchActivityComponent createComponent() {
         return DaggerSearchActivityComponent.builder()
                                             .freesoundApplicationComponent(
-                                                    ((FreesoundApplication) this
-                                                            .getApplication()).component())
+                                                    ((FreesoundApplication) getApplication())
+                                                            .component())
                                             .baseActivityModule(new BaseActivityModule(this))
                                             .build();
     }
 
     private void addSearchFragment() {
         getSupportFragmentManager().beginTransaction()
-                                   .add(R.id.container, SearchFragment.create())
+                                   .add(id.container, SearchFragment.create())
                                    .commit();
     }
 

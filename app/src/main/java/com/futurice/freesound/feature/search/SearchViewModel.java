@@ -65,7 +65,7 @@ final class SearchViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
-    private final Subject<String> searchTermRelay = BehaviorSubject
+    private final Subject<String> searchTermSubject = BehaviorSubject
             .createDefault(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
@@ -78,13 +78,14 @@ final class SearchViewModel extends BaseViewModel {
 
     @NonNull
     Observable<Boolean> getClearButtonVisibleStream() {
-        return searchTermRelay.map(SearchViewModel::isCloseEnabled);
+        return searchTermSubject.observeOn(Schedulers.computation())
+                                .map(SearchViewModel::isCloseEnabled);
 
     }
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        searchTermRelay.onNext(query);
+        searchTermSubject.onNext(query);
     }
 
     @NonNull
@@ -107,13 +108,11 @@ final class SearchViewModel extends BaseViewModel {
 
     @Override
     public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(searchTermRelay.subscribeOn(Schedulers.computation())
-                                       .observeOn(Schedulers.computation())
-                                       .map(String::trim)
-                                       .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                                       .switchMap(getSearchOrClear())
-                                       .observeOn(mainThread())
-                                       .subscribe(nothing1(),
+        disposables.add(searchTermSubject.observeOn(Schedulers.computation())
+                                         .map(String::trim)
+                                         .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
+                                         .switchMap(getSearchOrClear())
+                                         .subscribe(nothing1(),
                                                   e -> e(e, "Error when setting search term")));
     }
 
