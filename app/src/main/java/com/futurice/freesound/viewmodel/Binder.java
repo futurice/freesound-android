@@ -16,11 +16,13 @@
 
 package com.futurice.freesound.viewmodel;
 
+import android.support.annotation.NonNull;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public interface Binder {
 
-    void bind(final CompositeDisposable disposables);
+    void bind(@NonNull final CompositeDisposable disposables);
 
     void unbind();
 
