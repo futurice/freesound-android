@@ -11,8 +11,11 @@ import android.support.annotation.NonNull;
 @AutoValue
 public abstract class DisplayableItem<T> {
 
-    // Types
-    public static final int SOUND = 0;
+    // List types
+    public enum Type {
+        SOUND,
+        AD // this is just for demo only
+    }
 
     public abstract int type();
 
@@ -24,7 +27,7 @@ public abstract class DisplayableItem<T> {
     public interface Builder<T> {
 
         @NonNull
-        Builder<T> type(int type);
+        Builder<T> type(@NonNull Type type);
 
         @NonNull
         Builder<T> model(@NonNull T model);
@@ -39,8 +42,7 @@ public abstract class DisplayableItem<T> {
     }
 
     @NonNull
-    public static DisplayableItem create(@NonNull final Object model,
-                                         final int type) {
+    public static DisplayableItem create(@NonNull final Object model, final Type type) {
         return DisplayableItem.builder().type(type).model(model).build();
     }
 }

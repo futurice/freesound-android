@@ -43,7 +43,7 @@ import polanski.option.Unit;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
-import static com.futurice.freesound.viewmodel.DisplayableItem.SOUND;
+import static com.futurice.freesound.viewmodel.DisplayableItem.Type.SOUND;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static timber.log.Timber.e;
 
