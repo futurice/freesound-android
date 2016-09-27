@@ -149,7 +149,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     }
 
     private void showResults(@NonNull final List<DisplayableItem> sounds) {
-        if (sounds.isEmpty()) {
+        if (get(sounds).isEmpty()) {
             get(noResultsTextView).setVisibility(View.VISIBLE);
             get(resultsRecyclerView).setVisibility(View.GONE);
         } else {
