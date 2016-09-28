@@ -17,7 +17,7 @@ public abstract class DisplayableItem<T> {
         AD // this is just for demo only
     }
 
-    public abstract int type();
+    public abstract Type type();
 
     @NonNull
     public abstract T model();

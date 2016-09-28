@@ -33,13 +33,11 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.observers.TestObserver;
+import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
-import rx.observers.TestSubscriber;
-import rx.subjects.BehaviorSubject;
 
-import static com.futurice.freesound.test.utils.TestSubscriberUtils.testSubscribe;
-import static com.futurice.freesound.viewmodel.DisplayableItem.SOUND;
-import static com.petertackage.assertrx.Assertions.assertThat;
+import static com.futurice.freesound.viewmodel.DisplayableItem.Type.SOUND;
 import static org.mockito.Mockito.verify;
 import static polanski.option.Option.ofObj;
 
@@ -73,7 +71,7 @@ public class SearchViewModelTest {
     public void getSounds_emitsNone_whenSearchResultsIsNone() {
         new ArrangeBuilder().enqueueSearchResults(Option.none());
 
-        TestSubscriber<Option<List<DisplayableItem>>> ts = testSubscribe(viewModel.getSounds());
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSounds().test();
 
         ts.assertValue(Option.none());
     }
@@ -83,9 +81,9 @@ public class SearchViewModelTest {
         List<Sound> sounds = TestData.sounds(10);
         new ArrangeBuilder().enqueueSearchResults(ofObj(sounds));
 
-        TestSubscriber<Option<List<DisplayableItem>>> ts = testSubscribe(viewModel.getSounds());
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSounds().test();
 
-        assertThat(ts).hasReceivedValue(ofObj(expectedDisplayableItems(sounds)));
+        ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
 
     @NonNull
