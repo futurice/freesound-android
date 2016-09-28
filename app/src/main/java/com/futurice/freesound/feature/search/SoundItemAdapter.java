@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 import com.squareup.picasso.Picasso;
@@ -36,7 +37,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     @NonNull
-    private final DefaultAdapterInteractor<Sound> adapterInteractor;
+    private final DefaultAdapterInteractor<DisplayableItem> adapterInteractor;
 
     @NonNull
     private final SoundItemViewModel_Factory viewModelFactory;
@@ -44,7 +45,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     @NonNull
     private final Picasso picasso;
 
-    SoundItemAdapter(@NonNull final DefaultAdapterInteractor<Sound> adapterInteractor,
+    SoundItemAdapter(@NonNull final DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
                      @NonNull final Picasso picasso,
                      @NonNull final SoundItemViewModel_Factory viewModelFactory) {
         this.adapterInteractor = get(adapterInteractor);
@@ -63,7 +64,8 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     @Override
     public void onBindViewHolder(SoundItemViewHolder holder, int position) {
         adapterInteractor.getItem(position)
-                         .ifSome(item -> holder.bind(viewModelFactory.create(item)));
+                         .ifSome(item -> holder
+                                 .bind(viewModelFactory.create((Sound) item.model())));
     }
 
     @Override
@@ -77,7 +79,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
      *
      * @param items collection to append
      */
-    void addItems(@NonNull final List<Sound> items) {
+    void addItems(@NonNull final List<DisplayableItem> items) {
         applyChanges(() -> adapterInteractor.append(get(items)));
     }
 
@@ -86,7 +88,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
      *
      * @param items collection to update the previous values
      */
-    void setItems(@NonNull final List<Sound> items) {
+    void setItems(@NonNull final List<DisplayableItem> items) {
         applyChanges(() -> adapterInteractor.update(get(items)));
     }
 
