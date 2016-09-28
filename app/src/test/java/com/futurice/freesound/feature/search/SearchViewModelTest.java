@@ -17,10 +17,10 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
-import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +37,7 @@ import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
-import static com.futurice.freesound.viewmodel.DisplayableItem.Type.SOUND;
+import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static org.mockito.Mockito.verify;
 import static polanski.option.Option.ofObj;
 

@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
-import com.futurice.freesound.viewmodel.DisplayableItem;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;

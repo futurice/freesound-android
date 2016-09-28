@@ -18,9 +18,9 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.viewmodel.Binder;
-import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

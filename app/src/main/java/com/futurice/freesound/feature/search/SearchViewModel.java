@@ -17,12 +17,12 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.functional.StringFunctions;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
-import com.futurice.freesound.viewmodel.DisplayableItem;
 
 import android.support.annotation.NonNull;
 
@@ -41,9 +41,9 @@ import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 import polanski.option.Unit;
 
+import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
-import static com.futurice.freesound.viewmodel.DisplayableItem.Type.SOUND;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static timber.log.Timber.e;
 

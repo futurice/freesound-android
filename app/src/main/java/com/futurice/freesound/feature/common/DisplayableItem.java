@@ -1,4 +1,4 @@
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.feature.common;
 
 import com.google.auto.value.AutoValue;
 
@@ -17,6 +17,7 @@ public abstract class DisplayableItem<T> {
         AD // this is just for demo only
     }
 
+    @NonNull
     public abstract Type type();
 
     @NonNull
