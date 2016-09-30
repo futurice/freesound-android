@@ -38,7 +38,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
-    private final BehaviorSubject<Option<List<Sound>>> lastResults = BehaviorSubject.create();
+    private final BehaviorSubject<Option<List<Sound>>> lastResultsStream = BehaviorSubject.create();
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
@@ -50,21 +50,21 @@ final class DefaultSearchDataModel implements SearchDataModel {
         return freeSoundSearchService.search(get(query))
                                      .map(SoundSearchResult::results)
                                      .map(Option::ofObj)
-                                     .doOnSuccess(lastResults::onNext)
+                                     .doOnSuccess(lastResultsStream::onNext)
                                      .map(Unit::asUnit);
     }
 
     @Override
     @NonNull
-    public Observable<Option<List<Sound>>> getSearchResults() {
-        return lastResults.hide();
+    public Observable<Option<List<Sound>>> getSearchResultsStream() {
+        return lastResultsStream.hide();
     }
 
     @Override
     @NonNull
     public Single<Unit> clear() {
         return Single.just(Option.<List<Sound>>none())
-                     .doOnSuccess(lastResults::onNext)
+                     .doOnSuccess(lastResultsStream::onNext)
                      .map(Unit::asUnit);
     }
 }

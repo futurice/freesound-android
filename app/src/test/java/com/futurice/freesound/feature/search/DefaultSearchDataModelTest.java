@@ -95,7 +95,7 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultsFor("", result);
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         defaultSearchDataModel.querySearch("").subscribe();
 
@@ -109,7 +109,7 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultsFor(QUERY, result);
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
@@ -122,7 +122,7 @@ public class DefaultSearchDataModelTest {
         new Arrangement()
                 .withSearchResultError(new Exception());
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         defaultSearchDataModel.querySearch("dummy").subscribe(IgnoringSingleObserver.create());
 
@@ -132,7 +132,7 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchResults_hasNoDefaultResults() {
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         ts.assertNoErrors()
           .assertNoValues();
@@ -141,7 +141,7 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchResults_hasNoTerminalEvent() {
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         ts.assertNotTerminated();
     }
@@ -154,7 +154,7 @@ public class DefaultSearchDataModelTest {
                 .act().querySearch(QUERY);
 
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         ts.assertNoErrors()
           .assertValue(Option.ofObj(result.results()));
@@ -163,7 +163,7 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchResults_emitsEmptyList_whenCleared() {
         TestObserver<Option<List<Sound>>> ts =
-                defaultSearchDataModel.getSearchResults().test();
+                defaultSearchDataModel.getSearchResultsStream().test();
 
         defaultSearchDataModel.clear().subscribe();
 

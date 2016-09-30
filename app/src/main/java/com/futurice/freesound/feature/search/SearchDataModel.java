@@ -33,7 +33,7 @@ public interface SearchDataModel {
     Single<Unit> querySearch(@NonNull String query);
 
     @NonNull
-    Observable<Option<List<Sound>>> getSearchResults();
+    Observable<Option<List<Sound>>> getSearchResultsStream();
 
     @NonNull
     Single<Unit> clear();

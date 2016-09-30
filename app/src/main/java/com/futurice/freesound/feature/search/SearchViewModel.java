@@ -57,7 +57,7 @@ final class SearchViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
-    private final Subject<String> searchTermSubject = BehaviorSubject
+    private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
@@ -69,20 +69,20 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Boolean> getClearButtonVisibleStream() {
-        return searchTermSubject.observeOn(Schedulers.computation())
-                                .map(SearchViewModel::isCloseEnabled);
+    Observable<Boolean> getClearButtonVisibleOnceAndStream() {
+        return searchTermOnceAndStream.observeOn(Schedulers.computation())
+                                      .map(SearchViewModel::isCloseEnabled);
 
     }
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        searchTermSubject.onNext(query);
+        searchTermOnceAndStream.onNext(query);
     }
 
     @NonNull
-    Observable<Option<List<DisplayableItem>>> getSounds() {
-        return searchDataModel.getSearchResults()
+    Observable<Option<List<DisplayableItem>>> getSoundsStream() {
+        return searchDataModel.getSearchResultsStream()
                               .map(it -> it.map(SearchViewModel::wrapInDisplayableItem));
     }
 
@@ -100,16 +100,16 @@ final class SearchViewModel extends BaseViewModel {
 
     @Override
     public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(searchTermSubject.observeOn(Schedulers.computation())
-                                         .map(String::trim)
-                                         .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                                         .switchMap(this::searchOrClear)
-                                         .subscribe(nothing1(),
+        disposables.add(searchTermOnceAndStream.observeOn(Schedulers.computation())
+                                               .map(String::trim)
+                                               .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
+                                               .switchMap(this::searchOrClearOnce)
+                                               .subscribe(nothing1(),
                                                     e -> e(e, "Error when setting search term")));
     }
 
     @NonNull
-    private Observable<Unit> searchOrClear(@NonNull final String searchQuery) {
+    private Observable<Unit> searchOrClearOnce(@NonNull final String searchQuery) {
         return (TextUtils.isNullOrEmpty(searchQuery)
                 ? searchDataModel.clear()
                 : searchDataModel.querySearch(searchQuery))

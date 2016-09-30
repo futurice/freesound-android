@@ -65,7 +65,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
-            disposables.add(viewModel().getSounds()
+            disposables.add(viewModel().getSoundsStream()
                                        .subscribeOn(Schedulers.computation())
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::handleResults,

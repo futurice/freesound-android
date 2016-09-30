@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.reactivex.observers.TestObserver;
+import io.reactivex.subscribers.TestSubscriber;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -55,7 +56,7 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(null);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestObserver<String> ts = vm.thumbnailImageUrl().test();
+        TestSubscriber<String> ts = vm.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
           .assertValue("");
@@ -67,7 +68,7 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(Maps.newHashMap());
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestObserver<String> ts = vm.thumbnailImageUrl().test();
+        TestSubscriber<String> ts = vm.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
           .assertValue("");
@@ -75,7 +76,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
-        TestObserver<String> ts = soundItemViewModel.thumbnailImageUrl().test();
+        TestSubscriber<String> ts = soundItemViewModel.thumbnailImageUrl().test();
 
         ts.assertNoErrors()
           .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
@@ -83,7 +84,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void name_emitsSoundName() {
-        TestObserver<String> ts = soundItemViewModel.name().test();
+        TestSubscriber<String> ts = soundItemViewModel.name().test();
 
         ts.assertNoErrors()
           .assertValue(SOUND.name());
@@ -91,7 +92,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void description_emitsSoundDescription() {
-        TestObserver<String> ts = soundItemViewModel.description().test();
+        TestSubscriber<String> ts = soundItemViewModel.description().test();
 
         ts.assertNoErrors()
           .assertValue(SOUND.description());

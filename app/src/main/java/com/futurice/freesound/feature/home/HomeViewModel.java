@@ -35,21 +35,21 @@ final class HomeViewModel extends BaseViewModel {
     private final Navigator navigator;
 
     @NonNull
-    private final PublishSubject<Unit> openSearchSubject = PublishSubject.create();
+    private final PublishSubject<Unit> openSearchStream = PublishSubject.create();
 
     HomeViewModel(@NonNull final Navigator navigator) {
         this.navigator = get(navigator);
     }
 
     void openSearch() {
-        openSearchSubject.onNext(Unit.DEFAULT);
+        openSearchStream.onNext(Unit.DEFAULT);
     }
 
     @Override
     public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(openSearchSubject.observeOn(mainThread())
-                                         .subscribe(__ -> navigator.openSearch(),
-                                                    e -> Timber.e(e, "Error clearing search")));
+        disposables.add(openSearchStream.observeOn(mainThread())
+                                        .subscribe(__ -> navigator.openSearch(),
+                                                   e -> Timber.e(e, "Error clearing search")));
 
     }
 }
