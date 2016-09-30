@@ -57,6 +57,21 @@ To ensure you that your source files match the project style, import the setting
 1. Code style formatting settings
 2. Copyright header
 
+## Naming conventions
+
+### Observables/Flowables
+To be able to reason about the code, we have 3 naming conventions that should be applied to all Observables and Flowables.
+
+The usual way to name getter of an Observable, would be:
+
+`Observable<...> getValue()`
+
+In our project we have 3 ways how we should name the Observables/Flowables depending how they behave:
+
+- `Observable<...> getValueOnce()` - will emit a value as soon as possible after subscription, and then it will complete (similar to `Single`)
+- `Observable<...> getValueStream()` - when subscribed, may or may not emit any value, but it will never complete. Still, it might emit an error
+- `Observable<...> getValueOnceAndStream()` - when subscribed, this will emit a value as soon as possible, then may or may not emit any value. Also can emit an error
+
 # Acknowledgements
 
 Brought to you by the power of the [Chilicorn](http://spiceprogram.org/chilicorn-history/) and the [Futurice Open Source Program](http://spiceprogram.org/).
