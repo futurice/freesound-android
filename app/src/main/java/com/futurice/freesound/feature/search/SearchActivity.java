@@ -37,10 +37,8 @@ import android.widget.ImageView;
 
 import javax.inject.Inject;
 
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableEmitter.BackpressureMode;
-import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
@@ -121,25 +119,25 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @NonNull
-    private static Flowable<String> getTextChange(@NonNull final SearchView view) {
-        return Flowable.create(new FlowableOnSubscribe<String>() {
-            @Override
-            public void subscribe(final FlowableEmitter<String> e) throws Exception {
-                view.setOnQueryTextListener(new OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(final String query) {
-                        return false;
-                    }
+    private static Observable<String> getTextChange(@NonNull final SearchView view) {
+        return Observable.<String>create(e -> subscribeToSearchView(view, e))
+                         .subscribeOn(mainThread());
+    }
 
-                    @Override
-                    public boolean onQueryTextChange(final String newText) {
-                        e.onNext(get(newText));
-                        return true;
-                    }
-                });
+    private static void subscribeToSearchView(@NonNull final SearchView view,
+                                              @NonNull final ObservableEmitter<String> emitter) {
+        view.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                return false;
             }
-        }, BackpressureMode.LATEST)
-                       .subscribeOn(mainThread());
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                emitter.onNext(get(newText));
+                return true;
+            }
+        });
     }
 
     @NonNull
