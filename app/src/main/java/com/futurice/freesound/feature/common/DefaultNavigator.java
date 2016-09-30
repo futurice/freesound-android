@@ -18,6 +18,7 @@ package com.futurice.freesound.feature.common;
 
 import com.futurice.freesound.feature.search.SearchActivity;
 import com.futurice.freesound.network.api.model.Sound;
+import com.futurice.freesound.utils.AndroidPreconditions;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -35,6 +36,8 @@ public final class DefaultNavigator implements Navigator {
 
     @Override
     public void openSearch() {
+        AndroidPreconditions.assertUiThread();
+
         SearchActivity.open(activity);
     }
 
