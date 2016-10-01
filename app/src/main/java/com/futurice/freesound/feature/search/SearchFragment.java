@@ -36,6 +36,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
@@ -55,10 +57,12 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     SoundItemAdapter soundItemAdapter;
 
     @Nullable
-    private RecyclerView resultsRecyclerView;
+    @BindView(R.id.recyclerView_searchResults)
+    RecyclerView resultsRecyclerView;
 
     @Nullable
-    private TextView noResultsTextView;
+    @BindView(R.id.textView_searchNoResults)
+    TextView noResultsTextView;
 
     @NonNull
     private final Binder binder = new Binder() {
@@ -92,18 +96,18 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        resultsRecyclerView = (RecyclerView) view
-                .findViewById(R.id.recyclerView_searchResults);
+
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setRecycleChildrenOnDetach(true);
         get(resultsRecyclerView).setLayoutManager(layoutManager);
-        noResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
     }
 
     @Override

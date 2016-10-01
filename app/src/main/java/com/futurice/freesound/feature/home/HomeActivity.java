@@ -32,6 +32,7 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -62,8 +63,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(ButterKnife.findById(this, R.id.toolbar_home));
     }
 
     @NonNull
