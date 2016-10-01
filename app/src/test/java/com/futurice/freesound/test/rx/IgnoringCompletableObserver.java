@@ -14,26 +14,36 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
-
-import com.futurice.freesound.network.api.model.Sound;
+package com.futurice.freesound.test.rx;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import polanski.option.Option;
-
-public interface SearchDataModel {
-
-    @NonNull
-    Completable querySearch(@NonNull String query);
+/**
+ * An {@link Observer} which swallows all events without side effects.
+ */
+public class IgnoringCompletableObserver implements CompletableObserver {
 
     @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsStream();
+    public static CompletableObserver create() {
+        return new IgnoringCompletableObserver();
+    }
 
-    @NonNull
-    Completable clear();
+    @Override
+    public void onSubscribe(final Disposable d) {
+
+    }
+
+    @Override
+    public void onComplete() {
+
+    }
+
+    @Override
+    public void onError(final Throwable e) {
+
+    }
 }

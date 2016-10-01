@@ -28,13 +28,13 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
-import polanski.option.Unit;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.functional.Functions.nothing1;
@@ -57,7 +57,7 @@ final class SearchViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
-    private final Subject<String> searchTermSubject = BehaviorSubject
+    private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
@@ -69,20 +69,20 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Boolean> getClearButtonVisibleStream() {
-        return searchTermSubject.observeOn(Schedulers.computation())
-                                .map(SearchViewModel::isCloseEnabled);
+    Observable<Boolean> isClearButtonVisibleOnceAndStream() {
+        return searchTermOnceAndStream.observeOn(Schedulers.computation())
+                                      .map(SearchViewModel::isCloseEnabled);
 
     }
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        searchTermSubject.onNext(query);
+        searchTermOnceAndStream.onNext(query);
     }
 
     @NonNull
-    Observable<Option<List<DisplayableItem>>> getSounds() {
-        return searchDataModel.getSearchResults()
+    Observable<Option<List<DisplayableItem>>> getSoundsStream() {
+        return searchDataModel.getSearchResultsStream()
                               .map(it -> it.map(SearchViewModel::wrapInDisplayableItem));
     }
 
@@ -99,21 +99,22 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(searchTermSubject.observeOn(Schedulers.computation())
-                                         .map(String::trim)
-                                         .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                                         .switchMap(this::searchOrClear)
-                                         .subscribe(nothing1(),
-                                                    e -> e(e, "Error when setting search term")));
+    public void bind(@NonNull final CompositeDisposable d) {
+        d.add(searchTermOnceAndStream.observeOn(Schedulers.computation())
+                                     .map(String::trim)
+                                     .debounce(SEARCH_DEBOUNCE_TIME_SECONDS,
+                                               TimeUnit.SECONDS)
+                                     .switchMap(query -> searchOrClear(query).toObservable())
+                                     .subscribe(nothing1(),
+                                                e -> e(e,
+                                                       "Error when setting search term")));
     }
 
     @NonNull
-    private Observable<Unit> searchOrClear(@NonNull final String searchQuery) {
-        return (TextUtils.isNullOrEmpty(searchQuery)
+    private Completable searchOrClear(@NonNull final String searchQuery) {
+        return TextUtils.isNullOrEmpty(searchQuery)
                 ? searchDataModel.clear()
-                : searchDataModel.querySearch(searchQuery))
-                .toObservable();
+                : searchDataModel.querySearch(searchQuery);
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

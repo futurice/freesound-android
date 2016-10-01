@@ -71,7 +71,7 @@ public class SearchViewModelTest {
     public void getSounds_emitsNone_whenSearchResultsIsNone() {
         new ArrangeBuilder().enqueueSearchResults(Option.none());
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSounds().test();
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
 
         ts.assertValue(Option.none());
     }
@@ -81,7 +81,7 @@ public class SearchViewModelTest {
         List<Sound> sounds = TestData.sounds(10);
         new ArrangeBuilder().enqueueSearchResults(ofObj(sounds));
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSounds().test();
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
 
         ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
@@ -102,7 +102,7 @@ public class SearchViewModelTest {
                 .create();
 
         ArrangeBuilder() {
-            Mockito.when(searchDataModel.getSearchResults()).thenReturn(searchResultsStream);
+            Mockito.when(searchDataModel.getSearchResultsStream()).thenReturn(searchResultsStream);
         }
 
         ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {

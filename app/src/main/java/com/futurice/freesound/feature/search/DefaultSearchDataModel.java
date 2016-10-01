@@ -24,11 +24,10 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
-import polanski.option.Unit;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -38,7 +37,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
-    private final BehaviorSubject<Option<List<Sound>>> lastResults = BehaviorSubject.create();
+    private final BehaviorSubject<Option<List<Sound>>> lastResultsStream = BehaviorSubject.create();
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
@@ -46,25 +45,23 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
-    public Single<Unit> querySearch(@NonNull final String query) {
+    public Completable querySearch(@NonNull final String query) {
         return freeSoundSearchService.search(get(query))
                                      .map(SoundSearchResult::results)
                                      .map(Option::ofObj)
-                                     .doOnSuccess(lastResults::onNext)
-                                     .map(Unit::asUnit);
+                                     .doOnSuccess(lastResultsStream::onNext)
+                                     .toCompletable();
     }
 
     @Override
     @NonNull
-    public Observable<Option<List<Sound>>> getSearchResults() {
-        return lastResults.hide();
+    public Observable<Option<List<Sound>>> getSearchResultsStream() {
+        return lastResultsStream.hide();
     }
 
     @Override
     @NonNull
-    public Single<Unit> clear() {
-        return Single.just(Option.<List<Sound>>none())
-                     .doOnSuccess(lastResults::onNext)
-                     .map(Unit::asUnit);
+    public Completable clear() {
+        return Completable.fromAction(() -> lastResultsStream.onNext(Option.none()));
     }
 }

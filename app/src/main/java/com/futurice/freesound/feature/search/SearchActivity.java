@@ -65,12 +65,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         public void bind(@NonNull final CompositeDisposable disposables) {
             checkNotNull(searchView, "Search view cannot be null.");
 
-            disposables.add(searchViewModel.getClearButtonVisibleStream()
+            disposables.add(searchViewModel.isClearButtonVisibleOnceAndStream()
                                            .observeOn(mainThread())
                                            .subscribe(SearchActivity.this::setClearSearchVisible,
                                                       e -> e(e, "Error setting query string")));
 
-            disposables.add(getTextChange(searchView)
+            disposables.add(getTextChangeStream(searchView)
                                     .observeOn(computation())
                                     .subscribe(searchViewModel::search,
                                                e -> e(e, "Error getting changed text")));
@@ -119,9 +119,9 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @NonNull
-    private static Observable<String> getTextChange(@NonNull final SearchView view) {
+    private static Observable<String> getTextChangeStream(@NonNull final SearchView view) {
         return Observable.<String>create(e -> subscribeToSearchView(view, e))
-                         .subscribeOn(mainThread());
+                .subscribeOn(mainThread());
     }
 
     private static void subscribeToSearchView(@NonNull final SearchView view,

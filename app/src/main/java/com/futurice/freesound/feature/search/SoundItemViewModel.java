@@ -23,7 +23,7 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
@@ -43,8 +43,8 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    Observable<String> thumbnailImageUrl() {
-        return Observable.just(getThumbnail());
+    Single<String> thumbnailImageUrl() {
+        return Single.just(getThumbnail());
     }
 
     @NonNull
@@ -55,13 +55,13 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    Observable<String> name() {
-        return Observable.just(sound.name());
+    Single<String> name() {
+        return Single.just(sound.name());
     }
 
     @NonNull
-    Observable<String> description() {
-        return Observable.just(sound.description());
+    Single<String> description() {
+        return Single.just(sound.description());
     }
 
     void openDetails() {
