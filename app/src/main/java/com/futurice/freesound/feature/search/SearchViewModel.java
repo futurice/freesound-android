@@ -28,13 +28,13 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
-import polanski.option.Unit;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.functional.Functions.nothing1;
@@ -69,7 +69,7 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Boolean> getClearButtonVisibleOnceAndStream() {
+    Observable<Boolean> isClearButtonVisibleOnceAndStream() {
         return searchTermOnceAndStream.observeOn(Schedulers.computation())
                                       .map(SearchViewModel::isCloseEnabled);
 
@@ -99,21 +99,22 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(searchTermOnceAndStream.observeOn(Schedulers.computation())
-                                               .map(String::trim)
-                                               .debounce(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS)
-                                               .switchMap(this::searchOrClearOnce)
-                                               .subscribe(nothing1(),
-                                                    e -> e(e, "Error when setting search term")));
+    public void bind(@NonNull final CompositeDisposable d) {
+        d.add(searchTermOnceAndStream.observeOn(Schedulers.computation())
+                                     .map(String::trim)
+                                     .debounce(SEARCH_DEBOUNCE_TIME_SECONDS,
+                                               TimeUnit.SECONDS)
+                                     .switchMap(query -> searchOrClear(query).toObservable())
+                                     .subscribe(nothing1(),
+                                                e -> e(e,
+                                                       "Error when setting search term")));
     }
 
     @NonNull
-    private Observable<Unit> searchOrClearOnce(@NonNull final String searchQuery) {
-        return (TextUtils.isNullOrEmpty(searchQuery)
+    private Completable searchOrClear(@NonNull final String searchQuery) {
+        return TextUtils.isNullOrEmpty(searchQuery)
                 ? searchDataModel.clear()
-                : searchDataModel.querySearch(searchQuery))
-                .toObservable();
+                : searchDataModel.querySearch(searchQuery);
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

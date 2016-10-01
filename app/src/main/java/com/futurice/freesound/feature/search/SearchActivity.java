@@ -65,7 +65,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         public void bind(@NonNull final CompositeDisposable disposables) {
             checkNotNull(searchView, "Search view cannot be null.");
 
-            disposables.add(searchViewModel.getClearButtonVisibleOnceAndStream()
+            disposables.add(searchViewModel.isClearButtonVisibleOnceAndStream()
                                            .observeOn(mainThread())
                                            .subscribe(SearchActivity.this::setClearSearchVisible,
                                                       e -> e(e, "Error setting query string")));
