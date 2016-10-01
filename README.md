@@ -60,11 +60,13 @@ To ensure you that your source files match the project style, import the setting
 ## Naming conventions
 
 ### Observables/Flowables
-In order to more clearly understand the nature of the Observables and Flowables created, we employ the following naming convention:
+In order to more clearly understand the nature of the `Observables` and `Flowables` created, we employ the following naming convention:
 
 - `Observable<...> getValueOnce()` - will emit a value as soon as possible after subscription, and then it will complete (similar to `Single`)
 - `Observable<...> getValueStream()` - when subscribed, may or may not emit any value, but it will never complete. Still, it might emit an error
 - `Observable<...> getValueOnceAndStream()` - when subscribed, this will emit a value as soon as possible, then may or may not emit any value. Also can emit an error
+
+This naming convention only applies to `Observables` and `Flowables`, for `Single`/`Completable`/`Maybe`, apply normal naming convention without the suffixes.
 
 # Acknowledgements
 

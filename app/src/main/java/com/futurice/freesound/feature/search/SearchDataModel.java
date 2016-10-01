@@ -24,9 +24,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import polanski.option.Option;
-import polanski.option.Unit;
 
 public interface SearchDataModel {
 
