@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
@@ -94,10 +95,10 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
                         @NonNull final Picasso picasso) {
         super(get(view));
         ButterKnife.bind(this, view);
-        rootView = view;
+        this.rootView = view;
         this.picasso = get(picasso);
-        waveformViewTarget = new WaveformViewTarget(
-                ButterKnife.findById(view, R.id.waveformView_soundItem),
+        this.waveformViewTarget = new WaveformViewTarget(
+                findById(view, R.id.waveformView_soundItem),
                 new BlackBackgroundWaveformExtractor());
     }
 
