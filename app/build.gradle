@@ -164,6 +164,10 @@ dependencies {
     compile "com.google.firebase:firebase-core:$dependencyVersions.firebase"
     compile "com.google.firebase:firebase-crash:$dependencyVersions.firebase"
 
+    //Butter Knife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
     // Unit Testing
     testCompile "junit:junit:$dependencyVersions.junit"
     testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"

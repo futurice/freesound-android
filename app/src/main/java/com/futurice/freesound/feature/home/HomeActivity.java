@@ -26,7 +26,6 @@ import com.futurice.freesound.viewmodel.ViewModel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,6 +33,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.get;
 
 public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
@@ -62,8 +62,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(findById(this, R.id.toolbar_home));
     }
 
     @NonNull

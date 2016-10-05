@@ -18,7 +18,6 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
-import com.futurice.freesound.feature.common.view.WaveformView;
 import com.futurice.freesound.feature.common.view.WaveformViewTarget;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
@@ -26,37 +25,52 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
 
+    @NonNull
     private final View rootView;
-    private final TextView titleTextView;
-    private final TextView descriptionTextView;
+
+    @Nullable
+    @BindView(R.id.textView_title)
+    TextView titleTextView;
+
+    @Nullable
+    @BindView(R.id.textView_description)
+    TextView descriptionTextView;
+
+    @NonNull
     private final Target waveformViewTarget;
+
+    @NonNull
     private final Picasso picasso;
 
+    @NonNull
     private final Binder viewBinder = new Binder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
-
             final SoundItemViewModel vm = get(getViewModel());
 
             disposables.add(vm.name()
                               .observeOn(mainThread())
-                              .subscribe(titleTextView::setText,
+                              .subscribe(get(titleTextView)::setText,
                                          e -> Timber.e(e, "Unable to set SoundItem name")));
             disposables.add(vm.description()
                               .observeOn(mainThread())
-                              .subscribe(descriptionTextView::setText,
+                              .subscribe(get(descriptionTextView)::setText,
                                          e -> Timber
                                                  .e(e, "Unable to set SoundItem description")));
 
@@ -80,12 +94,11 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     SoundItemViewHolder(@NonNull final View view,
                         @NonNull final Picasso picasso) {
         super(get(view));
+        ButterKnife.bind(this, view);
         this.rootView = view;
         this.picasso = get(picasso);
-        this.titleTextView = get((TextView) view.findViewById(R.id.textView_title));
-        this.descriptionTextView = get((TextView) view.findViewById(R.id.textView_description));
         this.waveformViewTarget = new WaveformViewTarget(
-                get((WaveformView) view.findViewById(R.id.waveformView_soundItem)),
+                findById(view, R.id.waveformView_soundItem),
                 new BlackBackgroundWaveformExtractor());
     }
 

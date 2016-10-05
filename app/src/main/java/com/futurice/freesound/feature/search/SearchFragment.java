@@ -36,11 +36,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import polanski.option.AtomicOption;
 import polanski.option.Option;
 import timber.log.Timber;
 
+import static butterknife.ButterKnife.bind;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
@@ -55,10 +59,15 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     SoundItemAdapter soundItemAdapter;
 
     @Nullable
-    private RecyclerView resultsRecyclerView;
+    @BindView(R.id.recyclerView_searchResults)
+    RecyclerView resultsRecyclerView;
 
     @Nullable
-    private TextView noResultsTextView;
+    @BindView(R.id.textView_searchNoResults)
+    TextView noResultsTextView;
+
+    @NonNull
+    private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
     @NonNull
     private final Binder binder = new Binder() {
@@ -98,12 +107,17 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        resultsRecyclerView = (RecyclerView) view
-                .findViewById(R.id.recyclerView_searchResults);
+        unbinder.setIfNone(bind(this, view));
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setRecycleChildrenOnDetach(true);
         get(resultsRecyclerView).setLayoutManager(layoutManager);
-        noResultsTextView = (TextView) view.findViewById(R.id.textView_searchNoResults);
+    }
+
+    @Override
+    public void onDestroyView() {
+        unbinder.getAndClear()
+                .ifSome(Unbinder::unbind);
+        super.onDestroyView();
     }
 
     @Override

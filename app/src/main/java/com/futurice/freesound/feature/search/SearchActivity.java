@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.appcompat.R;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
@@ -37,11 +38,14 @@ import android.widget.ImageView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -50,11 +54,13 @@ import static timber.log.Timber.e;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
 
+    @Nullable
     @Inject
     SearchViewModel searchViewModel;
 
     @Nullable
-    private SearchView searchView;
+    @BindView(id.search_view)
+    SearchView searchView;
 
     @Nullable
     private ImageView closeButton;
@@ -62,18 +68,19 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @NonNull
     private final Binder binder = new Binder() {
         @Override
-        public void bind(@NonNull final CompositeDisposable disposables) {
+        public void bind(@NonNull final CompositeDisposable d) {
+            checkNotNull(searchViewModel, "View Model cannot be null.");
             checkNotNull(searchView, "Search view cannot be null.");
 
-            disposables.add(searchViewModel.isClearButtonVisibleOnceAndStream()
-                                           .observeOn(mainThread())
-                                           .subscribe(SearchActivity.this::setClearSearchVisible,
-                                                      e -> e(e, "Error setting query string")));
+            d.add(searchViewModel.isClearButtonVisibleOnceAndStream()
+                                 .observeOn(mainThread())
+                                 .subscribe(SearchActivity.this::setClearSearchVisible,
+                                            e -> e(e, "Error setting query string")));
 
-            disposables.add(getTextChangeStream(searchView)
-                                    .observeOn(computation())
-                                    .subscribe(searchViewModel::search,
-                                               e -> e(e, "Error getting changed text")));
+            d.add(getTextChangeStream(searchView)
+                          .observeOn(computation())
+                          .subscribe(searchViewModel::search,
+                                     e -> e(e, "Error getting changed text")));
         }
 
         @Override
@@ -99,17 +106,16 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_search);
+        ButterKnife.bind(this);
         Option.ofObj(savedInstanceState)
               .ifNone(this::addSearchFragment);
 
-        Toolbar toolbar = (Toolbar) findViewById(id.toolbar_search);
+        Toolbar toolbar = findById(this, id.toolbar_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        searchView = get((SearchView) findViewById(id.search_view));
-        searchView.setIconified(false);
-        closeButton = (ImageView) searchView
-                .findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        get(searchView).setIconified(false);
+        closeButton = findById(searchView, R.id.search_close_btn);
 
         searchView.setOnCloseListener(() -> {
             searchView.setQuery(SearchViewModel.NO_SEARCH, true);
