@@ -45,6 +45,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -109,12 +110,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         Option.ofObj(savedInstanceState)
               .ifNone(this::addSearchFragment);
 
-        Toolbar toolbar = ButterKnife.findById(this, id.toolbar_search);
+        Toolbar toolbar = findById(this, id.toolbar_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         get(searchView).setIconified(false);
-        closeButton = ButterKnife.findById(searchView, R.id.search_close_btn);
+        closeButton = findById(searchView, R.id.search_close_btn);
 
         searchView.setOnCloseListener(() -> {
             searchView.setQuery(SearchViewModel.NO_SEARCH, true);
