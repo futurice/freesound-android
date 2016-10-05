@@ -80,98 +80,97 @@ task checkstyle(type: Checkstyle) {
 }
 
 ext {
-    // Shared dependency versions
-    androidSupportLibraryVersion = '23.3.0'
-    javaPoetVersion = '1.7.0'
-    dagger2Version = '2.4'
-    javaxAnnotationVersion = '10.0-b28'
-    rxJava2Version = '2.0.0-RC2'
-    rxAndroidVersion = '2.0.0-RC1'
-    okHttpVersion = '3.4.1'
-    picassoVersion = '2.5.2'
-    retrofit2Version = '2.1.0'
-    retrofit2RxJava2AdapterVersion = '1.0.0-RC2'
-    retrofit2GsonConverterVersion = '2.0.0'
-    gsonVersion = '2.7'
-    autoValueVersion = '1.2'
-    autoValueGsonVersion = '0.3.2-rc1'
-    autoValueParcelableVersion = '0.2.3-rc2'
-    optionsVersion = '1.2.0'
-    firebaseVersion = '9.4.0'
-    stethoVersion = '1.3.1'
-    timberVersion = '4.2.0'
-
-    junitVersion = '4.12'
-    mockitoVersion = '2.0.101-beta'
-    assertJVersion = '1.7.1'
+    dependencyVersions = [
+            androidSupportLibrary  : '23.3.0',
+            javaPoet               : '1.7.0',
+            dagger2                : '2.4',
+            javaxAnnotation        : '10.0-b28',
+            rxJava2                : '2.0.0-RC2',
+            rxAndroid              : '2.0.0-RC1',
+            okHttp                 : '3.4.1',
+            picasso                : '2.5.2',
+            retrofit2              : '2.1.0',
+            retrofit2RxJava2Adapter: '1.0.0-RC2',
+            retrofit2GsonConverter : '2.0.0',
+            gson                   : '2.7',
+            autoValue              : '1.2',
+            autoValueGson          : '0.3.2-rc1',
+            autoValueParcelable    : '0.2.3-rc2',
+            options                : '1.2.0',
+            firebase               : '9.4.0',
+            stetho                 : '1.3.1',
+            timber                 : '4.2.0',
+            junit                  : '4.12',
+            mockito                : '2.0.101-beta',
+            assertJ                : '1.7.1']
 }
 
 dependencies {
 
     // Android Support
-    compile "com.android.support:support-v4:$androidSupportLibraryVersion"
-    compile "com.android.support:support-annotations:$androidSupportLibraryVersion"
-    compile "com.android.support:appcompat-v7:$androidSupportLibraryVersion"
-    compile "com.android.support:palette-v7:$androidSupportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$androidSupportLibraryVersion"
-    compile "com.android.support:cardview-v7:$androidSupportLibraryVersion"
-    compile "com.android.support:design:$androidSupportLibraryVersion"
+    compile "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:support-annotations:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:appcompat-v7:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:palette-v7:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:design:$dependencyVersions.androidSupportLibrary"
 
     // Dagger 2
-    apt "com.squareup:javapoet:$javaPoetVersion"
-    compile "com.google.dagger:dagger:$dagger2Version"
-    apt "com.google.dagger:dagger-compiler:$dagger2Version"
-    provided "org.glassfish:javax.annotation:$javaxAnnotationVersion"
+    apt "com.squareup:javapoet:$dependencyVersions.javaPoet"
+    compile "com.google.dagger:dagger:$dependencyVersions.dagger2"
+    apt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
+    provided "org.glassfish:javax.annotation:$dependencyVersions.javaxAnnotation"
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rxJava2Version"
+    compile "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
+    compile "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
 
     // Networking
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-    compile "com.squareup.picasso:picasso:$picassoVersion"
+    compile "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
+    compile "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"
+    compile "com.squareup.picasso:picasso:$dependencyVersions.picasso"
 
     // Networking Retrofit
-    compile "com.squareup.retrofit2:retrofit:$retrofit2Version"
-    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$retrofit2RxJava2AdapterVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofit2GsonConverterVersion"
+    compile "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit2"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$dependencyVersions.retrofit2RxJava2Adapter"
+    compile "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit2GsonConverter"
 
     // GSON
-    compile "com.google.code.gson:gson:$gsonVersion"
+    compile "com.google.code.gson:gson:$dependencyVersions.gson"
 
     // Auto-Value
-    provided "com.google.auto.value:auto-value:$autoValueVersion"
-    apt "com.google.auto.value:auto-value:$autoValueVersion"
+    provided "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+    apt "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
 
     // Auto-Value GSON
-    apt "com.ryanharter.auto.value:auto-value-gson:$autoValueGsonVersion"
+    apt "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
 
     // Auto-Value Parcelable
-    compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$autoValueParcelableVersion"
-    apt "com.ryanharter.auto.value:auto-value-parcel:$autoValueParcelableVersion"
+    compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
+    apt "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
 
     // Optionals for Java 6/7
-    compile "com.github.tomaszpolanski:options:$optionsVersion"
+    compile "com.github.tomaszpolanski:options:$dependencyVersions.options"
 
     // Timber
-    compile "com.jakewharton.timber:timber:$timberVersion"
+    compile "com.jakewharton.timber:timber:$dependencyVersions.timber"
 
     // Instrumentation
-    compile "com.facebook.stetho:stetho:$stethoVersion"
-    compile "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
+    compile "com.facebook.stetho:stetho:$dependencyVersions.stetho"
+    compile "com.facebook.stetho:stetho-okhttp3:$dependencyVersions.stetho"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:$firebaseVersion"
-    compile "com.google.firebase:firebase-crash:$firebaseVersion"
+    compile "com.google.firebase:firebase-core:$dependencyVersions.firebase"
+    compile "com.google.firebase:firebase-crash:$dependencyVersions.firebase"
 
     // Unit Testing
-    testCompile "junit:junit:$junitVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
-    testCompile "org.assertj:assertj-core:$assertJVersion"
+    testCompile "junit:junit:$dependencyVersions.junit"
+    testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"
+    testCompile "org.assertj:assertj-core:$dependencyVersions.assertJ"
 
     //TODO: Temporally removing assert lib until it supports Rx2
-  //  testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
+    //  testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
 }
 
 apply plugin: 'com.google.gms.google-services'
