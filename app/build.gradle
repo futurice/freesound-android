@@ -172,6 +172,7 @@ dependencies {
     testCompile "junit:junit:$dependencyVersions.junit"
     testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"
     testCompile "org.assertj:assertj-core:$dependencyVersions.assertJ"
+    testCompile "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
 
     //TODO: Temporally removing assert lib until it supports Rx2
     //  testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
