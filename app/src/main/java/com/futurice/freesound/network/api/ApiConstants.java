@@ -18,6 +18,9 @@ package com.futurice.freesound.network.api;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
+/**
+ * Constants used in the Freesound API.
+ */
 final class ApiConstants {
 
     static final String TOKEN_QUERY_PARAM = "token";

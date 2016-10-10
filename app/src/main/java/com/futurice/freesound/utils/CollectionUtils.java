@@ -23,6 +23,9 @@ import android.support.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Utility class to simplify working with Java {@link Collection}.
+ */
 public final class CollectionUtils {
 
     /**

@@ -37,7 +37,7 @@ import static polanski.option.Option.ofObj;
 public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
 
     @NonNull
-    protected final List<T> models = new ArrayList<>();
+    private final List<T> models = new ArrayList<>();
 
     @Override
     public boolean reset() {
