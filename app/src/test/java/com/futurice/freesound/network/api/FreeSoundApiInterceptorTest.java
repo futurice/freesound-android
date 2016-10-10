@@ -19,16 +19,24 @@ package com.futurice.freesound.network.api;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class FreeSoundApiInterceptorTest {
 
@@ -60,6 +68,23 @@ public class FreeSoundApiInterceptorTest {
                 .endsWith(String.format("?%s=%s", ApiConstants.TOKEN_QUERY_PARAM, TEST_TOKEN));
     }
 
+    @Test
+    public void interceptor_proceedsWithApiTokenQueryParameter() throws IOException {
+        Interceptor.Chain chain = mock(Interceptor.Chain.class);
+        Request request = request();
+        new ArrangeBuilder2(chain)
+                .withChainRequest(request);
+
+        interceptor.intercept(chain);
+
+        ArgumentCaptor<Request> argument = ArgumentCaptor.forClass(Request.class);
+        verify(chain).proceed(argument.capture());
+        String queryParameter = argument.getValue()
+                                        .url()
+                                        .queryParameter(ApiConstants.TOKEN_QUERY_PARAM);
+        assertThat(queryParameter).isEqualTo(TEST_TOKEN);
+    }
+
     private Request request() {
         return new Request.Builder().url(mockWebServer.url("/")).build();
     }
@@ -80,6 +105,26 @@ public class FreeSoundApiInterceptorTest {
 
         ArrangeBuilder withEnqueuedMockResponse() {
             mockWebServer.enqueue(new MockResponse());
+            return this;
+        }
+
+    }
+
+    private class ArrangeBuilder2 {
+
+        private Interceptor.Chain chain;
+
+        ArrangeBuilder2(Interceptor.Chain chain) {
+            this.chain = chain;
+        }
+
+        ArrangeBuilder2 withChainRequest(Request request) throws IOException {
+            when(chain.request()).thenReturn(request);
+            when(chain.proceed(any(Request.class)))
+                    .thenReturn(new Response.Builder()
+                                        .protocol(Protocol.HTTP_1_1)
+                                        .code(200)
+                                        .request(request).build());
             return this;
         }
 
