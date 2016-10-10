@@ -19,6 +19,7 @@ package com.futurice.freesound.app;
 import com.facebook.stetho.Stetho;
 import com.futurice.freesound.core.BaseApplication;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
+import com.squareup.leakcanary.LeakCanary;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -58,6 +59,7 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
     private void initialize() {
         initLogging();
         initStetho();
+        initLeakCanary();
     }
 
     private void initLogging() {
@@ -71,5 +73,12 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
                       .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                       .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                       .build());
+    }
+
+    private void initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
     }
 }

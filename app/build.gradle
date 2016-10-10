@@ -102,7 +102,8 @@ ext {
             timber                 : '4.2.0',
             junit                  : '4.12',
             mockito                : '2.0.101-beta',
-            assertJ                : '1.7.1']
+            assertJ                : '1.7.1',
+            leakCanary             : '1.5']
 }
 
 dependencies {
@@ -172,6 +173,11 @@ dependencies {
     testCompile "junit:junit:$dependencyVersions.junit"
     testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"
     testCompile "org.assertj:assertj-core:$dependencyVersions.assertJ"
+
+    // Leak Canary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
     //TODO: Temporally removing assert lib until it supports Rx2
     //  testCompile 'com.github.peter-tackage:assert-rx:0.9.7'
