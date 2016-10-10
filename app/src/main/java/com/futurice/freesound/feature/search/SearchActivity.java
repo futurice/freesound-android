@@ -31,7 +31,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.appcompat.R;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
@@ -60,6 +59,9 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Inject
     SearchViewModel searchViewModel;
 
+    @Inject
+    SearchSnackbar searchSnackbar;
+
     @Nullable
     @BindView(id.search_view)
     SearchView searchView;
@@ -67,9 +69,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Nullable
     private ImageView closeButton;
 
+    @Nullable
     private CoordinatorLayout coordinatorLayout;
-
-    private SearchSnackbar searchSnackbar;
 
     @NonNull
     private final Binder binder = new Binder() {
@@ -127,7 +128,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             searchView.setQuery(SearchViewModel.NO_SEARCH, true);
             return true;
         });
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.search_coordinatorlayout);
+        coordinatorLayout = (CoordinatorLayout) findViewById(id.search_coordinatorlayout);
         searchSnackbar = new SearchSnackbar();
 
     }

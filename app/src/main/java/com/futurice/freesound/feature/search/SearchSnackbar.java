@@ -3,9 +3,6 @@ package com.futurice.freesound.feature.search;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-/**
- * Created by mast on 25/09/16.
- */
 public class SearchSnackbar {
     private Snackbar snackbar;
 
