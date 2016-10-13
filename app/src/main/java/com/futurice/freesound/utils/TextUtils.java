@@ -20,12 +20,26 @@ import com.futurice.freesound.common.InstantiationForbiddenError;
 
 import android.support.annotation.Nullable;
 
+/**
+ * String utilities - matches those in the Android platform, but separated to allow for JVM unit
+ * testing.
+ */
 public final class TextUtils {
 
+    /**
+     * Evaluates if the given sequence is either null or empty.
+     *
+     * @return true if the parameter is null or empty, false otherwise.
+     */
     public static boolean isNullOrEmpty(@Nullable final CharSequence chars) {
         return chars == null || chars.length() == 0;
     }
 
+    /**
+     * Evaluates if the given sequence is neither null nor empty.
+     *
+     * @return true if the parameter neither null nor empty, false otherwise.
+     */
     public static boolean isNotNullOrEmpty(@Nullable final CharSequence chars) {
         return !isNullOrEmpty(chars);
     }

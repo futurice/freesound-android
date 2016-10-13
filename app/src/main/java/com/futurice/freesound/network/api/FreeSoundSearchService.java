@@ -24,6 +24,12 @@ import io.reactivex.Single;
 
 public interface FreeSoundSearchService {
 
+    /**
+     * Search Freesound for sounds matching the query.
+     *
+     * @param query the search term.
+     * @return the search results.
+     */
     @NonNull
     Single<SoundSearchResult> search(@NonNull String query);
 }

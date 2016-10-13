@@ -26,6 +26,11 @@ import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/**
+ * Retrofit2 annotated interface to the Freesound API.
+ *
+ * Refer to {@see https://www.freesound.org/docs/api/}.
+ */
 public interface FreeSoundApi {
 
     @NonNull

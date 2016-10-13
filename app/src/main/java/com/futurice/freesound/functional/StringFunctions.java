@@ -23,13 +23,26 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.functions.Predicate;
 
+/**
+ * Common String function implementations.
+ */
 public final class StringFunctions {
 
+    /**
+     * Returns a {@link Predicate} which evaluates if a String is null or empty.
+     *
+     * @return the {@link Predicate}.
+     */
     @NonNull
     public static Predicate<String> isEmpty() {
         return TextUtils::isNullOrEmpty;
     }
 
+    /**
+     * Returns a {@link Predicate} which evaluates if a String is not null nor empty.
+     *
+     * @return the {@link Predicate}.
+     */
     @NonNull
     public static Predicate<String> isNotEmpty() {
         return TextUtils::isNotNullOrEmpty;

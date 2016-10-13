@@ -22,12 +22,23 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.functions.Consumer;
 
+/**
+ * Common function implementations.
+ */
 public final class Functions {
 
+    private static final Consumer NOTHING1 = __ -> {
+    };
+
+    /**
+     * Returns an instance of {@link Consumer} with no side-effects.
+     *
+     * @return the {@link Consumer}
+     */
     @NonNull
     public static <T> Consumer<T> nothing1() {
-        return __ -> {
-        };
+        //noinspection unchecked
+        return NOTHING1;
     }
 
     private Functions() {

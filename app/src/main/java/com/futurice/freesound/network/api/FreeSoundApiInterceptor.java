@@ -28,6 +28,9 @@ import okhttp3.Response;
 import static com.futurice.freesound.network.api.ApiConstants.TOKEN_QUERY_PARAM;
 import static com.futurice.freesound.utils.Preconditions.get;
 
+/**
+ * An {@link Interceptor} which adds the required API token query parameter to the request.
+ */
 public final class FreeSoundApiInterceptor implements Interceptor {
 
     @NonNull
