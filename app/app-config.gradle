@@ -30,8 +30,9 @@ def Properties loadFileProperties(String fileLocation) {
         properties.load(new FileInputStream(fileLocation))
     } catch (FileNotFoundException fnf) {
         logger.log(LogLevel.ERROR,
-                String.format("Unable to load properties file: %s", fileLocation),
+                String.format("Missing properties file: %s", fileLocation),
                 fnf)
+        throw fnf
     }
     return properties
 }
