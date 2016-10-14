@@ -49,7 +49,7 @@ public class FreeSoundApiInterceptorTest {
     @Test
     public void interceptor_addsApiTokenQueryParameter() throws InterruptedException, IOException {
         new ArrangeBuilder()
-                .withOkHttpClient()
+                .withNewOkHttpClient()
                 .withInterceptor(interceptor)
                 .withEnqueuedMockResponse();
 
@@ -66,7 +66,7 @@ public class FreeSoundApiInterceptorTest {
 
     private class ArrangeBuilder {
 
-        ArrangeBuilder withOkHttpClient() {
+        ArrangeBuilder withNewOkHttpClient() {
             okHttpClient = new OkHttpClient();
             return this;
         }
