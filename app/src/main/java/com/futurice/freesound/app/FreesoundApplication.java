@@ -76,9 +76,8 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
     }
 
     private void initLeakCanary() {
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return;
+        if (!LeakCanary.isInAnalyzerProcess(this)) {
+            LeakCanary.install(this);
         }
-        LeakCanary.install(this);
     }
 }
