@@ -27,8 +27,9 @@ script:
 
 env:
   global:
-    - ADB_INSTALL_TIMEOUT=8
-
+  - ADB_INSTALL_TIMEOUT=8
+  matrix:
+    secure: JV1dfawE/HgVaeGd9iqMA1zcHRzaMfd7L58xNqJWAEvRUOpWjwNHfwF0bo5RWAhx/Tj3GFwkFJpQutgi7PIFegY33Ok8+rHYNeq6pOlTGS+CBmgAQpO/hm0KFGCPt8x1RONxYSpYkkQBB3sabuPegozSCo0S0V0MWKEwma8KZpMBtlq1f+9NJ8bhAjAMv5t4/xqSDyV8vEDM6FzlPM8F/BOqAB6qetUkq6gcx9BxEgdjrODpEpj2mdXE8JCBxPSstQj0iUV6srEwbqjUTwvnCyftVlrOPQUe0e5/LbxZi1tESyJkZL6uZZjR7jAyKto9YsKHPjzt/T2QEVdYhKrZwTxSvrW8tVs5alcqExawTzOnoBAoZW+U25dQruePRO0ta+6Zj2id2Ku5KbRBg1R1cYry+BqNTd6XveUY1tUy0ADPccdXp+uxvqFF+mTallK0ktOjJVKMzx83jcVq+OYIy5Tm6v+p2H2NKfa9EwbDb0iUgAnnKcxUZ2QSfoJlArl6Xd189xY+VimWKC9V94OpBOThTLzuRqw2ULlPzZx6g/CBeUGrlii29lAW58d4Sm2H2gNXs1hG+g9VGiEl7YZx85nZ4Bl9QwSAgDSCUrro1rkqgTLLCmMGC2mbj1h/c4WMFULiOzI5unq9iIXPJkK6a99IPtp6/PZLLXoUii5pk3E=
 notifications:
   email: false
 
