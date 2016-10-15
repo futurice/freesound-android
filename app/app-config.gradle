@@ -39,7 +39,7 @@ private String getApiKeyFromFile() {
 }
 
 private String getApiKeyFromEnv() {
-    System.getenv("FREESOUND.API.KEY")
+    System.getenv("FREESOUND_API_KEY")
 }
 
 def Properties loadFileProperties(String fileLocation) {
