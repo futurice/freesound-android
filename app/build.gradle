@@ -173,6 +173,7 @@ dependencies {
     testCompile "junit:junit:$dependencyVersions.junit"
     testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"
     testCompile "org.assertj:assertj-core:$dependencyVersions.assertJ"
+    testCompile "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
 
     // Leak Canary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
