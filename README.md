@@ -18,7 +18,7 @@ Thanks for your interest!
 
 # Building
 
-To build the app, you will need a Freesound API key and store it in the file: `<repo>/app/freesound-api.properties`, as per:
+To build the app, you will need a Freesound API key stored in the file: `<repo>/app/freesound-api.properties`, as per:
 
 ```
 freesound.api.key=yourapikeyvaluegoeshere
