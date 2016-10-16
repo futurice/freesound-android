@@ -1,6 +1,7 @@
 
 # Futurice Freesound
 [![Build Status](https://travis-ci.org/futurice/freesound-android.svg?branch=master)](https://travis-ci.org/futurice/freesound-android)
+[![Sponsored](https://img.shields.io/badge/chilicorn-sponsored-brightgreen.svg)](http://spiceprogram.org/oss-sponsorship/)
 
 Android client for the [Freesound Project](http://freesound.org/).
 
