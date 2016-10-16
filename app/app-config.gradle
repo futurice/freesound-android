@@ -48,7 +48,7 @@ def Properties loadFileProperties(String fileLocation) {
         properties.load(new FileInputStream(fileLocation))
     } catch (FileNotFoundException fnf) {
         logger.log(LogLevel.ERROR,
-                String.format("Missing API properties file: %s", fileLocation),
+                String.format("Missing Freesound API properties file: %s", fileLocation),
                 fnf)
         throw fnf
     }
