@@ -1,35 +1,29 @@
 language: android
-
 jdk:
- - oraclejdk8
-
+- oraclejdk8
 android:
   components:
-    - platform-tools
-    - tools
-    - android-23
-    - build-tools-23.0.3
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-23
-
+  - platform-tools
+  - tools
+  - android-23
+  - build-tools-23.0.3
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-23
 before_script:
-  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
-  - adb shell input keyevent 82 &
-
+- echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
+- emulator -avd test -no-audio -no-window &
+- android-wait-for-emulator
+- adb shell settings put global window_animation_scale 0 &
+- adb shell settings put global transition_animation_scale 0 &
+- adb shell settings put global animator_duration_scale 0 &
+- adb shell input keyevent 82 &
 script:
-  - ./gradlew check
-
+- "./gradlew check"
 env:
   global:
-    - ADB_INSTALL_TIMEOUT=8
-
+  - ADB_INSTALL_TIMEOUT=8
+  - secure: DkjhtJyH7CLPt2e6upzfSrAO8us25q2WLIe0WhBo9/QuQTByn/h7+nV9pxjp1yRd8MKie1eSXMMiJ8Asr5g4CMh/82CmeqezDZqbZdTNZqS08Diu8/zDichdVW0Zl9t/gSDA3x9hWo2nfX+mMKyngycsracNmT6Og1a89hpa2KRI4gcy/0yrFYTEvchQUDBkNxAaVMWyObZYB/HuFeZUBbMM+cM65lw3Bn62sEDgiWLacJS87V+sDxx892HS0kNbsoOC+tkcAAU9sopwCD2Zh0MylBVbSpjXRIRZPJUWjIKXZmFPNIXoYTRwdCzVEfgPPWbV3aZawYp//WG/Lu/yUDxapeyAeqWfaeoHDA1scmVDDkMLnwDA02UUf0ZdgU1Aiq1ljBW2ZTg5XX4LSIfYCGQFEKm+opfv4tzgf6T6njtEJmWz23LrdZ9oRxRLjHxgAqnWVyoSmD8ffUUnn5M8pP5PAhh3jmlzUhFO41/D0zoi0TtSD1HHNQ2TnAh/3lW7AZdAWQxLhq1lzQywUVU+kohdw15wHT9i0QbYpSWSnuVnh4g1Xzi6YNgLEfUdV4dqM3Gu/lhUnawEXma4wq0AByq/ueH7zWKe5/hNBEn2K1vUWt7RLiQ3IWxlJPvF83+HWGhZKmDqj0YBVq4DJQrCQ+HbhUDQ3LEkJRPZ4OIShWM=
 notifications:
   email: false
-
 sudo: false

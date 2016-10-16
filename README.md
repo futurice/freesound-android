@@ -16,6 +16,18 @@ This project is intended as a way for Futurice developers to hone their Android 
 
 Thanks for your interest!
 
+# Building
+
+To build the app, you will need a Freesound API key stored in the file: `<repo>/app/freesound-api.properties`, as per:
+
+```
+freesound.api.key=yourapikeyvaluegoeshere
+```
+
+If you don't have a key and you're not in the Futurice organization, then you will have to [generate your own from the Freesound website.](https://www.freesound.org/docs/api/overview.html)
+
+Alternatively, you can [join us at Futurice](http://futurice.com/careers)!
+
 # Contributing
 
 If you're a Futuricean and feel like getting involved, then look at the list of [issues](https://github.com/futurice/freesound-android/issues) to find a task to work on. If you have an idea of your own, please add create a new issue and get the conversation started.
