@@ -1,35 +1,28 @@
 language: android
-
 jdk:
- - oraclejdk8
-
+- oraclejdk8
 android:
   components:
-    - platform-tools
-    - tools
-    - android-23
-    - build-tools-23.0.3
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-23
-
+  - platform-tools
+  - tools
+  - android-23
+  - build-tools-23.0.3
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-23
 before_script:
-  - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
-  - adb shell input keyevent 82 &
-
+- echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
+- emulator -avd test -no-audio -no-window &
+- android-wait-for-emulator
+- adb shell settings put global window_animation_scale 0 &
+- adb shell settings put global transition_animation_scale 0 &
+- adb shell settings put global animator_duration_scale 0 &
+- adb shell input keyevent 82 &
 script:
-  - ./gradlew check
-
+- "./gradlew check"
 env:
   global:
-  - ADB_INSTALL_TIMEOUT=8
-  matrix:
-    secure: hHQJElxVv65kP0dxvE4Sxx6XP1fI0Hvu8U9xA44x4LnNtzuwnhEnHiXV7mSRteqhB2AvjyPVIcjXDBf44io9AyzsWv4LpQheqBuaz2D730wqfVgMOMufr2HucFoZ1D5SI/pW+olYcUNHl7gMMaQc6R5pvLuP7V74lag6Kju8Bz5BCEKtHDfJZwIvi8eiU77j0lU5VVTSWrgKaQvMWpx0CqPgge0iwm1duVQHeVyUzra5mCirhP4sp1PWYLkKP2gO/zweL5axX8fmxeLGESWbN3ViRW0fcOSNbu9of2grQcj6z/tnbEYqCoKPfRKzf0ZITs8RP/EBk/Iy3roENon0u1ansvIMWJ77YBt/IAHUtOdxSrz1JJT4Qrp2iugXiQqC8Ek6AnQ0QOfzYvihkJO0HFDmWMtvxq/rcmbSsrrL2XNEqsmHxpFWqobghQyG2GuARCtvh19bNn8gTD76P4dbvImMd9+tWECsqz96QUkUTA1+UPHaqjJiRDXK4T5yIhyExiSnxAC8mDDkcWgiJHtSbzvMMd9Y0dHms+L33CZxjk2WjZBoqacZR5zJ0hy+f2S6uAOBmcrVswRQQSUkxUp341yAdYPsJ3UtQy49ajzASvn7nEenTB8B5+1yu0fr3itmZq4pxMh19aVbEdUBLVkOZLzPW7hn8ZCC4pZ5YAumUVk=
+    secure: fGxEs2bR2oeFGttb05E7gO6vsMKg1o+m6CigffozNgM2jD/rOXEssLMQdvKB5xuZ6bqFuxj9DA5KMpDNF0UC6yNo8Jfz/lxyBtlr137oUrQy8Z3w2XuMEBEysATy0ikmv+Fzt5b+INjA9yZjx45+sc0YBIjRXYKapufmhjvMOlxGp9JMCbFDgYfwjFASnrGvAoYim5bnbbTe83KNocOHpvb9i5CbAFB+M0OE5mJNV4lXn50DX9PLPbZt0O+hNOMM26V5cMng958RhldHgyjPdJAL2HByzWvstklud8gERtJGlEdWAWdPJJf6o0rjQOkrkuh12oGSCOSTowcvUW/BXeh+KUtKr8yHidAf4GFCUF48YnH0tygrIB/rVBWRrqZnue5qfxd6jFLt06XSTEiFSelBfXRDbL9we3jCQNnd9aGgXqQJmK6MamXyDP+cH4Fv90njUmQO2Kb+QMVkPPsqWu4Ci0gM+/h0EoBYWI4a7gn+9lasRanYnnSIn3h9oBS4FJvuk2q/Xc7dgih2R4W/saYEtnIuWKLFcJzYpKYu0WRaiMqQkpf7qjh4dWnJetk15A874bbdjfW1jA7j6LURtrEu4eGl+T+20u9hd/tVd3Gl0u8/5Xyor7RskI4meB7BtAnBiLJB3u4TxKdtbRJTMiHNi3VqrtSDHlKpxxnkARw=
 notifications:
   email: false
 sudo: false
