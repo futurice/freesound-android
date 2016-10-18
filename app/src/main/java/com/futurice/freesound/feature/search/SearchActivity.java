@@ -70,6 +70,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     private ImageView closeButton;
 
     @Nullable
+    @BindView(id.search_coordinatorlayout)
     private CoordinatorLayout coordinatorLayout;
 
     @NonNull
@@ -128,8 +129,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             searchView.setQuery(SearchViewModel.NO_SEARCH, true);
             return true;
         });
-        coordinatorLayout = (CoordinatorLayout) findViewById(id.search_coordinatorlayout);
-        searchSnackbar = new SearchSnackbar();
 
     }
 
@@ -153,11 +152,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                 return true;
             }
         });
-    }
-
-    private boolean search(final String query) {
-        searchViewModel.search(query);
-        return true;
     }
 
     @NonNull
@@ -195,14 +189,16 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @Override
-    public void onDestroy() {
-        searchSnackbar.dismissSnackbar();
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        dismissSnackbar();
     }
-    public void showSnackbar(CharSequence charSequence){
+
+    public void showSnackbar(@NonNull final CharSequence charSequence) {
         searchSnackbar.showNewSnackbar(coordinatorLayout, charSequence);
     }
-    public void dismissSnackbar(){
+
+    public void dismissSnackbar() {
         searchSnackbar.dismissSnackbar();
     }
 }
