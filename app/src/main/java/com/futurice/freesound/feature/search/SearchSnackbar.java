@@ -6,8 +6,6 @@ import android.view.View;
 public class SearchSnackbar {
     private Snackbar snackbar;
 
-    public SearchSnackbar() {
-    }
     public void showNewSnackbar(View view, CharSequence charSequence){
         if(snackbar != null){
             snackbar.dismiss();

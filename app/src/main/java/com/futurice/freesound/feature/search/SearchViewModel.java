@@ -37,9 +37,7 @@ import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
-import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.utils.Preconditions.get;
-import static timber.log.Timber.e;
 
 final class SearchViewModel extends BaseViewModel {
 
@@ -62,7 +60,8 @@ final class SearchViewModel extends BaseViewModel {
     private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
     @NonNull
-    private final BehaviorSubject<Option<Throwable>> lastError = BehaviorSubject.create();
+    private final Subject<Option<Throwable>> lastErrorOnceAndStream = BehaviorSubject
+            .createDefault(Option.none());
 
     SearchViewModel(@NonNull final SearchDataModel searchDataModel,
                     @NonNull final Navigator navigator,
@@ -76,12 +75,11 @@ final class SearchViewModel extends BaseViewModel {
     Observable<Boolean> isClearButtonVisibleOnceAndStream() {
         return searchTermOnceAndStream.observeOn(Schedulers.computation())
                                       .map(SearchViewModel::isCloseEnabled);
-
     }
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        lastError.onNext(Option.ofObj(null));
+        lastErrorOnceAndStream.onNext(Option.none());
         searchTermOnceAndStream.onNext(query);
     }
 
@@ -110,8 +108,10 @@ final class SearchViewModel extends BaseViewModel {
                                      .debounce(SEARCH_DEBOUNCE_TIME_SECONDS,
                                                TimeUnit.SECONDS)
                                      .switchMap(query -> searchOrClear(query).toObservable())
-                                     .subscribe(unit -> lastError.onNext(Option.ofObj(null)),
-                                             e -> lastError.onNext(Option.ofObj(e))));
+                                     .subscribe(__ -> lastErrorOnceAndStream
+                                                        .onNext(Option.none()),
+                                                e -> lastErrorOnceAndStream
+                                                        .onNext(Option.ofObj(e))));
     }
 
     @NonNull
@@ -126,7 +126,9 @@ final class SearchViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Option<Throwable>> getSearchErrors() {
-        return lastError.hide();
+    public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
+        return lastErrorOnceAndStream
+                .hide()
+                .subscribeOn(Schedulers.computation());
     }
 }

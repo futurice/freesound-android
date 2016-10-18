@@ -45,6 +45,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
+import timber.log.Timber;
 
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
@@ -89,6 +90,16 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                           .observeOn(computation())
                           .subscribe(searchViewModel::search,
                                      e -> e(e, "Error getting changed text")));
+            d.add(searchViewModel.getSearchErrorOnceAndStream()
+                                 .observeOn(mainThread())
+                                 .subscribe(throwableOption -> {
+                                                if (throwableOption.isSome()) {
+                                                    showSnackbar("There was an error searching");
+                                                } else {
+                                                    dismissSnackbar();
+                                                }
+                                            },
+                                            e -> Timber.e(e, "Error setting Sound items")));
         }
 
         @Override
@@ -194,13 +205,11 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         dismissSnackbar();
     }
 
-    public void showSnackbar(@NonNull final CharSequence charSequence) {
-        checkNotNull(searchSnackbar, "Search Snackbar cannot be null.");
+    private void showSnackbar(@NonNull final CharSequence charSequence) {
         searchSnackbar.showNewSnackbar(coordinatorLayout, charSequence);
     }
 
-    public void dismissSnackbar() {
-        checkNotNull(searchSnackbar, "Search Snackbar cannot be null.");
+    private void dismissSnackbar() {
         searchSnackbar.dismissSnackbar();
     }
 }

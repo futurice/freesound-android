@@ -79,18 +79,6 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
-            disposables.add(viewModel().getSearchErrors()
-                                       .subscribeOn(Schedulers.computation())
-                                       .observeOn(mainThread())
-                                       .subscribe(throwableOption -> {
-                                                      if (throwableOption.isSome()) {
-                                                          ((SearchActivity) getActivity()).showSnackbar(
-                                                                  "There was an error searching");
-                                                      } else {
-                                                          ((SearchActivity) getActivity()).dismissSnackbar();
-                                                      }
-                                                  },
-                                                  e -> Timber.e(e, "Error setting Sound items")));
         }
 
         @Override
