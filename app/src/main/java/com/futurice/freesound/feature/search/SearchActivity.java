@@ -60,6 +60,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Inject
     SearchViewModel searchViewModel;
 
+    @Nullable
     @Inject
     SearchSnackbar searchSnackbar;
 
@@ -90,6 +91,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                           .observeOn(computation())
                           .subscribe(searchViewModel::search,
                                      e -> e(e, "Error getting changed text")));
+
             d.add(searchViewModel.getSearchErrorOnceAndStream()
                                  .observeOn(mainThread())
                                  .subscribe(throwableOption -> {
@@ -206,10 +208,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {
-        searchSnackbar.showNewSnackbar(coordinatorLayout, charSequence);
+        get(searchSnackbar).showNewSnackbar(coordinatorLayout, charSequence);
     }
 
     private void dismissSnackbar() {
-        searchSnackbar.dismissSnackbar();
+        get(searchSnackbar).dismissSnackbar();
     }
 }
