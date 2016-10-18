@@ -39,7 +39,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import polanski.option.AtomicOption;
 import polanski.option.Option;
@@ -81,16 +80,17 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
             disposables.add(viewModel().getSearchErrors()
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(mainThread())
-                    .subscribe(throwableOption -> {
-                                if (throwableOption.isSome()) {
-                                    ((SearchActivity) getActivity()).showSnackbar("There was an error searching");
-                                } else {
-                                    ((SearchActivity) getActivity()).dismissSnackbar();
-                                }
-                            },
-                            e -> Timber.e(e, "Error setting Sound items")));
+                                       .subscribeOn(Schedulers.computation())
+                                       .observeOn(mainThread())
+                                       .subscribe(throwableOption -> {
+                                                      if (throwableOption.isSome()) {
+                                                          ((SearchActivity) getActivity()).showSnackbar(
+                                                                  "There was an error searching");
+                                                      } else {
+                                                          ((SearchActivity) getActivity()).dismissSnackbar();
+                                                      }
+                                                  },
+                                                  e -> Timber.e(e, "Error setting Sound items")));
         }
 
         @Override
