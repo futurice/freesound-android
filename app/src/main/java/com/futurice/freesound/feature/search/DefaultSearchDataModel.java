@@ -75,7 +75,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Completable clear() {
-        return Completable.fromAction(onClear());
+        return Completable.fromAction(clearResultAndError());
     }
 
     @NonNull
@@ -95,7 +95,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     }
 
     @NonNull
-    private Action onClear() {
+    private Action clearResultAndError() {
         return () -> {
             lastResultsStream.onNext(Option.none());
             lastErrorStream.onNext(Option.none());

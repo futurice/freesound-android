@@ -166,6 +166,15 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
+    public void getSearchErrorStream_hasNoDefaultResults() {
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
+
+        ts.assertNoErrors()
+          .assertNoValues();
+    }
+
+    @Test
     public void getSearchErrorStream_isCleared_whenQuerySearchSuccessful() {
         new Arrangement().withSearchResultsFor(QUERY, dummyResults());
         TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream().test();
@@ -204,6 +213,28 @@ public class DefaultSearchDataModelTest {
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
         ts.assertNotTerminated();
+    }
+
+    @Test
+    public void clear_clearsSearchResults() {
+        TestObserver<Option<List<Sound>>> ts = defaultSearchDataModel.getSearchResultsStream()
+                                                                     .test();
+
+        defaultSearchDataModel.clear().subscribe();
+
+        ts.assertValue(Option.none())
+          .assertNotTerminated();
+    }
+
+    @Test
+    public void clear_clearsSearchErrors() {
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
+
+        defaultSearchDataModel.clear().subscribe();
+
+        ts.assertValue(Option.none())
+          .assertNotTerminated();
     }
 
     @Test
