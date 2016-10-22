@@ -26,13 +26,15 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import polanski.option.Option;
 
-public interface SearchDataModel {
+interface SearchDataModel {
 
-    @NonNull
     Completable querySearch(@NonNull String query);
 
     @NonNull
     Observable<Option<List<Sound>>> getSearchResultsStream();
+
+    @NonNull
+    Observable<Option<Throwable>> getSearchErrorStream();
 
     @NonNull
     Completable clear();

@@ -79,7 +79,7 @@ final class SearchActivityViewModel extends BaseViewModel {
                                      .switchMap(query -> searchOrClear(query).toObservable())
                                      .subscribe(nothing1(),
                                                 e -> e(e,
-                                                       "Error when setting search term")));
+                                                       "Fatal error when setting search term")));
     }
 
     @NonNull

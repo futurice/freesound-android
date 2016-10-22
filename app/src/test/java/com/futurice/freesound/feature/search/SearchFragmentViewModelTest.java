@@ -24,7 +24,6 @@ import com.futurice.freesound.test.data.TestData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
@@ -32,11 +31,15 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
 public class SearchFragmentViewModelTest {
@@ -74,6 +77,7 @@ public class SearchFragmentViewModelTest {
         ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
 
+
     @NonNull
     private static List<DisplayableItem> expectedDisplayableItems(
             @NonNull final List<Sound> sounds) {
@@ -86,15 +90,26 @@ public class SearchFragmentViewModelTest {
 
     private class ArrangeBuilder {
 
-        private final BehaviorSubject<Option<List<Sound>>> searchResultsStream = BehaviorSubject
-                .create();
+        private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
+                = BehaviorSubject.create();
 
         ArrangeBuilder() {
-            Mockito.when(searchDataModel.getSearchResultsStream()).thenReturn(searchResultsStream);
+            withSuccessfulSearchResultStream();
+        }
+
+        ArrangeBuilder withSuccessfulSearchResultStream() {
+            when(searchDataModel.getSearchResultsStream()).thenReturn(mockedSearchResultsStream);
+            return this;
         }
 
         ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
-            searchResultsStream.onNext(sounds);
+            mockedSearchResultsStream.onNext(sounds);
+            return this;
+        }
+
+        ArrangeBuilder withErrorWhenSearching() {
+            when(searchDataModel.querySearch(anyString())).thenReturn(
+                    Completable.error(new Exception()));
             return this;
         }
     }

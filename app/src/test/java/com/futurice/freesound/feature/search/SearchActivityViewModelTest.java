@@ -17,13 +17,21 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.test.data.TestData;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
+import io.reactivex.observers.TestObserver;
+import polanski.option.Option;
+
 import static org.mockito.Mockito.verify;
+import static polanski.option.Option.ofObj;
 
 public class SearchActivityViewModelTest {
 
@@ -47,5 +55,25 @@ public class SearchActivityViewModelTest {
 
         verify(analytics).log("SearchPressedEvent");
     }
+
+//    @Test
+//    public void search_recoversFromSearchErrors() {
+//         ArrangeBuilder
+//                arrangeBuilder = new SearchFragmentViewModelTest.ArrangeBuilder().withErrorWhenSearching();
+//        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
+//
+//        viewModel.search("query");
+//
+//        ts.assertNoValues();
+//
+//        arrangeBuilder
+//                .withSuccessfulSearchResultStream()
+//                .enqueueSearchResults(ofObj(TestData.sounds(10)));
+//
+//        viewModel.search("query");
+//
+//        ts.assertValueCount(1);
+//    }
+//
 
 }

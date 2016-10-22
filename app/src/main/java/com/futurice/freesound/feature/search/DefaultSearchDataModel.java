@@ -26,10 +26,13 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.utils.Preconditions.get;
+import static timber.log.Timber.e;
 
 final class DefaultSearchDataModel implements SearchDataModel {
 
@@ -39,18 +42,22 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     private final BehaviorSubject<Option<List<Sound>>> lastResultsStream = BehaviorSubject.create();
 
+    @NonNull
+    private final BehaviorSubject<Option<Throwable>> lastErrorStream = BehaviorSubject.create();
+
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
     }
 
     @Override
-    @NonNull
     public Completable querySearch(@NonNull final String query) {
         return freeSoundSearchService.search(get(query))
                                      .map(SoundSearchResult::results)
                                      .map(Option::ofObj)
-                                     .doOnSuccess(lastResultsStream::onNext)
-                                     .toCompletable();
+                                     .doOnSuccess(storeValueAndClearError())
+                                     .doOnError(storeError(query))
+                                     .toCompletable()
+                                     .onErrorComplete();
     }
 
     @Override
@@ -61,7 +68,37 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
+    public Observable<Option<Throwable>> getSearchErrorStream() {
+        return lastErrorStream.hide();
+    }
+
+    @Override
+    @NonNull
     public Completable clear() {
-        return Completable.fromAction(() -> lastResultsStream.onNext(Option.none()));
+        return Completable.fromAction(onClear());
+    }
+
+    @NonNull
+    private Consumer<Throwable> storeError(final @NonNull String query) {
+        return e -> {
+            lastErrorStream.onNext(Option.ofObj(e));
+            e(e, "Error searching Freesound for query: %s ", query);
+        };
+    }
+
+    @NonNull
+    private Consumer<Option<List<Sound>>> storeValueAndClearError() {
+        return results -> {
+            lastResultsStream.onNext(results);
+            lastErrorStream.onNext(Option.none());
+        };
+    }
+
+    @NonNull
+    private Action onClear() {
+        return () -> {
+            lastResultsStream.onNext(Option.none());
+            lastErrorStream.onNext(Option.none());
+        };
     }
 }
