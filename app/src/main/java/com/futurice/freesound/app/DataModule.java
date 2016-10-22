@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
 import dagger.Module;
 
 @Module
-public class DataModule {
+class DataModule {
 
 }

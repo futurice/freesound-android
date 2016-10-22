@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
-
-import android.content.Context;
+import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Interceptor;
 
 @Module
-public class ImagesModule {
+public final class InstrumentationModule {
 
     @Provides
     @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return Picasso.with(context);
+    @ApiModule.NetworkInterceptors
+    static List<Interceptor> provideNetworkInterceptors() {
+        return Collections.emptyList();
     }
 
+    @Provides
+    @Singleton
+    @ApiModule.AppInterceptors
+    static List<Interceptor> provideAppInterceptors() {
+        return Collections.emptyList();
+    }
 }

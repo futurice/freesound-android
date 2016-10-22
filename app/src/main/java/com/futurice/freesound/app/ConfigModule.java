@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
-import java.util.Collections;
-import java.util.List;
+import com.futurice.freesound.BuildConfig;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Interceptor;
 
 @Module
-public final class InstrumentationModule {
+final class ConfigModule {
 
     @Provides
     @Singleton
-    @ApiModule.NetworkInterceptors
-    static List<Interceptor> provideNetworkInterceptors() {
-        return Collections.emptyList();
+    @Named(ApiModule.URL_CONFIG)
+    static String provideApiModuleUrlConfig() {
+        return BuildConfig.FREESOUND_API_URL;
     }
 
     @Provides
     @Singleton
-    @ApiModule.AppInterceptors
-    static List<Interceptor> provideAppInterceptors() {
-        return Collections.emptyList();
+    @Named(ApiModule.API_TOKEN_CONFIG)
+    static String provideApiModuleApiTokenConfig() {
+        return BuildConfig.FREESOUND_API_KEY;
     }
+
 }

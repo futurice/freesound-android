@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
@@ -31,7 +31,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 @Module
-public final class InstrumentationModule {
+final class InstrumentationModule {
 
     @Provides
     @Singleton
