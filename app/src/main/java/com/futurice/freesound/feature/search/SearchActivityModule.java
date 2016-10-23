@@ -43,6 +43,7 @@ class SearchActivityModule {
     }
 
     @Provides
+    @ActivityScope
     static FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
         return new DefaultFreeSoundSearchService(freeSoundApi);
     }
