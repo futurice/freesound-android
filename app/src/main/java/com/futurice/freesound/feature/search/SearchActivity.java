@@ -56,7 +56,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     @Nullable
     @Inject
-    SearchViewModel searchViewModel;
+    SearchActivityViewModel searchViewModel;
 
     @Nullable
     @BindView(id.search_view)
@@ -118,7 +118,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         closeButton = findById(searchView, R.id.search_close_btn);
 
         searchView.setOnCloseListener(() -> {
-            searchView.setQuery(SearchViewModel.NO_SEARCH, true);
+            searchView.setQuery(SearchActivityViewModel.NO_SEARCH, true);
             return true;
         });
 

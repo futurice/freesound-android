@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
@@ -38,10 +37,9 @@ import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
-import static org.mockito.Mockito.verify;
 import static polanski.option.Option.ofObj;
 
-public class SearchViewModelTest {
+public class SearchFragmentViewModelTest {
 
     @Mock
     SearchDataModel searchDataModel;
@@ -49,22 +47,12 @@ public class SearchViewModelTest {
     @Mock
     Navigator navigator;
 
-    @Mock
-    Analytics analytics;
-
-    private SearchViewModel viewModel;
+    private SearchFragmentViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        viewModel = new SearchViewModel(searchDataModel, navigator, analytics);
-    }
-
-    @Test
-    public void search_emitsAnalyticsEvent() {
-        viewModel.search("Query");
-
-        verify(analytics).log("SearchPressedEvent");
+        viewModel = new SearchFragmentViewModel(searchDataModel, navigator);
     }
 
     @Test
