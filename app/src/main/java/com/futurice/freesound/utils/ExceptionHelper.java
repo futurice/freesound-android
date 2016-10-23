@@ -13,42 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.futurice.freesound.functional;
+package com.futurice.freesound.utils;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
-import com.futurice.freesound.utils.TextUtils;
 
 import android.support.annotation.NonNull;
 
-import io.reactivex.functions.Predicate;
-
 /**
- * Common String function implementations.
+ * Utility class for exceptions.
  */
-public final class StringFunctions {
+public final class ExceptionHelper {
 
-    /**
-     * Returns a {@link Predicate} which evaluates if a String is null or empty.
-     *
-     * @return the {@link Predicate}.
-     */
-    @NonNull
-    public static Predicate<String> isEmpty() {
-        return TextUtils::isNullOrEmpty;
-    }
-
-    /**
-     * Returns a {@link Predicate} which evaluates if a String is not null nor empty.
-     *
-     * @return the {@link Predicate}.
-     */
-    @NonNull
-    public static Predicate<String> isNotEmpty() {
-        return TextUtils::isNotEmpty;
-    }
-
-    private StringFunctions() {
+    private ExceptionHelper() {
         throw new InstantiationForbiddenError();
+    }
+
+    /**
+     * If the provided Throwable is an Error this method
+     * throws it, otherwise returns a RuntimeException wrapping the error
+     * if that error is a checked exception.
+     *
+     * @param error the error to wrap or throw
+     * @return the (wrapped) error
+     */
+    @NonNull
+    public static RuntimeException wrapOrThrow(@NonNull final Throwable error) {
+        if (error instanceof Error) {
+            throw (Error) error;
+        }
+        if (error instanceof RuntimeException) {
+            return (RuntimeException) error;
+        }
+        return new RuntimeException(error);
     }
 }

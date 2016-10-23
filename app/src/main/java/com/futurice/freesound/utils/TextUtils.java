@@ -44,6 +44,15 @@ public final class TextUtils {
         return !isNullOrEmpty(chars);
     }
 
+    /**
+     * Evaluates if the given sequence is neither null nor empty.
+     *
+     * @return true if the parameter has at least one char, false otherwise.
+     */
+    public static boolean isNotEmpty(@Nullable final CharSequence chars) {
+        return chars != null && chars.length() > 0;
+    }
+
     private TextUtils() {
         throw new InstantiationForbiddenError();
     }
