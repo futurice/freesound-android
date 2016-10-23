@@ -98,7 +98,8 @@ public class SearchFragmentViewModelTest {
         }
 
         ArrangeBuilder withSuccessfulSearchResultStream() {
-            when(searchDataModel.getSearchResultsStream()).thenReturn(mockedSearchResultsStream);
+            when(searchDataModel.getSearchResultsOnceAndStream())
+                    .thenReturn(mockedSearchResultsStream);
             return this;
         }
 

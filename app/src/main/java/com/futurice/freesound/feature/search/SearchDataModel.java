@@ -31,10 +31,10 @@ interface SearchDataModel {
     Completable querySearch(@NonNull String query);
 
     @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsStream();
+    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
 
     @NonNull
-    Observable<Option<Throwable>> getSearchErrorStream();
+    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
 
     @NonNull
     Completable clear();

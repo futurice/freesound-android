@@ -40,10 +40,12 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final FreeSoundSearchService freeSoundSearchService;
 
     @NonNull
-    private final BehaviorSubject<Option<List<Sound>>> lastResultsStream = BehaviorSubject.create();
+    private final BehaviorSubject<Option<List<Sound>>> lastResultsOnceAndStream =
+            BehaviorSubject.createDefault(Option.none());
 
     @NonNull
-    private final BehaviorSubject<Option<Throwable>> lastErrorStream = BehaviorSubject.create();
+    private final BehaviorSubject<Option<Throwable>> lastErrorOnceAndStream =
+            BehaviorSubject.createDefault(Option.none());
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
@@ -62,14 +64,14 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
-    public Observable<Option<List<Sound>>> getSearchResultsStream() {
-        return lastResultsStream.hide();
+    public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
+        return lastResultsOnceAndStream.hide();
     }
 
     @Override
     @NonNull
-    public Observable<Option<Throwable>> getSearchErrorStream() {
-        return lastErrorStream.hide();
+    public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
+        return lastErrorOnceAndStream.hide();
     }
 
     @Override
@@ -81,7 +83,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     private Consumer<Throwable> storeError(@NonNull final String query) {
         return e -> {
-            lastErrorStream.onNext(Option.ofObj(e));
+            lastErrorOnceAndStream.onNext(Option.ofObj(e));
             e(e, "Error searching Freesound for query: %s ", query);
         };
     }
@@ -89,16 +91,16 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     private Consumer<Option<List<Sound>>> storeValueAndClearError() {
         return results -> {
-            lastResultsStream.onNext(results);
-            lastErrorStream.onNext(Option.none());
+            lastResultsOnceAndStream.onNext(results);
+            lastErrorOnceAndStream.onNext(Option.none());
         };
     }
 
     @NonNull
     private Action clearResultAndError() {
         return () -> {
-            lastResultsStream.onNext(Option.none());
-            lastErrorStream.onNext(Option.none());
+            lastResultsOnceAndStream.onNext(Option.none());
+            lastErrorOnceAndStream.onNext(Option.none());
         };
     }
 }
