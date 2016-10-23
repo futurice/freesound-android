@@ -125,11 +125,10 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void getSearchResults_hasNoDefaultResults() {
-        TestObserver<Option<List<Sound>>> ts = defaultSearchDataModel.getSearchResultsStream()
-                                                                     .test();
-
-        ts.assertNoErrors()
-          .assertNoValues();
+        defaultSearchDataModel.getSearchResultsStream()
+                              .test()
+                              .assertNotTerminated()
+                              .assertNoValues();
     }
 
     @Test
@@ -167,17 +166,17 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void getSearchErrorStream_hasNoDefaultResults() {
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
-                                                                   .test();
-
-        ts.assertNoErrors()
-          .assertNoValues();
+        defaultSearchDataModel.getSearchErrorStream()
+                              .test()
+                              .assertNotTerminated()
+                              .assertNoValues();
     }
 
     @Test
     public void getSearchErrorStream_isCleared_whenQuerySearchSuccessful() {
         new Arrangement().withSearchResultsFor(QUERY, dummyResults());
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream().test();
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
@@ -187,7 +186,8 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchErrorStream_doesNotTerminate_whenQuerySearchSuccessful() {
         new Arrangement().withSearchResultsFor(QUERY, dummyResults());
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream().test();
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
@@ -198,7 +198,8 @@ public class DefaultSearchDataModelTest {
     public void getSearchErrorStream_emitsErrorValue_whenQuerySearchErrors() {
         Exception searchError = new Exception();
         new Arrangement().withSearchResultError(searchError);
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream().test();
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
@@ -208,7 +209,8 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchErrorStream_doesNotTerminate_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError(new Exception());
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream().test();
+        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorStream()
+                                                                   .test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 

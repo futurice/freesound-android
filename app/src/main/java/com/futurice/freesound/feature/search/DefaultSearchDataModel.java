@@ -79,7 +79,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
     }
 
     @NonNull
-    private Consumer<Throwable> storeError(final @NonNull String query) {
+    private Consumer<Throwable> storeError(@NonNull final String query) {
         return e -> {
             lastErrorStream.onNext(Option.ofObj(e));
             e(e, "Error searching Freesound for query: %s ", query);
