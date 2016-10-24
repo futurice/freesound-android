@@ -47,8 +47,8 @@ final class SearchFragmentViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Option<List<DisplayableItem>>> getSoundsStream() {
-        return searchDataModel.getSearchResultsStream()
+    Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
+        return searchDataModel.getSearchResultsOnceAndStream()
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem));
     }
 

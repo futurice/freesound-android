@@ -32,13 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
@@ -60,9 +60,9 @@ public class SearchFragmentViewModelTest {
 
     @Test
     public void getSounds_emitsNone_whenSearchResultsIsNone() {
-        new ArrangeBuilder().enqueueSearchResults(Option.none());
+        new Arrangement().enqueueSearchResults(Option.none());
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsOnceAndStream().test();
 
         ts.assertValue(Option.none());
     }
@@ -70,13 +70,12 @@ public class SearchFragmentViewModelTest {
     @Test
     public void getSounds_emitsSearchResultsWrappedInDisplayableItems() {
         List<Sound> sounds = TestData.sounds(10);
-        new ArrangeBuilder().enqueueSearchResults(ofObj(sounds));
+        new Arrangement().enqueueSearchResults(ofObj(sounds));
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
+        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsOnceAndStream().test();
 
         ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
-
 
     @NonNull
     private static List<DisplayableItem> expectedDisplayableItems(
@@ -88,30 +87,26 @@ public class SearchFragmentViewModelTest {
         return displayableItems;
     }
 
-    private class ArrangeBuilder {
+    private class Arrangement {
 
         private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
-                = BehaviorSubject.create();
+                = BehaviorSubject.createDefault(Option.none());
 
-        ArrangeBuilder() {
+        Arrangement() {
             withSuccessfulSearchResultStream();
         }
 
-        ArrangeBuilder withSuccessfulSearchResultStream() {
+        Arrangement withSuccessfulSearchResultStream() {
             when(searchDataModel.getSearchResultsOnceAndStream())
                     .thenReturn(mockedSearchResultsStream);
             return this;
         }
 
-        ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
+        Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
             mockedSearchResultsStream.onNext(sounds);
             return this;
         }
 
-        ArrangeBuilder withErrorWhenSearching() {
-            when(searchDataModel.querySearch(anyString())).thenReturn(
-                    Completable.error(new Exception()));
-            return this;
-        }
     }
+
 }

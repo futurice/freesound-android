@@ -17,23 +17,34 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
-import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
-import io.reactivex.observers.TestObserver;
+import io.reactivex.Completable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
 public class SearchActivityViewModelTest {
+
+    private static final String QUERY = "test-query";
 
     @Mock
     SearchDataModel searchDataModel;
@@ -56,24 +67,113 @@ public class SearchActivityViewModelTest {
         verify(analytics).log("SearchPressedEvent");
     }
 
-//    @Test
-//    public void search_recoversFromSearchErrors() {
-//         ArrangeBuilder
-//                arrangeBuilder = new SearchFragmentViewModelTest.ArrangeBuilder().withErrorWhenSearching();
-//        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
-//
-//        viewModel.search("query");
-//
-//        ts.assertNoValues();
-//
-//        arrangeBuilder
-//                .withSuccessfulSearchResultStream()
-//                .enqueueSearchResults(ofObj(TestData.sounds(10)));
-//
-//        viewModel.search("query");
-//
-//        ts.assertValueCount(1);
-//    }
-//
+    @Ignore("This will require Scheduler overriding")
+    @Test
+    public void querySearch_queriesSearchDataModelWithTerm() {
+        new Arrangement().withSuccessfulSearchResultStream()
+                         .act()
+                         .subscribed();
+
+        viewModel.search(QUERY);
+
+        verify(searchDataModel).querySearch(eq(QUERY));
+    }
+
+    @Ignore("This will require Scheduler overriding")
+    @Test
+    public void querySearch_clearsSearchDataModel_whenEmptySearchString() {
+        fail("Not yet implemented");
+    }
+
+    @Ignore(("This will require Scheduler overriding"))
+    @Test
+    public void clear_isDisabled_byDefault() {
+        viewModel.isClearEnabledOnceAndStream()
+                 .test()
+                 .assertValue(false)
+                 .assertNotTerminated();
+    }
+
+    @Ignore(("This will require Scheduler overriding"))
+    @Test
+    public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
+        viewModel.search("query");
+
+        viewModel.isClearEnabledOnceAndStream()
+                 .test()
+                 .assertValue(true)
+                 .assertNotTerminated();
+    }
+
+    @Ignore(("This will require Scheduler overriding"))
+    @Test
+    public void clear_isDisabled_whenSearchWithEmptyQuery() {
+        viewModel.search("");
+
+        viewModel.isClearEnabledOnceAndStream()
+                 .test()
+                 .assertValue(false)
+                 .assertNotTerminated();
+    }
+
+    @Test
+    public void search_recoversFromSearchErrors() {
+        Arrangement arrangement = new Arrangement();
+        arrangement.withErrorWhenSearching()
+                   .act()
+                   .search();
+
+        arrangement
+                .withSuccessfulSearchResultStream()
+                .enqueueSearchResults(ofObj(TestData.sounds(10)));
+
+        viewModel.search(QUERY);
+
+        verify(searchDataModel).querySearch(eq(QUERY));
+    }
+
+    private class Arrangement {
+
+        private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
+                = BehaviorSubject.createDefault(Option.none());
+
+        Arrangement() {
+            withSuccessfulSearchResultStream();
+        }
+
+        Arrangement withSuccessfulSearchResultStream() {
+            when(searchDataModel.getSearchResultsOnceAndStream())
+                    .thenReturn(mockedSearchResultsStream);
+            return this;
+        }
+
+        Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
+            mockedSearchResultsStream.onNext(sounds);
+            return this;
+        }
+
+        Arrangement withErrorWhenSearching() {
+            when(searchDataModel.querySearch(anyString())).thenReturn(
+                    Completable.error(new Exception()));
+            return this;
+        }
+
+        Act act() {
+            return new Act();
+        }
+    }
+
+    private class Act {
+
+        CompositeDisposable d = new CompositeDisposable();
+
+        void subscribed() {
+            viewModel.bind(d);
+        }
+
+        void search() {
+            viewModel.search(QUERY);
+        }
+    }
 
 }

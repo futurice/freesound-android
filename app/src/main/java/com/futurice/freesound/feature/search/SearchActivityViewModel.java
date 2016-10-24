@@ -59,7 +59,7 @@ final class SearchActivityViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Boolean> isClearButtonVisibleOnceAndStream() {
+    Observable<Boolean> isClearEnabledOnceAndStream() {
         return searchTermOnceAndStream.observeOn(Schedulers.computation())
                                       .map(SearchActivityViewModel::isCloseEnabled);
 
