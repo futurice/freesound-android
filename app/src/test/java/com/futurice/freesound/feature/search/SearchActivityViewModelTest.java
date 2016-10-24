@@ -35,7 +35,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -62,7 +61,7 @@ public class SearchActivityViewModelTest {
 
     @Test
     public void search_emitsAnalyticsEvent() {
-        viewModel.search("Query");
+        viewModel.search(QUERY);
 
         verify(analytics).log("SearchPressedEvent");
     }
@@ -82,7 +81,13 @@ public class SearchActivityViewModelTest {
     @Ignore("This will require Scheduler overriding")
     @Test
     public void querySearch_clearsSearchDataModel_whenEmptySearchString() {
-        fail("Not yet implemented");
+        new Arrangement().withSuccessfulSearchResultStream()
+                         .act()
+                         .subscribed();
+
+        viewModel.search("");
+
+        verify(searchDataModel).clear();
     }
 
     @Ignore(("This will require Scheduler overriding"))
@@ -97,7 +102,11 @@ public class SearchActivityViewModelTest {
     @Ignore(("This will require Scheduler overriding"))
     @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
-        viewModel.search("query");
+        new Arrangement().withSuccessfulSearchResultStream()
+                         .act()
+                         .subscribed();
+
+        viewModel.search(QUERY);
 
         viewModel.isClearEnabledOnceAndStream()
                  .test()
@@ -108,6 +117,10 @@ public class SearchActivityViewModelTest {
     @Ignore(("This will require Scheduler overriding"))
     @Test
     public void clear_isDisabled_whenSearchWithEmptyQuery() {
+        new Arrangement().withSuccessfulSearchResultStream()
+                         .act()
+                         .subscribed();
+
         viewModel.search("");
 
         viewModel.isClearEnabledOnceAndStream()
@@ -116,18 +129,20 @@ public class SearchActivityViewModelTest {
                  .assertNotTerminated();
     }
 
+    @Ignore(("This will require Scheduler overriding"))
     @Test
     public void search_recoversFromSearchErrors() {
         Arrangement arrangement = new Arrangement();
         arrangement.withErrorWhenSearching()
                    .act()
+                   .subscribed()
                    .search();
 
         arrangement
                 .withSuccessfulSearchResultStream()
-                .enqueueSearchResults(ofObj(TestData.sounds(10)));
-
-        viewModel.search(QUERY);
+                .enqueueSearchResults(ofObj(TestData.sounds(10)))
+                .act()
+                .search();
 
         verify(searchDataModel).querySearch(eq(QUERY));
     }
@@ -167,12 +182,14 @@ public class SearchActivityViewModelTest {
 
         CompositeDisposable d = new CompositeDisposable();
 
-        void subscribed() {
+        Act subscribed() {
             viewModel.bind(d);
+            return this;
         }
 
-        void search() {
+        Act search() {
             viewModel.search(QUERY);
+            return this;
         }
     }
 
