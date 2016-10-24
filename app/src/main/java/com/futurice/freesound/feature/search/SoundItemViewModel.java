@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundImageFormat;
@@ -51,7 +52,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     private String getThumbnail() {
         return ofObj(sound.images())
                 .flatMap(it -> ofObj(it.get(SoundImageFormat.waveform_m)))
-                .orDefault(() -> "");
+                .orDefault(() -> Text.EMPTY);
     }
 
     @NonNull

@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.common;
 
-import com.futurice.freesound.inject.fragment.BaseFragmentComponent;
-import com.futurice.freesound.inject.fragment.FragmentScope;
+public final class Text {
 
-import dagger.Component;
+    public static final String EMPTY = "";
 
-@FragmentScope
-@Component(dependencies = SearchActivityComponent.class, modules = SearchFragmentModule.class)
-interface SearchFragmentComponent extends BaseFragmentComponent {
-
-    void inject(final SearchFragment searchFragment);
+    private Text() {
+        throw new InstantiationForbiddenError();
+    }
 }
