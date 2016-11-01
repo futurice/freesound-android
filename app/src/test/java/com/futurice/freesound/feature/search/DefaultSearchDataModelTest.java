@@ -56,7 +56,7 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
-    public void querySearch_queriesFreesoundSearchSearch() {
+    public void querySearch_queriesFreesoundSearchService() {
         new Arrangement().withDummySearchResult();
 
         defaultSearchDataModel.querySearch(QUERY).test();

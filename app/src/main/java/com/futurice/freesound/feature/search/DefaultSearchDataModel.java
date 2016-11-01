@@ -26,7 +26,6 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
@@ -54,9 +53,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     public Completable querySearch(@NonNull final String query) {
         return freeSoundSearchService.search(get(query))
-                                     .map(SoundSearchResult::results)
-                                     .map(Option::ofObj)
-                                     .doOnSuccess(storeValueAndClearError())
+                                     .map(DefaultSearchDataModel::toResults)
+                                     .doOnSuccess(this::storeValueAndClearError)
                                      .doOnError(storeError(query))
                                      .toCompletable()
                                      .onErrorComplete();
@@ -77,7 +75,17 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Completable clear() {
-        return Completable.fromAction(clearResultAndError());
+        return Completable.fromAction(this::clearResultAndError);
+    }
+
+    @NonNull
+    private static Option<List<Sound>> toResults(final SoundSearchResult soundSearchResult) {
+        return Option.ofObj(soundSearchResult.results());
+    }
+
+    private void storeValueAndClearError(@NonNull final Option<List<Sound>> listOption) {
+        lastResultsOnceAndStream.onNext(listOption);
+        lastErrorOnceAndStream.onNext(Option.none());
     }
 
     @NonNull
@@ -88,19 +96,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
         };
     }
 
-    @NonNull
-    private Consumer<Option<List<Sound>>> storeValueAndClearError() {
-        return results -> {
-            lastResultsOnceAndStream.onNext(results);
-            lastErrorOnceAndStream.onNext(Option.none());
-        };
-    }
-
-    @NonNull
-    private Action clearResultAndError() {
-        return () -> {
-            lastResultsOnceAndStream.onNext(Option.none());
-            lastErrorOnceAndStream.onNext(Option.none());
-        };
+    private void clearResultAndError() {
+        lastResultsOnceAndStream.onNext(Option.none());
+        lastErrorOnceAndStream.onNext(Option.none());
     }
 }
