@@ -57,7 +57,7 @@ final class SearchFragmentViewModel extends BaseViewModel {
         return Observable.fromIterable(sounds)
                          .map(sound -> DisplayableItem.create(sound, SOUND))
                          .toList()
-                         .blockingFirst();
+                         .blockingGet();
     }
 
     void openSoundDetails(@NonNull final Sound sound) {

@@ -338,7 +338,7 @@ public class AdapterInteractorTest {
         return Observable.range(from, to)
                          .map(Object::toString)
                          .toList()
-                         .blockingFirst();
+                         .blockingGet();
     }
 
     private static Collection<String> emptyStringCollection() {

@@ -27,9 +27,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.reactivex.observers.TestObserver;
-import io.reactivex.subscribers.TestSubscriber;
-
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -56,9 +53,8 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(null);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestSubscriber<String> ts = vm.thumbnailImageUrl().test();
-
-        ts.assertNoErrors()
+        vm.thumbnailImageUrl()
+          .test()
           .assertValue("");
     }
 
@@ -68,34 +64,30 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(Maps.newHashMap());
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
-        TestSubscriber<String> ts = vm.thumbnailImageUrl().test();
-
-        ts.assertNoErrors()
+        vm.thumbnailImageUrl()
+          .test()
           .assertValue("");
     }
 
     @Test
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
-        TestSubscriber<String> ts = soundItemViewModel.thumbnailImageUrl().test();
-
-        ts.assertNoErrors()
-          .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
+        soundItemViewModel.thumbnailImageUrl()
+                          .test()
+                          .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
     }
 
     @Test
     public void name_emitsSoundName() {
-        TestSubscriber<String> ts = soundItemViewModel.name().test();
-
-        ts.assertNoErrors()
-          .assertValue(SOUND.name());
+        soundItemViewModel.name()
+                          .test()
+                          .assertValue(SOUND.name());
     }
 
     @Test
     public void description_emitsSoundDescription() {
-        TestSubscriber<String> ts = soundItemViewModel.description().test();
-
-        ts.assertNoErrors()
-          .assertValue(SOUND.description());
+        soundItemViewModel.description()
+                          .test()
+                          .assertValue(SOUND.description());
     }
 
     @Test
