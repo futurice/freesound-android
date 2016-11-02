@@ -70,7 +70,6 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.querySearch(QUERY)
                               .test()
-                              .assertNoErrors()
                               .assertComplete();
     }
 
@@ -212,7 +211,6 @@ public class DefaultSearchDataModelTest {
     public void clear_completes() {
         defaultSearchDataModel.clear()
                               .test()
-                              .assertNoErrors()
                               .assertComplete();
     }
 
