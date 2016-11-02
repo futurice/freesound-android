@@ -32,7 +32,7 @@ import io.reactivex.disposables.Disposables;
  * When this scheduler is used in tests with an operator where we specify time,
  * it will ignore the time values and schedule the action immediately.
  *
- * The reason behind it is to run tests as qickly as possible and not use
+ * The reason behind it is to run tests as quickly as possible and not use
  * {@link io.reactivex.schedulers.TestScheduler} every time.
  */
 public final class TimeSkipScheduler extends Scheduler {
