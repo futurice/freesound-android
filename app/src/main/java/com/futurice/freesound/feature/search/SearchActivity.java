@@ -72,7 +72,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             checkNotNull(searchViewModel, "View Model cannot be null.");
             checkNotNull(searchView, "Search view cannot be null.");
 
-            d.add(searchViewModel.isClearButtonVisibleOnceAndStream()
+            d.add(searchViewModel.isClearEnabledOnceAndStream()
                                  .observeOn(mainThread())
                                  .subscribe(SearchActivity.this::setClearSearchVisible,
                                             e -> e(e, "Error setting query string")));

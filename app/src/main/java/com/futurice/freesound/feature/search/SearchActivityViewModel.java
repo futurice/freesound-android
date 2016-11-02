@@ -59,7 +59,7 @@ final class SearchActivityViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Boolean> isClearButtonVisibleOnceAndStream() {
+    Observable<Boolean> isClearEnabledOnceAndStream() {
         return searchTermOnceAndStream.observeOn(Schedulers.computation())
                                       .map(SearchActivityViewModel::isCloseEnabled);
 
@@ -79,7 +79,7 @@ final class SearchActivityViewModel extends BaseViewModel {
                                      .switchMap(query -> searchOrClear(query).toObservable())
                                      .subscribe(nothing1(),
                                                 e -> e(e,
-                                                       "Error when setting search term")));
+                                                       "Fatal error when setting search term")));
     }
 
     @NonNull
