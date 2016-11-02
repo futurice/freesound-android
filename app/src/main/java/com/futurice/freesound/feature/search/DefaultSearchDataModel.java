@@ -79,7 +79,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
     }
 
     @NonNull
-    private static Option<List<Sound>> toResults(final SoundSearchResult soundSearchResult) {
+    private static Option<List<Sound>> toResults(
+            @NonNull final SoundSearchResult soundSearchResult) {
         return Option.ofObj(soundSearchResult.results());
     }
 
