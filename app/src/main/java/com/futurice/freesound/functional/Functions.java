@@ -37,7 +37,7 @@ public final class Functions {
     };
 
     /**
-     * Returns an time of {@link Action} with no side-effects.
+     * Returns an instance of {@link Action} with no side-effects.
      *
      * @return the {@link Action}
      */
@@ -48,7 +48,7 @@ public final class Functions {
     }
 
     /**
-     * Returns an time of {@link Consumer} with no side-effects.
+     * Returns an instance of {@link Consumer} with no side-effects.
      *
      * @return the {@link Consumer}
      */

@@ -22,6 +22,7 @@ import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,10 +40,12 @@ import static timber.log.Timber.e;
 
 final class SearchActivityViewModel extends BaseViewModel {
 
+    @VisibleForTesting
     static final int SEARCH_DEBOUNCE_TIME_SECONDS = 2;
 
     static final String NO_SEARCH = Text.EMPTY;
 
+    @VisibleForTesting
     static final String SEARCH_DEBOUNCE_TAG = "SEARCH DEBOUNCE";
 
     @NonNull
