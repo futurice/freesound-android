@@ -52,4 +52,19 @@ public class TextUtilsTest {
         assertThat(TextUtils.isNullOrEmpty("dummy")).isFalse();
     }
 
+    @Test
+    public void isNotEmpty_returnFalse_whenNull() {
+        assertThat(TextUtils.isNotEmpty(null)).isFalse();
+    }
+
+    @Test
+    public void isNotEmpty_returnTrue_whenNonEmptyString() {
+        assertThat(TextUtils.isNotEmpty("dummy")).isTrue();
+    }
+
+    @Test
+    public void isNotEmpty_returnFalse_whenEmptyString() {
+        assertThat(TextUtils.isNotEmpty("")).isFalse();
+    }
+
 }

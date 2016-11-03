@@ -28,10 +28,9 @@ import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.observers.TestObserver;
+import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
@@ -42,16 +41,17 @@ import static polanski.option.Option.ofObj;
 public class SearchFragmentViewModelTest {
 
     @Mock
-    SearchDataModel searchDataModel;
+    private SearchDataModel searchDataModel;
 
     @Mock
-    Navigator navigator;
+    private Navigator navigator;
 
     private SearchFragmentViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+
         viewModel = new SearchFragmentViewModel(searchDataModel, navigator);
     }
 
@@ -59,9 +59,9 @@ public class SearchFragmentViewModelTest {
     public void getSounds_emitsNone_whenSearchResultsIsNone() {
         new Arrangement().enqueueSearchResults(Option.none());
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsOnceAndStream().test();
-
-        ts.assertValue(Option.none());
+        viewModel.getSoundsOnceAndStream()
+                 .test()
+                 .assertValue(Option.none());
     }
 
     @Test
@@ -69,19 +69,18 @@ public class SearchFragmentViewModelTest {
         List<Sound> sounds = TestData.sounds(10);
         new Arrangement().enqueueSearchResults(ofObj(sounds));
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsOnceAndStream().test();
-
-        ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
+        viewModel.getSoundsOnceAndStream()
+                 .test()
+                 .assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
 
     @NonNull
     private static List<DisplayableItem> expectedDisplayableItems(
             @NonNull final List<Sound> sounds) {
-        List<DisplayableItem> displayableItems = new ArrayList<>();
-        for (Sound sound : sounds) {
-            displayableItems.add(DisplayableItem.create(sound, SOUND));
-        }
-        return displayableItems;
+        return Observable.fromIterable(sounds)
+                         .map(it -> DisplayableItem.create(it, SOUND))
+                         .toList()
+                         .blockingFirst();
     }
 
     private class Arrangement {
