@@ -33,8 +33,8 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
-import static com.futurice.freesound.utils.Preconditions.get;
 import static com.futurice.freesound.rx.TimeScheduler.time;
+import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
@@ -94,8 +94,7 @@ final class SearchActivityViewModel extends BaseViewModel {
         return Observable.timer(SEARCH_DEBOUNCE_TIME_SECONDS,
                                 TimeUnit.SECONDS,
                                 time(SEARCH_DEBOUNCE_TAG))
-                         .flatMap(__ -> searchDataModel.querySearch(query).toObservable())
-                         .toCompletable();
+                         .flatMapCompletable(__ -> searchDataModel.querySearch(query));
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {
