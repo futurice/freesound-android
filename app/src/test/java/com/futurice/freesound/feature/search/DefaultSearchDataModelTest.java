@@ -70,18 +70,15 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.querySearch(QUERY)
                               .test()
-                              .assertNoErrors()
                               .assertComplete();
     }
 
     @Test
     public void querySearch_doesNotEmitError_whenQuerySearchErrors() {
-        final Exception expected = new Exception();
-        new Arrangement().withSearchResultError(expected);
+        new Arrangement().withSearchResultError(new Exception());
 
         defaultSearchDataModel.querySearch("should-error")
                               .test()
-                              .assertNoErrors()
                               .assertComplete();
     }
 
@@ -108,7 +105,7 @@ public class DefaultSearchDataModelTest {
     }
 
     @Test
-    public void getSearchResultsOnceAndStream_completesAndDoesNotError_whenQuerySearchErrors() {
+    public void getSearchResultsOnceAndStream_doesNotCompleteOrError_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError(new Exception());
         TestObserver<Option<List<Sound>>> ts = defaultSearchDataModel
                 .getSearchResultsOnceAndStream()
@@ -116,8 +113,7 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.querySearch("should-error").subscribe();
 
-        ts.assertNoErrors()
-          .completions();
+        ts.assertNotTerminated();
     }
 
     @Test
@@ -212,7 +208,6 @@ public class DefaultSearchDataModelTest {
     public void clear_completes() {
         defaultSearchDataModel.clear()
                               .test()
-                              .assertNoErrors()
                               .assertComplete();
     }
 

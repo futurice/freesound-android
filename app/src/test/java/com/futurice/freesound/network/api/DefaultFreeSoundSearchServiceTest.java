@@ -28,7 +28,6 @@ import org.mockito.MockitoAnnotations;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
-import io.reactivex.subscribers.TestSubscriber;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -62,11 +61,9 @@ public class DefaultFreeSoundSearchServiceTest {
     public void search_emitsResults_whenApiSuccessful() {
         new Arrangement().withApiResultResult(RESULT);
 
-        TestSubscriber<SoundSearchResult> ts =
-                defaultFreeSoundSearchService.search(QUERY).test();
-
-        ts.assertNoErrors()
-          .assertValue(RESULT);
+        defaultFreeSoundSearchService.search(QUERY)
+                                     .test()
+                                     .assertValue(RESULT);
     }
 
     @Test
@@ -83,11 +80,9 @@ public class DefaultFreeSoundSearchServiceTest {
     public void search_emitsError_whenApiError() {
         new Arrangement().withApiError(ERROR);
 
-        TestSubscriber<SoundSearchResult> ts =
-                defaultFreeSoundSearchService.search(QUERY).test();
-
-        ts.assertNoValues()
-          .assertError(ERROR);
+        defaultFreeSoundSearchService.search(QUERY)
+                                     .test()
+                                     .assertError(ERROR);
     }
 
     private class Arrangement {

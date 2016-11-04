@@ -80,7 +80,7 @@ public class SearchFragmentViewModelTest {
         return Observable.fromIterable(sounds)
                          .map(it -> DisplayableItem.create(it, SOUND))
                          .toList()
-                         .blockingFirst();
+                         .blockingGet();
     }
 
     private class Arrangement {
