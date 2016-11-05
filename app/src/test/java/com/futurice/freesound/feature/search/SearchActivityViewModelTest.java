@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
@@ -83,8 +82,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void querySearch_queriesSearchDataModelWithTerm() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
         viewModel.search(QUERY);
 
@@ -95,8 +94,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void querySearch_clearsSearchDataModel_whenEmptySearchString() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
         viewModel.search("");
 
@@ -116,8 +115,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
         viewModel.search(QUERY);
 
@@ -131,8 +130,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void clear_isDisabled_whenSearchWithEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
         viewModel.search("");
 
@@ -147,13 +146,14 @@ public class SearchActivityViewModelTest {
     public void search_recoversFromSearchErrors() {
         ArrangeBuilder arrangement = new ArrangeBuilder();
         arrangement.withErrorWhenSearching()
+                   .act()
                    .bind()
-                   .subscribed()
                    .search();
 
         arrangement
                 .withSuccessfulSearchResultStream()
                 .enqueueSearchResults(ofObj(TestData.sounds(10)))
+                .act()
                 .bind()
                 .search();
 
@@ -163,6 +163,7 @@ public class SearchActivityViewModelTest {
     @Test
     public void emptyQuery_clearsSearchImmediately() {
         Act act = new ArrangeBuilder()
+                .act()
                 .bind();
 
         act.search("");
@@ -174,6 +175,7 @@ public class SearchActivityViewModelTest {
     public void nonEmptyQuery_doesNotTriggerImmediately() {
         Act act = new ArrangeBuilder()
                 .withTimeScheduler(new TestScheduler())
+                .act()
                 .bind();
 
         act.search("Something");
@@ -187,6 +189,7 @@ public class SearchActivityViewModelTest {
         String query = "Something";
         Act act = new ArrangeBuilder()
                 .withTimeScheduler(testScheduler, SEARCH_DEBOUNCE_TAG)
+                .act()
                 .bind();
 
         act.search(query);
@@ -242,18 +245,15 @@ public class SearchActivityViewModelTest {
             return this;
         }
 
-        Act bind() {
-            viewModel.bindToDataModel();
+        Act act() {
             return new Act();
         }
     }
 
     private class Act {
 
-        CompositeDisposable d = new CompositeDisposable();
-
-        Act subscribed() {
-            viewModel.bind(d);
+        Act bind() {
+            viewModel.bindToDataModel();
             return this;
         }
 
