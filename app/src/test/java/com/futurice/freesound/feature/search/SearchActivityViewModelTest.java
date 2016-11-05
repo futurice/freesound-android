@@ -174,6 +174,7 @@ public class SearchActivityViewModelTest {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
                             .bind();
+
         final TestObserver<Boolean> ts = viewModel
                 .isClearEnabledOnceAndStream()
                 .test();
