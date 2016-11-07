@@ -14,11 +14,31 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
+
+import com.futurice.freesound.BuildConfig;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Module;
+import dagger.Provides;
 
 @Module
-public class DataModule {
+final class ConfigModule {
+
+    @Provides
+    @Singleton
+    @Named(ApiModule.URL_CONFIG)
+    static String provideApiModuleUrlConfig() {
+        return BuildConfig.FREESOUND_API_URL;
+    }
+
+    @Provides
+    @Singleton
+    @Named(ApiModule.API_TOKEN_CONFIG)
+    static String provideApiModuleApiTokenConfig() {
+        return BuildConfig.FREESOUND_API_KEY;
+    }
 
 }

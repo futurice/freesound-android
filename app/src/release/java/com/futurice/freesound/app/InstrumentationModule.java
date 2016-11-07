@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
 import java.util.Collections;
 import java.util.List;

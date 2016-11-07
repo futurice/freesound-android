@@ -23,9 +23,7 @@ import dagger.Component;
 
 @FragmentScope
 @Component(dependencies = SearchActivityComponent.class, modules = SearchFragmentModule.class)
-public interface SearchFragmentComponent extends BaseFragmentComponent {
-
-    SoundItemAdapter getSoundItemAdapter();
+interface SearchFragmentComponent extends BaseFragmentComponent {
 
     void inject(final SearchFragment searchFragment);
 }

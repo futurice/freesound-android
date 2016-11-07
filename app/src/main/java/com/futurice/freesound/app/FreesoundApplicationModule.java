@@ -16,9 +16,6 @@
 
 package com.futurice.freesound.app;
 
-import com.futurice.freesound.app.module.ApiModule;
-import com.futurice.freesound.app.module.DataModule;
-import com.futurice.freesound.app.module.ImagesModule;
 import com.futurice.freesound.feature.analytics.AnalyticsModule;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 import com.futurice.freesound.logging.LoggingModule;
@@ -31,5 +28,5 @@ import dagger.Module;
                     DataModule.class,
                     AnalyticsModule.class,
                     LoggingModule.class})
-class FreesoundApplicationModule {
+final class FreesoundApplicationModule {
 }

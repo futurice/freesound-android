@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.common;
 
-import org.junit.Test;
+public final class Text {
 
-import static org.assertj.core.api.Assertions.assertThat;
+    public static final String EMPTY = "";
 
-public class InstrumentationModuleTest {
-    @Test
-    public void provideNetworkInterceptors_isEmpty_inReleaseVariant() {
-        assertThat(InstrumentationModule.provideNetworkInterceptors())
-                .isEmpty();
-    }
-
-    @Test
-    public void provideAppInterceptors_isEmpty_inReleaseVariant() {
-        assertThat(InstrumentationModule.provideAppInterceptors())
-                .isEmpty();
+    private Text() {
+        throw new InstantiationForbiddenError();
     }
 }

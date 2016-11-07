@@ -14,31 +14,25 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
-import com.futurice.freesound.BuildConfig;
+import com.futurice.freesound.inject.app.ForApplication;
+import com.squareup.picasso.Picasso;
 
-import javax.inject.Named;
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class ConfigModule {
+final class ImagesModule {
 
     @Provides
     @Singleton
-    @Named(ApiModule.URL_CONFIG)
-    static String provideApiModuleUrlConfig() {
-        return BuildConfig.FREESOUND_API_URL;
-    }
-
-    @Provides
-    @Singleton
-    @Named(ApiModule.API_TOKEN_CONFIG)
-    static String provideApiModuleApiTokenConfig() {
-        return BuildConfig.FREESOUND_API_KEY;
+    static Picasso providePicasso(@ForApplication Context context) {
+        return Picasso.with(context);
     }
 
 }

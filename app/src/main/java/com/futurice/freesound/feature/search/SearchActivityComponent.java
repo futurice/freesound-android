@@ -27,13 +27,13 @@ import dagger.Component;
 @ActivityScope
 @Component(dependencies = FreesoundApplicationComponent.class,
         modules = SearchActivityModule.class)
-public interface SearchActivityComponent extends BaseActivityComponent {
-
-    SearchViewModel getSearchViewModel();
+interface SearchActivityComponent extends BaseActivityComponent {
 
     Picasso getPicasso();
 
     Navigator getNavigator();
+
+    SearchDataModel getSearchDataModel();
 
     void inject(final SearchActivity activity);
 }

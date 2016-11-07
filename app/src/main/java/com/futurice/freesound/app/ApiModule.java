@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,7 +44,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Module(includes = {ConfigModule.class, InstrumentationModule.class})
-public final class ApiModule {
+final class ApiModule {
 
     static final String URL_CONFIG = "ApiModule.URL_CONFIG";
     static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";

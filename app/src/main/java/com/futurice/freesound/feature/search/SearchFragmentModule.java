@@ -32,6 +32,13 @@ public class SearchFragmentModule {
 
     @Provides
     @FragmentScope
+    static SearchFragmentViewModel provideSearchFragmentViewModel(SearchDataModel searchDataModel,
+                                                                  Navigator navigator) {
+        return new SearchFragmentViewModel(searchDataModel, navigator);
+    }
+
+    @Provides
+    @FragmentScope
     static SoundItemAdapter provideSoundItemAdapter(
             DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
             Picasso picasso,

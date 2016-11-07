@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app.module;
+package com.futurice.freesound.app;
 
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
+import org.junit.Test;
 
-import android.content.Context;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.inject.Singleton;
+public class InstrumentationModuleTest {
 
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public class ImagesModule {
-
-    @Provides
-    @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return Picasso.with(context);
+    @Test
+    public void provideNetworkInterceptors_isEmpty_inReleaseVariant() {
+        assertThat(InstrumentationModule.provideNetworkInterceptors())
+                .isEmpty();
     }
 
+    @Test
+    public void provideAppInterceptors_isEmpty_inReleaseVariant() {
+        assertThat(InstrumentationModule.provideAppInterceptors())
+                .isEmpty();
+    }
 }

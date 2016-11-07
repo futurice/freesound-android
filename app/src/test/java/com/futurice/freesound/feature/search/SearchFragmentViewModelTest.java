@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
@@ -25,89 +24,85 @@ import com.futurice.freesound.test.data.TestData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.observers.TestObserver;
+import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
-public class SearchViewModelTest {
+public class SearchFragmentViewModelTest {
 
     @Mock
-    SearchDataModel searchDataModel;
+    private SearchDataModel searchDataModel;
 
     @Mock
-    Navigator navigator;
+    private Navigator navigator;
 
-    @Mock
-    Analytics analytics;
-
-    private SearchViewModel viewModel;
+    private SearchFragmentViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        viewModel = new SearchViewModel(searchDataModel, navigator, analytics);
-    }
 
-    @Test
-    public void search_emitsAnalyticsEvent() {
-        viewModel.search("Query");
-
-        verify(analytics).log("SearchPressedEvent");
+        viewModel = new SearchFragmentViewModel(searchDataModel, navigator);
     }
 
     @Test
     public void getSounds_emitsNone_whenSearchResultsIsNone() {
-        new ArrangeBuilder().enqueueSearchResults(Option.none());
+        new Arrangement().enqueueSearchResults(Option.none());
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
-
-        ts.assertValue(Option.none());
+        viewModel.getSoundsOnceAndStream()
+                 .test()
+                 .assertValue(Option.none());
     }
 
     @Test
     public void getSounds_emitsSearchResultsWrappedInDisplayableItems() {
         List<Sound> sounds = TestData.sounds(10);
-        new ArrangeBuilder().enqueueSearchResults(ofObj(sounds));
+        new Arrangement().enqueueSearchResults(ofObj(sounds));
 
-        TestObserver<Option<List<DisplayableItem>>> ts = viewModel.getSoundsStream().test();
-
-        ts.assertValue(ofObj(expectedDisplayableItems(sounds)));
+        viewModel.getSoundsOnceAndStream()
+                 .test()
+                 .assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
 
     @NonNull
     private static List<DisplayableItem> expectedDisplayableItems(
             @NonNull final List<Sound> sounds) {
-        List<DisplayableItem> displayableItems = new ArrayList<>();
-        for (Sound sound : sounds) {
-            displayableItems.add(DisplayableItem.create(sound, SOUND));
-        }
-        return displayableItems;
+        return Observable.fromIterable(sounds)
+                         .map(it -> DisplayableItem.create(it, SOUND))
+                         .toList()
+                         .blockingGet();
     }
 
-    private class ArrangeBuilder {
+    private class Arrangement {
 
-        private final BehaviorSubject<Option<List<Sound>>> searchResultsStream = BehaviorSubject
-                .create();
+        private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
+                = BehaviorSubject.createDefault(Option.none());
 
-        ArrangeBuilder() {
-            Mockito.when(searchDataModel.getSearchResultsStream()).thenReturn(searchResultsStream);
+        Arrangement() {
+            withSuccessfulSearchResultStream();
         }
 
-        ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
-            searchResultsStream.onNext(sounds);
+        Arrangement withSuccessfulSearchResultStream() {
+            when(searchDataModel.getSearchResultsOnceAndStream())
+                    .thenReturn(mockedSearchResultsStream);
             return this;
         }
+
+        Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
+            mockedSearchResultsStream.onNext(sounds);
+            return this;
+        }
+
     }
+
 }

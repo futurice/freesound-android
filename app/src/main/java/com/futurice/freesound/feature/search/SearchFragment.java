@@ -52,7 +52,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
 
     @Nullable
     @Inject
-    SearchViewModel searchViewModel;
+    SearchFragmentViewModel searchFragmentViewModel;
 
     @Nullable
     @Inject
@@ -74,7 +74,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
-            disposables.add(viewModel().getSoundsStream()
+            disposables.add(viewModel().getSoundsOnceAndStream()
                                        .subscribeOn(Schedulers.computation())
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::handleResults,
@@ -89,13 +89,8 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     };
 
     @NonNull
-    public static SearchFragment create() {
+    static SearchFragment create() {
         return new SearchFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -143,8 +138,8 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
 
     @NonNull
     @Override
-    protected SearchViewModel viewModel() {
-        return get(searchViewModel);
+    protected SearchFragmentViewModel viewModel() {
+        return get(searchFragmentViewModel);
     }
 
     @NonNull

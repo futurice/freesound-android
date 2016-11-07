@@ -57,7 +57,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     @Nullable
     @Inject
-    SearchViewModel searchViewModel;
+    SearchActivityViewModel searchViewModel;
 
     @Nullable
     @Inject
@@ -81,7 +81,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             checkNotNull(searchViewModel, "View Model cannot be null.");
             checkNotNull(searchView, "Search view cannot be null.");
 
-            d.add(searchViewModel.isClearButtonVisibleOnceAndStream()
+            d.add(searchViewModel.isClearEnabledOnceAndStream()
                                  .observeOn(mainThread())
                                  .subscribe(SearchActivity.this::setClearSearchVisible,
                                             e -> e(e, "Error setting query string")));
@@ -138,7 +138,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         closeButton = findById(searchView, R.id.search_close_btn);
 
         searchView.setOnCloseListener(() -> {
-            searchView.setQuery(SearchViewModel.NO_SEARCH, true);
+            searchView.setQuery(SearchActivityViewModel.NO_SEARCH, true);
             return true;
         });
 

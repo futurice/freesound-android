@@ -17,9 +17,12 @@
 package com.futurice.freesound.functional;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
+import com.futurice.freesound.utils.ExceptionHelper;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.functions.Action;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 
 /**
@@ -27,8 +30,22 @@ import io.reactivex.functions.Consumer;
  */
 public final class Functions {
 
+    private static final Action NOTHING0 = () -> {
+    };
+
     private static final Consumer NOTHING1 = __ -> {
     };
+
+    /**
+     * Returns an instance of {@link Action} with no side-effects.
+     *
+     * @return the {@link Action}
+     */
+    @NonNull
+    public static Action nothing0() {
+        //noinspection unchecked
+        return NOTHING0;
+    }
 
     /**
      * Returns an instance of {@link Consumer} with no side-effects.
@@ -39,6 +56,26 @@ public final class Functions {
     public static <T> Consumer<T> nothing1() {
         //noinspection unchecked
         return NOTHING1;
+    }
+
+    /**
+     * Wraps the call to the function in try-catch and propagates thrown
+     * checked exceptions as RuntimeException.
+     *
+     * @param <T> the first input type
+     * @param <U> the second input type
+     * @param <R> the output type
+     * @param f   the function to call, not null (not verified)
+     * @param t   the first parameter value to the function
+     * @param u   the second parameter value to the function
+     * @return the result of the function call
+     */
+    public static <T, U, R> R apply(BiFunction<T, U, R> f, T t, U u) {
+        try {
+            return f.apply(t, u);
+        } catch (Exception ex) {
+            throw ExceptionHelper.wrapOrThrow(ex);
+        }
     }
 
     private Functions() {

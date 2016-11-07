@@ -14,28 +14,11 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.app;
 
-import com.futurice.freesound.network.api.model.Sound;
+import dagger.Module;
 
-import android.support.annotation.NonNull;
+@Module
+class DataModule {
 
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import polanski.option.Option;
-
-interface SearchDataModel {
-
-    Completable querySearch(@NonNull String query);
-
-    @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
-
-    @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
-
-    @NonNull
-    Completable clear();
 }

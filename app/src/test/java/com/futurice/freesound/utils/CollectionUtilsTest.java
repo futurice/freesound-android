@@ -103,12 +103,12 @@ public class CollectionUtilsTest {
         if (start <= end) {
             return Observable.range(start, end - start)
                              .toList()
-                             .blockingFirst();
+                             .blockingGet();
         } else {
             return Observable.range(end, start - end)
                              .map(it -> (start + end) - it - 1)
                              .toList()
-                             .blockingFirst();
+                             .blockingGet();
         }
     }
 }
