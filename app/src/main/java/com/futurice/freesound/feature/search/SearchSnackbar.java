@@ -7,14 +7,17 @@ import android.view.View;
 
 import polanski.option.Option;
 
+import static com.futurice.freesound.utils.Preconditions.checkNotNull;
+
 public class SearchSnackbar {
 
     @Nullable
     private Snackbar snackbar;
 
     public void showNewSnackbar(@NonNull View view, @NonNull final CharSequence charSequence) {
-        Option.ofObj(snackbar)
-              .ifSome(Snackbar::dismiss);
+        checkNotNull(view);
+        checkNotNull(charSequence);
+        dismissSnackbar();
 
         snackbar = Snackbar.make(view, charSequence, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();

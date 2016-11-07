@@ -128,7 +128,6 @@ final class SearchViewModel extends BaseViewModel {
     @NonNull
     public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
         return lastErrorOnceAndStream
-                .hide()
                 .observeOn(Schedulers.computation());
     }
 }

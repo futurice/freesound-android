@@ -45,7 +45,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
-import timber.log.Timber;
 
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
@@ -94,14 +93,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
             d.add(searchViewModel.getSearchErrorOnceAndStream()
                                  .observeOn(mainThread())
-                                 .subscribe(throwableOption -> {
-                                                if (throwableOption.isSome()) {
-                                                    showSnackbar("There was an error searching");
-                                                } else {
-                                                    dismissSnackbar();
-                                                }
-                                            },
-                                            e -> Timber.e(e, "Error setting Sound items")));
+                                 .subscribe(SearchActivity.this::handleErrorState,
+                                            e -> e(e, "Error receiving Errors")));
         }
 
         @Override
@@ -109,6 +102,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             // Nothing
         }
     };
+
+    private void handleErrorState(@NonNull final Option<Throwable> errorOption) {
+        errorOption
+                .ifSome(__ -> showSnackbar(getString(com.futurice.freesound.R.string.search_error)))
+                .ifNone(this::dismissSnackbar);
+    }
 
     private void setClearSearchVisible(final boolean clearVisible) {
         checkNotNull(closeButton, "Close Button has not been bound");
@@ -203,12 +202,13 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     @Override
     public void onPause() {
-        super.onPause();
         dismissSnackbar();
+        super.onPause();
     }
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {
-        get(searchSnackbar).showNewSnackbar(coordinatorLayout, charSequence);
+        checkNotNull(charSequence);
+        get(searchSnackbar).showNewSnackbar(get(coordinatorLayout), charSequence);
     }
 
     private void dismissSnackbar() {

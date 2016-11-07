@@ -23,5 +23,6 @@
 
     <string name="accessibility_sound_item_image">Sound item image</string>
     <string name="menu_item_title_search">Search</string>
+    <string name="search_error">There was an error searching</string>
 
 </resources>
