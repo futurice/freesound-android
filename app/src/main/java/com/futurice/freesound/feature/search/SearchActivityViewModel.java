@@ -33,9 +33,11 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
+import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.rx.TimeScheduler.time;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.schedulers.Schedulers.computation;
+import static timber.log.Timber.e;
 
 final class SearchActivityViewModel extends BaseViewModel {
 
@@ -56,9 +58,6 @@ final class SearchActivityViewModel extends BaseViewModel {
     @NonNull
     private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
-    @NonNull
-    private final Subject<Option<Throwable>> lastErrorOnceAndStream = BehaviorSubject
-            .createDefault(Option.none());
 
     SearchActivityViewModel(@NonNull final SearchDataModel searchDataModel,
                             @NonNull final Analytics analytics) {
@@ -75,7 +74,6 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     void search(@NonNull final String query) {
         analytics.log("SearchPressedEvent");
-        lastErrorOnceAndStream.onNext(Option.none());
         searchTermOnceAndStream.onNext(query.trim());
     }
 
@@ -87,10 +85,9 @@ final class SearchActivityViewModel extends BaseViewModel {
                                              ? querySearch(query).toObservable()
                                              : searchDataModel.clear().toObservable())
                                      .subscribeOn(computation())
-                                     .subscribe(__ -> lastErrorOnceAndStream
-                                                        .onNext(Option.none()),
-                                                e -> lastErrorOnceAndStream
-                                                        .onNext(Option.ofObj(e))));
+                                     .subscribe(nothing1(),
+                                                e -> e(e,
+                                                       "Fatal error when setting search term")));
     }
 
     @NonNull
@@ -107,7 +104,6 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     @NonNull
     public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
-        return lastErrorOnceAndStream
-                .observeOn(computation());
+        return searchDataModel.getSearchErrorOnceAndStream();
     }
 }
