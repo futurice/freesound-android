@@ -65,14 +65,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
-        return lastResultsOnceAndStream.hide();
+        return lastResultsOnceAndStream.observeOn(computation());
     }
 
     @Override
     @NonNull
     public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
-        return lastErrorOnceAndStream
-                .observeOn(computation());
+        return lastErrorOnceAndStream.observeOn(computation());
     }
 
     @Override
