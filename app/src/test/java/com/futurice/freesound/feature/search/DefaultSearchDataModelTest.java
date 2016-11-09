@@ -32,6 +32,8 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,6 +54,7 @@ public class DefaultSearchDataModelTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
         defaultSearchDataModel = new DefaultSearchDataModel(freeSoundSearchService);
     }
 
