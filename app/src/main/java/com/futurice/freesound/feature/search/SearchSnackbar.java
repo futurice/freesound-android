@@ -9,12 +9,12 @@ import polanski.option.Option;
 
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 
-public class SearchSnackbar {
+class SearchSnackbar {
 
     @Nullable
     private Snackbar snackbar;
 
-    public void showNewSnackbar(@NonNull View view, @NonNull final CharSequence charSequence) {
+    void showNewSnackbar(@NonNull View view, @NonNull final CharSequence charSequence) {
         checkNotNull(view);
         checkNotNull(charSequence);
         dismissSnackbar();
@@ -23,7 +23,7 @@ public class SearchSnackbar {
         snackbar.show();
     }
 
-    public void dismissSnackbar() {
+    void dismissSnackbar() {
         Option.ofObj(snackbar)
               .ifSome(Snackbar::dismiss);
     }

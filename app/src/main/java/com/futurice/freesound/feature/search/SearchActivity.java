@@ -23,7 +23,7 @@ import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.ViewModel;
-
+import com.futurice.freesound.R.string;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -105,7 +105,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     private void handleErrorState(@NonNull final Option<Throwable> errorOption) {
         errorOption
-                .ifSome(__ -> showSnackbar(getString(com.futurice.freesound.R.string.search_error)))
+                .ifSome(__ -> showSnackbar(getString(string.search_error)))
                 .ifNone(this::dismissSnackbar);
     }
 
