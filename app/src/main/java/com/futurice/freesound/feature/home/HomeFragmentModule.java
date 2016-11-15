@@ -16,27 +16,19 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.inject.activity.ActivityScope;
-import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.network.api.FreeSoundApi;
+import com.futurice.freesound.inject.fragment.BaseFragmentModule;
+import com.futurice.freesound.inject.fragment.FragmentScope;
 
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = BaseActivityModule.class)
-class HomeActivityModule {
+@Module(includes = BaseFragmentModule.class)
+public class HomeFragmentModule {
 
     @Provides
-    @ActivityScope
-    static HomeViewModel provideHomeViewModel(Navigator navigator) {
-        return new HomeViewModel(navigator);
-    }
-
-    @Provides
-    @ActivityScope
-    static UserDataModel provideUserDataModel(FreeSoundApi freeSoundApi) {
-        return new DefaultUserDataModel(freeSoundApi);
+    @FragmentScope
+    static HomeFragmentViewModel provideHomeFragmentViewModel(UserDataModel userDataModel) {
+        return new HomeFragmentViewModel(userDataModel);
     }
 
 }
