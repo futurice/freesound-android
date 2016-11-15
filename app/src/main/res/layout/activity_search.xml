@@ -18,6 +18,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/search_coordinatorlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.search.SearchActivity"
@@ -28,11 +29,13 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar android:layout_width="match_parent"
-                                           android:layout_height="?attr/actionBarSize"
-                                           android:id="@+id/toolbar_search"
-                                           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                                           app:layout_scrollFlags="scroll|enterAlways">
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_search"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
             <android.support.v7.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
@@ -44,9 +47,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                 android:id="@+id/container"/>
+    <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

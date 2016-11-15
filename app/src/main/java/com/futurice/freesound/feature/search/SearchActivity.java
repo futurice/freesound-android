@@ -23,12 +23,13 @@ import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.viewmodel.Binder;
 import com.futurice.freesound.viewmodel.ViewModel;
-
+import com.futurice.freesound.R.string;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.appcompat.R;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
@@ -59,11 +60,19 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     SearchActivityViewModel searchViewModel;
 
     @Nullable
+    @Inject
+    SearchSnackbar searchSnackbar;
+
+    @Nullable
     @BindView(id.search_view)
     SearchView searchView;
 
     @Nullable
     private ImageView closeButton;
+
+    @Nullable
+    @BindView(id.search_coordinatorlayout)
+    CoordinatorLayout coordinatorLayout;
 
     @NonNull
     private final Binder binder = new Binder() {
@@ -81,6 +90,11 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                           .observeOn(computation())
                           .subscribe(searchViewModel::search,
                                      e -> e(e, "Error getting changed text")));
+
+            d.add(searchViewModel.getSearchErrorOnceAndStream()
+                                 .observeOn(mainThread())
+                                 .subscribe(SearchActivity.this::handleErrorState,
+                                            e -> e(e, "Error receiving Errors")));
         }
 
         @Override
@@ -88,6 +102,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             // Nothing
         }
     };
+
+    private void handleErrorState(@NonNull final Option<Throwable> errorOption) {
+        errorOption
+                .ifSome(__ -> showSnackbar(getString(string.search_error)))
+                .ifNone(this::dismissSnackbar);
+    }
 
     private void setClearSearchVisible(final boolean clearVisible) {
         checkNotNull(closeButton, "Close Button has not been bound");
@@ -180,4 +200,18 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                    .commit();
     }
 
+    @Override
+    public void onPause() {
+        dismissSnackbar();
+        super.onPause();
+    }
+
+    private void showSnackbar(@NonNull final CharSequence charSequence) {
+        checkNotNull(charSequence);
+        get(searchSnackbar).showNewSnackbar(get(coordinatorLayout), charSequence);
+    }
+
+    private void dismissSnackbar() {
+        get(searchSnackbar).dismissSnackbar();
+    }
 }

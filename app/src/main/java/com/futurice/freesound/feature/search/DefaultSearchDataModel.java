@@ -28,9 +28,11 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.utils.Preconditions.get;
+import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
 final class DefaultSearchDataModel implements SearchDataModel {
@@ -43,7 +45,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
             BehaviorSubject.createDefault(Option.none());
 
     @NonNull
-    private final BehaviorSubject<Option<Throwable>> lastErrorOnceAndStream =
+    private final Subject<Option<Throwable>> lastErrorOnceAndStream =
             BehaviorSubject.createDefault(Option.none());
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
@@ -63,13 +65,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
-        return lastResultsOnceAndStream.hide();
+        return lastResultsOnceAndStream.observeOn(computation());
     }
 
     @Override
     @NonNull
     public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
-        return lastErrorOnceAndStream.hide();
+        return lastErrorOnceAndStream.observeOn(computation());
     }
 
     @Override

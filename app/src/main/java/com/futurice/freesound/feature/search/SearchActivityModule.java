@@ -47,4 +47,10 @@ class SearchActivityModule {
     static FreeSoundSearchService provideFreeSoundsSearchService(FreeSoundApi freeSoundApi) {
         return new DefaultFreeSoundSearchService(freeSoundApi);
     }
+
+    @Provides
+    @ActivityScope
+    static SearchSnackbar provideSearchSnackbar() {
+        return new SearchSnackbar();
+    }
 }
