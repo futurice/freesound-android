@@ -21,7 +21,9 @@ class SearchSnackbar {
      * Shows a snackbar  indefinitely in the first parent view found above the provided view.
      * Dismisses a previous SnackBar if one was shown before.
      *
-     * @param view The view supposed to show the SnackBar. If not a CoordinatorLayout, SnackBar will find the first parent view which is suitable to hold a SnackBar
+     * @param view         The view supposed to show the SnackBar. If not a CoordinatorLayout,
+     *                     SnackBar will find the first parent view which is suitable to hold a
+     *                     SnackBar
      * @param charSequence The message to be displayed in the SnackBar
      */
     void showNewSnackbar(@NonNull View view, @NonNull final CharSequence charSequence) {
