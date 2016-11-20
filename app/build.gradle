@@ -99,6 +99,7 @@ ext {
             autoValueParcelable    : '0.2.5',
             autoFactory            : '1.0-beta3',
             options                : '1.2.0',
+            exoplayer              : 'r2.0.4',
             firebase               : '9.4.0',
             stetho                 : '1.3.1',
             timber                 : '4.2.0',
@@ -159,6 +160,9 @@ dependencies {
 
     // Optionals for Java 6/7
     compile "com.github.tomaszpolanski:options:$dependencyVersions.options"
+
+    // Audio player
+    compile "com.google.android.exoplayer:exoplayer:$dependencyVersions.exoplayer"
 
     // Timber
     compile "com.jakewharton.timber:timber:$dependencyVersions.timber"
