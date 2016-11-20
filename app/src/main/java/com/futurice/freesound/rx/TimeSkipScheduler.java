@@ -41,7 +41,6 @@ public final class TimeSkipScheduler extends Scheduler {
     private static final TimeSkipScheduler INSTANCE = new TimeSkipScheduler();
 
     private TimeSkipScheduler() {
-        throw new InstantiationForbiddenError();
     }
 
     /**
