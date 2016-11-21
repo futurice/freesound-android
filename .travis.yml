@@ -6,14 +6,18 @@ android:
   - platform-tools
   - tools
   - tools
+
+  - build-tools-24.0.3
   - android-24
-  - build-tools-25.0.0
+
   - extra-google-m2repository
   - extra-android-m2repository
+
+  # AVD image
   - sys-img-armeabi-v7a-android-24
 before_script:
 - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-- export QEMU_AUDIO_DRV=none && emulator -avd test -no-window &
+- emulator -avd test -no-audio -no-window &
 - android-wait-for-emulator
 - adb shell settings put global window_animation_scale 0 &
 - adb shell settings put global transition_animation_scale 0 &
