@@ -65,6 +65,7 @@ android {
 
     lintOptions {
         lintConfig file('./quality/lint.xml')
+        abortOnError false
     }
 
 }
