@@ -25,13 +25,13 @@ apply from: 'proguard-config.gradle'
 def STRING = "String"
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
 
@@ -82,7 +82,7 @@ task checkstyle(type: Checkstyle) {
 
 ext {
     dependencyVersions = [
-            androidSupportLibrary  : '24.2.1',
+            androidSupportLibrary  : '25.0.1',
             javaPoet               : '1.7.0',
             dagger2                : '2.4',
             javaxAnnotation        : '10.0-b28',
