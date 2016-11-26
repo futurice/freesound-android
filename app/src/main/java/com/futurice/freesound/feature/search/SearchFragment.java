@@ -20,7 +20,7 @@ import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -70,7 +70,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
     @NonNull
-    private final Binder binder = new Binder() {
+    private final DataBinder dataBinder = new DataBinder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
@@ -144,8 +144,8 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
 
     @NonNull
     @Override
-    protected Binder binder() {
-        return binder;
+    protected DataBinder dataBinder() {
+        return dataBinder;
     }
 
     private void handleResults(@NonNull final Option<List<DisplayableItem>> sounds) {

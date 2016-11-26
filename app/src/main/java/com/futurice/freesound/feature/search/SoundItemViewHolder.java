@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.R;
 import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
 import com.futurice.freesound.feature.common.view.WaveformViewTarget;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -58,7 +58,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     private final Picasso picasso;
 
     @NonNull
-    private final Binder viewBinder = new Binder() {
+    private final DataBinder viewDataBinder = new DataBinder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
@@ -103,9 +103,8 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     }
 
     @NonNull
-    @Override
-    protected Binder getViewBinder() {
-        return viewBinder;
+    protected DataBinder getViewDataBinder() {
+        return viewDataBinder;
     }
 
 }

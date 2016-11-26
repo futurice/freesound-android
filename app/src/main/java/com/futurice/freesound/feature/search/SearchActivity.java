@@ -18,12 +18,14 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R.id;
 import com.futurice.freesound.R.layout;
+import com.futurice.freesound.R.string;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
+import com.futurice.freesound.viewmodel.SimpleDataBinder;
 import com.futurice.freesound.viewmodel.ViewModel;
-import com.futurice.freesound.R.string;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,7 +77,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     CoordinatorLayout coordinatorLayout;
 
     @NonNull
-    private final Binder binder = new Binder() {
+    private final DataBinder dataBinder = new SimpleDataBinder() {
         @Override
         public void bind(@NonNull final CompositeDisposable d) {
             checkNotNull(searchViewModel, "View Model cannot be null.");
@@ -95,11 +97,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                  .observeOn(mainThread())
                                  .subscribe(SearchActivity.this::handleErrorState,
                                             e -> e(e, "Error receiving Errors")));
-        }
-
-        @Override
-        public void unbind() {
-            // Nothing
         }
     };
 
@@ -174,8 +171,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     @NonNull
     @Override
-    protected Binder binder() {
-        return binder;
+    protected DataBinder dataBinder() {
+        return dataBinder;
     }
 
     @Override

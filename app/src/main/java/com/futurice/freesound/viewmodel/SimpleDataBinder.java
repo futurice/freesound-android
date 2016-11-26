@@ -16,16 +16,22 @@
 
 package com.futurice.freesound.viewmodel;
 
-interface LifecycleBinder extends Binder {
+import android.support.annotation.NonNull;
 
-    void onCreate();
+import io.reactivex.disposables.CompositeDisposable;
 
-    void onResume();
+/**
+ * Implements methods so that child classes don't need to declare empty implementations.
+ */
+public class SimpleDataBinder implements DataBinder {
 
-    void onPause();
+    @Override
+    public void bind(@NonNull final CompositeDisposable disposables) {
+        // Override this when required.
+    }
 
-    void onDestroyView();
-
-    void onDestroy();
-
+    @Override
+    public void unbind() {
+        // Override this when required.
+    }
 }

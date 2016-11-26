@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.core;
 
-import com.futurice.freesound.viewmodel.BaseLifecycleViewBinder;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.BaseLifecycleViewDataBinder;
+import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.os.Bundle;
@@ -31,19 +31,19 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public abstract class BindingBaseFragment<T> extends BaseFragment<T> {
 
-    // TODO This binder is a good candidate for a trait in Kotlin
+    // TODO This dataBinder is a good candidate for a trait in Kotlin
 
     @NonNull
-    private final BaseLifecycleViewBinder lifecycleBinder = new BaseLifecycleViewBinder() {
+    private final BaseLifecycleViewDataBinder lifecycleBinder = new BaseLifecycleViewDataBinder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
-            binder().bind(disposables);
+            dataBinder().bind(disposables);
         }
 
         @Override
         public void unbind() {
-            binder().unbind();
+            dataBinder().unbind();
         }
 
         @NonNull
@@ -88,5 +88,5 @@ public abstract class BindingBaseFragment<T> extends BaseFragment<T> {
     protected abstract ViewModel viewModel();
 
     @NonNull
-    protected abstract Binder binder();
+    protected abstract DataBinder dataBinder();
 }
