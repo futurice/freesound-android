@@ -80,13 +80,14 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
                                                        .into(waveformViewTarget),
                                          e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
-            rootView.setOnClickListener(__ -> vm.openDetails());
+            rootView.setOnClickListener(__ -> vm.playPreview());
         }
 
         @Override
         public void unbind() {
             rootView.setOnClickListener(null);
             picasso.cancelRequest(waveformViewTarget);
+            get(getViewModel()).stopPreview();
         }
 
     };

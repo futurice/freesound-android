@@ -38,6 +38,7 @@ public final class SoundFields {
             .geotag()
             .username()
             .images()
+            .previews()
             .duration()
             .build();
 
@@ -49,6 +50,7 @@ public final class SoundFields {
     private static final String GEOTAG = "geotag";
     private static final String USERNAME = "username";
     private static final String IMAGES = "images";
+    private static final String PREVIEWS = "previews";
     private static final String DURATION = "duration";
 
     @NonNull
@@ -105,6 +107,11 @@ public final class SoundFields {
 
         Builder images() {
             add(IMAGES);
+            return this;
+        }
+
+        Builder previews() {
+            add(PREVIEWS);
             return this;
         }
 

@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -68,6 +69,9 @@ public abstract class Sound implements Parcelable {
     @Nullable
     public abstract Image images();
 
+    @Nullable
+    public abstract Map<SoundPreviewFormat, String> previews();
+
     // Duration in seconds
     @Nullable
     public abstract Float duration();
@@ -95,6 +99,8 @@ public abstract class Sound implements Parcelable {
         public abstract Builder username(@NonNull final String username);
 
         public abstract Builder images(@NonNull final Image images);
+
+        public abstract Builder previews(@NonNull final Map<SoundPreviewFormat, String> previews);
 
         public abstract Builder duration(@NonNull final Float duration);
 

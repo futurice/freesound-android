@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.network.api.model;
 
-import com.futurice.freesound.network.api.model.Sound;
+import com.google.gson.annotations.SerializedName;
 
-import android.support.annotation.NonNull;
-
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import polanski.option.Option;
-
-interface SearchDataModel {
-
-    Completable querySearch(@NonNull String query);
-
-    @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
-
-    @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
-
-    @NonNull
-    Completable clear();
-
+public enum SoundPreviewFormat {
+    @SerializedName("preview-lq-mp3")
+    preview_lq_mp3,
+    @SerializedName("preview-hq-mp3")
+    preview_hq_mp3,
+    @SerializedName("preview-lq-ogg")
+    preview_lq_ogg,
+    @SerializedName("preview-hq-ogg")
+    preview_hq_ogg
 }

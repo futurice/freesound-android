@@ -16,14 +16,18 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 
 import com.futurice.freesound.common.Text;
+import com.futurice.freesound.feature.audio.MediaSourceFactory;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
+import com.futurice.freesound.network.api.model.SoundPreviewFormat;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
@@ -40,10 +44,20 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     private final Navigator navigator;
 
+    @NonNull
+    private final SimpleExoPlayer exoplayer;
+
+    @NonNull
+    private final MediaSourceFactory mediaSourceFactory;
+
     SoundItemViewModel(@NonNull final Sound sound,
-                       @Provided @NonNull final Navigator navigator) {
+                       @Provided @NonNull final Navigator navigator,
+                       @NonNull final SimpleExoPlayer exoPlayer,
+                       @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.sound = get(sound);
         this.navigator = get(navigator);
+        this.exoplayer = get(exoPlayer);
+        this.mediaSourceFactory = get(mediaSourceFactory);
     }
 
     @NonNull
@@ -72,4 +86,13 @@ final class SoundItemViewModel extends SimpleViewModel {
         navigator.openSoundDetails(sound);
     }
 
+    void playPreview() {
+        exoplayer.prepare(mediaSourceFactory.create(Uri.parse(
+                sound.previews().get(SoundPreviewFormat.preview_lq_mp3))));
+        exoplayer.setPlayWhenReady(true);
+    }
+
+    public void stopPreview() {
+        exoplayer.stop();
+    }
 }

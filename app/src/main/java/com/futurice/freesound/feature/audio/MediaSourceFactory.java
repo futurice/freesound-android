@@ -14,29 +14,17 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.feature.audio;
 
-import com.futurice.freesound.network.api.model.Sound;
+import com.google.android.exoplayer2.source.MediaSource;
 
-import android.support.annotation.NonNull;
+import android.net.Uri;
 
-import java.util.List;
+/**
+ * Created by ptac on 26/11/16.
+ */
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import polanski.option.Option;
+public interface MediaSourceFactory {
 
-interface SearchDataModel {
-
-    Completable querySearch(@NonNull String query);
-
-    @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
-
-    @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
-
-    @NonNull
-    Completable clear();
-
+    MediaSource create(Uri uri);
 }
