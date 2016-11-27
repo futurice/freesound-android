@@ -70,7 +70,7 @@ public abstract class Sound implements Parcelable {
     public abstract Image images();
 
     @Nullable
-    public abstract Map<SoundPreviewFormat, String> previews();
+    public abstract Preview previews();
 
     // Duration in seconds
     @Nullable
@@ -100,7 +100,7 @@ public abstract class Sound implements Parcelable {
 
         public abstract Builder images(@NonNull final Image images);
 
-        public abstract Builder previews(@NonNull final Map<SoundPreviewFormat, String> previews);
+        public abstract Builder previews(@NonNull final Preview previews);
 
         public abstract Builder duration(@NonNull final Float duration);
 

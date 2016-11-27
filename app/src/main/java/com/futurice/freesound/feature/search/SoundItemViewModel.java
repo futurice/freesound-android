@@ -24,7 +24,6 @@ import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.audio.MediaSourceFactory;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.network.api.model.SoundPreviewFormat;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.net.Uri;
@@ -52,8 +51,8 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     SoundItemViewModel(@NonNull final Sound sound,
                        @Provided @NonNull final Navigator navigator,
-                       @NonNull final SimpleExoPlayer exoPlayer,
-                       @NonNull final MediaSourceFactory mediaSourceFactory) {
+                       @Provided @NonNull final SimpleExoPlayer exoPlayer,
+                       @Provided @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.sound = get(sound);
         this.navigator = get(navigator);
         this.exoplayer = get(exoPlayer);
@@ -88,7 +87,7 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     void playPreview() {
         exoplayer.prepare(mediaSourceFactory.create(Uri.parse(
-                sound.previews().get(SoundPreviewFormat.preview_lq_mp3))));
+                sound.previews().lowQualityMp3Url())));
         exoplayer.setPlayWhenReady(true);
     }
 

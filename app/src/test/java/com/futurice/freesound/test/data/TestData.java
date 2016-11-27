@@ -18,12 +18,8 @@ package com.futurice.freesound.test.data;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.network.api.model.GeoLocation;
+import com.futurice.freesound.network.api.model.Preview;
 import com.futurice.freesound.network.api.model.Sound;
-<<<<<<< 26353444779dc3bca8ef45cae90e3c23cc459024
-=======
-import com.futurice.freesound.network.api.model.SoundImageFormat;
-import com.futurice.freesound.network.api.model.SoundPreviewFormat;
->>>>>>> First working audio
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
@@ -84,7 +80,7 @@ public final class TestData {
                           .build();
     }
 
-<<<<<<< 26353444779dc3bca8ef45cae90e3c23cc459024
+    @NonNull
     public static Sound.Image images() {
         return Sound.Image.builder()
                           .medSizeWaveformUrl("https://url.com/mw")
@@ -92,24 +88,16 @@ public final class TestData {
                           .medSizeSpectralUrl("https://url.com/ms")
                           .largeSizeSpectralUrl("https://url.com/ls")
                           .build();
-=======
-    @NonNull
-    public static Map<SoundImageFormat, String> images() {
-        Map<SoundImageFormat, String> images = new HashMap<>();
-        for (SoundImageFormat format : SoundImageFormat.values()) {
-            images.put(format, "https://url.com/" + format);
-        }
-        return images;
->>>>>>> First working audio
     }
 
     @NonNull
-    public static Map<SoundPreviewFormat, String> previews() {
-        Map<SoundPreviewFormat, String> previews = new HashMap<>();
-        for (SoundPreviewFormat format : SoundPreviewFormat.values()) {
-            previews.put(format, "https://url.com" + format);
-        }
-        return previews;
+    public static Preview previews() {
+        return Preview.builder()
+                      .lowQualityMp3Url("https://url.com/lqmp3")
+                      .highQualityMp3Url("https://url.com/hqmp3")
+                      .lowQualityOggUrl("https://url.com/lqogg")
+                      .highQualityOggUrl("https://url.com/hgogg")
+                      .build();
     }
 
     @NonNull

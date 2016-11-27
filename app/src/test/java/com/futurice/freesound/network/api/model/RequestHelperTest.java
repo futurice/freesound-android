@@ -27,7 +27,6 @@ public class RequestHelperTest {
 
     @Test
     public void asCommaSeparated_isEmpty_whenEmptyIterable() {
-
         assertThat(RequestHelper.asCommaSeparated(Collections.emptyList())).isEmpty();
     }
 
