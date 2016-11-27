@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public interface Binder {
+public interface DataBinder {
 
     void bind(@NonNull CompositeDisposable disposables);
 

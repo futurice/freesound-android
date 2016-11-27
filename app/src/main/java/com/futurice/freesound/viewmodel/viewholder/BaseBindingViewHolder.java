@@ -17,7 +17,7 @@
 package com.futurice.freesound.viewmodel.viewholder;
 
 import com.futurice.freesound.viewmodel.BaseViewModel;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -57,7 +57,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     }
 
     @NonNull
-    protected abstract Binder getViewBinder();
+    protected abstract DataBinder getViewDataBinder();
 
     @Nullable
     protected final T getViewModel() {
@@ -65,7 +65,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     }
 
     private void bindViewToViewModel() {
-        getViewBinder().bind(disposables);
+        getViewDataBinder().bind(disposables);
     }
 
     private void setAndBindDataModel(@NonNull final T viewModel) {
@@ -76,7 +76,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     private void unbindViewFromViewModel() {
         // Don't unsubscribe - we need to reuse it!
         disposables.clear();
-        getViewBinder().unbind();
+        getViewDataBinder().unbind();
     }
 
     private void unbindViewModelFromData() {

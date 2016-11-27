@@ -20,7 +20,8 @@ import com.futurice.freesound.R;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
+import com.futurice.freesound.viewmodel.SimpleDataBinder;
 import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.os.Bundle;
@@ -31,7 +32,6 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
 import static butterknife.ButterKnife.findById;
@@ -44,19 +44,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     HomeViewModel homeViewModel;
 
     @NonNull
-    private final Binder binder = new Binder() {
-
-        @Override
-        public void bind(@NonNull final CompositeDisposable disposables) {
-            // Nothing
-        }
-
-        @Override
-        public void unbind() {
-            // Nothing to do here
-        }
-
-    };
+    private final DataBinder dataBinder = new SimpleDataBinder();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,8 +64,8 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
 
     @NonNull
     @Override
-    protected Binder binder() {
-        return binder;
+    protected DataBinder dataBinder() {
+        return dataBinder;
     }
 
     @Override

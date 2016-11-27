@@ -23,7 +23,7 @@ import io.reactivex.disposables.CompositeDisposable;
 /**
  * Abstracts the view-to-viewmodel binding mechanism from the views associated lifecycle triggers.
  */
-public abstract class BaseLifecycleViewBinder implements LifecycleBinder {
+public abstract class BaseLifecycleViewDataBinder implements LifecycleDataBinder {
 
     @NonNull
     private final CompositeDisposable disposable = new CompositeDisposable();
