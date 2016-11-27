@@ -20,7 +20,7 @@ import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.utils.Preconditions;
-import com.futurice.freesound.viewmodel.Binder;
+import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
 
 import android.os.Bundle;
@@ -71,7 +71,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
     @NonNull
-    private final Binder binder = new Binder() {
+    private final DataBinder dataBinder = new DataBinder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable d) {
@@ -151,8 +151,8 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
 
     @NonNull
     @Override
-    protected Binder binder() {
-        return binder;
+    protected DataBinder dataBinder() {
+        return dataBinder;
     }
 
 }
