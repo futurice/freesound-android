@@ -18,12 +18,14 @@ package com.futurice.freesound.network.api;
 
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
+import com.futurice.freesound.network.api.model.UserResult;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -38,4 +40,8 @@ public interface FreeSoundApi {
     Single<SoundSearchResult> search(@Query("query") @NonNull final String query,
                                      @Query("filter") @Nullable final String filter,
                                      @Query("fields") @NonNull final SoundFields fields);
+
+    @NonNull
+    @GET("/apiv2/users/{user}/")
+    Single<UserResult> user(@Path("user") @NonNull final String user);
 }

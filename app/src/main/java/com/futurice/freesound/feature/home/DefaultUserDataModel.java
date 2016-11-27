@@ -16,27 +16,31 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.inject.activity.ActivityScope;
-import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.network.api.FreeSoundApi;
+import com.futurice.freesound.network.api.model.UserResult;
 
-import dagger.Module;
-import dagger.Provides;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
-@Module(includes = BaseActivityModule.class)
-class HomeActivityModule {
+import io.reactivex.Single;
 
-    @Provides
-    @ActivityScope
-    static HomeViewModel provideHomeViewModel(Navigator navigator) {
-        return new HomeViewModel(navigator);
+import static com.futurice.freesound.utils.Preconditions.get;
+
+final class DefaultUserDataModel implements UserDataModel {
+
+    @VisibleForTesting
+    static final String USER_NAME = "SpiceProgram";
+
+    @NonNull
+    private final FreeSoundApi freeSoundApi;
+
+    DefaultUserDataModel(@NonNull final FreeSoundApi freeSoundApi) {
+        this.freeSoundApi = get(freeSoundApi);
     }
 
-    @Provides
-    @ActivityScope
-    static UserDataModel provideUserDataModel(FreeSoundApi freeSoundApi) {
-        return new DefaultUserDataModel(freeSoundApi);
+    @NonNull
+    @Override
+    public Single<UserResult> getHomeUser() {
+        return freeSoundApi.user(USER_NAME);
     }
-
 }

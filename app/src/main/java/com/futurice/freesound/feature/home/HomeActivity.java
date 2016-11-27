@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import polanski.option.Option;
 
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.get;
@@ -61,6 +62,8 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Option.ofObj(savedInstanceState)
+              .ifNone(this::addHomeFragment);
 
         setSupportActionBar(findById(this, R.id.toolbar_home));
     }
@@ -111,5 +114,11 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     @Override
     public void inject() {
         component().inject(this);
+    }
+
+    private void addHomeFragment() {
+        getSupportFragmentManager().beginTransaction()
+                                   .add(R.id.container, HomeFragment.create())
+                                   .commit();
     }
 }
