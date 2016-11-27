@@ -20,7 +20,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 
 import com.futurice.freesound.feature.audio.MediaSourceFactory;
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.network.api.model.Image;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
 

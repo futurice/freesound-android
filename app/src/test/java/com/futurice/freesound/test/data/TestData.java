@@ -18,7 +18,6 @@ package com.futurice.freesound.test.data;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.network.api.model.GeoLocation;
-import com.futurice.freesound.network.api.model.Preview;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
@@ -91,13 +90,13 @@ public final class TestData {
     }
 
     @NonNull
-    public static Preview previews() {
-        return Preview.builder()
-                      .lowQualityMp3Url("https://url.com/lqmp3")
-                      .highQualityMp3Url("https://url.com/hqmp3")
-                      .lowQualityOggUrl("https://url.com/lqogg")
-                      .highQualityOggUrl("https://url.com/hgogg")
-                      .build();
+    public static Sound.Preview previews() {
+        return Sound.Preview.builder()
+                            .lowQualityMp3Url("https://url.com/lqmp3")
+                            .highQualityMp3Url("https://url.com/hqmp3")
+                            .lowQualityOggUrl("https://url.com/lqogg")
+                            .highQualityOggUrl("https://url.com/hgogg")
+                            .build();
     }
 
     @NonNull
