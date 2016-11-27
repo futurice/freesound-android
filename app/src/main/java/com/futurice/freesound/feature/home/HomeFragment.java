@@ -99,7 +99,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
 
         @Override
         public void unbind() {
-            // Nothing to do here
+            get(picasso).cancelRequest(avatarImage);
         }
 
     };
