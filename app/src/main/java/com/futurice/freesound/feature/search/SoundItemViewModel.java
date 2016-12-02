@@ -16,6 +16,9 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
+
 import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
@@ -28,6 +31,7 @@ import io.reactivex.Single;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
 
+@AutoFactory
 final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
@@ -37,7 +41,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     private final Navigator navigator;
 
     SoundItemViewModel(@NonNull final Sound sound,
-                       @NonNull final Navigator navigator) {
+                       @Provided @NonNull final Navigator navigator) {
         this.sound = get(sound);
         this.navigator = get(navigator);
     }
