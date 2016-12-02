@@ -155,7 +155,7 @@ dependencies {
     apt "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
 
     // AutoFactory
-    provided "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
+    compile "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
 
     // Optionals for Java 6/7
     compile "com.github.tomaszpolanski:options:$dependencyVersions.options"
