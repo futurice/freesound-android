@@ -19,15 +19,12 @@ package com.futurice.freesound.test.data;
 import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.network.api.model.SoundImageFormat;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public final class TestData {
 
@@ -81,13 +78,13 @@ public final class TestData {
                           .build();
     }
 
-    @NonNull
-    public static Map<SoundImageFormat, String> images() {
-        Map<SoundImageFormat, String> images = new HashMap<>();
-        for (SoundImageFormat format : SoundImageFormat.values()) {
-            images.put(format, "url" + format);
-        }
-        return images;
+    public static Sound.Image images() {
+        return Sound.Image.builder()
+                          .medSizeWaveformUrl("https://url.com/mw")
+                          .largeSizeWaveformUrl("https://url.com/lw")
+                          .medSizeSpectralUrl("https://url.com/ms")
+                          .largeSizeSpectralUrl("https://url.com/ls")
+                          .build();
     }
 
     @NonNull
