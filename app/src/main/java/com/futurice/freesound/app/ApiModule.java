@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 
 import com.futurice.freesound.network.api.FreeSoundApi;
 import com.futurice.freesound.network.api.FreeSoundApiInterceptor;
+import com.futurice.freesound.network.api.model.FreesoundTypeAdapterFactory;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -70,6 +71,7 @@ final class ApiModule {
     static Gson provideGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
+                .registerTypeAdapterFactory(FreesoundTypeAdapterFactory.create())
                 .create();
     }
 

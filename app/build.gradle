@@ -148,6 +148,7 @@ dependencies {
 
     // Auto-Value GSON
     apt "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
+    provided "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
 
     // Auto-Value Parcelable
     compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
