@@ -18,13 +18,10 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.source.MediaSource;
 
-import android.net.Uri;
-
-/**
- * Created by ptac on 26/11/16.
- */
+import android.support.annotation.NonNull;
 
 public interface MediaSourceFactory {
 
-    MediaSource create(Uri uri);
+    @NonNull
+    MediaSource create(@NonNull String uri);
 }

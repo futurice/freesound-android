@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
@@ -26,7 +27,6 @@ import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
@@ -44,7 +44,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     private final Navigator navigator;
 
     @NonNull
-    private final SimpleExoPlayer exoplayer;
+    private final ExoPlayer exoplayer;
 
     @NonNull
     private final MediaSourceFactory mediaSourceFactory;
@@ -86,12 +86,11 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     void playPreview() {
-        exoplayer.prepare(mediaSourceFactory.create(Uri.parse(
-                sound.previews().lowQualityMp3Url())));
+        exoplayer.prepare(mediaSourceFactory.create(sound.previews().lowQualityMp3Url()));
         exoplayer.setPlayWhenReady(true);
     }
 
-    public void stopPreview() {
+    void stopPreview() {
         exoplayer.stop();
     }
 }

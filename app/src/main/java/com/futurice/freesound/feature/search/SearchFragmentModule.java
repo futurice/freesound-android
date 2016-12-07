@@ -29,7 +29,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = {BaseFragmentModule.class, AudioModule.class})
-public class SearchFragmentModule {
+class SearchFragmentModule {
 
     @Provides
     @FragmentScope

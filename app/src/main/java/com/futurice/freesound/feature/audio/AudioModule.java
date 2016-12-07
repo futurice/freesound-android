@@ -17,12 +17,10 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -31,60 +29,43 @@ import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 
+import com.futurice.freesound.BuildConfig;
 import com.futurice.freesound.inject.app.ForApplication;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import timber.log.Timber;
 
 @Module
-public final class AudioModule {
+public abstract class AudioModule {
+
+    @Binds
+    abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
 
     @Provides
     static MediaSourceFactory provideMediaSourceFactory(final DataSource.Factory dataSourceFactory,
                                                         final ExtractorsFactory extractorsFactory) {
-        return uri -> new ExtractorMediaSource(uri,
+        return uri -> new ExtractorMediaSource(Uri.parse(uri),
                                                dataSourceFactory,
                                                extractorsFactory,
-                                               null,
-                                               (ExtractorMediaSource.EventListener) error -> Timber
-                                                       .e(error, "onLoadError"));
+                                               null, null);
     }
+
+    //
+    // Internal
+    //
 
     @Provides
     static DataSource.Factory provideDataSourceFactory(@ForApplication Context context) {
         return new DefaultDataSourceFactory(context,
-                                            Util.getUserAgent(context, "yourApplicationName"),
-                                            new TransferListener<DataSource>() {
-                                                @Override
-                                                public void onTransferStart(final DataSource source,
-                                                                            final DataSpec dataSpec) {
-                                                    Timber.d("onTransferStart %s %s", source,
-                                                             dataSpec);
-                                                }
-
-                                                @Override
-                                                public void onBytesTransferred(
-                                                        final DataSource source,
-                                                        final int bytesTransferred) {
-                                                    Timber.d("onBytesTransferred %s %d", source,
-                                                             bytesTransferred);
-
-                                                }
-
-                                                @Override
-                                                public void onTransferEnd(final DataSource source) {
-                                                    Timber.d("onTransferEnd %s", source);
-                                                }
-                                            });
+                                            Util.getUserAgent(context, BuildConfig.APPLICATION_ID));
     }
 
     @Provides
@@ -93,55 +74,27 @@ public final class AudioModule {
     }
 
     @Provides
-    static SimpleExoPlayer provideExoPlayer(@ForApplication Context context) {
-        Handler mainHandler = new Handler();
-        TrackSelection.Factory audioTrackSelectionFactory = new FixedTrackSelection.Factory();
-        TrackSelector trackSelector = new DefaultTrackSelector(mainHandler,
-                                                               audioTrackSelectionFactory);
-        LoadControl loadControl = new DefaultLoadControl();
+    static TrackSelection.Factory provideTrackSelectionFactory() {
+        return new FixedTrackSelection.Factory();
+    }
 
-        SimpleExoPlayer player = ExoPlayerFactory
-                .newSimpleInstance(context, trackSelector, loadControl);
+    @Provides
+    static TrackSelector provideTrackSelector(TrackSelection.Factory trackSelectionFactory) {
+        return new DefaultTrackSelector(new Handler(),
+                                        trackSelectionFactory);
+    }
 
-        player.setAudioDebugListener(new AudioRendererEventListener() {
-            @Override
-            public void onAudioEnabled(final DecoderCounters counters) {
-                Timber.d("onAudioEnabled");
-            }
+    @Provides
+    static LoadControl provideLoadControl() {
+        return new DefaultLoadControl();
+    }
 
-            @Override
-            public void onAudioSessionId(final int audioSessionId) {
-                Timber.d("onAudioSessionId");
-            }
+    @Provides
+    static SimpleExoPlayer provideSimpleExoPlayer(@ForApplication Context context,
+                                                  TrackSelector trackSelector,
+                                                  LoadControl loadControl) {
+        return ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
 
-            @Override
-            public void onAudioDecoderInitialized(final String decoderName,
-                                                  final long initializedTimestampMs,
-                                                  final long initializationDurationMs) {
-                Timber.d("onAudioDecoderInitialized");
-
-            }
-
-            @Override
-            public void onAudioInputFormatChanged(final Format format) {
-                Timber.d("onAudioInputFormatChanged");
-
-            }
-
-            @Override
-            public void onAudioTrackUnderrun(final int bufferSize, final long bufferSizeMs,
-                                             final long elapsedSinceLastFeedMs) {
-                Timber.d("onAudioTrackUnderrun");
-
-            }
-
-            @Override
-            public void onAudioDisabled(final DecoderCounters counters) {
-                Timber.d("onAudioDisabled");
-
-            }
-        });
-        return player;
     }
 
 }
