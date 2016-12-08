@@ -94,7 +94,6 @@ public abstract class AudioModule {
                                                   TrackSelector trackSelector,
                                                   LoadControl loadControl) {
         return ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-
     }
 
 }
