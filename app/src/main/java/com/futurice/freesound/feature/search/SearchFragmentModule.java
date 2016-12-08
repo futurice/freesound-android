@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.feature.audio.AudioModule;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
@@ -28,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {BaseFragmentModule.class, AudioModule.class})
+@Module(includes = BaseFragmentModule.class)
 class SearchFragmentModule {
 
     @Provides

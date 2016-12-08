@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ExoPlayer;
 
 import com.futurice.freesound.feature.audio.MediaSourceFactory;
 import com.futurice.freesound.feature.common.Navigator;
@@ -41,7 +41,7 @@ public class SoundItemViewModelTest {
     private Navigator navigator;
 
     @Mock
-    private SimpleExoPlayer simpleExoPlayer;
+    private ExoPlayer exoPlayer;
 
     @Mock
     private MediaSourceFactory mediaSourceFactory;
@@ -52,7 +52,7 @@ public class SoundItemViewModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         soundItemViewModel = new SoundItemViewModel(SOUND, navigator,
-                                                    simpleExoPlayer, mediaSourceFactory);
+                                                    exoPlayer, mediaSourceFactory);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class SoundItemViewModelTest {
         Sound sound = mock(Sound.class);
         when(sound.images()).thenReturn(null);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator,
-                                                       simpleExoPlayer, mediaSourceFactory);
+                                                       exoPlayer, mediaSourceFactory);
 
         vm.thumbnailImageUrl()
           .test()
@@ -73,7 +73,7 @@ public class SoundItemViewModelTest {
         when(sound.images()).thenReturn(Sound.Image.builder().build());
 
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator,
-                                                       simpleExoPlayer, mediaSourceFactory);
+                                                       exoPlayer, mediaSourceFactory);
 
         vm.thumbnailImageUrl()
           .test()

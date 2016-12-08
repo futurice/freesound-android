@@ -16,7 +16,10 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.google.android.exoplayer2.ExoPlayer;
+
 import com.futurice.freesound.app.FreesoundApplicationComponent;
+import com.futurice.freesound.feature.audio.MediaSourceFactory;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
@@ -33,6 +36,10 @@ import dagger.Component;
 interface SearchActivityComponent extends BaseActivityComponent {
 
     Picasso getPicasso();
+
+    ExoPlayer getExoPlayer();
+
+    MediaSourceFactory getMediaSourceFactory();
 
     @ForApplication
     Context getContext();
