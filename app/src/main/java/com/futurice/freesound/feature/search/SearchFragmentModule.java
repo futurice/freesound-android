@@ -28,7 +28,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = BaseFragmentModule.class)
-public class SearchFragmentModule {
+class SearchFragmentModule {
 
     @Provides
     @FragmentScope
@@ -42,14 +42,8 @@ public class SearchFragmentModule {
     static SoundItemAdapter provideSoundItemAdapter(
             DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
             Picasso picasso,
-            SoundItemViewModel_Factory viewModelFactory) {
+            SoundItemViewModelFactory viewModelFactory) {
         return new SoundItemAdapter(adapterInteractor, picasso, viewModelFactory);
-    }
-
-    @Provides
-    @FragmentScope
-    static SoundItemViewModel_Factory provideSoundItemViewModelFactory(Navigator navigator) {
-        return new SoundItemViewModel_Factory(navigator);
     }
 
     @Provides

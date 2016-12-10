@@ -94,9 +94,10 @@ ext {
             retrofit2RxJava2Adapter: '1.0.0',
             retrofit2GsonConverter : '2.0.0',
             gson                   : '2.7',
-            autoValue              : '1.2',
-            autoValueGson          : '0.3.2-rc1',
-            autoValueParcelable    : '0.2.3-rc2',
+            autoValue              : '1.3',
+            autoValueGson          : '0.4.4',
+            autoValueParcelable    : '0.2.5',
+            autoFactory            : '1.0-beta3',
             options                : '1.2.0',
             firebase               : '9.4.0',
             stetho                 : '1.3.1',
@@ -147,10 +148,14 @@ dependencies {
 
     // Auto-Value GSON
     apt "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
+    provided "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
 
     // Auto-Value Parcelable
     compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
     apt "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
+
+    // AutoFactory
+    compile "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
 
     // Optionals for Java 6/7
     compile "com.github.tomaszpolanski:options:$dependencyVersions.options"

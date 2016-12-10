@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.network.api.model;
 
-import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.network.api.model.Sound;
+import com.google.gson.TypeAdapterFactory;
+
+import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 
 import android.support.annotation.NonNull;
 
-import static com.futurice.freesound.utils.Preconditions.get;
-
-final class SoundItemViewModel_Factory {
-
-    @NonNull
-    private final Navigator navigator;
-
-    SoundItemViewModel_Factory(@NonNull final Navigator navigator) {
-        this.navigator = get(navigator);
-    }
+@GsonTypeAdapterFactory
+public abstract class FreesoundTypeAdapterFactory implements TypeAdapterFactory {
 
     @NonNull
-    SoundItemViewModel create(@NonNull final Sound sound) {
-        return new SoundItemViewModel(get(sound), navigator);
+    public static TypeAdapterFactory create() {
+        return new AutoValueGson_FreesoundTypeAdapterFactory();
     }
+
 }

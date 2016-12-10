@@ -40,14 +40,14 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     private final DefaultAdapterInteractor<DisplayableItem> adapterInteractor;
 
     @NonNull
-    private final SoundItemViewModel_Factory viewModelFactory;
+    private final SoundItemViewModelFactory viewModelFactory;
 
     @NonNull
     private final Picasso picasso;
 
     SoundItemAdapter(@NonNull final DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
                      @NonNull final Picasso picasso,
-                     @NonNull final SoundItemViewModel_Factory viewModelFactory) {
+                     @NonNull final SoundItemViewModelFactory viewModelFactory) {
         this.adapterInteractor = get(adapterInteractor);
         this.viewModelFactory = get(viewModelFactory);
         this.picasso = get(picasso);

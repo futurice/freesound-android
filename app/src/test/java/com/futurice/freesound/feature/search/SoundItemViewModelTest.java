@@ -18,10 +18,8 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.network.api.model.SoundImageFormat;
 import com.futurice.freesound.test.data.TestData;
 
-import org.assertj.core.util.Maps;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -61,7 +59,7 @@ public class SoundItemViewModelTest {
     @Test
     public void thumbnailImageUrl_ifNoWaveFormat_returnEmptyString() {
         Sound sound = mock(Sound.class);
-        when(sound.images()).thenReturn(Maps.newHashMap());
+        when(sound.images()).thenReturn(Sound.Image.builder().build());
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
 
         vm.thumbnailImageUrl()
@@ -73,7 +71,7 @@ public class SoundItemViewModelTest {
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
         soundItemViewModel.thumbnailImageUrl()
                           .test()
-                          .assertValue(SOUND.images().get(SoundImageFormat.waveform_m));
+                          .assertValue(SOUND.images().medSizeWaveformUrl());
     }
 
     @Test
