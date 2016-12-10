@@ -23,8 +23,8 @@ import com.futurice.freesound.rx.TimeSkipScheduler;
 import com.futurice.freesound.test.data.TestData;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.TestObserver;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
@@ -47,14 +47,16 @@ import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEAR
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
 public class SearchActivityViewModelTest {
 
-    private static final String QUERY = "test-query";
+    private static final String DUMMY_QUERY = "test-query";
 
     @Mock
     private SearchDataModel searchDataModel;
@@ -73,37 +75,78 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
+    public void viewModel_clearsSearchDataModel_byDefault() {
+        new ArrangeBuilder().withSuccessfulSearchResultStream()
+                            .act()
+                            .bind();
+
+        verify(searchDataModel).clear();
+    }
+
+    @Test
     public void search_emitsAnalyticsEvent() {
-        viewModel.search(QUERY);
+        viewModel.search(DUMMY_QUERY);
 
         verify(analytics).log("SearchPressedEvent");
     }
 
-    @Ignore("This will require Scheduler overriding")
     @Test
-    public void querySearch_queriesSearchDataModelWithTerm() {
+    public void search_queriesSearchDataModelWithTerm() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
-        viewModel.search(QUERY);
+        viewModel.search(DUMMY_QUERY);
 
-        verify(searchDataModel).querySearch(eq(QUERY));
+        verify(searchDataModel).querySearch(eq(DUMMY_QUERY));
+
     }
 
-    @Ignore("This will require Scheduler overriding")
     @Test
-    public void querySearch_clearsSearchDataModel_whenEmptySearchString() {
+    public void search_duplicateNonEmptyQueriesAreIgnored() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
+        viewModel.search(DUMMY_QUERY);
+        viewModel.search(DUMMY_QUERY);
+        viewModel.search(DUMMY_QUERY);
+        viewModel.search(DUMMY_QUERY);
+        viewModel.search(DUMMY_QUERY);
+
+        verify(searchDataModel).querySearch(DUMMY_QUERY);
+    }
+
+    @Test
+    public void search_duplicateEmptyQueriesAreIgnored() {
+        new ArrangeBuilder().withSuccessfulSearchResultStream()
+                            .act()
+                            .bind();
+
+        viewModel.search("");
+        viewModel.search("");
+        viewModel.search("");
+        viewModel.search("");
         viewModel.search("");
 
         verify(searchDataModel).clear();
     }
 
-    @Ignore(("This will require Scheduler overriding"))
+    @Test
+    public void search_clearsSearchDataModel_whenEmptySearchString_afterSearchWithNonEmptyString() {
+        new ArrangeBuilder().withSuccessfulSearchResultStream()
+                            .act()
+                            .bind();
+
+        viewModel.search(DUMMY_QUERY);
+        viewModel.search("");
+
+        InOrder order = inOrder(searchDataModel);
+        order.verify(searchDataModel).clear();
+        order.verify(searchDataModel).querySearch(DUMMY_QUERY);
+        order.verify(searchDataModel).clear();
+    }
+
     @Test
     public void clear_isDisabled_byDefault() {
         viewModel.isClearEnabledOnceAndStream()
@@ -112,14 +155,13 @@ public class SearchActivityViewModelTest {
                  .assertNotTerminated();
     }
 
-    @Ignore(("This will require Scheduler overriding"))
     @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
 
-        viewModel.search(QUERY);
+        viewModel.search(DUMMY_QUERY);
 
         viewModel.isClearEnabledOnceAndStream()
                  .test()
@@ -127,72 +169,79 @@ public class SearchActivityViewModelTest {
                  .assertNotTerminated();
     }
 
-    @Ignore(("This will require Scheduler overriding"))
     @Test
-    public void clear_isDisabled_whenSearchWithEmptyQuery() {
+    public void clear_isDisabled_whenSearchWithEmptyQuery_afterSearchWithNonEmptyString() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .bind()
-                            .subscribed();
+                            .act()
+                            .bind();
+        final TestObserver<Boolean> ts = viewModel
+                .isClearEnabledOnceAndStream()
+                .test();
 
+        viewModel.search(DUMMY_QUERY);
         viewModel.search("");
 
-        viewModel.isClearEnabledOnceAndStream()
-                 .test()
-                 .assertValue(false)
-                 .assertNotTerminated();
+        ts.assertValues(false, true, false)
+          .assertNotTerminated();
     }
 
-    @Ignore(("This will require Scheduler overriding"))
     @Test
-    public void search_recoversFromSearchErrors() {
+    public void search_recoversFromSearchErrors_callsApiAgain() {
         ArrangeBuilder arrangement = new ArrangeBuilder();
         arrangement.withErrorWhenSearching()
+                   .act()
                    .bind()
-                   .subscribed()
                    .search();
 
         arrangement
                 .withSuccessfulSearchResultStream()
                 .enqueueSearchResults(ofObj(TestData.sounds(10)))
+                .act()
                 .bind()
                 .search();
 
-        verify(searchDataModel).querySearch(eq(QUERY));
+        verify(searchDataModel, times(2)).querySearch(eq(DUMMY_QUERY));
     }
 
     @Test
-    public void emptyQuery_clearsSearchImmediately() {
+    public void search_withEmptyQuery_clearsSearchImmediately_afterNonEmptySearch() {
+        TestScheduler testScheduler = new TestScheduler();
         Act act = new ArrangeBuilder()
-                .bind();
+                .withTimeScheduler(testScheduler)
+                .act()
+                .bind()
+                .search();
 
+        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
         act.search("");
 
-        verify(searchDataModel).clear();
+        verify(searchDataModel, times(2)).clear();
     }
 
     @Test
-    public void nonEmptyQuery_doesNotTriggerImmediately() {
+    public void search_withNonEmptyQuery_doesNotTriggerImmediately() {
         Act act = new ArrangeBuilder()
                 .withTimeScheduler(new TestScheduler())
+                .act()
                 .bind();
 
-        act.search("Something");
+        act.search(DUMMY_QUERY);
 
-        verify(searchDataModel, never()).querySearch(eq("Something"));
+        verify(searchDataModel, never()).querySearch(eq(DUMMY_QUERY));
     }
 
     @Test
-    public void nonEmptyQuery_triggersAfterDelay() {
+    public void search_withNonEmptyQuery_triggersAfterDelay() {
         TestScheduler testScheduler = new TestScheduler();
-        String query = "Something";
         Act act = new ArrangeBuilder()
                 .withTimeScheduler(testScheduler, SEARCH_DEBOUNCE_TAG)
+                .act()
                 .bind();
 
-        act.search(query);
+        act.search(DUMMY_QUERY);
         testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
 
-        verify(searchDataModel).querySearch(query);
+        verify(searchDataModel).querySearch(DUMMY_QUERY);
     }
 
     private class ArrangeBuilder {
@@ -210,6 +259,7 @@ public class SearchActivityViewModelTest {
             Mockito.when(searchDataModel.querySearch(anyString()))
                    .thenReturn(Completable.complete());
             withSuccessfulSearchResultStream();
+            withTimeSkipScheduler();
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler, String tag) {
@@ -223,6 +273,10 @@ public class SearchActivityViewModelTest {
         ArrangeBuilder withTimeScheduler(Scheduler scheduler) {
             TimeScheduler.setTimeSchedulerHandler((s, __) -> scheduler);
             return this;
+        }
+
+        ArrangeBuilder withTimeSkipScheduler() {
+            return withTimeScheduler(TimeSkipScheduler.instance());
         }
 
         ArrangeBuilder withSuccessfulSearchResultStream() {
@@ -242,24 +296,21 @@ public class SearchActivityViewModelTest {
             return this;
         }
 
-        Act bind() {
-            viewModel.bindToDataModel();
+        Act act() {
             return new Act();
         }
     }
 
     private class Act {
 
-        CompositeDisposable d = new CompositeDisposable();
-
-        Act subscribed() {
-            viewModel.bind(d);
+        Act bind() {
+            viewModel.bindToDataModel();
             return this;
         }
 
         Act search() {
-            viewModel.search(QUERY);
-            return search(QUERY);
+            viewModel.search(DUMMY_QUERY);
+            return search(DUMMY_QUERY);
         }
 
         Act search(String query) {
