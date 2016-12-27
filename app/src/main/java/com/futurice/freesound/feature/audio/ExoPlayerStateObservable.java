@@ -17,11 +17,18 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+
+import android.support.annotation.NonNull;
+
+import java.util.Arrays;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import timber.log.Timber;
 
-class ExoPlayerStateObservable extends Observable<PlayerState> {
+final class ExoPlayerStateObservable extends Observable<PlayerState> {
 
     private final ExoPlayer exoPlayer;
 
@@ -36,16 +43,24 @@ class ExoPlayerStateObservable extends Observable<PlayerState> {
         exoPlayer.addListener(listener);
     }
 
-    private static class Listener extends BaseExoPlayerEventListener<PlayerState> {
+    private static class Listener extends SimpleAudioPlayerEventListener<PlayerState> {
 
-        Listener(ExoPlayer exoPlayer,
-                 Observer<? super PlayerState> observer) {
+        Listener(@NonNull final ExoPlayer exoPlayer,
+                 @NonNull Observer<? super PlayerState> observer) {
             super(exoPlayer, observer);
+        }
+
+        @Override
+        public void onTracksChanged(final TrackGroupArray trackGroups,
+                                    final TrackSelectionArray trackSelections) {
+            Timber.d("### OnTracksChanged: %s", Arrays.toString(trackSelections.getAll()));
         }
 
         @Override
         public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
             observer.onNext(PlayerState.create(playWhenReady, playbackState));
+
         }
+
     }
 }

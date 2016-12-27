@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.rx.TimeScheduler;
 import com.futurice.freesound.rx.TimeSkipScheduler;
@@ -62,6 +63,9 @@ public class SearchActivityViewModelTest {
     private SearchDataModel searchDataModel;
 
     @Mock
+    private AudioPlayer audioPlayer;
+
+    @Mock
     private Analytics analytics;
 
     private SearchActivityViewModel viewModel;
@@ -71,7 +75,7 @@ public class SearchActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
 
-        viewModel = new SearchActivityViewModel(searchDataModel, analytics);
+        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
     }
 
     @Test

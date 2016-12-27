@@ -16,13 +16,24 @@
 
 package com.futurice.freesound.feature.audio;
 
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.auto.value.AutoValue;
 
-import io.reactivex.Observable;
+import android.support.annotation.NonNull;
 
-public class ExoPlayerObservable {
+import polanski.option.Option;
 
-    public static Observable<PlayerState> playerState(ExoPlayer exoPlayer) {
-        return new ExoPlayerStateObservable(exoPlayer);
+@AutoValue
+public abstract class UrlPlayerState {
+
+    @NonNull
+    abstract PlayerState playerState();
+
+    @NonNull
+    abstract Option<String> id();
+
+    @NonNull
+    static UrlPlayerState create(@NonNull final PlayerState playerState,
+                                 @NonNull final Option<String> id) {
+        return new AutoValue_UrlPlayerState(playerState, id);
     }
 }

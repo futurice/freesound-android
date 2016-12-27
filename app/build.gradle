@@ -25,13 +25,13 @@ apply from: 'proguard-config.gradle'
 def STRING = "String"
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
 
@@ -99,7 +99,7 @@ ext {
             autoValueParcelable    : '0.2.5',
             autoFactory            : '1.0-beta3',
             options                : '1.2.0',
-            exoplayer              : 'r2.0.4',
+            exoplayer              : 'r2.1.1',
             firebase               : '9.4.0',
             stetho                 : '1.3.1',
             timber                 : '4.2.0',

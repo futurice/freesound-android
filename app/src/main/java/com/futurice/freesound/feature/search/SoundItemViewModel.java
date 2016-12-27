@@ -16,25 +16,26 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 
 import com.futurice.freesound.common.Text;
-import com.futurice.freesound.feature.audio.MediaSourceFactory;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.SimpleViewModel;
+import com.futurice.freesound.viewmodel.BaseViewModel;
 
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
 
 @AutoFactory
-final class SoundItemViewModel extends SimpleViewModel {
+final class SoundItemViewModel extends BaseViewModel {
 
     @NonNull
     private final Sound sound;
@@ -43,20 +44,14 @@ final class SoundItemViewModel extends SimpleViewModel {
     private final Navigator navigator;
 
     @NonNull
-    private final ExoPlayer exoplayer;
-
-    @NonNull
-    private final MediaSourceFactory mediaSourceFactory;
+    private final AudioPlayer audioPlayer;
 
     SoundItemViewModel(@NonNull final Sound sound,
                        @Provided @NonNull final Navigator navigator,
-                       @Provided @NonNull final ExoPlayer exoPlayer,
-                       @Provided @NonNull final MediaSourceFactory mediaSourceFactory) {
-
+                       @Provided @NonNull final AudioPlayer audioPlayer) {
         this.sound = get(sound);
         this.navigator = get(navigator);
-        this.exoplayer = get(exoPlayer);
-        this.mediaSourceFactory = get(mediaSourceFactory);
+        this.audioPlayer = get(audioPlayer);
     }
 
     @NonNull
@@ -85,12 +80,17 @@ final class SoundItemViewModel extends SimpleViewModel {
         navigator.openSoundDetails(sound);
     }
 
-    void togglePreviewPlayback() {
-        exoplayer.prepare(mediaSourceFactory.create(sound.previews().lowQualityMp3Url()));
-        exoplayer.setPlayWhenReady(true);
+    void playSound() {
+        audioPlayer.toggle(sound.previews().lowQualityMp3Url());
     }
 
     void stopPreviewPlayback() {
-        exoplayer.stop();
+        audioPlayer.stop();
+    }
+
+    @Override
+    public void bind(@NonNull final CompositeDisposable disposables) {
+        disposables.add(audioPlayer.getPlayerStateStream()
+                                   .subscribe(v -> Timber.d("#### getPlayerStateStream: %s", v)));
     }
 }

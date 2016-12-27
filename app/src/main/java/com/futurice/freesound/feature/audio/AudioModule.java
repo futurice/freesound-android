@@ -37,7 +37,6 @@ import com.futurice.freesound.inject.app.ForApplication;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Handler;
 
 import dagger.Binds;
 import dagger.Module;
@@ -45,6 +44,9 @@ import dagger.Provides;
 
 @Module
 public abstract class AudioModule {
+
+    @Binds
+    abstract AudioPlayer provideAudioPlayer(ExoPlayerAudioPlayer exoPlayerAudioPlayer);
 
     @Binds
     abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
@@ -80,8 +82,7 @@ public abstract class AudioModule {
 
     @Provides
     static TrackSelector provideTrackSelector(TrackSelection.Factory trackSelectionFactory) {
-        return new DefaultTrackSelector(new Handler(),
-                                        trackSelectionFactory);
+        return new DefaultTrackSelector(trackSelectionFactory);
     }
 
     @Provides

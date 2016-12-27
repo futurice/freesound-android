@@ -20,21 +20,31 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 
+import android.support.annotation.NonNull;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-class BaseExoPlayerEventListener<T> implements Disposable, ExoPlayer.EventListener {
+import static com.futurice.freesound.utils.Preconditions.get;
 
+abstract class SimpleAudioPlayerEventListener<T> implements Disposable,
+                                                            ExoPlayer.EventListener {
+
+    @NonNull
     private final ExoPlayer exoPlayer;
+
+    @NonNull
     final Observer<? super T> observer;
+
+    @NonNull
     private final AtomicBoolean unsubscribed = new AtomicBoolean();
 
-    BaseExoPlayerEventListener(ExoPlayer exoPlayer,
-                               Observer<? super T> observer) {
-        this.exoPlayer = exoPlayer;
-        this.observer = observer;
+    SimpleAudioPlayerEventListener(@NonNull final ExoPlayer exoPlayer,
+                                   @NonNull final Observer<? super T> observer) {
+        this.exoPlayer = get(exoPlayer);
+        this.observer = get(observer);
     }
 
     @Override

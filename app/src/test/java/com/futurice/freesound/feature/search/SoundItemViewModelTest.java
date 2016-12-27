@@ -16,9 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.google.android.exoplayer2.ExoPlayer;
-
-import com.futurice.freesound.feature.audio.MediaSourceFactory;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
@@ -41,26 +39,21 @@ public class SoundItemViewModelTest {
     private Navigator navigator;
 
     @Mock
-    private ExoPlayer exoPlayer;
-
-    @Mock
-    private MediaSourceFactory mediaSourceFactory;
+    private AudioPlayer audioPlayer;
 
     private SoundItemViewModel soundItemViewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        soundItemViewModel = new SoundItemViewModel(SOUND, navigator,
-                                                    exoPlayer, mediaSourceFactory);
+        soundItemViewModel = new SoundItemViewModel(SOUND, navigator, audioPlayer);
     }
 
     @Test
     public void thumbnailImageUrl_ifNoImages_returnEmptyString() {
         Sound sound = mock(Sound.class);
         when(sound.images()).thenReturn(null);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator,
-                                                       exoPlayer, mediaSourceFactory);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
 
         vm.thumbnailImageUrl()
           .test()
@@ -72,8 +65,7 @@ public class SoundItemViewModelTest {
         Sound sound = mock(Sound.class);
         when(sound.images()).thenReturn(Sound.Image.builder().build());
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator,
-                                                       exoPlayer, mediaSourceFactory);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
 
         vm.thumbnailImageUrl()
           .test()
