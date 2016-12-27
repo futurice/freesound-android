@@ -22,10 +22,13 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 
-final class ExoPlayerObservables {
+/**
+ * Entry-point for accessing Observables from ExoPlayer events.
+ */
+public final class ExoPlayerObservables {
 
     @NonNull
-    public static Observable<PlayerState> playerState(@NonNull final ExoPlayer exoPlayer) {
+    static Observable<PlayerState> playerState(@NonNull final ExoPlayer exoPlayer) {
         return new ExoPlayerStateObservable(exoPlayer);
     }
 

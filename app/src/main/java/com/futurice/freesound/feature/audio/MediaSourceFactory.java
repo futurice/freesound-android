@@ -20,8 +20,19 @@ import com.google.android.exoplayer2.source.MediaSource;
 
 import android.support.annotation.NonNull;
 
-public interface MediaSourceFactory {
+/**
+ * Generates {@link MediaSource} from URIs.
+ *
+ * Can't be an AutoFactory because we can't annotate the ExoPlayer classes.
+ */
+interface MediaSourceFactory {
 
+    /**
+     * Creates a new instance of a {@link MediaSource}.
+     *
+     * @param uri The {@link MediaSource} source URI.
+     * @return a new {@link MediaSource} instance.
+     */
     @NonNull
     MediaSource create(@NonNull String uri);
 }

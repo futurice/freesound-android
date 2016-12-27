@@ -21,7 +21,7 @@ import com.google.auto.value.AutoValue;
 import android.support.annotation.NonNull;
 
 @AutoValue
-public abstract class PlayerState {
+abstract class PlayerState {
 
     abstract boolean playWhenReady();
 

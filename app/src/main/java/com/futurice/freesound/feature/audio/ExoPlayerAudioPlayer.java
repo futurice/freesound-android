@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.audio;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import com.futurice.freesound.common.Releaseable;
+import com.futurice.freesound.utils.Preconditions;
 
 import android.support.annotation.NonNull;
 
@@ -32,6 +33,8 @@ import polanski.option.Option;
 import static com.futurice.freesound.utils.Preconditions.get;
 
 /**
+ * AudioPlayer implementation that uses ExoPlayer 2.
+ *
  * This is not thread safe; you should only issue commands from the initialization thread.
  *
  * ExoPlayer documentation recommends that the player instance is only interacted with from
@@ -65,6 +68,8 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
 
     @Override
     public void toggle(@NonNull final String url) {
+        Preconditions.checkNotNull(url);
+
         final int state = exoPlayer.getPlaybackState();
         final boolean hasSourceUrlChanged = hasSourceUrlChanged(url);
 

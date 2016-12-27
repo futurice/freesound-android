@@ -19,6 +19,8 @@ package com.futurice.freesound.feature.audio;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 
 import android.support.annotation.NonNull;
 
@@ -29,47 +31,57 @@ import io.reactivex.disposables.Disposable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-abstract class SimpleAudioPlayerEventListener<T> implements Disposable,
-                                                            ExoPlayer.EventListener {
+/**
+ * Base class for making Observables from ExoPlayer callback events.
+ *
+ * @param <T> the Observable value type.
+ */
+abstract class BaseAudioPlayerEventListener<T> implements Disposable, ExoPlayer.EventListener {
 
     @NonNull
     private final ExoPlayer exoPlayer;
 
     @NonNull
-    final Observer<? super T> observer;
+    protected final Observer<? super T> observer;
 
     @NonNull
     private final AtomicBoolean unsubscribed = new AtomicBoolean();
 
-    SimpleAudioPlayerEventListener(@NonNull final ExoPlayer exoPlayer,
-                                   @NonNull final Observer<? super T> observer) {
+    BaseAudioPlayerEventListener(@NonNull final ExoPlayer exoPlayer,
+                                 @NonNull final Observer<? super T> observer) {
         this.exoPlayer = get(exoPlayer);
         this.observer = get(observer);
     }
 
     @Override
     public void onLoadingChanged(final boolean isLoading) {
-        // Nothing
+        // Override if needed
     }
 
     @Override
     public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
-        // Nothing
+        // Override if needed
     }
 
     @Override
     public void onTimelineChanged(final Timeline timeline, final Object manifest) {
-        // Nothing
+        // Override if needed
     }
 
     @Override
     public void onPlayerError(final ExoPlaybackException error) {
-        // Nothing
+        // Override if needed
     }
 
     @Override
     public void onPositionDiscontinuity() {
-        // Nothing
+        // Override if needed
+    }
+
+    @Override
+    public void onTracksChanged(final TrackGroupArray trackGroups,
+                                final TrackSelectionArray trackSelections) {
+        // Override if needed
     }
 
     @Override
