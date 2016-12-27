@@ -31,8 +31,6 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public abstract class BindingBaseFragment<T> extends BaseFragment<T> {
 
-    // TODO This dataBinder is a good candidate for a trait in Kotlin
-
     @NonNull
     private final BaseLifecycleViewDataBinder lifecycleBinder = new BaseLifecycleViewDataBinder() {
 
