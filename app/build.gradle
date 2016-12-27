@@ -37,6 +37,8 @@ android {
 
         signingConfig signingConfigs.debug
 
+        multiDexEnabled true
+
         vectorDrawables.useSupportLibrary = true
 
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
