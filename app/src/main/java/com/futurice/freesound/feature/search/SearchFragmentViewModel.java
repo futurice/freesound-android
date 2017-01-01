@@ -66,8 +66,11 @@ final class SearchFragmentViewModel extends SimpleViewModel {
                          .blockingGet();
     }
 
+    void stopPlayback() {
+        audioPlayer.stop();
+    }
+
     void openSoundDetails(@NonNull final Sound sound) {
         navigator.openSoundDetails(get(sound));
     }
-
 }

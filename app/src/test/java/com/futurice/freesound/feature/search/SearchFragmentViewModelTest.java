@@ -81,7 +81,7 @@ public class SearchFragmentViewModelTest {
     }
 
     @Test
-    public void viewModel_stopsAudioPlayback_byDefault() {
+    public void stopsAudioPlayback_byDefault() {
         new Arrangement();
 
         viewModel.getSoundsOnceAndStream()
@@ -91,13 +91,20 @@ public class SearchFragmentViewModelTest {
     }
 
     @Test
-    public void viewModel_stopsAudioPlayback_whenSearchResultChange() {
+    public void stopsAudioPlayback_whenSearchResultChange() {
         Arrangement arrangement = new Arrangement();
         viewModel.getSoundsOnceAndStream()
                  .test();
         reset(audioPlayer); // is invoked by default, so reset the mock invocation count.
 
         arrangement.enqueueSearchResults(ofObj(TestData.sounds(10)));
+
+        verify(audioPlayer).stop();
+    }
+
+    @Test
+    public void stopPlayback_stopsAudioPlayback() {
+        viewModel.stopPlayback();
 
         verify(audioPlayer).stop();
     }
