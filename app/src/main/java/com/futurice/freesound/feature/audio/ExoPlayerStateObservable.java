@@ -23,12 +23,15 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
+import static com.futurice.freesound.utils.Preconditions.get;
+
 final class ExoPlayerStateObservable extends Observable<PlayerState> {
 
+    @NonNull
     private final ExoPlayer exoPlayer;
 
-    ExoPlayerStateObservable(ExoPlayer exoPlayer) {
-        this.exoPlayer = exoPlayer;
+    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer) {
+        this.exoPlayer = get(exoPlayer);
     }
 
     @Override
@@ -47,7 +50,9 @@ final class ExoPlayerStateObservable extends Observable<PlayerState> {
 
         @Override
         public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
-            observer.onNext(PlayerState.create(playWhenReady, playbackState));
+            if (!isDisposed()) {
+                observer.onNext(PlayerState.create(playWhenReady, playbackState));
+            }
         }
 
     }
