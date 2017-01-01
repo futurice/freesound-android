@@ -31,27 +31,44 @@ public abstract class BaseLifecycleViewDataBinder implements LifecycleDataBinder
     @NonNull
     private final CompositeDisposable disposable = new CompositeDisposable();
 
+    /**
+     *  Inform the ViewModel that it needs to bind to the View's modelled data sources.
+     */
     @Override
     public void onCreate() {
         viewModel().bindToDataModel();
     }
 
+    /**
+     * Bind the View to the ViewModel's data sources.
+     */
     @Override
     public void onResume() {
         bind(disposable);
     }
 
+    /**
+     * Unbind the View from the ViewModel's data sources.
+     */
     @Override
     public void onPause() {
         disposable.clear();
         unbind();
     }
 
+    /**
+     * Inform the ViewModel that it needs to unbind from the View's modelled data sources.
+     */
     @Override
     public void onDestroyView() {
         viewModel().unbindDataModel();
     }
 
+    /**
+     * Permanently dispose of any resources held.
+     *
+     * The instance cannot be reused after this operation.
+     */
     @Override
     public void onDestroy() {
         disposable.dispose();
