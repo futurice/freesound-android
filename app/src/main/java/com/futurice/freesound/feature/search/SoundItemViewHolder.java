@@ -77,7 +77,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
                                                        .into(waveformViewTarget),
                                          e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
-            waveFormView.setOnClickListener(__ -> vm.playSound());
+            waveFormView.setOnClickListener(__ -> vm.toggleSoundPlayback());
         }
 
         @Override
