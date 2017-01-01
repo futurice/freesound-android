@@ -46,7 +46,7 @@ final class HomeViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
+    protected void bind(@NonNull final CompositeDisposable disposables) {
         disposables.add(openSearchStream.observeOn(mainThread())
                                         .subscribe(__ -> navigator.openSearch(),
                                                    e -> Timber.e(e, "Error clearing search")));

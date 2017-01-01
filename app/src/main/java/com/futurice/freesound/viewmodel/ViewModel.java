@@ -16,10 +16,6 @@
 
 package com.futurice.freesound.viewmodel;
 
-import android.support.annotation.NonNull;
-
-import io.reactivex.disposables.CompositeDisposable;
-
 public interface ViewModel {
 
     /**
@@ -31,11 +27,6 @@ public interface ViewModel {
      * Unbind the ViewModel from its data model.
      */
     void unbindDataModel();
-
-    /**
-     * TODO This should be protected ideally
-     */
-    void bind(@NonNull final CompositeDisposable disposables);
 
     /**
      * Permanently dispose of any resources held.

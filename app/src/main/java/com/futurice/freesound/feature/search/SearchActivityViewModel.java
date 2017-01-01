@@ -66,7 +66,7 @@ final class SearchActivityViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable d) {
+    protected void bind(@NonNull final CompositeDisposable d) {
         d.add(searchTermOnceAndStream.observeOn(computation())
                                      .distinctUntilChanged()
                                      .switchMap(query -> TextUtils.isNotEmpty(query)
