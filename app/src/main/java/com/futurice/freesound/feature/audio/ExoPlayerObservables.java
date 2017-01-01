@@ -22,6 +22,8 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 
+import static com.futurice.freesound.utils.Preconditions.get;
+
 /**
  * Entry-point for accessing Observables from ExoPlayer events.
  */
@@ -29,7 +31,7 @@ public final class ExoPlayerObservables {
 
     @NonNull
     static Observable<PlayerState> playerState(@NonNull final ExoPlayer exoPlayer) {
-        return new ExoPlayerStateObservable(exoPlayer);
+        return new ExoPlayerStateObservable(get(exoPlayer));
     }
 
 }
