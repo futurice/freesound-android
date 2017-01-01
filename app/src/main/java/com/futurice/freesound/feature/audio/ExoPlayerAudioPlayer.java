@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import polanski.option.Option;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -40,6 +41,11 @@ import static com.futurice.freesound.utils.Preconditions.get;
  * ExoPlayer documentation recommends that the player instance is only interacted with from
  * a single thread. Callbacks are provided on the same thread that initialized the ExoPlayer
  * instance.
+ *
+ * NOTE: I haven't yet found a way to determine the current playing source in ExoPlayer, so this
+ * class needs to retain the URL itself. As a consequence, keep this instance with the same scope
+ * as the underlying ExoPlayer instance. Otherwise you could arrive at a situation where ExoPlayer
+ * is playing a source and this instance has no current URL defined.
  */
 final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
 
@@ -63,6 +69,7 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     @NonNull
     public Observable<UrlPlayerState> getPlayerStateStream() {
         return ExoPlayerObservables.playerState(exoPlayer)
+                                   .startWith(currentPlayerState())
                                    .map(state -> UrlPlayerState.create(state, currentUrl.get()));
     }
 
@@ -93,6 +100,11 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     @Override
     public void release() {
         exoPlayer.release();
+    }
+
+    @NonNull
+    private PlayerState currentPlayerState() {
+        return PlayerState.create(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState());
     }
 
     private static boolean isIdle(final int state) {

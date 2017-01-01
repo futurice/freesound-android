@@ -26,6 +26,8 @@ import io.reactivex.Observable;
 public interface AudioPlayer {
 
     /**
+     * Reports the initial player state and subsequent changes.
+     *
      * @return A stream of the {@link UrlPlayerState}.
      */
     @NonNull

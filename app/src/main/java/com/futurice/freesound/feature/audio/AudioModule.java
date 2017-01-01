@@ -33,10 +33,13 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import com.futurice.freesound.BuildConfig;
+import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.app.ForApplication;
 
 import android.content.Context;
 import android.net.Uri;
+
+import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
@@ -45,8 +48,17 @@ import dagger.Provides;
 @Module
 public abstract class AudioModule {
 
+    /*
+     * Current app visual design means that instances are not shared between Activities.
+     */
+
     @Binds
+    @ActivityScope
     abstract AudioPlayer provideAudioPlayer(ExoPlayerAudioPlayer exoPlayerAudioPlayer);
+
+    //
+    // Internal
+    //
 
     @Provides
     static MediaSourceFactory provideMediaSourceFactory(final DataSource.Factory dataSourceFactory,
@@ -57,9 +69,6 @@ public abstract class AudioModule {
                                                null, null);
     }
 
-    //
-    // Internal
-    //
 
     @Binds
     abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
