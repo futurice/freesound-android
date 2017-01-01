@@ -33,7 +33,7 @@ public abstract class BaseViewModel implements ViewModel {
     }
 
     @Override
-    public final void destroy() {
-        dataDisposable.clear();
+    public final void dispose() {
+        dataDisposable.dispose();
     }
 }

@@ -23,17 +23,24 @@ import io.reactivex.disposables.CompositeDisposable;
 public interface ViewModel {
 
     /**
-     * Bind the ViewModel to its data model (typically View data)
+     * Bind the ViewModel to its data model (typically modelled Observable View data).
      */
     void bindToDataModel();
 
     /**
-     * Unbind the ViewModel from its data model
+     * Unbind the ViewModel from its data model.
      */
     void unbindDataModel();
 
-    // TODO This should be protected ideally
+    /**
+     * TODO This should be protected ideally
+     */
     void bind(@NonNull final CompositeDisposable disposables);
 
-    void destroy();
+    /**
+     * Permanently dispose of any resources held.
+     *
+     * The instance cannot be reused after this operation.
+     */
+    void dispose();
 }
