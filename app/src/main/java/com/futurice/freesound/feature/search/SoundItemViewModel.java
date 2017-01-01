@@ -23,19 +23,17 @@ import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
-import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
 
 @AutoFactory
-final class SoundItemViewModel extends BaseViewModel {
+final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     private final Sound sound;
@@ -80,17 +78,8 @@ final class SoundItemViewModel extends BaseViewModel {
         navigator.openSoundDetails(sound);
     }
 
-    void playSound() {
+    void toggleSoundPlayback() {
         audioPlayer.toggle(sound.previews().lowQualityMp3Url());
     }
 
-    void stopPreviewPlayback() {
-        audioPlayer.stop();
-    }
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(audioPlayer.getPlayerStateStream()
-                                   .subscribe(v -> Timber.d("#### getPlayerStateStream: %s", v)));
-    }
 }
