@@ -48,9 +48,6 @@ public abstract class AudioModule {
     @Binds
     abstract AudioPlayer provideAudioPlayer(ExoPlayerAudioPlayer exoPlayerAudioPlayer);
 
-    @Binds
-    abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
-
     @Provides
     static MediaSourceFactory provideMediaSourceFactory(final DataSource.Factory dataSourceFactory,
                                                         final ExtractorsFactory extractorsFactory) {
@@ -63,6 +60,9 @@ public abstract class AudioModule {
     //
     // Internal
     //
+
+    @Binds
+    abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
 
     @Provides
     static DataSource.Factory provideDataSourceFactory(@ForApplication Context context) {

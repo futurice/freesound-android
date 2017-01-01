@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
@@ -33,8 +34,9 @@ class SearchFragmentModule {
     @Provides
     @FragmentScope
     static SearchFragmentViewModel provideSearchFragmentViewModel(SearchDataModel searchDataModel,
-                                                                  Navigator navigator) {
-        return new SearchFragmentViewModel(searchDataModel, navigator);
+                                                                  Navigator navigator,
+                                                                  AudioPlayer audioPlayer) {
+        return new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer);
     }
 
     @Provides

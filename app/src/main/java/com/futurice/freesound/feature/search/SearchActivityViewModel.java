@@ -18,7 +18,6 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.analytics.Analytics;
-import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 
@@ -54,9 +53,6 @@ final class SearchActivityViewModel extends BaseViewModel {
     private final SearchDataModel searchDataModel;
 
     @NonNull
-    private final AudioPlayer audioPlayer;
-
-    @NonNull
     private final Analytics analytics;
 
     @NonNull
@@ -64,10 +60,8 @@ final class SearchActivityViewModel extends BaseViewModel {
             .createDefault(NO_SEARCH);
 
     SearchActivityViewModel(@NonNull final SearchDataModel searchDataModel,
-                            @NonNull final AudioPlayer audioPlayer,
                             @NonNull final Analytics analytics) {
         this.searchDataModel = get(searchDataModel);
-        this.audioPlayer = get(audioPlayer);
         this.analytics = get(analytics);
     }
 
@@ -75,7 +69,6 @@ final class SearchActivityViewModel extends BaseViewModel {
     public void bind(@NonNull final CompositeDisposable d) {
         d.add(searchTermOnceAndStream.observeOn(computation())
                                      .distinctUntilChanged()
-                                     .doOnNext(__ -> audioPlayer.stop())
                                      .switchMap(query -> TextUtils.isNotEmpty(query)
                                              ? querySearch(query).toObservable()
                                              : searchDataModel.clear().toObservable())

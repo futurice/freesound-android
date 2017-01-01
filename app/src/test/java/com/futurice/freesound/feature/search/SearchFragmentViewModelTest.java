@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
@@ -35,6 +36,8 @@ import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static polanski.option.Option.ofObj;
 
@@ -46,13 +49,16 @@ public class SearchFragmentViewModelTest {
     @Mock
     private Navigator navigator;
 
+    @Mock
+    private AudioPlayer audioPlayer;
+
     private SearchFragmentViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        viewModel = new SearchFragmentViewModel(searchDataModel, navigator);
+        viewModel = new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer);
     }
 
     @Test
@@ -73,6 +79,30 @@ public class SearchFragmentViewModelTest {
                  .test()
                  .assertValue(ofObj(expectedDisplayableItems(sounds)));
     }
+
+    @Test
+    public void viewModel_stopsAudioPlayback_byDefault() {
+        new Arrangement();
+
+        viewModel.getSoundsOnceAndStream()
+                 .test();
+
+        verify(audioPlayer).stop();
+    }
+
+    @Test
+    public void viewModel_stopsAudioPlayback_whenSearchResultChange() {
+        Arrangement arrangement = new Arrangement();
+        viewModel.getSoundsOnceAndStream()
+                 .test();
+        reset(audioPlayer); // is invoked by default, so reset the mock invocation count.
+
+        arrangement.enqueueSearchResults(ofObj(TestData.sounds(10)));
+
+        verify(audioPlayer).stop();
+    }
+
+    // Helpers
 
     @NonNull
     private static List<DisplayableItem> expectedDisplayableItems(

@@ -63,8 +63,6 @@ public class SearchActivityViewModelTest {
     @Mock
     private SearchDataModel searchDataModel;
 
-    @Mock
-    private AudioPlayer audioPlayer;
 
     @Mock
     private Analytics analytics;
@@ -76,7 +74,7 @@ public class SearchActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
 
-        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
+        viewModel = new SearchActivityViewModel(searchDataModel, analytics);
     }
 
     @Test
@@ -86,15 +84,6 @@ public class SearchActivityViewModelTest {
                             .bind();
 
         verify(searchDataModel).clear();
-    }
-
-    @Test
-    public void viewModel_stopsAudioPlayback_afterBind() {
-        new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
-
-        verify(audioPlayer).stop();
     }
 
     @Test
@@ -110,18 +99,6 @@ public class SearchActivityViewModelTest {
         viewModel.search(DUMMY_QUERY);
 
         verify(analytics).log("SearchPressedEvent");
-    }
-
-    @Test
-    public void search_stopsAudioPlayback() {
-        new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
-        reset(audioPlayer); // stop is called during bind, so reset the mock invocation count
-
-        viewModel.search(DUMMY_QUERY);
-
-        verify(audioPlayer).stop();
     }
 
     @Test

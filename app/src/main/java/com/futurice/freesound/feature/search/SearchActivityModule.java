@@ -18,7 +18,6 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioModule;
-import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.network.api.DefaultFreeSoundSearchService;
@@ -34,9 +33,8 @@ class SearchActivityModule {
     @Provides
     @ActivityScope
     static SearchActivityViewModel provideSearchViewModel(SearchDataModel searchDataModel,
-                                                          AudioPlayer audioPlayer,
                                                           Analytics analytics) {
-        return new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
+        return new SearchActivityViewModel(searchDataModel, analytics);
     }
 
     @Provides

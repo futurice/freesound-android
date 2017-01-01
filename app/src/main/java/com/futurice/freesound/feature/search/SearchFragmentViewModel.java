@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
@@ -40,15 +41,21 @@ final class SearchFragmentViewModel extends BaseViewModel {
     @NonNull
     private final Navigator navigator;
 
+    @NonNull
+    private final AudioPlayer audioPlayer;
+
     SearchFragmentViewModel(@NonNull final SearchDataModel searchDataModel,
-                            @NonNull final Navigator navigator) {
+                            @NonNull final Navigator navigator,
+                            @NonNull final AudioPlayer audioPlayer) {
         this.searchDataModel = get(searchDataModel);
         this.navigator = get(navigator);
+        this.audioPlayer = get(audioPlayer);
     }
 
     @NonNull
     Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
         return searchDataModel.getSearchResultsOnceAndStream()
+                              .doOnNext(__ -> audioPlayer.stop())
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem));
     }
 
