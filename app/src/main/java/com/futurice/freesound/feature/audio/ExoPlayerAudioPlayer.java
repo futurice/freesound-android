@@ -23,13 +23,11 @@ import com.futurice.freesound.utils.Preconditions;
 
 import android.support.annotation.NonNull;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import polanski.option.AtomicOption;
 import polanski.option.Option;
-import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -56,7 +54,7 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     private final MediaSourceFactory mediaSourceFactory;
 
     @NonNull
-    private AtomicReference<Option<String>> currentUrl = new AtomicReference<>(Option.none());
+    private AtomicOption<String> currentUrl = new AtomicOption<>();
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
