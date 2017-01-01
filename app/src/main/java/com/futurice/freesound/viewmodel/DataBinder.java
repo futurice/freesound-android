@@ -20,10 +20,21 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+/**
+ * Provides the facility to bind/unbind to arbitrary data sources.
+ */
 public interface DataBinder {
 
+    /**
+     * Bind to the data source.
+     *
+     * @param disposables a {@link CompositeDisposable} to hold the bindings.
+     */
     void bind(@NonNull CompositeDisposable disposables);
 
+    /**
+     * Unbind from the data source.
+     */
     void unbind();
 
 }

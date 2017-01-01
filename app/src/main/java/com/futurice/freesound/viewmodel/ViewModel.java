@@ -22,8 +22,14 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public interface ViewModel {
 
+    /**
+     * Bind the ViewModel to its data model (typically View data)
+     */
     void bindToDataModel();
 
+    /**
+     * Unbind the ViewModel from its data model
+     */
     void unbindDataModel();
 
     // TODO This should be protected ideally

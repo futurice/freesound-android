@@ -22,6 +22,9 @@ import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Abstracts the view-to-viewmodel binding mechanism from the views associated lifecycle triggers.
+ *
+ * The View should implement a concrete instance to allow it bind to the time-variant (Observable)
+ * values provided by its associated {@link ViewModel}.
  */
 public abstract class BaseLifecycleViewDataBinder implements LifecycleDataBinder {
 
@@ -54,6 +57,11 @@ public abstract class BaseLifecycleViewDataBinder implements LifecycleDataBinder
         disposable.dispose();
     }
 
+    /**
+     * The {@link ViewModel} to which this binder should bind/unbind.
+     *
+     * @return the {@link ViewModel} instance.
+     */
     @NonNull
     public abstract ViewModel viewModel();
 

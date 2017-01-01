@@ -16,13 +16,21 @@
 
 package com.futurice.freesound.viewmodel.viewholder;
 
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.DataBinder;
+import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-abstract class AbstractBindingViewHolder<T extends BaseViewModel> extends RecyclerView.ViewHolder {
+/**
+ * A {@link android.support.v7.widget.RecyclerView.ViewHolder} which supports binding and unbinding
+ * to a {@link ViewModel}.
+ *
+ * @param <T> {@link ViewModel} type
+ */
+abstract class AbstractBindingViewHolder<T extends ViewModel> extends RecyclerView.ViewHolder implements
+                                                                                              DataBinder {
 
     AbstractBindingViewHolder(final View itemView) {
         super(itemView);
