@@ -50,6 +50,8 @@ final class ExoPlayerStateObservable extends Observable<PlayerState> {
 
         @Override
         public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
+            // Strictly speaking, this check is not required because the listener is removed
+            // upon disposal, therefore ExoPlayer won't keep it around to notify of changes.
             if (!isDisposed()) {
                 observer.onNext(PlayerState.create(playWhenReady, playbackState));
             }
