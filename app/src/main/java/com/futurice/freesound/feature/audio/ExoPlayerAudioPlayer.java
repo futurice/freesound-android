@@ -54,7 +54,7 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     private final MediaSourceFactory mediaSourceFactory;
 
     @NonNull
-    private AtomicOption<String> currentUrl = new AtomicOption<>();
+    private final AtomicOption<String> currentUrl = new AtomicOption<>();
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
