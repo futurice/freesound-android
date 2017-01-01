@@ -20,20 +20,20 @@ import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.utils.Preconditions.get;
 
-final class SearchFragmentViewModel extends BaseViewModel {
+final class SearchFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     private final SearchDataModel searchDataModel;
@@ -55,8 +55,9 @@ final class SearchFragmentViewModel extends BaseViewModel {
     @NonNull
     Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
         return searchDataModel.getSearchResultsOnceAndStream()
-                              .doOnNext(__ -> audioPlayer.stop())
-                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem));
+                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
+                              .observeOn(AndroidSchedulers.mainThread())
+                              .doOnNext(__ -> audioPlayer.stop());
     }
 
     @NonNull
@@ -69,11 +70,6 @@ final class SearchFragmentViewModel extends BaseViewModel {
 
     void openSoundDetails(@NonNull final Sound sound) {
         navigator.openSoundDetails(get(sound));
-    }
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable d) {
-        // Nothing
     }
 
 }
