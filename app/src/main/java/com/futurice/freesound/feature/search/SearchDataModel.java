@@ -38,5 +38,4 @@ interface SearchDataModel {
 
     @NonNull
     Completable clear();
-
 }
