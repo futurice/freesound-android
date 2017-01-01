@@ -75,6 +75,7 @@ final class SearchActivityViewModel extends BaseViewModel {
     public void bind(@NonNull final CompositeDisposable d) {
         d.add(searchTermOnceAndStream.observeOn(computation())
                                      .distinctUntilChanged()
+                                     .doOnNext(__ -> audioPlayer.stop())
                                      .switchMap(query -> TextUtils.isNotEmpty(query)
                                              ? querySearch(query).toObservable()
                                              : searchDataModel.clear().toObservable())

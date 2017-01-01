@@ -50,6 +50,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -79,7 +80,7 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
-    public void viewModel_clearsSearchDataModel_byDefault() {
+    public void viewModel_clearsSearchDataModel_afterBind() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
                             .bind();
@@ -88,10 +89,39 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
+    public void viewModel_stopsAudioPlayback_afterBind() {
+        new ArrangeBuilder().withSuccessfulSearchResultStream()
+                            .act()
+                            .bind();
+
+        verify(audioPlayer).stop();
+    }
+
+    @Test
+    public void clear_isDisabled_afterInitialized() {
+        viewModel.isClearEnabledOnceAndStream()
+                 .test()
+                 .assertValue(false)
+                 .assertNotTerminated();
+    }
+
+    @Test
     public void search_emitsAnalyticsEvent() {
         viewModel.search(DUMMY_QUERY);
 
         verify(analytics).log("SearchPressedEvent");
+    }
+
+    @Test
+    public void search_stopsAudioPlayback() {
+        new ArrangeBuilder().withSuccessfulSearchResultStream()
+                            .act()
+                            .bind();
+        reset(audioPlayer); // stop is called during bind, so reset the mock invocation count
+
+        viewModel.search(DUMMY_QUERY);
+
+        verify(audioPlayer).stop();
     }
 
     @Test
@@ -103,7 +133,6 @@ public class SearchActivityViewModelTest {
         viewModel.search(DUMMY_QUERY);
 
         verify(searchDataModel).querySearch(eq(DUMMY_QUERY));
-
     }
 
     @Test
@@ -152,14 +181,6 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
-    public void clear_isDisabled_byDefault() {
-        viewModel.isClearEnabledOnceAndStream()
-                 .test()
-                 .assertValue(false)
-                 .assertNotTerminated();
-    }
-
-    @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
@@ -179,9 +200,8 @@ public class SearchActivityViewModelTest {
                             .act()
                             .bind();
 
-        final TestObserver<Boolean> ts = viewModel
-                .isClearEnabledOnceAndStream()
-                .test();
+        final TestObserver<Boolean> ts = viewModel.isClearEnabledOnceAndStream()
+                                                  .test();
 
         viewModel.search(DUMMY_QUERY);
         viewModel.search("");
