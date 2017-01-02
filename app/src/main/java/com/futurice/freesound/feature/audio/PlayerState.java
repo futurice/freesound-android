@@ -20,18 +20,20 @@ import com.google.auto.value.AutoValue;
 
 import android.support.annotation.NonNull;
 
+import polanski.option.Option;
+
 @AutoValue
-abstract class PlayerState {
-
-    abstract boolean playWhenReady();
-
-    /**
-     * See {@link com.google.android.exoplayer2.ExoPlayer} {@code STATE}
-     */
-    abstract int playbackState();
+public abstract class PlayerState {
 
     @NonNull
-    static PlayerState create(final boolean playWhenReady, final int playbackState) {
-        return new AutoValue_PlayerState(playWhenReady, playbackState);
+    abstract ExoPlayerState playerState();
+
+    @NonNull
+    abstract Option<String> id();
+
+    @NonNull
+    static PlayerState create(@NonNull final ExoPlayerState exoPlayerState,
+                              @NonNull final Option<String> id) {
+        return new AutoValue_PlayerState(exoPlayerState, id);
     }
 }

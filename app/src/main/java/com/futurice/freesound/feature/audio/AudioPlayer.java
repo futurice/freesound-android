@@ -28,10 +28,10 @@ public interface AudioPlayer {
     /**
      * Reports the initial player state and subsequent changes.
      *
-     * @return A stream of the {@link UrlPlayerState}.
+     * @return A stream of the {@link PlayerState}.
      */
     @NonNull
-    Observable<UrlPlayerState> getPlayerStateStream();
+    Observable<PlayerState> getPlayerStateStream();
 
     /**
      * Toggles the playback for the given URL.

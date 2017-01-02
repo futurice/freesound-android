@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.auto.factory.AutoFactory;
 
 import android.support.annotation.NonNull;
 
@@ -30,7 +31,8 @@ import static com.futurice.freesound.utils.Preconditions.get;
  *
  * Based upon techniques used in RxBinding library.
  */
-final class ExoPlayerStateObservable extends Observable<PlayerState> {
+@AutoFactory
+final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
 
     @NonNull
     private final ExoPlayer exoPlayer;
@@ -40,16 +42,16 @@ final class ExoPlayerStateObservable extends Observable<PlayerState> {
     }
 
     @Override
-    protected void subscribeActual(final Observer<? super PlayerState> observer) {
+    protected void subscribeActual(final Observer<? super ExoPlayerState> observer) {
         Listener listener = new Listener(exoPlayer, observer);
         observer.onSubscribe(listener);
         exoPlayer.addListener(listener);
     }
 
-    private static class Listener extends BaseAudioPlayerEventListener<PlayerState> {
+    private static class Listener extends BaseAudioPlayerEventListener<ExoPlayerState> {
 
         Listener(@NonNull final ExoPlayer exoPlayer,
-                 @NonNull Observer<? super PlayerState> observer) {
+                 @NonNull Observer<? super ExoPlayerState> observer) {
             super(exoPlayer, observer);
         }
 
@@ -58,7 +60,7 @@ final class ExoPlayerStateObservable extends Observable<PlayerState> {
             // Strictly speaking, this check is not required because the listener is removed
             // upon disposal, therefore ExoPlayer won't keep it around to notify of changes.
             if (!isDisposed()) {
-                observer.onNext(PlayerState.create(playWhenReady, playbackState));
+                observer.onNext(ExoPlayerState.create(playWhenReady, playbackState));
             }
         }
 

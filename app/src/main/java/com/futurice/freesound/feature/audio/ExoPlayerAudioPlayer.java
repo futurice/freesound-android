@@ -50,6 +50,8 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     @NonNull
     private final ExoPlayer exoPlayer;
 
+    private final ExoPlayerStateObservableFactory playerStateobservableFactory;
+
     @NonNull
     private final MediaSourceFactory mediaSourceFactory;
 
@@ -58,17 +60,20 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
+                         @NonNull final ExoPlayerStateObservableFactory playerStateobservableFactory,
                          @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.exoPlayer = get(exoPlayer);
+        this.playerStateobservableFactory = get(playerStateobservableFactory);
         this.mediaSourceFactory = get(mediaSourceFactory);
     }
 
     @Override
     @NonNull
-    public Observable<UrlPlayerState> getPlayerStateStream() {
-        return ExoPlayerObservables.playerState(exoPlayer)
-                                   .startWith(currentPlayerState())
-                                   .map(state -> UrlPlayerState.create(state, currentUrl.get()));
+    public Observable<PlayerState> getPlayerStateStream() {
+        return playerStateobservableFactory.create(exoPlayer)
+                                           .startWith(currentPlayerState())
+                                           .map(state -> PlayerState.create(state,
+                                                                            currentUrl.get()));
     }
 
     @Override
@@ -101,8 +106,8 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     }
 
     @NonNull
-    private PlayerState currentPlayerState() {
-        return PlayerState.create(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState());
+    private ExoPlayerState currentPlayerState() {
+        return ExoPlayerState.create(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState());
     }
 
     private static boolean isIdle(final int state) {

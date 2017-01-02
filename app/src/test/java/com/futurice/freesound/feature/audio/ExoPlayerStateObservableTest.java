@@ -66,18 +66,18 @@ public class ExoPlayerStateObservableTest {
 
     @Test
     public void emitsCallbackValue() {
-        TestObserver<PlayerState> test = exoPlayerStateObservable.test();
+        TestObserver<ExoPlayerState> test = exoPlayerStateObservable.test();
 
         new ExoPlayerTestEventGenerator()
                 .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
 
-        test.assertValue(PlayerState.create(true, ExoPlayer.STATE_IDLE))
+        test.assertValue(ExoPlayerState.create(true, ExoPlayer.STATE_IDLE))
             .assertNotTerminated();
     }
 
     @Test
     public void doesNotEmitsAfterDisposed() {
-        TestObserver<PlayerState> test = exoPlayerStateObservable.test();
+        TestObserver<ExoPlayerState> test = exoPlayerStateObservable.test();
         test.dispose();
 
         new ExoPlayerTestEventGenerator()
@@ -94,7 +94,8 @@ public class ExoPlayerStateObservableTest {
             verify(exoPlayer).addListener(listenerCaptor.capture());
         }
 
-        ExoPlayerTestEventGenerator invokeListenerCallback(boolean playWhenReady, int playbackState) {
+        ExoPlayerTestEventGenerator invokeListenerCallback(boolean playWhenReady,
+                                                           int playbackState) {
             listenerCaptor.getValue().onPlayerStateChanged(playWhenReady, playbackState);
             return this;
         }
