@@ -25,6 +25,11 @@ import io.reactivex.Observer;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
+/**
+ * Make an Observable from the ExoPlayer player state.
+ *
+ * Based upon techniques used in RxBinding library.
+ */
 final class ExoPlayerStateObservable extends Observable<PlayerState> {
 
     @NonNull
