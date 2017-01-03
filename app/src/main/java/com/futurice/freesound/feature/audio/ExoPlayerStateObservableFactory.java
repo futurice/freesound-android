@@ -27,7 +27,7 @@ import io.reactivex.Observable;
 class ExoPlayerStateObservableFactory {
 
     @Inject
-    public ExoPlayerStateObservableFactory() {
+    ExoPlayerStateObservableFactory() {
     }
 
     @NonNull
