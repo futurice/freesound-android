@@ -39,8 +39,6 @@ import com.futurice.freesound.inject.app.ForApplication;
 import android.content.Context;
 import android.net.Uri;
 
-import javax.inject.Singleton;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
