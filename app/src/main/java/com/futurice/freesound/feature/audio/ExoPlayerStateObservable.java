@@ -17,7 +17,6 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.auto.factory.AutoFactory;
 
 import android.support.annotation.NonNull;
 
@@ -31,7 +30,6 @@ import static com.futurice.freesound.utils.Preconditions.get;
  *
  * Based upon techniques used in RxBinding library.
  */
-@AutoFactory
 final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
 
     @NonNull

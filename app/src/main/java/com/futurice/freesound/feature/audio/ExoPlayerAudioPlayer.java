@@ -50,7 +50,8 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
     @NonNull
     private final ExoPlayer exoPlayer;
 
-    private final ExoPlayerStateObservableFactory playerStateobservableFactory;
+    @NonNull
+    private final ExoPlayerStateObservableFactory playerStateObservableFactory;
 
     @NonNull
     private final MediaSourceFactory mediaSourceFactory;
@@ -60,17 +61,17 @@ final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
-                         @NonNull final ExoPlayerStateObservableFactory playerStateobservableFactory,
+                         @NonNull final ExoPlayerStateObservableFactory playerStateObservableFactory,
                          @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.exoPlayer = get(exoPlayer);
-        this.playerStateobservableFactory = get(playerStateobservableFactory);
+        this.playerStateObservableFactory = get(playerStateObservableFactory);
         this.mediaSourceFactory = get(mediaSourceFactory);
     }
 
     @Override
     @NonNull
     public Observable<PlayerState> getPlayerStateStream() {
-        return playerStateobservableFactory.create(exoPlayer)
+        return playerStateObservableFactory.create(exoPlayer)
                                            .startWith(currentPlayerState())
                                            .map(state -> PlayerState.create(state,
                                                                             currentUrl.get()));
