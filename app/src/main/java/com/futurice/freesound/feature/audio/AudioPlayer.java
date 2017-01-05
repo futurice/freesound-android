@@ -26,12 +26,17 @@ import io.reactivex.Observable;
 public interface AudioPlayer {
 
     /**
+     * Initialize the player.
+     */
+    void init();
+
+    /**
      * Reports the initial player state and subsequent changes.
      *
      * @return A stream of the {@link PlayerState}.
      */
     @NonNull
-    Observable<PlayerState> getPlayerStateStream();
+    Observable<PlayerState> getPlayerStateOnceAndStream();
 
     /**
      * Toggles the playback for the given URL.
@@ -40,10 +45,10 @@ public interface AudioPlayer {
      *
      * @param url the audio source URL.
      */
-    void toggle(@NonNull String url);
+    void togglePlayback(@NonNull String url);
 
     /**
      * Stops the current playback and reset state.
      */
-    void stop();
+    void stopPlayback();
 }

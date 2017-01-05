@@ -79,7 +79,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     void toggleSoundPlayback() {
-        audioPlayer.toggle(sound.previews().lowQualityMp3Url());
+        audioPlayer.togglePlayback(sound.previews().lowQualityMp3Url());
     }
 
 }

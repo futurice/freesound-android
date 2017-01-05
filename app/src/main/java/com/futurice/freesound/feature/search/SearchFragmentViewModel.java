@@ -55,7 +55,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
         return searchDataModel.getSearchResultsOnceAndStream()
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
-                              .doOnNext(__ -> audioPlayer.stop());
+                              .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
     @NonNull
@@ -67,7 +67,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     }
 
     void stopPlayback() {
-        audioPlayer.stop();
+        audioPlayer.stopPlayback();
     }
 
     void openSoundDetails(@NonNull final Sound sound) {

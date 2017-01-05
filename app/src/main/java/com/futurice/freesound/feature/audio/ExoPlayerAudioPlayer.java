@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.audio;
 import com.google.android.exoplayer2.ExoPlayer;
 
 import com.futurice.freesound.common.Releaseable;
+import com.futurice.freesound.functional.Functions;
 import com.futurice.freesound.utils.Preconditions;
 
 import android.support.annotation.NonNull;
@@ -26,8 +27,11 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.SerialDisposable;
+import io.reactivex.subjects.PublishSubject;
 import polanski.option.AtomicOption;
 import polanski.option.Option;
+import timber.log.Timber;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
@@ -47,68 +51,114 @@ import static com.futurice.freesound.utils.Preconditions.get;
  */
 final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
 
+    private enum ToggleAction {
+        PAUSE,
+        UNPAUSE,
+        PLAY,
+    }
+
     @NonNull
     private final ExoPlayer exoPlayer;
 
     @NonNull
-    private final ExoPlayerStateObservableFactory playerStateObservableFactory;
+    private final Observable<ExoPlayerState> exoPlayerStateObservable;
 
     @NonNull
     private final MediaSourceFactory mediaSourceFactory;
+
+    @NonNull
+    private final SerialDisposable playerStateDisposable = new SerialDisposable();
+
+    @NonNull
+    private final PublishSubject<String> toggleUrlStream = PublishSubject.create();
 
     @NonNull
     private final AtomicOption<String> currentUrl = new AtomicOption<>();
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
-                         @NonNull final ExoPlayerStateObservableFactory playerStateObservableFactory,
+                         @NonNull final Observable<ExoPlayerState> exoPlayerStateObservable,
                          @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.exoPlayer = get(exoPlayer);
-        this.playerStateObservableFactory = get(playerStateObservableFactory);
+        this.exoPlayerStateObservable = get(exoPlayerStateObservable);
         this.mediaSourceFactory = get(mediaSourceFactory);
     }
 
     @Override
+    public void init() {
+        playerStateDisposable
+                .set(toggleUrlStream.concatMap(url -> exoPlayerStateObservable
+                        .take(1)
+                        .map(exoPlayerState -> toToggleAction(url, exoPlayerState))
+                        .doOnNext(action -> handleToggleAction(action, url)))
+                                    .subscribe(Functions.nothing1(),
+                                               e -> Timber.e(e, "Fatal error toggling playback")));
+    }
+
+    @Override
     @NonNull
-    public Observable<PlayerState> getPlayerStateStream() {
-        return playerStateObservableFactory.create(exoPlayer)
-                                           .startWith(currentPlayerState())
-                                           .map(state -> PlayerState.create(state,
-                                                                            currentUrl.get()));
+    public Observable<PlayerState> getPlayerStateOnceAndStream() {
+        return exoPlayerStateObservable.map(state -> PlayerState.create(state, currentUrl.get()));
     }
 
     @Override
-    public void toggle(@NonNull final String url) {
+    public void togglePlayback(@NonNull final String url) {
         Preconditions.checkNotNull(url);
-
-        final int state = exoPlayer.getPlaybackState();
-        final boolean hasSourceUrlChanged = hasSourceUrlChanged(url);
-
-        currentUrl.set(Option.ofObj(url));
-
-        if (isIdle(state) || hasSourceUrlChanged) {
-            exoPlayer.prepare(mediaSourceFactory.create(get(url)));
-            exoPlayer.setPlayWhenReady(true);
-        } else {
-            exoPlayer.setPlayWhenReady(!exoPlayer.getPlayWhenReady());
-        }
-
+        toggleUrlStream.onNext(url);
     }
 
     @Override
-    public void stop() {
-        currentUrl.set(Option.none());
-        exoPlayer.stop();
+    public void stopPlayback() {
+        stop();
     }
 
     @Override
     public void release() {
+        playerStateDisposable.dispose();
         exoPlayer.release();
     }
 
     @NonNull
-    private ExoPlayerState currentPlayerState() {
-        return ExoPlayerState.create(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState());
+    private ToggleAction toToggleAction(@NonNull final String url,
+                                        @NonNull final ExoPlayerState exoPlayerState) {
+        if (isIdle(exoPlayerState.playbackState()) || hasSourceUrlChanged(url)) {
+            return ToggleAction.PLAY;
+        } else {
+            return exoPlayerState.playWhenReady() ? ToggleAction.PAUSE : ToggleAction.UNPAUSE;
+        }
+    }
+
+    private void handleToggleAction(@NonNull final ToggleAction action,
+                                    @NonNull final String url) {
+        Timber.v("Action: %s, URL: %s", action, url);
+        switch (action) {
+            case PLAY:
+                play(url);
+                break;
+            case PAUSE:
+            case UNPAUSE:
+                toggle(action);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported playback action: "
+                                                   + action);
+        }
+
+    }
+
+    private void play(@NonNull final String url) {
+        exoPlayer.prepare(mediaSourceFactory.create(get(url)));
+        exoPlayer.setPlayWhenReady(true);
+        currentUrl.set(Option.ofObj(url));
+    }
+
+    private void toggle(@NonNull final ToggleAction action) {
+        exoPlayer.setPlayWhenReady(action != ToggleAction.PAUSE);
+    }
+
+    private void stop() {
+        currentUrl.set(Option.none());
+        exoPlayer.stop();
     }
 
     private static boolean isIdle(final int state) {

@@ -42,6 +42,7 @@ import android.net.Uri;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Observable;
 
 @Module
 public abstract class AudioModule {
@@ -69,6 +70,11 @@ public abstract class AudioModule {
 
     @Binds
     abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
+
+    @Provides
+    static Observable<ExoPlayerState> provideExoPlayerStateObservable(ExoPlayer exoPlayer) {
+        return new ExoPlayerStateObservable(exoPlayer);
+    }
 
     @Provides
     static DataSource.Factory provideDataSourceFactory(@ForApplication Context context) {

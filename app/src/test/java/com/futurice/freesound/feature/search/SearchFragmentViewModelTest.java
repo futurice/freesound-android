@@ -87,7 +87,7 @@ public class SearchFragmentViewModelTest {
         viewModel.getSoundsOnceAndStream()
                  .test();
 
-        verify(audioPlayer).stop();
+        verify(audioPlayer).stopPlayback();
     }
 
     @Test
@@ -99,14 +99,14 @@ public class SearchFragmentViewModelTest {
 
         arrangement.enqueueSearchResults(ofObj(TestData.sounds(10)));
 
-        verify(audioPlayer).stop();
+        verify(audioPlayer).stopPlayback();
     }
 
     @Test
     public void stopPlayback_stopsAudioPlayback() {
         viewModel.stopPlayback();
 
-        verify(audioPlayer).stop();
+        verify(audioPlayer).stopPlayback();
     }
 
     // Helpers
