@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.feature.audio;
 
+import com.futurice.freesound.common.Releasable;
+
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
@@ -23,7 +25,7 @@ import io.reactivex.Observable;
 /**
  * An AudioPlayer for URL based sources.
  */
-public interface AudioPlayer {
+public interface AudioPlayer extends Releasable {
 
     /**
      * Initialize the player.
@@ -51,4 +53,9 @@ public interface AudioPlayer {
      * Stops the current playback and reset state.
      */
     void stopPlayback();
+
+    /**
+     * Dispose of the player, the instance cannot be reused.
+     */
+    void release();
 }

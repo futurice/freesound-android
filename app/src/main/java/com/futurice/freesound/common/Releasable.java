@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.common;
 
-public interface Releaseable {
+public interface Releasable {
 
     void release();
 }

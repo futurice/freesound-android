@@ -29,6 +29,7 @@ import io.reactivex.observers.TestObserver;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 public class ExoPlayerStateObservableTest {
 
@@ -42,7 +43,7 @@ public class ExoPlayerStateObservableTest {
 
     public ExoPlayerStateObservableTest() {
         MockitoAnnotations.initMocks(this);
-        exoPlayerStateObservable = new ExoPlayerStateObservable(exoPlayer);
+        exoPlayerStateObservable = new ExoPlayerStateObservable(exoPlayer, false);
     }
 
     @Test
@@ -66,24 +67,48 @@ public class ExoPlayerStateObservableTest {
 
     @Test
     public void emitsCallbackValue() {
-        TestObserver<ExoPlayerState> test = exoPlayerStateObservable.test();
+        TestObserver<ExoPlayerState> testObserver = exoPlayerStateObservable.test();
 
         new ExoPlayerTestEventGenerator()
                 .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
 
-        test.assertValue(ExoPlayerState.create(true, ExoPlayer.STATE_IDLE))
-            .assertNotTerminated();
+        testObserver.assertValue(ExoPlayerState.create(true, ExoPlayer.STATE_IDLE))
+                    .assertNotTerminated();
     }
 
     @Test
-    public void doesNotEmitsAfterDisposed() {
-        TestObserver<ExoPlayerState> test = exoPlayerStateObservable.test();
-        test.dispose();
+    public void doesNotEmitAfterDisposed() {
+        TestObserver<ExoPlayerState> testObserver = exoPlayerStateObservable.test();
+        testObserver.dispose();
 
         new ExoPlayerTestEventGenerator()
                 .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
 
-        test.assertNoValues();
+        testObserver.assertNoValues();
+    }
+
+    // Special tests for initial emit
+
+    @Test
+    public void doesNotEmitInitialValue_whenNotSet() {
+        when(exoPlayer.getPlayWhenReady()).thenReturn(true);
+        when(exoPlayer.getPlaybackState()).thenReturn(1000);
+        ExoPlayerStateObservable observable = new ExoPlayerStateObservable(exoPlayer, false);
+
+        TestObserver<ExoPlayerState> testObserver = observable.test();
+
+        testObserver.assertNoValues();
+    }
+
+    @Test
+    public void emitsInitialValue_whenSet() {
+        when(exoPlayer.getPlayWhenReady()).thenReturn(true);
+        when(exoPlayer.getPlaybackState()).thenReturn(1000);
+        ExoPlayerStateObservable observable = new ExoPlayerStateObservable(exoPlayer, true);
+
+        TestObserver<ExoPlayerState> testObserver = observable.test();
+
+        testObserver.assertValue(ExoPlayerState.create(true, 1000));
     }
 
     // Helpers

@@ -58,19 +58,19 @@ final class SearchFragmentViewModel extends SimpleViewModel {
                               .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
-    @NonNull
-    private static List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
-        return Observable.fromIterable(sounds)
-                         .map(sound -> DisplayableItem.create(sound, SOUND))
-                         .toList()
-                         .blockingGet();
-    }
-
     void stopPlayback() {
         audioPlayer.stopPlayback();
     }
 
     void openSoundDetails(@NonNull final Sound sound) {
         navigator.openSoundDetails(get(sound));
+    }
+
+    @NonNull
+    private static List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
+        return Observable.fromIterable(sounds)
+                         .map(sound -> DisplayableItem.create(sound, SOUND))
+                         .toList()
+                         .blockingGet();
     }
 }

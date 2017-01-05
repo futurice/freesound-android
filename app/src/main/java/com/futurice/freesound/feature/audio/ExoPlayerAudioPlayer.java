@@ -18,7 +18,6 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import com.futurice.freesound.common.Releaseable;
 import com.futurice.freesound.functional.Functions;
 import com.futurice.freesound.utils.Preconditions;
 
@@ -49,7 +48,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
  * as the underlying ExoPlayer instance. Otherwise you could arrive at a situation where ExoPlayer
  * is playing a source and this instance has no current URL defined.
  */
-final class ExoPlayerAudioPlayer implements Releaseable, AudioPlayer {
+final class ExoPlayerAudioPlayer implements AudioPlayer {
 
     private enum ToggleAction {
         PAUSE,

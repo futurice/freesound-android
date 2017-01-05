@@ -41,8 +41,8 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
         this(exoPlayer, true);
     }
 
-    private ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer,
-                                     final boolean emitInitial) {
+    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer,
+                             final boolean emitInitial) {
         this.exoPlayer = get(exoPlayer);
         this.emitInitial = emitInitial;
     }

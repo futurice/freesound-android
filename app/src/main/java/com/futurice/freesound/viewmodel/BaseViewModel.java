@@ -32,9 +32,12 @@ public abstract class BaseViewModel implements ViewModel {
     @Override
     public final void unbindDataModel() {
         dataDisposable.clear();
+        unbind();
     }
 
     protected abstract void bind(@NonNull final CompositeDisposable disposables);
+
+    protected abstract void unbind();
 
     @Override
     public final void dispose() {

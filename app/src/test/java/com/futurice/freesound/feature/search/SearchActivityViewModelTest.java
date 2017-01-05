@@ -50,7 +50,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,6 +62,8 @@ public class SearchActivityViewModelTest {
     @Mock
     private SearchDataModel searchDataModel;
 
+    @Mock
+    private AudioPlayer audioPlayer;
 
     @Mock
     private Analytics analytics;
@@ -74,7 +75,25 @@ public class SearchActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
 
-        viewModel = new SearchActivityViewModel(searchDataModel, analytics);
+        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
+    }
+
+    @Test
+    public void onBind_initializesAudioPlayer() {
+        new ArrangeBuilder()
+                .act()
+                .bind();
+
+        verify(audioPlayer).init();
+    }
+
+    @Test
+    public void unBind_releasesAudioPlayer() {
+        new ArrangeBuilder()
+                .act()
+                .unbind();
+
+        verify(audioPlayer).release();
     }
 
     @Test
@@ -301,12 +320,18 @@ public class SearchActivityViewModelTest {
         Act act() {
             return new Act();
         }
+
     }
 
     private class Act {
 
         Act bind() {
             viewModel.bindToDataModel();
+            return this;
+        }
+
+        Act unbind() {
+            viewModel.unbind();
             return this;
         }
 
