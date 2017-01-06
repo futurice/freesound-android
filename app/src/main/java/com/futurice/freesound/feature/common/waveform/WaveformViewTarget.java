@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.view;
+package com.futurice.freesound.feature.common.waveform;
 
-import com.futurice.freesound.feature.common.WaveformExtractor;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

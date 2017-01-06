@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common;
+package com.futurice.freesound.feature.common.waveform;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 
-public final class BlackBackgroundWaveformExtractor extends WaveformExtractor {
+public interface WaveformRender {
 
-    @Override
-    public boolean isWaveform(@NonNull final Bitmap bitmap, final int x, final int y) {
-        return bitmap.getPixel(x, y) != Color.BLACK;
-    }
+    void setWaveform(@NonNull float[] waveform);
+
+    void clear();
 }
+

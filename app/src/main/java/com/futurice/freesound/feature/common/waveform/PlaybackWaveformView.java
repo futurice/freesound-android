@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.view;
+package com.futurice.freesound.feature.common.waveform;
 
 import com.futurice.freesound.R;
 

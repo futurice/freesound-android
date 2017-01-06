@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
-import com.futurice.freesound.feature.common.view.PlaybackWaveformView;
-import com.futurice.freesound.feature.common.view.WaveformViewTarget;
+import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
+import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
+import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;

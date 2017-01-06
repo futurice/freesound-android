@@ -54,7 +54,7 @@
                 android:layout_marginBottom="16dp"
                 tools:text="Demo description"/>
 
-        <com.futurice.freesound.feature.common.view.PlaybackWaveformView
+        <com.futurice.freesound.feature.common.waveform.PlaybackWaveformView
                 android:id="@+id/playbackWaveformView_soundItem"
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
