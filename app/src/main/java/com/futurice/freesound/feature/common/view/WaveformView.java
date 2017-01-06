@@ -76,7 +76,7 @@ public class WaveformView extends View {
         }
     }
 
-    public void setWaveform(float[] waveform) {
+    public void setWaveform(@NonNull float[] waveform) {
         this.waveform = waveform.clone();
         invalidate();
     }

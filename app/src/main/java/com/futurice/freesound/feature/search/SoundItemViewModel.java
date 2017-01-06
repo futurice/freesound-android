@@ -74,6 +74,11 @@ final class SoundItemViewModel extends SimpleViewModel {
         return Single.just(sound.description());
     }
 
+    @NonNull
+    Single<Float> duration() {
+        return Single.just(sound.duration());
+    }
+
     void openDetails() {
         navigator.openSoundDetails(sound);
     }

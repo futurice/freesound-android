@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
-import com.futurice.freesound.feature.common.view.WaveformView;
+import com.futurice.freesound.feature.common.view.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.view.WaveformViewTarget;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -45,14 +46,15 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     @BindView(R.id.textView_description)
     TextView descriptionTextView;
 
-    @BindView(R.id.waveformView_soundItem)
-    WaveformView waveFormView;
-
-    @NonNull
-    private final Target waveformViewTarget;
+    @Nullable
+    @BindView(R.id.playbackWaveformView_soundItem)
+    PlaybackWaveformView playbackWaveformView;
 
     @NonNull
     private final Picasso picasso;
+
+    @NonNull
+    private final Target waveformViewTarget;
 
     @NonNull
     private final DataBinder viewDataBinder = new DataBinder() {
@@ -70,6 +72,13 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
                               .subscribe(get(descriptionTextView)::setText,
                                          e -> Timber
                                                  .e(e, "Unable to set SoundItem description")));
+
+            disposables.add(vm.duration()
+                              .observeOn(mainThread())
+                              .subscribe(
+                                      duration -> get(playbackWaveformView)
+                                              .setMetadata(Math.round(duration)),
+                                      e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
             disposables.add(vm.thumbnailImageUrl()
                               .observeOn(mainThread())
