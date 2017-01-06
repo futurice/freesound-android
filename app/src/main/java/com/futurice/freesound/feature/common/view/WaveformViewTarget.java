@@ -29,21 +29,21 @@ import static com.futurice.freesound.utils.Preconditions.get;
 public class WaveformViewTarget implements Target {
 
     @NonNull
-    private final WaveformView waveformView;
+    private final WaveformRender mWaveformRender;
 
     @NonNull
     private final WaveformExtractor waveformExtractor;
 
-    public WaveformViewTarget(@NonNull final WaveformView waveformView,
+    public WaveformViewTarget(@NonNull final WaveformRender waveformRender,
                               @NonNull final WaveformExtractor waveformExtractor) {
-        this.waveformView = get(waveformView);
+        this.mWaveformRender = get(waveformRender);
         this.waveformExtractor = get(waveformExtractor);
     }
 
     @Override
     public void onBitmapLoaded(final Bitmap bitmap, final Picasso.LoadedFrom from) {
         float[] waveform = waveformExtractor.extract(bitmap);
-        waveformView.setWaveform(waveform);
+        mWaveformRender.setWaveform(waveform);
     }
 
     @Override
@@ -53,6 +53,5 @@ public class WaveformViewTarget implements Target {
 
     @Override
     public void onPrepareLoad(final Drawable placeHolderDrawable) {
-        waveformView.clear();
     }
 }

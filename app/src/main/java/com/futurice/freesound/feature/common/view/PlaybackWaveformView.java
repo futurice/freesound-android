@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.common.view;
 import com.futurice.freesound.R;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
@@ -27,7 +28,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlaybackWaveformView extends FrameLayout {
+public class PlaybackWaveformView extends FrameLayout implements WaveformRender {
 
     @BindView(R.id.waveformView_soundItem)
     WaveformView waveformView;
@@ -59,24 +60,22 @@ public class PlaybackWaveformView extends FrameLayout {
     }
 
     private void init() {
-
-        //Inflate xml resource, pass "this" as the parent, we use <merge> tag in xml to avoid
-        //redundant parent, otherwise a LinearLayout will be added to this LinearLayout ending up
-        //with two view groups
         inflate(getContext(), R.layout.view_playbackwaveform, this);
-
         ButterKnife.bind(this);
     }
 
-    public void setWaveform(final float[] waveform) {
+    @NonNull
+    public void setWaveform(@NonNull final float[] waveform) {
         waveformView.setWaveform(waveform);
+    }
+
+    @NonNull
+    public void clear() {
+        waveformView.clear();
+        durationTextView.setText("");
     }
 
     public void setMetadata(final int duration) {
         durationTextView.setText(DateUtils.formatElapsedTime(duration));
-    }
-
-    public void clear() {
-        waveformView.clear();
     }
 }

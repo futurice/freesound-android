@@ -33,7 +33,7 @@ import android.view.View;
 
 import timber.log.Timber;
 
-public class WaveformView extends View {
+public class WaveformView extends View implements WaveformRender {
 
     private static final boolean VERBOSE_LOGGING = true;
 
@@ -76,11 +76,13 @@ public class WaveformView extends View {
         }
     }
 
+    @Override
     public void setWaveform(@NonNull float[] waveform) {
         this.waveform = waveform.clone();
         invalidate();
     }
 
+    @Override
     public void clear() {
         waveform = null;
         invalidate();
