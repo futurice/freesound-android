@@ -64,12 +64,12 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
         ButterKnife.bind(this);
     }
 
-    @NonNull
+    @Override
     public void setWaveform(@NonNull final float[] waveform) {
         waveformView.setWaveform(waveform);
     }
 
-    @NonNull
+    @Override
     public void clear() {
         waveformView.clear();
         durationTextView.setText("");
