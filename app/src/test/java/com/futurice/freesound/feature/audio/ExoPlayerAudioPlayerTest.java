@@ -177,7 +177,7 @@ public class ExoPlayerAudioPlayerTest {
 
         InOrder inOrder = inOrder(exoPlayer, mediaSourceFactory);
         inOrder.verify(mediaSourceFactory).create(url);
-        inOrder.verify(exoPlayer).setPlayWhenReady((true));
+        inOrder.verify(exoPlayer).setPlayWhenReady(true);
         inOrder.verify(exoPlayer).setPlayWhenReady(false);
         inOrder.verify(exoPlayer).setPlayWhenReady(true);
     }
