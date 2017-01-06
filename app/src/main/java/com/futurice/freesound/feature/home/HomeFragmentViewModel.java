@@ -17,16 +17,15 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.network.api.model.UserResult;
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 
 import static com.futurice.freesound.utils.Preconditions.get;
 
-class HomeFragmentViewModel extends BaseViewModel {
+final class HomeFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     private final Single<UserResult> homeUser;
@@ -34,11 +33,6 @@ class HomeFragmentViewModel extends BaseViewModel {
     HomeFragmentViewModel(@NonNull final UserDataModel userDataModel) {
         this.homeUser = get(userDataModel).getHomeUser()
                                           .cache();
-    }
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-
     }
 
     @NonNull

@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.viewmodel.viewholder;
 
-import com.futurice.freesound.viewmodel.BaseViewModel;
 import com.futurice.freesound.viewmodel.DataBinder;
+import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -29,7 +29,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import static com.futurice.freesound.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.utils.Preconditions.get;
 
-public abstract class BaseBindingViewHolder<T extends BaseViewModel>
+/**
+ * Provides the base operations for a binding {@link android.support.v7.widget.RecyclerView.ViewHolder}
+ *
+ * Specific handling is required to support recycling.
+ */
+public abstract class BaseBindingViewHolder<T extends ViewModel>
         extends AbstractBindingViewHolder<T> {
 
     @Nullable
@@ -42,14 +47,12 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
         super(get(view));
     }
 
-    @CallSuper
     @Override
     public final void bind(@NonNull final T viewModel) {
         setAndBindDataModel(get(viewModel));
         bindViewToViewModel();
     }
 
-    @CallSuper
     @Override
     public final void unbind() {
         unbindViewFromViewModel();
@@ -74,7 +77,7 @@ public abstract class BaseBindingViewHolder<T extends BaseViewModel>
     }
 
     private void unbindViewFromViewModel() {
-        // Don't unsubscribe - we need to reuse it!
+        // Don't dispose - we need to reuse it when recycling!
         disposables.clear();
         getViewDataBinder().unbind();
     }

@@ -58,6 +58,7 @@ public final class TestData {
                     .tags(tags(index, (int) (index % 5)))
                     .geotag(geotag(index))
                     .images(images())
+                    .previews(previews())
                     .build();
     }
 
@@ -78,6 +79,7 @@ public final class TestData {
                           .build();
     }
 
+    @NonNull
     public static Sound.Image images() {
         return Sound.Image.builder()
                           .medSizeWaveformUrl("https://url.com/mw")
@@ -85,6 +87,16 @@ public final class TestData {
                           .medSizeSpectralUrl("https://url.com/ms")
                           .largeSizeSpectralUrl("https://url.com/ls")
                           .build();
+    }
+
+    @NonNull
+    public static Sound.Preview previews() {
+        return Sound.Preview.builder()
+                            .lowQualityMp3Url("https://url.com/lqmp3")
+                            .highQualityMp3Url("https://url.com/hqmp3")
+                            .lowQualityOggUrl("https://url.com/lqogg")
+                            .highQualityOggUrl("https://url.com/hgogg")
+                            .build();
     }
 
     @NonNull

@@ -20,6 +20,7 @@ import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 
 import com.futurice.freesound.common.Text;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
@@ -40,10 +41,15 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     private final Navigator navigator;
 
+    @NonNull
+    private final AudioPlayer audioPlayer;
+
     SoundItemViewModel(@NonNull final Sound sound,
-                       @Provided @NonNull final Navigator navigator) {
+                       @Provided @NonNull final Navigator navigator,
+                       @Provided @NonNull final AudioPlayer audioPlayer) {
         this.sound = get(sound);
         this.navigator = get(navigator);
+        this.audioPlayer = get(audioPlayer);
     }
 
     @NonNull
@@ -70,6 +76,10 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     void openDetails() {
         navigator.openSoundDetails(sound);
+    }
+
+    void toggleSoundPlayback() {
+        audioPlayer.togglePlayback(sound.previews().lowQualityMp3Url());
     }
 
 }

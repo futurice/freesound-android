@@ -26,7 +26,12 @@ import io.reactivex.disposables.CompositeDisposable;
 public class SimpleViewModel extends BaseViewModel {
 
     @Override
-    public final void bind(@NonNull final CompositeDisposable disposables) {
+    protected void bind(@NonNull final CompositeDisposable disposables) {
         // Nothing - has no data source to bind to.
+    }
+
+    @Override
+    protected void unbind() {
+        // Nothing - has no data source to unbind from.
     }
 }

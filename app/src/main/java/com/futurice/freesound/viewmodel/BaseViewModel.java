@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.viewmodel;
 
+import android.support.annotation.NonNull;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseViewModel implements ViewModel {
@@ -30,10 +32,15 @@ public abstract class BaseViewModel implements ViewModel {
     @Override
     public final void unbindDataModel() {
         dataDisposable.clear();
+        unbind();
     }
 
+    protected abstract void bind(@NonNull final CompositeDisposable disposables);
+
+    protected abstract void unbind();
+
     @Override
-    public final void destroy() {
-        dataDisposable.clear();
+    public final void dispose() {
+        dataDisposable.dispose();
     }
 }

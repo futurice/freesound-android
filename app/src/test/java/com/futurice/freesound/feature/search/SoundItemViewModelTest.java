@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
@@ -37,19 +38,22 @@ public class SoundItemViewModelTest {
     @Mock
     private Navigator navigator;
 
+    @Mock
+    private AudioPlayer audioPlayer;
+
     private SoundItemViewModel soundItemViewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        soundItemViewModel = new SoundItemViewModel(SOUND, navigator);
+        soundItemViewModel = new SoundItemViewModel(SOUND, navigator, audioPlayer);
     }
 
     @Test
     public void thumbnailImageUrl_ifNoImages_returnEmptyString() {
         Sound sound = mock(Sound.class);
         when(sound.images()).thenReturn(null);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
 
         vm.thumbnailImageUrl()
           .test()
@@ -60,7 +64,8 @@ public class SoundItemViewModelTest {
     public void thumbnailImageUrl_ifNoWaveFormat_returnEmptyString() {
         Sound sound = mock(Sound.class);
         when(sound.images()).thenReturn(Sound.Image.builder().build());
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator);
+
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
 
         vm.thumbnailImageUrl()
           .test()

@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.rx.TimeScheduler;
 import com.futurice.freesound.rx.TimeSkipScheduler;
@@ -62,6 +63,9 @@ public class SearchActivityViewModelTest {
     private SearchDataModel searchDataModel;
 
     @Mock
+    private AudioPlayer audioPlayer;
+
+    @Mock
     private Analytics analytics;
 
     private SearchActivityViewModel viewModel;
@@ -71,16 +75,42 @@ public class SearchActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
 
-        viewModel = new SearchActivityViewModel(searchDataModel, analytics);
+        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
     }
 
     @Test
-    public void viewModel_clearsSearchDataModel_byDefault() {
+    public void onBind_initializesAudioPlayer() {
+        new ArrangeBuilder()
+                .act()
+                .bind();
+
+        verify(audioPlayer).init();
+    }
+
+    @Test
+    public void unBind_releasesAudioPlayer() {
+        new ArrangeBuilder()
+                .act()
+                .unbind();
+
+        verify(audioPlayer).release();
+    }
+
+    @Test
+    public void viewModel_clearsSearchDataModel_afterBind() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
                             .bind();
 
         verify(searchDataModel).clear();
+    }
+
+    @Test
+    public void clear_isDisabled_afterInitialized() {
+        viewModel.isClearEnabledOnceAndStream()
+                 .test()
+                 .assertValue(false)
+                 .assertNotTerminated();
     }
 
     @Test
@@ -99,7 +129,6 @@ public class SearchActivityViewModelTest {
         viewModel.search(DUMMY_QUERY);
 
         verify(searchDataModel).querySearch(eq(DUMMY_QUERY));
-
     }
 
     @Test
@@ -148,14 +177,6 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
-    public void clear_isDisabled_byDefault() {
-        viewModel.isClearEnabledOnceAndStream()
-                 .test()
-                 .assertValue(false)
-                 .assertNotTerminated();
-    }
-
-    @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
@@ -174,9 +195,9 @@ public class SearchActivityViewModelTest {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
                             .bind();
-        final TestObserver<Boolean> ts = viewModel
-                .isClearEnabledOnceAndStream()
-                .test();
+
+        final TestObserver<Boolean> ts = viewModel.isClearEnabledOnceAndStream()
+                                                  .test();
 
         viewModel.search(DUMMY_QUERY);
         viewModel.search("");
@@ -299,12 +320,18 @@ public class SearchActivityViewModelTest {
         Act act() {
             return new Act();
         }
+
     }
 
     private class Act {
 
         Act bind() {
             viewModel.bindToDataModel();
+            return this;
+        }
+
+        Act unbind() {
+            viewModel.unbind();
             return this;
         }
 

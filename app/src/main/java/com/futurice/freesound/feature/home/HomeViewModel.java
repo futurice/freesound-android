@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
@@ -29,7 +29,7 @@ import timber.log.Timber;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
-final class HomeViewModel extends BaseViewModel {
+final class HomeViewModel extends SimpleViewModel {
 
     @NonNull
     private final Navigator navigator;
@@ -46,7 +46,7 @@ final class HomeViewModel extends BaseViewModel {
     }
 
     @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
+    protected void bind(@NonNull final CompositeDisposable disposables) {
         disposables.add(openSearchStream.observeOn(mainThread())
                                         .subscribe(__ -> navigator.openSearch(),
                                                    e -> Timber.e(e, "Error clearing search")));

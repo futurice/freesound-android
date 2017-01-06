@@ -28,6 +28,7 @@ import polanski.option.Option;
 
 interface SearchDataModel {
 
+    @NonNull
     Completable querySearch(@NonNull String query);
 
     @NonNull

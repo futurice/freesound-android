@@ -16,23 +16,23 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.BaseViewModel;
+import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
 import static com.futurice.freesound.utils.Preconditions.get;
 
-final class SearchFragmentViewModel extends BaseViewModel {
+final class SearchFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     private final SearchDataModel searchDataModel;
@@ -40,16 +40,30 @@ final class SearchFragmentViewModel extends BaseViewModel {
     @NonNull
     private final Navigator navigator;
 
+    @NonNull
+    private final AudioPlayer audioPlayer;
+
     SearchFragmentViewModel(@NonNull final SearchDataModel searchDataModel,
-                            @NonNull final Navigator navigator) {
+                            @NonNull final Navigator navigator,
+                            @NonNull final AudioPlayer audioPlayer) {
         this.searchDataModel = get(searchDataModel);
         this.navigator = get(navigator);
+        this.audioPlayer = get(audioPlayer);
     }
 
     @NonNull
     Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
         return searchDataModel.getSearchResultsOnceAndStream()
-                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem));
+                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
+                              .doOnNext(__ -> audioPlayer.stopPlayback());
+    }
+
+    void stopPlayback() {
+        audioPlayer.stopPlayback();
+    }
+
+    void openSoundDetails(@NonNull final Sound sound) {
+        navigator.openSoundDetails(get(sound));
     }
 
     @NonNull
@@ -59,14 +73,4 @@ final class SearchFragmentViewModel extends BaseViewModel {
                          .toList()
                          .blockingGet();
     }
-
-    void openSoundDetails(@NonNull final Sound sound) {
-        navigator.openSoundDetails(get(sound));
-    }
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable d) {
-        // Nothing
-    }
-
 }

@@ -17,6 +17,8 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.audio.AudioModule;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.network.api.DefaultFreeSoundSearchService;
@@ -26,14 +28,15 @@ import com.futurice.freesound.network.api.FreeSoundSearchService;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = BaseActivityModule.class)
+@Module(includes = {BaseActivityModule.class, AudioModule.class})
 class SearchActivityModule {
 
     @Provides
     @ActivityScope
     static SearchActivityViewModel provideSearchViewModel(SearchDataModel searchDataModel,
+                                                          AudioPlayer audioPlayer,
                                                           Analytics analytics) {
-        return new SearchActivityViewModel(searchDataModel, analytics);
+        return new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
     }
 
     @Provides
@@ -53,4 +56,5 @@ class SearchActivityModule {
     static SearchSnackbar provideSearchSnackbar() {
         return new SearchSnackbar();
     }
+
 }

@@ -68,6 +68,10 @@ public abstract class Sound implements Parcelable {
     @Nullable
     public abstract Image images();
 
+    // Preview sounds URLs
+    @Nullable
+    public abstract Preview previews();
+
     // Duration in seconds
     @Nullable
     public abstract Float duration();
@@ -95,6 +99,8 @@ public abstract class Sound implements Parcelable {
         public abstract Builder username(@NonNull final String username);
 
         public abstract Builder images(@NonNull final Image images);
+
+        public abstract Builder previews(@NonNull final Preview previews);
 
         public abstract Builder duration(@NonNull final Float duration);
 
@@ -152,4 +158,48 @@ public abstract class Sound implements Parcelable {
         }
     }
 
+    @AutoValue
+    public abstract static class Preview implements Parcelable {
+
+        @Nullable
+        @SerializedName("preview-lq-mp3")
+        public abstract String lowQualityMp3Url();
+
+        @Nullable
+        @SerializedName("preview-hq-mp3")
+        public abstract String highQualityMp3Url();
+
+        @Nullable
+        @SerializedName("preview-lq-ogg")
+        public abstract String lowQualityOggUrl();
+
+        @Nullable
+        @SerializedName("preview-hq-ogg")
+        public abstract String highQualityOggUrl();
+
+        @NonNull
+        public static TypeAdapter<Preview> typeAdapter(@NonNull final Gson gson) {
+            return new AutoValue_Sound_Preview.GsonTypeAdapter(get(gson));
+        }
+
+        @AutoValue.Builder
+        public abstract static class Builder {
+
+            public abstract Builder lowQualityMp3Url(@NonNull final String url);
+
+            public abstract Builder highQualityMp3Url(@NonNull final String url);
+
+            public abstract Builder lowQualityOggUrl(@NonNull final String url);
+
+            public abstract Builder highQualityOggUrl(@NonNull final String url);
+
+            @NonNull
+            public abstract Preview build();
+        }
+
+        @NonNull
+        public static Builder builder() {
+            return new AutoValue_Sound_Preview.Builder();
+        }
+    }
 }

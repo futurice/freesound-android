@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel.viewholder;
+package com.futurice.freesound.feature.audio;
 
-import com.futurice.freesound.viewmodel.ViewModel;
+import com.google.auto.value.AutoValue;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-/**
- * A {@link android.support.v7.widget.RecyclerView.ViewHolder} which supports binding and unbinding
- * to a {@link ViewModel}.
- *
- * @param <T> {@link ViewModel} type
- */
-abstract class AbstractBindingViewHolder<T extends ViewModel> extends RecyclerView.ViewHolder {
+@AutoValue
+abstract class ExoPlayerState {
 
-    AbstractBindingViewHolder(final View itemView) {
-        super(itemView);
+    abstract boolean playWhenReady();
+
+    /**
+     * See {@link com.google.android.exoplayer2.ExoPlayer} {@code STATE}
+     */
+    abstract int playbackState();
+
+    @NonNull
+    static ExoPlayerState create(final boolean playWhenReady, final int playbackState) {
+        return new AutoValue_ExoPlayerState(playWhenReady, playbackState);
     }
-
-    public abstract void bind(@NonNull final T viewModel);
-
-    public abstract void unbind();
 }

@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel.viewholder;
+package com.futurice.freesound.feature.audio;
 
-import com.futurice.freesound.viewmodel.ViewModel;
+import com.google.android.exoplayer2.source.MediaSource;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 /**
- * A {@link android.support.v7.widget.RecyclerView.ViewHolder} which supports binding and unbinding
- * to a {@link ViewModel}.
+ * Generates {@link MediaSource} from URIs.
  *
- * @param <T> {@link ViewModel} type
+ * Can't be an AutoFactory because we can't annotate the ExoPlayer classes.
  */
-abstract class AbstractBindingViewHolder<T extends ViewModel> extends RecyclerView.ViewHolder {
+interface MediaSourceFactory {
 
-    AbstractBindingViewHolder(final View itemView) {
-        super(itemView);
-    }
-
-    public abstract void bind(@NonNull final T viewModel);
-
-    public abstract void unbind();
+    /**
+     * Creates a new instance of a {@link MediaSource}.
+     *
+     * @param uri The {@link MediaSource} source URI.
+     * @return a new {@link MediaSource} instance.
+     */
+    @NonNull
+    MediaSource create(@NonNull String uri);
 }

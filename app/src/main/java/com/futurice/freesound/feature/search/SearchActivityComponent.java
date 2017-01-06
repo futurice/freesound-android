@@ -17,10 +17,14 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.app.FreesoundApplicationComponent;
+import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
+import com.futurice.freesound.inject.app.ForApplication;
 import com.squareup.picasso.Picasso;
+
+import android.content.Context;
 
 import dagger.Component;
 
@@ -30,6 +34,11 @@ import dagger.Component;
 interface SearchActivityComponent extends BaseActivityComponent {
 
     Picasso getPicasso();
+
+    AudioPlayer getAudioPlayer();
+
+    @ForApplication
+    Context getContext();
 
     Navigator getNavigator();
 

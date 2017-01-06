@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.inject.fragment;
+package com.futurice.freesound.common;
 
-import java.lang.annotation.Retention;
+public interface Releasable {
 
-import javax.inject.Scope;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@Scope
-@Retention(RUNTIME)
-public @interface PerFragment {
+    void release();
 }

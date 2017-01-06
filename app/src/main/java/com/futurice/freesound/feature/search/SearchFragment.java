@@ -21,7 +21,6 @@ import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.viewmodel.DataBinder;
-import com.futurice.freesound.viewmodel.SimpleDataBinder;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,7 +70,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
     @NonNull
-    private final DataBinder dataBinder = new SimpleDataBinder() {
+    private final DataBinder dataBinder = new DataBinder() {
 
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
@@ -82,6 +81,10 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                                   e -> Timber.e(e, "Error setting Sound items")));
         }
 
+        @Override
+        public void unbind() {
+            viewModel().stopPlayback();
+        }
     };
 
     @NonNull
