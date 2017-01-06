@@ -33,6 +33,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
+import timber.log.Timber;
 
 import static com.futurice.freesound.functional.Functions.nothing1;
 import static com.futurice.freesound.rx.TimeScheduler.time;
@@ -74,6 +75,9 @@ final class SearchActivityViewModel extends BaseViewModel {
     @Override
     protected void bind(@NonNull final CompositeDisposable d) {
         audioPlayer.init();
+
+        d.add(audioPlayer.getPlayerStateOnceAndStream().subscribe(v -> Timber
+                .d("#### Value: %s", v)));
 
         d.add(searchTermOnceAndStream.observeOn(computation())
                                      .distinctUntilChanged()

@@ -69,6 +69,7 @@ public abstract class AudioModule {
     }
 
     @Binds
+    @ActivityScope
     abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
 
     @Provides
