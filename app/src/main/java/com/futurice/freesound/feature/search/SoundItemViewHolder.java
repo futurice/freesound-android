@@ -72,8 +72,7 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             disposables.add(vm.description()
                               .observeOn(mainThread())
                               .subscribe(descriptionTextView::setText,
-                                         e -> Timber
-                                                 .e(e, "Unable to set SoundItem description")));
+                                         e -> Timber.e(e, "Unable to set SoundItem description")));
 
             disposables.add(vm.duration()
                               .observeOn(mainThread())

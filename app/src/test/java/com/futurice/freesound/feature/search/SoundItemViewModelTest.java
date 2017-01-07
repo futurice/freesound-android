@@ -94,6 +94,54 @@ public class SoundItemViewModelTest {
     }
 
     @Test
+    public void duration_emitsSoundDurationRoundedUp_fromPoint4() {
+        Sound sound = mock(Sound.class);
+        when(sound.duration()).thenReturn(0.4f);
+
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.duration()
+          .test()
+          .assertValue(1);
+    }
+
+    @Test
+    public void duration_emitsSoundDurationRoundedUp_fromPoint5() {
+        Sound sound = mock(Sound.class);
+        when(sound.duration()).thenReturn(2.6f);
+
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.duration()
+          .test()
+          .assertValue(3);
+    }
+
+    @Test
+    public void duration_emitsSoundDurationRoundedUp_doesNotAffectWholeValues() {
+        Sound sound = mock(Sound.class);
+        when(sound.duration()).thenReturn(1f);
+
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.duration()
+          .test()
+          .assertValue(1);
+    }
+
+    @Test
+    public void duration_emitsSoundDurationRoundedUp_from0to1() {
+        Sound sound = mock(Sound.class);
+        when(sound.duration()).thenReturn(0f);
+
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.duration()
+          .test()
+          .assertValue(1);
+    }
+
+    @Test
     public void openDetails_openSoundViaNavigator() {
         soundItemViewModel.openDetails();
 

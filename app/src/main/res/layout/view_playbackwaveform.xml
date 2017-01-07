@@ -31,11 +31,9 @@
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:id="@+id/textView_soundDuration"
-              android:textColor="@color/white"
-              android:background="@color/black_54"
+              style="@style/TextLabelOverlay"
               android:layout_gravity="bottom|end"
               android:layout_margin="@dimen/spacing_small"
-              android:padding="@dimen/spacing_micro"
               tools:text="3:34"/>
 
 </FrameLayout>

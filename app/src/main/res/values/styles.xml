@@ -27,4 +27,10 @@
 
     <style name="AppToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+    <style name="TextLabelOverlay">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/black_54</item>
+        <item name="android:padding">@dimen/spacing_micro</item>
+    </style>
+
 </resources>
