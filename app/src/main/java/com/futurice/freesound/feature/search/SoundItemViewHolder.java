@@ -77,10 +77,8 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
 
             disposables.add(vm.duration()
                               .observeOn(mainThread())
-                              .subscribe(
-                                      duration -> playbackWaveformView
-                                              .setMetadata(duration),
-                                      e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
+                              .subscribe(playbackWaveformView::setMetadata,
+                                         e -> Timber.e(e, "Unable to set SoundItem duration")));
 
             disposables.add(vm.thumbnailImageUrl()
                               .observeOn(mainThread())
