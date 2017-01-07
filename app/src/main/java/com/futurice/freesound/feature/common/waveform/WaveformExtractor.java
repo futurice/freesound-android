@@ -21,9 +21,15 @@ import android.support.annotation.NonNull;
 
 import timber.log.Timber;
 
-public abstract class WaveformExtractor {
+abstract class WaveformExtractor {
 
-    public final float[] extract(@NonNull final Bitmap bitmap) {
+    /**
+     * Extracts the waveform amplitude array from the given bitmap.
+     *
+     * @param bitmap The source {@link Bitmap}.
+     * @return the signed amplitude array.
+     */
+    final float[] extract(@NonNull final Bitmap bitmap) {
         final long debugStartTime = System.currentTimeMillis();
 
         final int width = bitmap.getWidth();

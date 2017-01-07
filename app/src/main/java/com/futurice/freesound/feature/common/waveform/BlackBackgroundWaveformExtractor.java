@@ -20,6 +20,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 
+/**
+ * Extracts the waveform from the background by evaluating that any non-waveform component is the
+ * represented by the color black.
+ */
 public final class BlackBackgroundWaveformExtractor extends WaveformExtractor {
 
     @Override
