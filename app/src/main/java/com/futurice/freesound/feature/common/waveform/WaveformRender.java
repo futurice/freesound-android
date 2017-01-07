@@ -18,10 +18,12 @@ package com.futurice.freesound.feature.common.waveform;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Renders a waveform, allows abstractions to the rendering for different views.
+ */
 public interface WaveformRender {
 
     void setWaveform(@NonNull float[] waveform);
 
-    void clear();
+    void clearWaveform();
 }
-

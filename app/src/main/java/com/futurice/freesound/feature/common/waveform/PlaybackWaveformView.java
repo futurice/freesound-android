@@ -70,9 +70,8 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
     }
 
     @Override
-    public void clear() {
-        waveformView.clear();
-        durationTextView.setText("");
+    public void clearWaveform() {
+        waveformView.clearWaveform();
     }
 
     public void setMetadata(final int duration) {

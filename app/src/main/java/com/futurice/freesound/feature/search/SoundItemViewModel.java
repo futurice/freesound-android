@@ -75,8 +75,9 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    Single<Float> duration() {
-        return Single.just(sound.duration());
+    Single<Integer> duration() {
+        return Single.just(sound.duration())
+                     .map(duration -> (int) Math.ceil(duration));
     }
 
     void openDetails() {

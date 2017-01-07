@@ -83,7 +83,7 @@ public class WaveformView extends View implements WaveformRender {
     }
 
     @Override
-    public void clear() {
+    public void clearWaveform() {
         waveform = null;
         invalidate();
     }
