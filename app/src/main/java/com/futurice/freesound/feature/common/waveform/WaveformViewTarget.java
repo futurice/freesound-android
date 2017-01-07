@@ -28,21 +28,21 @@ import static com.futurice.freesound.utils.Preconditions.get;
 public class WaveformViewTarget implements Target {
 
     @NonNull
-    private final WaveformRender mWaveformRender;
+    private final WaveformRender waveformRender;
 
     @NonNull
     private final WaveformExtractor waveformExtractor;
 
     public WaveformViewTarget(@NonNull final WaveformRender waveformRender,
                               @NonNull final WaveformExtractor waveformExtractor) {
-        this.mWaveformRender = get(waveformRender);
+        this.waveformRender = get(waveformRender);
         this.waveformExtractor = get(waveformExtractor);
     }
 
     @Override
     public void onBitmapLoaded(final Bitmap bitmap, final Picasso.LoadedFrom from) {
         float[] waveform = waveformExtractor.extract(bitmap);
-        mWaveformRender.setWaveform(waveform);
+        waveformRender.setWaveform(waveform);
     }
 
     @Override
