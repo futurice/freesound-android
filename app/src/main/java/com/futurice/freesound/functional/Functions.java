@@ -24,17 +24,13 @@ import android.support.annotation.NonNull;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 /**
  * Common function implementations.
  */
 public final class Functions {
-
-    private static final Action NOTHING0 = () -> {
-    };
-
-    private static final Consumer NOTHING1 = __ -> {
-    };
 
     /**
      * Returns an instance of {@link Action} with no side-effects.
@@ -44,7 +40,8 @@ public final class Functions {
     @NonNull
     public static Action nothing0() {
         //noinspection unchecked
-        return NOTHING0;
+        return () -> {
+        };
     }
 
     /**
@@ -55,7 +52,66 @@ public final class Functions {
     @NonNull
     public static <T> Consumer<T> nothing1() {
         //noinspection unchecked
-        return NOTHING1;
+        return v -> {
+        };
+    }
+
+    /**
+     * A {@link Predicate} which always returns true.
+     *
+     * @param <T> the predicate type.
+     * @return a {@link Predicate} which ignores the value and returns {@link Boolean#TRUE}.
+     */
+    @NonNull
+    public static <T> Predicate<T> alwaysTrue() {
+        //noinspection unchecked
+        return v -> true;
+    }
+
+    /**
+     * A {@link Predicate} which always returns false.
+     *
+     * @param <T> the predicate type.
+     * @return a {@link Predicate} which ignores the value and returns {@link Boolean#FALSE}.
+     */
+    @NonNull
+    public static <T> Predicate<T> alwaysFalse() {
+        //noinspection unchecked
+        return v -> false;
+    }
+
+    /**
+     * Identity function - returns parameter as result.
+     *
+     * @param <T> function argument and result type.
+     * @return the identity value of the provided type.
+     */
+    @NonNull
+    public static <T> Function<T, T> identity() {
+        return t -> t;
+    }
+
+    /**
+     * Inverting function - inverts the supplied {@link Boolean} value.
+     */
+    public static Function<Boolean, Boolean> invert() {
+        return v -> !v;
+    }
+
+    /**
+     * Filter predicate function - allows only {@link Boolean#TRUE} values to pass.
+     */
+    @NonNull
+    public static Function<Boolean, Boolean> ifTrue() {
+        return v -> v;
+    }
+
+    /**
+     * Filter predicate function - allows only {@link Boolean#FALSE} values to pass.
+     */
+    @NonNull
+    public static Function<Boolean, Boolean> ifFalse() {
+        return v -> !v;
     }
 
     /**
