@@ -107,7 +107,9 @@ final class SoundItemViewModel extends SimpleViewModel {
                                                                                          .lowQualityMp3Url()))
                                                             .isSome() ?
 
-                                                  Observable.timer(1, TimeUnit.SECONDS).repeat()
+                                                  Observable.timer(1, TimeUnit.SECONDS)
+                                                            .repeat()
+                                                            .startWith(0L)
                                                             .switchMap(__ ->
                                                                                audioPlayer
                                                                                        .getTimePositionMsOnceAndStream()
