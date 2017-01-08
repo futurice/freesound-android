@@ -23,7 +23,7 @@ import io.reactivex.Observable;
 /**
  * Represent the {@link com.google.android.exoplayer2.ExoPlayer} through Observables.
  */
-public interface ObservableExoPlayer {
+interface ObservableExoPlayer {
 
     /**
      * ExoPlayer state {@link Observable} with initial value.
