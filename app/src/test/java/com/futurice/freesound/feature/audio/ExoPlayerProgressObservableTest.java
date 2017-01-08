@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-public class ExoPlayerStateObservableTest {
+public class ExoPlayerProgressObservableTest {
 
     @Mock
     private ExoPlayer exoPlayer;
@@ -39,11 +39,11 @@ public class ExoPlayerStateObservableTest {
     @Captor
     private ArgumentCaptor<ExoPlayer.EventListener> listenerCaptor;
 
-    private ExoPlayerStateObservable exoPlayerStateObservable;
+    private ExoPlayerProgressObservable exoPlayerProgressObservable;
 
-    public ExoPlayerStateObservableTest() {
+    public ExoPlayerProgressObservableTest() {
         MockitoAnnotations.initMocks(this);
-        exoPlayerStateObservable = new ExoPlayerStateObservable(exoPlayer, false);
+        exoPlayerProgressObservable = new ExoPlayerProgressObservable(exoPlayer, false);
     }
 
     @Test
@@ -53,36 +53,38 @@ public class ExoPlayerStateObservableTest {
 
     @Test
     public void addsListener_whenSubscribing() {
-        exoPlayerStateObservable.subscribe();
+        exoPlayerProgressObservable.subscribe();
 
         verify(exoPlayer).addListener(any(ExoPlayer.EventListener.class));
     }
 
     @Test
     public void removesListener_whenUnsubscribing() {
-        exoPlayerStateObservable.subscribe().dispose();
+        exoPlayerProgressObservable.subscribe().dispose();
 
         verify(exoPlayer).removeListener(any(ExoPlayer.EventListener.class));
     }
 
     @Test
     public void emitsCallbackValue() {
-        TestObserver<ExoPlayerState> testObserver = exoPlayerStateObservable.test();
+        long expected = 100L;
+        TestObserver<Long> testObserver = exoPlayerProgressObservable.test();
 
         new ExoPlayerTestEventGenerator()
-                .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
+                .moveToProgressTime(expected)
+                .invokeListenerCallback();
 
-        testObserver.assertValue(ExoPlayerState.create(true, ExoPlayer.STATE_IDLE))
+        testObserver.assertValue(expected)
                     .assertNotTerminated();
     }
 
     @Test
     public void doesNotEmitAfterDisposed() {
-        TestObserver<ExoPlayerState> testObserver = exoPlayerStateObservable.test();
+        TestObserver<Long> testObserver = exoPlayerProgressObservable.test();
         testObserver.dispose();
 
         new ExoPlayerTestEventGenerator()
-                .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
+                .invokeListenerCallback();
 
         testObserver.assertNoValues();
     }
@@ -91,22 +93,22 @@ public class ExoPlayerStateObservableTest {
 
     @Test
     public void doesNotEmitInitialValue_whenNotSet() {
-        ExoPlayerStateObservable observable = new ExoPlayerStateObservable(exoPlayer, false);
+        ExoPlayerProgressObservable observable = new ExoPlayerProgressObservable(exoPlayer, false);
 
-        TestObserver<ExoPlayerState> testObserver = observable.test();
+        TestObserver<Long> testObserver = observable.test();
 
         testObserver.assertNoValues();
     }
 
     @Test
     public void emitsInitialValue_whenSet() {
-        when(exoPlayer.getPlayWhenReady()).thenReturn(true);
-        when(exoPlayer.getPlaybackState()).thenReturn(1000);
-        ExoPlayerStateObservable observable = new ExoPlayerStateObservable(exoPlayer, true);
+        long expected = 1000L;
+        when(exoPlayer.getCurrentPosition()).thenReturn(expected);
+        ExoPlayerProgressObservable observable = new ExoPlayerProgressObservable(exoPlayer, true);
 
-        TestObserver<ExoPlayerState> testObserver = observable.test();
+        TestObserver<Long> testObserver = observable.test();
 
-        testObserver.assertValue(ExoPlayerState.create(true, 1000));
+        testObserver.assertValue(expected);
     }
 
     // Helpers
@@ -117,9 +119,14 @@ public class ExoPlayerStateObservableTest {
             verify(exoPlayer).addListener(listenerCaptor.capture());
         }
 
-        ExoPlayerTestEventGenerator invokeListenerCallback(boolean playWhenReady,
-                                                           int playbackState) {
-            listenerCaptor.getValue().onPlayerStateChanged(playWhenReady, playbackState);
+        ExoPlayerTestEventGenerator moveToProgressTime(long progress) {
+            when(exoPlayer.getCurrentPosition()).thenReturn(progress);
+            return this;
+        }
+
+        ExoPlayerTestEventGenerator invokeListenerCallback() {
+            // don't care about value and are nullable anyway
+            listenerCaptor.getValue().onTimelineChanged(null, null);
             return this;
         }
 

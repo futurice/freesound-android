@@ -60,7 +60,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     private final ExoPlayer exoPlayer;
 
     @NonNull
-    private final Observable<ExoPlayerState> exoPlayerStateObservable;
+    private final ObservableExoPlayer observableExoPlayer;
 
     @NonNull
     private final MediaSourceFactory mediaSourceFactory;
@@ -76,17 +76,18 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
-                         @NonNull final Observable<ExoPlayerState> exoPlayerStateObservable,
+                         @NonNull final ObservableExoPlayer observableExoPlayer,
                          @NonNull final MediaSourceFactory mediaSourceFactory) {
         this.exoPlayer = get(exoPlayer);
-        this.exoPlayerStateObservable = get(exoPlayerStateObservable);
+        this.observableExoPlayer = get(observableExoPlayer);
         this.mediaSourceFactory = get(mediaSourceFactory);
     }
 
     @Override
     public void init() {
         playerStateDisposable
-                .set(toggleUrlStream.concatMap(url -> exoPlayerStateObservable
+                .set(toggleUrlStream.concatMap(url -> observableExoPlayer
+                        .getExoPlayerStateOnceAndStream()
                         .take(1)
                         .map(exoPlayerState -> toToggleAction(url, exoPlayerState))
                         .doOnNext(action -> handleToggleAction(action, url)))
@@ -97,7 +98,8 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @Override
     @NonNull
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
-        return exoPlayerStateObservable.map(state -> PlayerState.create(state, currentUrl.get()));
+        return observableExoPlayer.getExoPlayerStateOnceAndStream()
+                                  .map(state -> PlayerState.create(state, currentUrl.get()));
     }
 
     @Override
