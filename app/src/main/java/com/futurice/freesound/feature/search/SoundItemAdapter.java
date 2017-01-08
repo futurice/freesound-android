@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.common.adapter.DefaultAdapterInteractor;
+import com.futurice.freesound.common.adapter.AdapterInteractor;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.network.api.model.Sound;
 import com.squareup.picasso.Picasso;
@@ -37,7 +37,7 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 
     @NonNull
-    private final DefaultAdapterInteractor<DisplayableItem> adapterInteractor;
+    private final AdapterInteractor<DisplayableItem> adapterInteractor;
 
     @NonNull
     private final SoundItemViewModelFactory viewModelFactory;
@@ -45,7 +45,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     @NonNull
     private final Picasso picasso;
 
-    SoundItemAdapter(@NonNull final DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
+    SoundItemAdapter(@NonNull final AdapterInteractor<DisplayableItem> adapterInteractor,
                      @NonNull final Picasso picasso,
                      @NonNull final SoundItemViewModelFactory viewModelFactory) {
         this.adapterInteractor = get(adapterInteractor);

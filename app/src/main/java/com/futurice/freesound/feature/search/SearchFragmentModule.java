@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.common.adapter.AdapterInteractor;
-import com.futurice.freesound.common.adapter.DefaultAdapterInteractor;
+import com.futurice.freesound.common.adapter.SimpleAdapterInteractor;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
@@ -42,7 +42,7 @@ class SearchFragmentModule {
     @Provides
     @FragmentScope
     static SoundItemAdapter provideSoundItemAdapter(
-            DefaultAdapterInteractor<DisplayableItem> adapterInteractor,
+            AdapterInteractor<DisplayableItem> adapterInteractor,
             Picasso picasso,
             SoundItemViewModelFactory viewModelFactory) {
         return new SoundItemAdapter(adapterInteractor, picasso, viewModelFactory);
@@ -50,7 +50,7 @@ class SearchFragmentModule {
 
     @Provides
     @FragmentScope
-    static DefaultAdapterInteractor<DisplayableItem> provideAdapterInteractor() {
-        return new AdapterInteractor<>();
+    static AdapterInteractor<DisplayableItem> provideAdapterInteractor() {
+        return new SimpleAdapterInteractor<>();
     }
 }

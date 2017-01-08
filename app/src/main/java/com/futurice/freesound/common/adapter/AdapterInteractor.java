@@ -16,100 +16,93 @@
 
 package com.futurice.freesound.common.adapter;
 
-import com.futurice.freesound.common.utils.CollectionUtils;
-
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import polanski.option.Option;
 
-import static com.futurice.freesound.common.utils.Preconditions.checkArgument;
-import static polanski.option.Option.ofObj;
-
 /**
- * Handles testable logic for interpreting adapter events.
+ * Helper interface that aids an adapter with holding the model.
  */
-public class AdapterInteractor<T> implements DefaultAdapterInteractor<T> {
+public interface AdapterInteractor<T> {
 
+    /**
+     * Updates the current existing list of items with the given one.
+     *
+     * @param items Items to be used to change the collection
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean update(@NonNull Collection<T> items);
+
+    /**
+     * Appends new items to currently existing ones.
+     *
+     * @param items collection of items that should be added to the list
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean append(@NonNull Collection<T> items);
+
+    /**
+     * Removes an item at the specified position.
+     *
+     * @param position of the item to be removed
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean remove(@IntRange(from = 0) int position);
+
+    /**
+     * Removes specific item.
+     *
+     * @param item to be removed
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean remove(@NonNull T item);
+
+    /**
+     * Removes a collection of items.
+     *
+     * @param items to be removed
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean removeAll(@NonNull Collection<T> items);
+
+    /**
+     * Removes all the current items.
+     *
+     * @return {@code true} if the adapter has been changed
+     */
+    boolean reset();
+
+    /**
+     * Current count of items in the adapter.
+     */
+    int getCount();
+
+    /**
+     * Returns an option of the model object at the position.
+     *
+     * @param position of the item
+     * @return option of the model object at the position.
+     */
     @NonNull
-    private final List<T> models = new ArrayList<>();
+    Option<T> getItem(@IntRange(from = 0) int position);
 
-    @Override
-    public boolean reset() {
-        if (models.isEmpty()) {
-            return false;
-        }
-        models.clear();
-        return true;
-    }
-
-    @Override
-    public boolean update(@NonNull final Collection<T> items) {
-        boolean changed = !CollectionUtils.areEqual(models, items);
-        if (changed) {
-            models.clear();
-            models.addAll(items);
-        }
-        return changed;
-    }
-
-    @Override
-    public boolean append(@NonNull final Collection<T> items) {
-        if (!items.isEmpty()) {
-            models.addAll(items);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean insert(@NonNull final T item, @IntRange(from = 0) final int position) {
-        assertValidPosition(position);
-        models.add(position, item);
-        return true;
-    }
-
-    @Override
-    public boolean remove(@IntRange(from = 0) final int position) {
-        assertValidPosition(position);
-        models.remove(position);
-        return true;
-    }
-
-    @Override
-    public boolean remove(@NonNull final T item) {
-        return models.remove(item);
-    }
-
-    @Override
-    public boolean removeAll(@NonNull final Collection<T> items) {
-        return models.removeAll(items);
-    }
-
-    @Override
-    public int getCount() {
-        return models.size();
-    }
-
+    /**
+     * Returns an option of the index where the item exists.
+     *
+     * @param item of item to be found
+     * @return Option of index of item or {@link Option#NONE} if wasn't found
+     */
     @NonNull
-    @Override
-    public Option<T> getItem(@IntRange(from = 0) final int position) {
-        assertValidPosition(position);
-        return ofObj(models.get(position));
-    }
+    Option<Integer> getItemPosition(@NonNull T item);
 
-    @NonNull
-    @Override
-    public Option<Integer> getItemPosition(@NonNull final T item) {
-        int position = models.indexOf(item);
-        return position < 0 ? Option.NONE : ofObj(position);
-    }
-
-    private void assertValidPosition(final int position) {
-        checkArgument(position < models.size(), "Position value is too big.");
-    }
+    /**
+     * Inserts an item at the specified position.
+     *
+     * @param item     the item to insert
+     * @param position the position the item needs to be
+     */
+    boolean insert(@NonNull T item, int position);
 }

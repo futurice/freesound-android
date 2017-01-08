@@ -32,13 +32,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static polanski.option.Option.NONE;
 import static polanski.option.Option.ofObj;
 
-public class AdapterInteractorTest {
+public class SimpleAdapterInteractorTest {
 
-    private AdapterInteractor<String> adapter;
+    private SimpleAdapterInteractor<String> adapter;
 
     @Before
     public void setUp() {
-        adapter = new AdapterInteractor<>();
+        adapter = new SimpleAdapterInteractor<>();
     }
 
     @Test
@@ -344,7 +344,7 @@ public class AdapterInteractorTest {
     }
 
     private static <T> void assertAdapterItems(@NonNull final List<T> items,
-                                               @NonNull final DefaultAdapterInteractor<T> adapter) {
+                                               @NonNull final AdapterInteractor<T> adapter) {
         assertThat(adapter.getCount()).isEqualTo(items.size());
 
         for (int i = 0; i < items.size(); i++) {
