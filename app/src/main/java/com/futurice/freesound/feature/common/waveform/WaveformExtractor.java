@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common;
+package com.futurice.freesound.feature.common.waveform;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import timber.log.Timber;
 
-public abstract class WaveformExtractor {
+abstract class WaveformExtractor {
 
-    public final float[] extract(@NonNull final Bitmap bitmap) {
+    /**
+     * Extracts the waveform amplitude array from the given bitmap.
+     *
+     * @param bitmap The source {@link Bitmap}.
+     * @return the signed amplitude array.
+     */
+    final float[] extract(@NonNull final Bitmap bitmap) {
         final long debugStartTime = System.currentTimeMillis();
 
         final int width = bitmap.getWidth();

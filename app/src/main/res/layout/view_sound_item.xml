@@ -54,13 +54,10 @@
                 android:layout_marginBottom="16dp"
                 tools:text="Demo description"/>
 
-        <com.futurice.freesound.feature.common.view.WaveformView
-                android:id="@+id/waveformView_soundItem"
+        <com.futurice.freesound.feature.common.waveform.PlaybackWaveformView
+                android:id="@+id/playbackWaveformView_soundItem"
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
-                app:waveformColor="@color/brand"
-                app:columnWidth="4dp"
-                app:columnGap="1dp"
                 android:background="@color/gray_very_light"
                 android:contentDescription="@string/accessibility_sound_item_image"/>
 

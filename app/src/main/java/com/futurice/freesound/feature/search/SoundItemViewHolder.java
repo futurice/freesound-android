@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.feature.common.BlackBackgroundWaveformExtractor;
-import com.futurice.freesound.feature.common.view.WaveformView;
-import com.futurice.freesound.feature.common.view.WaveformViewTarget;
+import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
+import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
+import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
+import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
@@ -45,14 +46,14 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     @BindView(R.id.textView_description)
     TextView descriptionTextView;
 
-    @BindView(R.id.waveformView_soundItem)
-    WaveformView waveFormView;
-
-    @NonNull
-    private final Target waveformViewTarget;
+    @BindView(R.id.playbackWaveformView_soundItem)
+    PlaybackWaveformView playbackWaveformView;
 
     @NonNull
     private final Picasso picasso;
+
+    @NonNull
+    private final Target playbackWaveformViewTarget;
 
     @NonNull
     private final DataBinder viewDataBinder = new DataBinder() {
@@ -61,29 +62,36 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         public void bind(@NonNull final CompositeDisposable disposables) {
             final SoundItemViewModel vm = get(getViewModel());
 
+            // Synchronously clear the waveform, it might be recycled.
+            playbackWaveformView.clearWaveform();
+
             disposables.add(vm.name()
                               .observeOn(mainThread())
-                              .subscribe(get(titleTextView)::setText,
+                              .subscribe(titleTextView::setText,
                                          e -> Timber.e(e, "Unable to set SoundItem name")));
             disposables.add(vm.description()
                               .observeOn(mainThread())
-                              .subscribe(get(descriptionTextView)::setText,
-                                         e -> Timber
-                                                 .e(e, "Unable to set SoundItem description")));
+                              .subscribe(descriptionTextView::setText,
+                                         e -> Timber.e(e, "Unable to set SoundItem description")));
+
+            disposables.add(vm.duration()
+                              .observeOn(mainThread())
+                              .subscribe(playbackWaveformView::setMetadata,
+                                         e -> Timber.e(e, "Unable to set SoundItem duration")));
 
             disposables.add(vm.thumbnailImageUrl()
                               .observeOn(mainThread())
                               .subscribe(url -> picasso.load(url)
-                                                       .into(waveformViewTarget),
+                                                       .into(playbackWaveformViewTarget),
                                          e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
-            waveFormView.setOnClickListener(__ -> vm.toggleSoundPlayback());
+            playbackWaveformView.setOnClickListener(__ -> vm.toggleSoundPlayback());
         }
 
         @Override
         public void unbind() {
-            waveFormView.setOnClickListener(null);
-            picasso.cancelRequest(waveformViewTarget);
+            playbackWaveformView.setOnClickListener(null);
+            picasso.cancelRequest(playbackWaveformViewTarget);
         }
 
     };
@@ -93,8 +101,9 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         super(get(view));
         ButterKnife.bind(this, view);
         this.picasso = get(picasso);
-        this.waveformViewTarget = new WaveformViewTarget(waveFormView,
-                                                         new BlackBackgroundWaveformExtractor());
+        this.playbackWaveformViewTarget = new WaveformViewTarget(
+                findById(view, R.id.playbackWaveformView_soundItem),
+                new BlackBackgroundWaveformExtractor());
     }
 
     @NonNull

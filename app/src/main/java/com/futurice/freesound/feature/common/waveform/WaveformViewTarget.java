@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.view;
+package com.futurice.freesound.feature.common.waveform;
 
-import com.futurice.freesound.feature.common.WaveformExtractor;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -29,21 +28,21 @@ import static com.futurice.freesound.utils.Preconditions.get;
 public class WaveformViewTarget implements Target {
 
     @NonNull
-    private final WaveformView waveformView;
+    private final WaveformRender waveformRender;
 
     @NonNull
     private final WaveformExtractor waveformExtractor;
 
-    public WaveformViewTarget(@NonNull final WaveformView waveformView,
+    public WaveformViewTarget(@NonNull final WaveformRender waveformRender,
                               @NonNull final WaveformExtractor waveformExtractor) {
-        this.waveformView = get(waveformView);
+        this.waveformRender = get(waveformRender);
         this.waveformExtractor = get(waveformExtractor);
     }
 
     @Override
     public void onBitmapLoaded(final Bitmap bitmap, final Picasso.LoadedFrom from) {
         float[] waveform = waveformExtractor.extract(bitmap);
-        waveformView.setWaveform(waveform);
+        waveformRender.setWaveform(waveform);
     }
 
     @Override
@@ -53,6 +52,5 @@ public class WaveformViewTarget implements Target {
 
     @Override
     public void onPrepareLoad(final Drawable placeHolderDrawable) {
-        waveformView.clear();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common;
+package com.futurice.freesound.feature.common.waveform;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 
+/**
+ * Extracts the waveform from the background by evaluating that any non-waveform component is the
+ * represented by the color black.
+ */
 public final class BlackBackgroundWaveformExtractor extends WaveformExtractor {
 
     @Override

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.view;
+package com.futurice.freesound.feature.common.waveform;
 
 import com.futurice.freesound.R;
 
@@ -33,7 +33,7 @@ import android.view.View;
 
 import timber.log.Timber;
 
-public class WaveformView extends View {
+public class WaveformView extends View implements WaveformRender {
 
     private static final boolean VERBOSE_LOGGING = true;
 
@@ -76,12 +76,14 @@ public class WaveformView extends View {
         }
     }
 
-    public void setWaveform(float[] waveform) {
+    @Override
+    public void setWaveform(@NonNull float[] waveform) {
         this.waveform = waveform.clone();
         invalidate();
     }
 
-    public void clear() {
+    @Override
+    public void clearWaveform() {
         waveform = null;
         invalidate();
     }
