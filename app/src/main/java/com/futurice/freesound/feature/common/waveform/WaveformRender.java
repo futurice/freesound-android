@@ -23,7 +23,15 @@ import android.support.annotation.NonNull;
  */
 public interface WaveformRender {
 
+    /**
+     * Renders the given waveform.
+     *
+     * @param waveform the waveform amplitude array, values in range [-1.0, 1.0].
+     */
     void setWaveform(@NonNull float[] waveform);
 
+    /**
+     * Clear the waveform render.
+     */
     void clearWaveform();
 }
