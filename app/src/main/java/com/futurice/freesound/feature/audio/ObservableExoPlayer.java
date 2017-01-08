@@ -36,9 +36,7 @@ interface ObservableExoPlayer {
     /**
      * ExoPlayer current playback time position with initial value.
      *
-     * The value is in milliseconds
-     *
-     * @return the Observable playback position.
+     * @return the Observable playback time position in milliseconds.
      */
     @NonNull
     Observable<Long> getTimePositionMsOnceAndStream();
