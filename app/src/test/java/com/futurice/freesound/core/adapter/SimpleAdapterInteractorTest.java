@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.common.adapter;
+package com.futurice.freesound.core.adapter;
 
 import org.junit.Before;
 import org.junit.Test;

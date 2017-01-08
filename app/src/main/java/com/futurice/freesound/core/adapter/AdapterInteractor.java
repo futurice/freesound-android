@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.common.adapter;
+package com.futurice.freesound.core.adapter;
 
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;

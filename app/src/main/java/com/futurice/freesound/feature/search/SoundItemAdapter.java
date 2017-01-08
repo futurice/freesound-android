@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.common.adapter.AdapterInteractor;
+import com.futurice.freesound.core.adapter.AdapterInteractor;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.network.api.model.Sound;
 import com.squareup.picasso.Picasso;

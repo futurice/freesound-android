@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.common.adapter.AdapterInteractor;
-import com.futurice.freesound.common.adapter.SimpleAdapterInteractor;
+import com.futurice.freesound.core.adapter.AdapterInteractor;
+import com.futurice.freesound.core.adapter.SimpleAdapterInteractor;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
