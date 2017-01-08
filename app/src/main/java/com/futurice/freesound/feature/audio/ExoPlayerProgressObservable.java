@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 
 import android.support.annotation.NonNull;
 
@@ -30,55 +31,51 @@ import static com.futurice.freesound.utils.Preconditions.get;
  *
  * Based upon techniques used in the RxBinding library.
  */
-final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
+final class ExoPlayerProgressObservable extends Observable<Long> {
 
     @NonNull
     private final ExoPlayer exoPlayer;
 
     private final boolean emitInitial;
 
-    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer) {
+    ExoPlayerProgressObservable(@NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }
 
-    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer,
-                             final boolean emitInitial) {
+    ExoPlayerProgressObservable(@NonNull final ExoPlayer exoPlayer,
+                                final boolean emitInitial) {
         this.exoPlayer = get(exoPlayer);
         this.emitInitial = emitInitial;
     }
 
     @Override
-    protected void subscribeActual(final Observer<? super ExoPlayerState> observer) {
+    protected void subscribeActual(final Observer<? super Long> observer) {
         Listener listener = new Listener(exoPlayer, observer);
         observer.onSubscribe(listener);
         exoPlayer.addListener(listener);
         if (emitInitial) {
-            emitValue(ExoPlayerState.create(exoPlayer.getPlayWhenReady(),
-                                            exoPlayer.getPlaybackState()),
-                      observer);
+            emitValue(exoPlayer, observer);
         }
     }
 
-    private static class Listener extends BaseAudioPlayerEventListener<ExoPlayerState> {
+    private static class Listener extends BaseAudioPlayerEventListener<Long> {
 
         Listener(@NonNull final ExoPlayer exoPlayer,
-                 @NonNull final Observer<? super ExoPlayerState> observer) {
+                 @NonNull final Observer<? super Long> observer) {
             super(exoPlayer, observer);
         }
 
         @Override
-        public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
-            // Strictly speaking, this check is not required because the listener is removed
-            // upon disposal, therefore ExoPlayer won't keep it around to notify of changes.
+        public void onTimelineChanged(final Timeline timeline, final Object manifest) {
             if (!isDisposed()) {
-                emitValue(ExoPlayerState.create(playWhenReady, playbackState), observer);
+                emitValue(exoPlayer, observer);
             }
         }
 
     }
 
-    private static void emitValue(@NonNull final ExoPlayerState exoPlayerState,
-                                  @NonNull final Observer<? super ExoPlayerState> observer) {
-        observer.onNext(exoPlayerState);
+    private static void emitValue(@NonNull final ExoPlayer exoPlayer,
+                                  @NonNull final Observer<? super Long> observer) {
+        observer.onNext(exoPlayer.getCurrentPosition());
     }
 }

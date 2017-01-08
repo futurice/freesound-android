@@ -39,7 +39,7 @@ import static com.futurice.freesound.utils.Preconditions.get;
 abstract class BaseAudioPlayerEventListener<T> implements Disposable, ExoPlayer.EventListener {
 
     @NonNull
-    private final ExoPlayer exoPlayer;
+    protected final ExoPlayer exoPlayer;
 
     @NonNull
     protected final Observer<? super T> observer;

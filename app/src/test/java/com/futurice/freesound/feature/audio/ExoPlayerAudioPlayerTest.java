@@ -43,16 +43,16 @@ public class ExoPlayerAudioPlayerTest {
     @Mock
     private MediaSourceFactory mediaSourceFactory;
 
-    private BehaviorSubject<ExoPlayerState> exoPlayerStateStream;
+    @Mock
+    private ObservableExoPlayer observableExoPlayer;
 
     private ExoPlayerAudioPlayer exoPlayerAudioPlayer;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        exoPlayerStateStream = BehaviorSubject.create();
         exoPlayerAudioPlayer = new ExoPlayerAudioPlayer(exoPlayer,
-                                                        exoPlayerStateStream,
+                                                        observableExoPlayer,
                                                         mediaSourceFactory);
     }
 
@@ -255,6 +255,15 @@ public class ExoPlayerAudioPlayerTest {
     }
 
     private class ArrangeBuilder {
+
+        private final BehaviorSubject<ExoPlayerState> exoPlayerStateStream = BehaviorSubject
+                .create();
+        private final BehaviorSubject<Long> exoPlayerProgressStream = BehaviorSubject.create();
+
+        ArrangeBuilder() {
+            when(observableExoPlayer.getExoPlayerStateStream()).thenReturn(exoPlayerStateStream);
+            when(observableExoPlayer.getTimePositionStream()).thenReturn(exoPlayerProgressStream);
+        }
 
         ArrangeBuilder withMediaSource() {
             when(mediaSourceFactory.create(anyString())).thenReturn(mock(MediaSource.class));
