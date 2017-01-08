@@ -28,7 +28,6 @@ public class OptionFunctionsTest {
 
     @Test
     public void nothing0_hasSingleInstance() {
-
         assertThat(OptionFunctions.nothing0()).isSameAs(OptionFunctions.nothing0());
     }
 

@@ -26,7 +26,6 @@ public class FunctionsTest {
 
     @Test
     public void nothing0_hasSingleInstance() {
-
         assertThat(Functions.nothing0()).isSameAs(Functions.nothing0());
     }
 
