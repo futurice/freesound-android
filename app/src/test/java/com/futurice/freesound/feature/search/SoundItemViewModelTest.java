@@ -94,7 +94,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void duration_emitsSoundDurationRoundedUp_fromPoint4() {
+    public void duration_roundsUp_fromPoint4() {
         Sound sound = mock(Sound.class);
         when(sound.duration()).thenReturn(0.4f);
 
@@ -106,7 +106,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void duration_emitsSoundDurationRoundedUp_fromPoint5() {
+    public void duration_roundsUp_fromPoint5() {
         Sound sound = mock(Sound.class);
         when(sound.duration()).thenReturn(2.6f);
 
@@ -118,7 +118,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void duration_emitsSoundDurationRoundedUp_doesNotAffectWholeValues() {
+    public void duration_roundingUp_doesNotAffectWholeValues() {
         Sound sound = mock(Sound.class);
         when(sound.duration()).thenReturn(1f);
 
@@ -130,7 +130,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void duration_emitsSoundDurationRoundedUp_from0to1() {
+    public void duration_hasMinimumOf1Second() {
         Sound sound = mock(Sound.class);
         when(sound.duration()).thenReturn(0f);
 
