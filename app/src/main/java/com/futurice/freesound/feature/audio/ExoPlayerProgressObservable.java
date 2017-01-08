@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
  * Make an Observable from the ExoPlayer player state.

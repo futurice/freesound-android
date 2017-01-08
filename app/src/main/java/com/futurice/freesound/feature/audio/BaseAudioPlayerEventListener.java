@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
  * Base class for making Observables from ExoPlayer callback events.

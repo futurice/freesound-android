@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
-import com.futurice.freesound.utils.Preconditions;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +41,7 @@ import polanski.option.AtomicOption;
 import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.computation;
 

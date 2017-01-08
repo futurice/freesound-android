@@ -45,7 +45,7 @@ import polanski.option.Option;
 import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {

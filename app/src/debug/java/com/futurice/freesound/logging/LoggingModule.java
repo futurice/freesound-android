@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.logging;
+package com.futurice.freesound.feature.logging;
 
 import javax.inject.Singleton;
 

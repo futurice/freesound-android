@@ -35,7 +35,7 @@ import javax.inject.Inject;
 import polanski.option.Option;
 
 import static butterknife.ButterKnife.findById;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
 

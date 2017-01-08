@@ -7,7 +7,7 @@ import android.view.View;
 
 import polanski.option.Option;
 
-import static com.futurice.freesound.utils.Preconditions.checkNotNull;
+import static com.futurice.freesound.common.utils.Preconditions.checkNotNull;
 
 /**
  * A helper class, which can display and dismiss a SnackBar

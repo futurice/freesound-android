@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.common.adapter.DefaultAdapterInteractor;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 import com.squareup.picasso.Picasso;
 
 import android.support.annotation.NonNull;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import polanski.option.function.Func0;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
 

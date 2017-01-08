@@ -16,13 +16,13 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.common.adapter.AdapterInteractor;
+import com.futurice.freesound.common.adapter.DefaultAdapterInteractor;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
-import com.futurice.freesound.ui.adapter.AdapterInteractor;
-import com.futurice.freesound.ui.adapter.base.DefaultAdapterInteractor;
 import com.squareup.picasso.Picasso;
 
 import dagger.Module;

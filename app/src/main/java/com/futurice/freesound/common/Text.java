@@ -16,6 +16,9 @@
 
 package com.futurice.freesound.common;
 
+/**
+ * Simple text values available for reuse.
+ */
 public final class Text {
 
     public static final String EMPTY = "";
