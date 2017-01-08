@@ -23,10 +23,13 @@ import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import polanski.option.Option;
+import timber.log.Timber;
 
 public class PlaybackWaveformView extends FrameLayout implements WaveformRender {
 
@@ -35,6 +38,9 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
 
     @BindView(R.id.textView_soundDuration)
     TextView durationTextView;
+
+    @BindView(R.id.progressBar_playbackProgress)
+    ProgressBar playbackProgressBar;
 
     public PlaybackWaveformView(final Context context) {
         super(context);
@@ -76,5 +82,15 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
 
     public void setMetadata(final int duration) {
         durationTextView.setText(DateUtils.formatElapsedTime(duration));
+    }
+
+    public void setProgress(@NonNull final Option<Integer> progressPercentage) {
+        Timber.d("### Setting progress to: %s", progressPercentage);
+        progressPercentage
+                .matchAction(p -> {
+                                 playbackProgressBar.setVisibility(VISIBLE);
+                                 playbackProgressBar.setProgress(p);
+                             },
+                             () -> playbackProgressBar.setVisibility(GONE));
     }
 }

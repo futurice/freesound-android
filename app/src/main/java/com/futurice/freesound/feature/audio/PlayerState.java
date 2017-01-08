@@ -26,10 +26,10 @@ import polanski.option.Option;
 public abstract class PlayerState {
 
     @NonNull
-    abstract ExoPlayerState playerState();
+    public abstract ExoPlayerState playerState();
 
     @NonNull
-    abstract Option<String> id();
+    public abstract Option<String> id();
 
     @NonNull
     static PlayerState create(@NonNull final ExoPlayerState exoPlayerState,

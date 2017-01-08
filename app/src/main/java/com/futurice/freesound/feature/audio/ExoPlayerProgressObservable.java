@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -67,15 +68,29 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
         @Override
         public void onTimelineChanged(final Timeline timeline, final Object manifest) {
+            safeEmitValue();
+        }
+
+        @Override
+        public void onPositionDiscontinuity() {
+            safeEmitValue();
+        }
+
+        @Override
+        public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
+            safeEmitValue();
+        }
+
+        private void safeEmitValue() {
             if (!isDisposed()) {
                 emitValue(exoPlayer, observer);
             }
         }
-
     }
 
     private static void emitValue(@NonNull final ExoPlayer exoPlayer,
                                   @NonNull final Observer<? super Long> observer) {
+        Timber.d("### Got event for time observable");
         observer.onNext(exoPlayer.getCurrentPosition());
     }
 }

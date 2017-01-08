@@ -102,6 +102,12 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
                                   .map(state -> PlayerState.create(state, currentUrl.get()));
     }
 
+    @NonNull
+    @Override
+    public Observable<Long> getTimePositionMsOnceAndStream() {
+        return observableExoPlayer.getTimePositionMsOnceAndStream();
+    }
+
     @Override
     public void togglePlayback(@NonNull final String url) {
         Preconditions.checkNotNull(url);

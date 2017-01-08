@@ -41,6 +41,14 @@ public interface AudioPlayer extends Releasable {
     Observable<PlayerState> getPlayerStateOnceAndStream();
 
     /**
+     * Current playback time position with initial value.
+     *
+     * @return the Observable playback time position in milliseconds.
+     */
+    @NonNull
+    Observable<Long> getTimePositionMsOnceAndStream();
+
+    /**
      * Toggles the playback for the given URL.
      *
      * Starts playback if currently playing, otherwise will pause.
