@@ -39,7 +39,6 @@ public final class Functions {
      */
     @NonNull
     public static Action nothing0() {
-        //noinspection unchecked
         return () -> {
         };
     }
@@ -51,7 +50,6 @@ public final class Functions {
      */
     @NonNull
     public static <T> Consumer<T> nothing1() {
-        //noinspection unchecked
         return v -> {
         };
     }
@@ -64,7 +62,6 @@ public final class Functions {
      */
     @NonNull
     public static <T> Predicate<T> alwaysTrue() {
-        //noinspection unchecked
         return v -> true;
     }
 
@@ -76,7 +73,6 @@ public final class Functions {
      */
     @NonNull
     public static <T> Predicate<T> alwaysFalse() {
-        //noinspection unchecked
         return v -> false;
     }
 
