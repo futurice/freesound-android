@@ -87,7 +87,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     public void init() {
         playerStateDisposable
                 .set(toggleUrlStream.concatMap(url -> observableExoPlayer
-                        .getExoPlayerStateStream()
+                        .getExoPlayerStateOnceAndStream()
                         .take(1)
                         .map(exoPlayerState -> toToggleAction(url, exoPlayerState))
                         .doOnNext(action -> handleToggleAction(action, url)))
@@ -98,7 +98,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @Override
     @NonNull
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
-        return observableExoPlayer.getExoPlayerStateStream()
+        return observableExoPlayer.getExoPlayerStateOnceAndStream()
                                   .map(state -> PlayerState.create(state, currentUrl.get()));
     }
 

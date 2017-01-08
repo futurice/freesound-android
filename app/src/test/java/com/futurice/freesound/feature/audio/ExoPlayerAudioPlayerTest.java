@@ -261,8 +261,10 @@ public class ExoPlayerAudioPlayerTest {
         private final BehaviorSubject<Long> exoPlayerProgressStream = BehaviorSubject.create();
 
         ArrangeBuilder() {
-            when(observableExoPlayer.getExoPlayerStateStream()).thenReturn(exoPlayerStateStream);
-            when(observableExoPlayer.getTimePositionStream()).thenReturn(exoPlayerProgressStream);
+            when(observableExoPlayer.getExoPlayerStateOnceAndStream())
+                    .thenReturn(exoPlayerStateStream);
+            when(observableExoPlayer.getTimePositionMsOnceAndStream())
+                    .thenReturn(exoPlayerProgressStream);
         }
 
         ArrangeBuilder withMediaSource() {

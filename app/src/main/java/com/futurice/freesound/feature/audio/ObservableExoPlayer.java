@@ -25,9 +25,21 @@ import io.reactivex.Observable;
  */
 public interface ObservableExoPlayer {
 
+    /**
+     * ExoPlayer state {@link Observable} with initial value.
+     *
+     * @return the Observable {@link ExoPlayerState}.
+     */
     @NonNull
-    Observable<ExoPlayerState> getExoPlayerStateStream();
+    Observable<ExoPlayerState> getExoPlayerStateOnceAndStream();
 
+    /**
+     * ExoPlayer current playback time position with initial value.
+     *
+     * The value is in milliseconds
+     *
+     * @return the Observable playback position.
+     */
     @NonNull
-    Observable<Long> getTimePositionStream();
+    Observable<Long> getTimePositionMsOnceAndStream();
 }

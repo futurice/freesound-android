@@ -38,13 +38,13 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
     @NonNull
     @Override
-    public Observable<ExoPlayerState> getExoPlayerStateStream() {
+    public Observable<ExoPlayerState> getExoPlayerStateOnceAndStream() {
         return new ExoPlayerStateObservable(exoPlayer);
     }
 
     @NonNull
     @Override
-    public Observable<Long> getTimePositionStream() {
+    public Observable<Long> getTimePositionMsOnceAndStream() {
         return new ExoPlayerProgressObservable(exoPlayer);
     }
 }
