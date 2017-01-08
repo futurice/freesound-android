@@ -23,6 +23,11 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+/**
+ * A base Application which provides a dependency injection mechanism.
+ *
+ * @param <T> The DI component class
+ */
 public abstract class BaseApplication<T> extends Application implements Injector<T> {
 
     @Nullable
