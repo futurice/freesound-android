@@ -17,7 +17,6 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.auto.factory.Provided;
 
 import android.support.annotation.NonNull;
 
@@ -41,11 +40,11 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
     private final boolean emitInitial;
 
     @Inject
-    ExoPlayerStateObservable(@Provided @NonNull final ExoPlayer exoPlayer) {
+    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }
 
-    ExoPlayerStateObservable(@Provided @NonNull final ExoPlayer exoPlayer,
+    ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer,
                              final boolean emitInitial) {
         this.exoPlayer = get(exoPlayer);
         this.emitInitial = emitInitial;
