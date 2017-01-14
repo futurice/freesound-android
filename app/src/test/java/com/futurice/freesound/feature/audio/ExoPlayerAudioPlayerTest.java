@@ -28,6 +28,8 @@ import org.mockito.MockitoAnnotations;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
+import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isNone;
+import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isSome;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.inOrder;
@@ -76,7 +78,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.id().equals(Option.NONE));
+                            .assertValue(isNone(PlayerState::id));
     }
 
     @Test
@@ -88,7 +90,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.id().equals(Option.NONE));
+                            .assertValue(isNone(PlayerState::id));
     }
 
     @Test
@@ -156,7 +158,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.id().isSome());
+                            .assertValue(isSome(PlayerState::id));
     }
 
     @Test
@@ -198,7 +200,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.id().isSome());
+                            .assertValue(isSome(PlayerState::id));
     }
 
     @Test
