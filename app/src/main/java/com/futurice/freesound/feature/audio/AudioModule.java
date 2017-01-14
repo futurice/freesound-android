@@ -42,6 +42,7 @@ import android.net.Uri;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.Observable;
 
 @Module
 public abstract class AudioModule {
@@ -66,6 +67,14 @@ public abstract class AudioModule {
                                                extractorsFactory,
                                                null, null);
     }
+
+    @Binds
+    abstract Observable<ExoPlayerState> provideExoPlayerStateObservable(
+            ExoPlayerStateObservable observable);
+
+    @Binds
+    abstract Observable<Long> provideExoPlayerProgressObservable(
+            ExoPlayerProgressObservable observable);
 
     @Binds
     @ActivityScope

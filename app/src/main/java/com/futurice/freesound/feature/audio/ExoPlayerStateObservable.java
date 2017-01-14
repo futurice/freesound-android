@@ -17,10 +17,11 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 
 import android.support.annotation.NonNull;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -32,7 +33,6 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
  *
  * Based upon techniques used in the RxBinding library.
  */
-@AutoFactory
 final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
 
     @NonNull
@@ -40,6 +40,7 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
 
     private final boolean emitInitial;
 
+    @Inject
     ExoPlayerStateObservable(@Provided @NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }

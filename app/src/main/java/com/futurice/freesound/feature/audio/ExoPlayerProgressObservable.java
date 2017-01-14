@@ -18,14 +18,14 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Timeline;
-import com.google.auto.factory.AutoFactory;
 import com.google.auto.factory.Provided;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -38,7 +38,6 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
  * This means that consumers will need to resubscribe whenever they want to check the progress
  * updates. It's not much of an Observable!
  */
-@AutoFactory
 final class ExoPlayerProgressObservable extends Observable<Long> {
 
     @NonNull
@@ -46,6 +45,7 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
     private final boolean emitInitial;
 
+    @Inject
     ExoPlayerProgressObservable(@Provided @NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }
@@ -97,7 +97,6 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
     private static void emitValue(@NonNull final ExoPlayer exoPlayer,
                                   @NonNull final Observer<? super Long> observer) {
-        Timber.d("### Got event for time observable");
         observer.onNext(exoPlayer.getCurrentPosition());
     }
 }

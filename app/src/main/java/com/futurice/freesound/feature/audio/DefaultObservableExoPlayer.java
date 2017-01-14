@@ -18,7 +18,10 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
+import com.futurice.freesound.common.rx.TimeScheduler;
+
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,24 +33,27 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
-    @NonNull
-    private final ExoPlayerStateObservableFactory stateObservableFactory;
+    @VisibleForTesting
+    final String PLAYER_PROGRESS_SCHEDULER_TAG = "PLAYER_PROGRESS_SCHEDULER";
 
     @NonNull
-    private final ExoPlayerProgressObservableFactory progressObservableFactory;
+    private final Observable<ExoPlayerState> stateObservableFactory;
+
+    @NonNull
+    private final Observable<Long> progressObservableFactory;
 
     @Inject
     DefaultObservableExoPlayer(
-            @NonNull final ExoPlayerStateObservableFactory stateObservableFactory,
-            @NonNull final ExoPlayerProgressObservableFactory progressObservableFactory) {
-        this.stateObservableFactory = get(stateObservableFactory);
-        this.progressObservableFactory = get(progressObservableFactory);
+            @NonNull final Observable<ExoPlayerState> stateObservable,
+            @NonNull final Observable<Long> progressObservable) {
+        this.stateObservableFactory = get(stateObservable);
+        this.progressObservableFactory = get(progressObservable);
     }
 
     @NonNull
     @Override
     public Observable<ExoPlayerState> getExoPlayerStateOnceAndStream() {
-        return stateObservableFactory.create();
+        return stateObservableFactory;
     }
 
     @NonNull
@@ -64,11 +70,12 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     private Observable<Long> timePositionMsOnceAndStream(
             final boolean isTimelineChanging, final long updatePeriod, final TimeUnit timeUnit) {
         return isTimelineChanging ?
-                Observable.timer(updatePeriod, timeUnit)
+                Observable.timer(updatePeriod, timeUnit,
+                                 TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
                           .repeat()
                           .startWith(0L)
-                          .switchMap(__ -> progressObservableFactory.create())
-                : progressObservableFactory.create();
+                          .switchMap(__ -> progressObservableFactory)
+                : progressObservableFactory;
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
