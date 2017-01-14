@@ -28,8 +28,6 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
@@ -99,31 +97,30 @@ final class SoundItemViewModel extends SimpleViewModel {
                                       public ObservableSource<? extends Option<Integer>> apply(
                                               final PlayerState playerState)
                                               throws Exception {
-                                          return playerState.id()
-                                                            .log("PLATSTATE", n -> Timber
-                                                                    .d("### is: %s for %s", n,
-                                                                       sound))
-                                                            .filter(id -> id.equals(sound.previews()
-                                                                                         .lowQualityMp3Url()))
-                                                            .isSome() ?
-
-                                                  Observable.timer(1, TimeUnit.SECONDS)
-                                                            .repeat()
-                                                            .startWith(0L)
-                                                            .switchMap(__ ->
-                                                                               audioPlayer
-                                                                                       .getTimePositionMsOnceAndStream()
-                                                                                       .doOnEach(
-                                                                                               e -> Timber
-                                                                                                       .d("### time position changed %s",
-                                                                                                          e))
-                                                                                       .map(positionMs -> toPercentage(
-                                                                                               positionMs,
-                                                                                               sound.duration()))
-                                                                                       .map(Option::ofObj))
+                                          return ifThis(playerState) ?
+                                                  getCurrentPercentage(playerState)
                                                   : Observable.just(Option.none());
                                       }
                                   });
+    }
+
+    private boolean ifThis(final PlayerState playerState) {
+        return playerState.id()
+                          .log("PLATSTATE", n -> Timber.d("### is: %s for %s", n, sound))
+                          .filter(id -> id.equals(sound.previews().lowQualityMp3Url()))
+                          .isSome();
+    }
+
+    private Observable<Option<Integer>> getCurrentPercentage(PlayerState playerState) {
+        return audioPlayer.getTimePositionMsOnceAndStream()
+                          .doOnEach(
+                                  e -> Timber
+                                          .d("### time position changed %s",
+                                             e))
+                          .map(positionMs -> toPercentage(
+                                  positionMs,
+                                  sound.duration()))
+                          .map(Option::ofObj);
     }
 
     private Integer toPercentage(final Long positionMs, final Float durationSec) {

@@ -23,6 +23,8 @@ import com.futurice.freesound.common.utils.Preconditions;
 
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -105,7 +107,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @NonNull
     @Override
     public Observable<Long> getTimePositionMsOnceAndStream() {
-        return observableExoPlayer.getTimePositionMsOnceAndStream();
+        return observableExoPlayer.getTimePositionMsOnceAndStream(50, TimeUnit.MILLISECONDS);
     }
 
     @Override

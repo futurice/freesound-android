@@ -20,6 +20,8 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -29,22 +31,47 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
     @NonNull
-    private final ExoPlayer exoPlayer;
+    private final ExoPlayerStateObservableFactory stateObservableFactory;
+
+    @NonNull
+    private final ExoPlayerProgressObservableFactory progressObservableFactory;
 
     @Inject
-    DefaultObservableExoPlayer(@NonNull final ExoPlayer exoPlayer) {
-        this.exoPlayer = get(exoPlayer);
+    DefaultObservableExoPlayer(
+            @NonNull final ExoPlayerStateObservableFactory stateObservableFactory,
+            @NonNull final ExoPlayerProgressObservableFactory progressObservableFactory) {
+        this.stateObservableFactory = get(stateObservableFactory);
+        this.progressObservableFactory = get(progressObservableFactory);
     }
 
     @NonNull
     @Override
     public Observable<ExoPlayerState> getExoPlayerStateOnceAndStream() {
-        return new ExoPlayerStateObservable(exoPlayer);
+        return stateObservableFactory.create();
     }
 
     @NonNull
     @Override
-    public Observable<Long> getTimePositionMsOnceAndStream() {
-        return new ExoPlayerProgressObservable(exoPlayer);
+    public Observable<Long> getTimePositionMsOnceAndStream(long updatePeriod, TimeUnit timeUnit) {
+        return getExoPlayerStateOnceAndStream()
+                .map(DefaultObservableExoPlayer::isTimelineChanging)
+                .switchMap(isTimelineChanging -> timePositionMsOnceAndStream(isTimelineChanging,
+                                                                             updatePeriod,
+                                                                             timeUnit));
+    }
+
+    @NonNull
+    private Observable<Long> timePositionMsOnceAndStream(
+            final boolean isTimelineChanging, final long updatePeriod, final TimeUnit timeUnit) {
+        return isTimelineChanging ?
+                Observable.timer(updatePeriod, timeUnit)
+                          .repeat()
+                          .startWith(0L)
+                          .switchMap(__ -> progressObservableFactory.create())
+                : progressObservableFactory.create();
+    }
+
+    private static boolean isTimelineChanging(final ExoPlayerState playerState) {
+        return playerState.playbackState() == ExoPlayer.STATE_READY && playerState.playWhenReady();
     }
 }

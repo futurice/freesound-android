@@ -18,6 +18,8 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.auto.factory.AutoFactory;
+import com.google.auto.factory.Provided;
 
 import android.support.annotation.NonNull;
 
@@ -28,10 +30,15 @@ import timber.log.Timber;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
- * Make an Observable from the ExoPlayer player state.
+ * Make an Observable from the ExoPlayer playback progress.
  *
  * Based upon techniques used in the RxBinding library.
+ *
+ * Note: There's no callback notification trigger only when the playback progress updates.
+ * This means that consumers will need to resubscribe whenever they want to check the progress
+ * updates. It's not much of an Observable!
  */
+@AutoFactory
 final class ExoPlayerProgressObservable extends Observable<Long> {
 
     @NonNull
@@ -39,11 +46,11 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
     private final boolean emitInitial;
 
-    ExoPlayerProgressObservable(@NonNull final ExoPlayer exoPlayer) {
+    ExoPlayerProgressObservable(@Provided @NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }
 
-    ExoPlayerProgressObservable(@NonNull final ExoPlayer exoPlayer,
+    ExoPlayerProgressObservable(@Provided @NonNull final ExoPlayer exoPlayer,
                                 final boolean emitInitial) {
         this.exoPlayer = get(exoPlayer);
         this.emitInitial = emitInitial;

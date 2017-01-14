@@ -25,6 +25,8 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
@@ -265,7 +267,7 @@ public class ExoPlayerAudioPlayerTest {
         ArrangeBuilder() {
             when(observableExoPlayer.getExoPlayerStateOnceAndStream())
                     .thenReturn(exoPlayerStateStream);
-            when(observableExoPlayer.getTimePositionMsOnceAndStream())
+            when(observableExoPlayer.getTimePositionMsOnceAndStream(1, TimeUnit.SECONDS))
                     .thenReturn(exoPlayerProgressStream);
         }
 
