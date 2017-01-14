@@ -41,7 +41,8 @@
               android:id="@+id/textView_soundDuration"
               style="@style/TextLabelOverlay"
               android:layout_gravity="bottom|end"
-              android:layout_margin="@dimen/spacing_small"
+              android:layout_marginBottom="@dimen/spacing_normal"
+              android:layout_marginEnd="@dimen/spacing_small"
               tools:text="3:34"/>
 
 </FrameLayout>

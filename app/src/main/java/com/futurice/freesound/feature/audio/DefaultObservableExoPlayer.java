@@ -71,7 +71,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
                 : progressObservableFactory.create();
     }
 
-    private static boolean isTimelineChanging(final ExoPlayerState playerState) {
+    private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
         return playerState.playbackState() == ExoPlayer.STATE_READY && playerState.playWhenReady();
     }
 }

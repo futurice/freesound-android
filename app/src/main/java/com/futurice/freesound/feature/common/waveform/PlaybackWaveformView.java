@@ -29,7 +29,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import polanski.option.Option;
-import timber.log.Timber;
+
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public class PlaybackWaveformView extends FrameLayout implements WaveformRender {
 
@@ -72,7 +73,7 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
 
     @Override
     public void setWaveform(@NonNull final float[] waveform) {
-        waveformView.setWaveform(waveform);
+        waveformView.setWaveform(get(waveform));
     }
 
     @Override
@@ -85,8 +86,7 @@ public class PlaybackWaveformView extends FrameLayout implements WaveformRender 
     }
 
     public void setProgress(@NonNull final Option<Integer> progressPercentage) {
-        Timber.d("### Setting progress to: %s", progressPercentage);
-        progressPercentage
+        get(progressPercentage)
                 .matchAction(p -> {
                                  playbackProgressBar.setVisibility(VISIBLE);
                                  playbackProgressBar.setProgress(p);
