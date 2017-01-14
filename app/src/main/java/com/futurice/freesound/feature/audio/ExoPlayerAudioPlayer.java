@@ -18,8 +18,8 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import com.futurice.freesound.functional.Functions;
-import com.futurice.freesound.utils.Preconditions;
+import com.futurice.freesound.common.functional.Functions;
+import com.futurice.freesound.common.utils.Preconditions;
 
 import android.support.annotation.NonNull;
 
@@ -32,7 +32,7 @@ import polanski.option.AtomicOption;
 import polanski.option.Option;
 import timber.log.Timber;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
  * AudioPlayer implementation that uses ExoPlayer 2.

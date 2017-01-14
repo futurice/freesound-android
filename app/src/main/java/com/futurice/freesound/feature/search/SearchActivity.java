@@ -49,8 +49,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
 import static butterknife.ButterKnife.findById;
-import static com.futurice.freesound.utils.Preconditions.checkNotNull;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.checkNotNull;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;

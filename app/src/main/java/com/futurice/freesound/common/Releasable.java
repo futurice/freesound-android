@@ -16,7 +16,13 @@
 
 package com.futurice.freesound.common;
 
+/**
+ * An entity which has releasable resources.
+ */
 public interface Releasable {
 
+    /**
+     * Releases the resources.
+     */
     void release();
 }

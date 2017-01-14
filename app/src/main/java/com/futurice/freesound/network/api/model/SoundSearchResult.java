@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 
 import java.util.List;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 @AutoValue
 public abstract class SoundSearchResult {

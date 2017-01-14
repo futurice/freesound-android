@@ -31,7 +31,7 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 

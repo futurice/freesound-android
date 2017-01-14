@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class FirebaseAnalytics implements Analytics {
 

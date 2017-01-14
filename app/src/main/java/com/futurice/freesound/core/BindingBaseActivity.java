@@ -27,6 +27,11 @@ import android.support.annotation.Nullable;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+/**
+ * A base Activity which provides the binding mechanism hooks to a View Model.
+ *
+ * @param <T> The DI component class.
+ */
 public abstract class BindingBaseActivity<T> extends BaseActivity<T> {
 
     @NonNull

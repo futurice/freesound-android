@@ -16,11 +16,11 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.common.rx.TimeScheduler;
+import com.futurice.freesound.common.rx.TimeSkipScheduler;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.rx.TimeScheduler;
-import com.futurice.freesound.rx.TimeSkipScheduler;
 import com.futurice.freesound.test.data.TestData;
 
 import org.junit.Before;

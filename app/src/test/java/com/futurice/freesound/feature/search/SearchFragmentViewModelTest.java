@@ -36,6 +36,8 @@ import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
+import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.hasOptionValue;
+import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isNone;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,7 +69,7 @@ public class SearchFragmentViewModelTest {
 
         viewModel.getSoundsOnceAndStream()
                  .test()
-                 .assertValue(Option.none());
+                 .assertValue(isNone());
     }
 
     @Test
@@ -77,7 +79,7 @@ public class SearchFragmentViewModelTest {
 
         viewModel.getSoundsOnceAndStream()
                  .test()
-                 .assertValue(ofObj(expectedDisplayableItems(sounds)));
+                 .assertValue(hasOptionValue(expectedDisplayableItems(sounds)));
     }
 
     @Test

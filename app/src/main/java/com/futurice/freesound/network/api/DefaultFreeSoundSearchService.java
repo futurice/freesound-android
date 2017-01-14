@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public final class DefaultFreeSoundSearchService implements FreeSoundSearchService {
 

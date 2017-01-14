@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.common.Text;
+import com.futurice.freesound.common.utils.TextUtils;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
-import com.futurice.freesound.utils.TextUtils;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 
 import android.support.annotation.NonNull;
@@ -34,9 +34,9 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
-import static com.futurice.freesound.functional.Functions.nothing1;
-import static com.futurice.freesound.rx.TimeScheduler.time;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.functional.Functions.nothing1;
+import static com.futurice.freesound.common.rx.TimeScheduler.time;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 

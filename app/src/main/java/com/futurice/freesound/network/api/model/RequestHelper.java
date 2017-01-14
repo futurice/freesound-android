@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Iterator;
 
-import static com.futurice.freesound.utils.Preconditions.checkNotNull;
+import static com.futurice.freesound.common.utils.Preconditions.checkNotNull;
 
 final class RequestHelper {
 

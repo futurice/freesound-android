@@ -35,7 +35,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static butterknife.ButterKnife.findById;
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {

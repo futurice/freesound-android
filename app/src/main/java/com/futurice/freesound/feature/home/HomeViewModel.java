@@ -26,7 +26,7 @@ import io.reactivex.subjects.PublishSubject;
 import polanski.option.Unit;
 import timber.log.Timber;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 final class HomeViewModel extends SimpleViewModel {

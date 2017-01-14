@@ -27,7 +27,9 @@ import android.support.annotation.Nullable;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
- * The base Fragment to be used when the Fragment View is to be bound to a ViewModel.
+ * A base Fragment which provides the binding mechanism hooks to a View Model.
+ *
+ * @param <T> The DI component class.
  */
 public abstract class BindingBaseFragment<T> extends BaseFragment<T> {
 

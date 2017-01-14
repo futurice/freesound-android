@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public class FreesoundApplication extends BaseApplication<FreesoundApplicationComponent> {
 

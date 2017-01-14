@@ -96,7 +96,7 @@ ext {
             autoValueGson          : '0.4.4',
             autoValueParcelable    : '0.2.5',
             autoFactory            : '1.0-beta3',
-            options                : '1.2.0',
+            options                : '1.2.4',
             exoplayer              : 'r2.1.1',
             firebase               : '9.4.0',
             stetho                 : '1.3.1',

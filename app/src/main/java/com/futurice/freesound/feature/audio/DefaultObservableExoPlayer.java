@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-import static com.futurice.freesound.utils.Preconditions.get;
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
