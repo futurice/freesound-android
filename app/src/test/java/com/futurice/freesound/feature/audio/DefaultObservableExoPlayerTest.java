@@ -40,17 +40,17 @@ public class DefaultObservableExoPlayerTest {
 
     private BehaviorSubject<ExoPlayerState> exoPlayerStateOnceAndStream;
 
-    private BehaviorSubject<Long> exoPlayerProgressObservable;
+    private BehaviorSubject<Long> exoPlayerProgressOnceAndStream;
 
     private DefaultObservableExoPlayer defaultObservableExoPlayer;
 
     @Before
     public void setUp() throws Exception {
         exoPlayerStateOnceAndStream = BehaviorSubject.createDefault(TEST_INITIAL_EXOPLAYER_STATE);
-        exoPlayerProgressObservable = BehaviorSubject
+        exoPlayerProgressOnceAndStream = BehaviorSubject
                 .createDefault(TEST_INITIAL_EXOPLAYER_PROGRESS);
         defaultObservableExoPlayer = new DefaultObservableExoPlayer(exoPlayerStateOnceAndStream,
-                                                                    exoPlayerProgressObservable);
+                                                                    exoPlayerProgressOnceAndStream);
     }
 
     @Test
@@ -134,7 +134,7 @@ public class DefaultObservableExoPlayerTest {
 
         ArrangeBuilder() {
             exoPlayerStateOnceAndStream.onNext(TEST_INITIAL_EXOPLAYER_STATE);
-            exoPlayerProgressObservable.onNext(TEST_INITIAL_EXOPLAYER_PROGRESS);
+            exoPlayerProgressOnceAndStream.onNext(TEST_INITIAL_EXOPLAYER_PROGRESS);
             withTimeSkipScheduler();
         }
 
@@ -165,7 +165,7 @@ public class DefaultObservableExoPlayerTest {
         }
 
         ArrangeBuilder withProgress(long progress) {
-            exoPlayerProgressObservable.onNext(progress);
+            exoPlayerProgressOnceAndStream.onNext(progress);
             return this;
         }
 
