@@ -69,7 +69,7 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void stop_clearsCurrentUrl() {
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from("id"), "url");
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create("id"), "url");
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.act()
                       .togglePlayback(playbackSource)
@@ -100,7 +100,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPlay_playsSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource()
@@ -118,7 +118,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPlay_setsPlaybackUrl() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -137,7 +137,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPause_pausesSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -155,7 +155,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPause_retainsPlaybackUrl() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -176,7 +176,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toUnpause_unpausesSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -201,7 +201,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_doesNotClearPlaybackUrl_whenPausing() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.from(id), url);
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
@@ -224,8 +224,8 @@ public class ExoPlayerAudioPlayerTest {
         String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
-        PlaybackSource playbackSource1 = PlaybackSource.create(Id.from(id1), url1);
-        PlaybackSource playbackSource2 = PlaybackSource.create(Id.from(id2), url2);
+        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
+        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
@@ -251,8 +251,8 @@ public class ExoPlayerAudioPlayerTest {
         String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
-        PlaybackSource playbackSource1 = PlaybackSource.create(Id.from(id1), url1);
-        PlaybackSource playbackSource2 = PlaybackSource.create(Id.from(id2), url2);
+        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
+        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();

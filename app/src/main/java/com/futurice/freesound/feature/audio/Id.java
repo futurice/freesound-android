@@ -27,12 +27,12 @@ public abstract class Id {
     public abstract String id();
 
     @NonNull
-    public static Id from(@NonNull final String id) {
+    public static Id create(@NonNull final String id) {
         return new AutoValue_Id(id);
     }
 
     @NonNull
     public static Id from(@NonNull final Long id) {
-        return from(String.valueOf(id));
+        return create(String.valueOf(id));
     }
 }

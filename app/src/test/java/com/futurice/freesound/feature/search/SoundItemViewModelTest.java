@@ -266,16 +266,38 @@ public class SoundItemViewModelTest {
     @Test
     public void progressPercentage_isNone_whenDifferentSoundActiveInPlayer_usingId() {
         long id1 = 1L;
+        String url1 = "url";
         long id2 = 2L;
         Sound sound = TEST_SOUND.toBuilder()
                                 .id(id1)
-                                .url("url")
+                                .url(url1)
                                 .build();
         new ArrangeBuilder()
                 .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
                                                          Option.ofObj(PlaybackSource
                                                                               .create(Id.from(id2),
-                                                                                      sound.url()))));
+                                                                                      url1))));
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.progressPercentage()
+          .test()
+          .assertValue(Option.none());
+    }
+
+    @Test
+    public void progressPercentage_isNone_whenDifferentSoundActiveInPlayer_usingUrl() {
+        long id1 = 1L;
+        String url1 = "url";
+        long id2 = 2L;
+        Sound sound = TEST_SOUND.toBuilder()
+                                .id(id1)
+                                .url(url1)
+                                .build();
+        new ArrangeBuilder()
+                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
+                                                         Option.ofObj(PlaybackSource
+                                                                              .create(Id.from(id2),
+                                                                                      url1))));
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
 
         vm.progressPercentage()
