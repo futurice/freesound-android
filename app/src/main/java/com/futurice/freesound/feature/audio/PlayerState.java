@@ -25,15 +25,24 @@ import polanski.option.Option;
 @AutoValue
 public abstract class PlayerState {
 
+    public enum State {
+        IDLE,
+        BUFFERING,
+        PLAYING,
+        PAUSED,
+        ENDED,
+        ERROR
+    }
+
     @NonNull
-    public abstract ExoPlayerState playerState();
+    public abstract State state();
 
     @NonNull
     public abstract Option<PlaybackSource> source();
 
     @NonNull
-    static PlayerState create(@NonNull final ExoPlayerState exoPlayerState,
-                              @NonNull final Option<PlaybackSource> source) {
-        return new AutoValue_PlayerState(exoPlayerState, source);
+    public static PlayerState create(@NonNull final State state,
+                                     @NonNull final Option<PlaybackSource> source) {
+        return new AutoValue_PlayerState(state, source);
     }
 }

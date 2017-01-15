@@ -102,6 +102,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @NonNull
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
         return observableExoPlayer.getExoPlayerStateOnceAndStream()
+                                  .map(ExoPlayerAudioPlayer::toState)
                                   .map(state -> PlayerState.create(state, currentSource.get()));
     }
 
@@ -179,5 +180,21 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
         return currentSource.get()
                             .map(playbackSource -> !playbackSource.equals(source))
                             .orDefault(() -> false);
+    }
+
+    @NonNull
+    private static PlayerState.State toState(ExoPlayerState exoPlayerState) {
+        int exoplaybackState = exoPlayerState.playbackState();
+        if (exoplaybackState == ExoPlayer.STATE_IDLE) {
+            return PlayerState.State.IDLE;
+        } else if (exoplaybackState == ExoPlayer.STATE_ENDED) {
+            return PlayerState.State.ENDED;
+        } else if (exoplaybackState == ExoPlayer.STATE_BUFFERING) {
+            return PlayerState.State.BUFFERING;
+        } else if (exoplaybackState == ExoPlayer.STATE_READY) {
+            return exoPlayerState.playWhenReady() ? PlayerState.State.PLAYING
+                    : PlayerState.State.PAUSED;
+        }
+        return PlayerState.State.ERROR;
     }
 }

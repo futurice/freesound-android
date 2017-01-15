@@ -113,6 +113,9 @@ public abstract class Sound implements Parcelable {
         return new AutoValue_Sound.Builder();
     }
 
+    @NonNull
+    public abstract Builder toBuilder();
+
     @AutoValue
     public abstract static class Image implements Parcelable {
 
