@@ -31,11 +31,8 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import polanski.option.Option;
-import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
@@ -91,42 +88,8 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     Observable<Option<Integer>> progressPercentage() {
-
         return audioPlayer.getPlayerStateOnceAndStream()
-                          .switchMap(
-                                  new Function<PlayerState, ObservableSource<? extends Option<Integer>>>() {
-                                      @Override
-                                      public ObservableSource<? extends Option<Integer>> apply(
-                                              final PlayerState playerState)
-                                              throws Exception {
-                                          return ifThis(playerState) ?
-                                                  getCurrentPercentage(playerState)
-                                                  : Observable.just(Option.none());
-                                      }
-                                  });
-    }
-
-    private boolean ifThis(final PlayerState playerState) {
-        return playerState.source()
-                          .log("PLATSTATE", n -> Timber.d("### is: %s for %s", n, sound))
-                          .filter(playbackSource -> playbackSource.id().equals(Id.from(sound.id())))
-                          .isSome();
-    }
-
-    private Observable<Option<Integer>> getCurrentPercentage(PlayerState playerState) {
-        return audioPlayer.getTimePositionMsOnceAndStream()
-                          .doOnEach(
-                                  e -> Timber
-                                          .d("### time position changed %s",
-                                             e))
-                          .map(positionMs -> toPercentage(
-                                  positionMs,
-                                  sound.duration()))
-                          .map(Option::ofObj);
-    }
-
-    private Integer toPercentage(final Long positionMs, final Float durationSec) {
-        return (int) ((positionMs / (durationSec * 1000.0)) * 100);
+                          .switchMap(this::progressOrNothing);
     }
 
     void openDetails() {
@@ -136,6 +99,32 @@ final class SoundItemViewModel extends SimpleViewModel {
     void toggleSoundPlayback() {
         audioPlayer.togglePlayback(PlaybackSource.create(Id.from(sound.id()),
                                                          sound.previews().lowQualityMp3Url()));
+    }
+
+    @NonNull
+    private Observable<Option<Integer>> progressOrNothing(@NonNull final PlayerState playerState) {
+        return isThisSound(playerState) ?
+                getCurrentPercentage() :
+                Observable.just(Option.none());
+    }
+
+    private boolean isThisSound(@NonNull final PlayerState playerState) {
+        return playerState.source()
+                          .filter(playbackSource -> playbackSource.id().equals(Id.from(sound.id())))
+                          .isSome();
+    }
+
+    @NonNull
+    private Observable<Option<Integer>> getCurrentPercentage() {
+        return audioPlayer.getTimePositionMsOnceAndStream()
+                          .map(positionMs -> toPercentage(
+                                  positionMs,
+                                  sound.duration()))
+                          .map(Option::ofObj);
+    }
+
+    private int toPercentage(final Long positionMs, final Float durationSec) {
+        return (int) ((positionMs / (durationSec * 1000.0F)) * 100L);
     }
 
 }
