@@ -49,6 +49,7 @@ android {
         debug {
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
+            testCoverageEnabled = true
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), releaseProguardFiles
