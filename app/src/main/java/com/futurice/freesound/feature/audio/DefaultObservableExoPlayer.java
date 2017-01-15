@@ -37,23 +37,23 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     final String PLAYER_PROGRESS_SCHEDULER_TAG = "PLAYER_PROGRESS_SCHEDULER";
 
     @NonNull
-    private final Observable<ExoPlayerState> stateObservableFactory;
+    private final Observable<ExoPlayerState> stateOnceAndStream;
 
     @NonNull
-    private final Observable<Long> progressObservableFactory;
+    private final Observable<Long> progressOnceAndStream;
 
     @Inject
     DefaultObservableExoPlayer(
-            @NonNull final Observable<ExoPlayerState> stateObservable,
-            @NonNull final Observable<Long> progressObservable) {
-        this.stateObservableFactory = get(stateObservable);
-        this.progressObservableFactory = get(progressObservable);
+            @NonNull final Observable<ExoPlayerState> stateOnceAndStream,
+            @NonNull final Observable<Long> progressOnceAndStream) {
+        this.stateOnceAndStream = get(stateOnceAndStream);
+        this.progressOnceAndStream = get(progressOnceAndStream);
     }
 
     @NonNull
     @Override
     public Observable<ExoPlayerState> getExoPlayerStateOnceAndStream() {
-        return stateObservableFactory;
+        return stateOnceAndStream;
     }
 
     @NonNull
@@ -74,8 +74,8 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
                                  TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
                           .repeat()
                           .startWith(0L)
-                          .switchMap(__ -> progressObservableFactory)
-                : progressObservableFactory;
+                          .switchMap(__ -> progressOnceAndStream)
+                : progressOnceAndStream;
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
