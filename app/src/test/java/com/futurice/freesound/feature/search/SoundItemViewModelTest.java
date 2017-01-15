@@ -156,7 +156,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionNonZero() {
+    public void progressPercentange_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionNonZero() {
         long positionMs = TimeUnit.SECONDS.toMillis(10);
         float durationSec = 200f;
         int expectedPercentage = 5;
@@ -180,7 +180,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_expectedPercentage_0() {
+    public void progressPercentange_expectedPercentage_0() {
         long positionMs = 0;
         float durationSec = 200f;
         int expectedPercentage = 0;
@@ -204,7 +204,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_expectedPercentage_99Point9() {
+    public void progressPercentange_expectedPercentage_99Point9() {
         long positionMs = 999;
         float durationSec = 1;
         int expectedPercentage = 99;
@@ -228,7 +228,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_expectedPercentage_100() {
+    public void progressPercentange_expectedPercentage_100() {
         long positionMs = 1000;
         float durationSec = 1;
         int expectedPercentage = 100;
@@ -252,7 +252,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_percentageLimitedTo100() {
+    public void progressPercentage_LimitedTo100() {
         long positionMs = 2000;
         float durationSec = 1;
         int expectedPercentage = 100;
@@ -276,7 +276,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_isNone_whenOtherSoundActiveInPlayer_usingId() {
+    public void progressPercentage_isNone_whenDifferentSoundActiveInPlayer_usingId() {
         long id1 = 1L;
         long id2 = 2L;
         Sound sound = TEST_SOUND.toBuilder()
