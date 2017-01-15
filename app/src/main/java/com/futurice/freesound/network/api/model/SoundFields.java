@@ -42,7 +42,7 @@ public final class SoundFields {
             .duration()
             .build();
 
-    private static final String ID = "id";
+    private static final String ID = "source";
     private static final String URL = "url";
     private static final String NAME = "name";
     private static final String TAGS = "tags";

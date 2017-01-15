@@ -71,10 +71,10 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     private final SerialDisposable playerStateDisposable = new SerialDisposable();
 
     @NonNull
-    private final PublishSubject<String> toggleUrlStream = PublishSubject.create();
+    private final PublishSubject<PlaybackSource> toggleSourceStream = PublishSubject.create();
 
     @NonNull
-    private final AtomicOption<String> currentUrl = new AtomicOption<>();
+    private final AtomicOption<PlaybackSource> currentSource = new AtomicOption<>();
 
     @Inject
     ExoPlayerAudioPlayer(@NonNull final ExoPlayer exoPlayer,
@@ -88,20 +88,21 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @Override
     public void init() {
         playerStateDisposable
-                .set(toggleUrlStream.concatMap(url -> observableExoPlayer
+                .set(toggleSourceStream.concatMap(playbackSource -> observableExoPlayer
                         .getExoPlayerStateOnceAndStream()
                         .take(1)
-                        .map(exoPlayerState -> toToggleAction(url, exoPlayerState))
-                        .doOnNext(action -> handleToggleAction(action, url)))
-                                    .subscribe(Functions.nothing1(),
-                                               e -> Timber.e(e, "Fatal error toggling playback")));
+                        .map(exoPlayerState -> toToggleAction(playbackSource, exoPlayerState))
+                        .doOnNext(action -> handleToggleAction(action, playbackSource)))
+                                       .subscribe(Functions.nothing1(),
+                                                  e -> Timber
+                                                          .e(e, "Fatal error toggling playback")));
     }
 
     @Override
     @NonNull
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
         return observableExoPlayer.getExoPlayerStateOnceAndStream()
-                                  .map(state -> PlayerState.create(state, currentUrl.get()));
+                                  .map(state -> PlayerState.create(state, currentSource.get()));
     }
 
     @NonNull
@@ -111,9 +112,9 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     @Override
-    public void togglePlayback(@NonNull final String url) {
-        Preconditions.checkNotNull(url);
-        toggleUrlStream.onNext(url);
+    public void togglePlayback(@NonNull PlaybackSource playbackSource) {
+        Preconditions.checkNotNull(playbackSource);
+        toggleSourceStream.onNext(playbackSource);
     }
 
     @Override
@@ -128,9 +129,9 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     @NonNull
-    private ToggleAction toToggleAction(@NonNull final String url,
+    private ToggleAction toToggleAction(@NonNull final PlaybackSource playbackSource,
                                         @NonNull final ExoPlayerState exoPlayerState) {
-        if (isIdle(exoPlayerState.playbackState()) || hasSourceUrlChanged(url)) {
+        if (isIdle(exoPlayerState.playbackState()) || hasSourceChanged(playbackSource)) {
             return ToggleAction.PLAY;
         } else {
             return exoPlayerState.playWhenReady() ? ToggleAction.PAUSE : ToggleAction.UNPAUSE;
@@ -138,11 +139,11 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     private void handleToggleAction(@NonNull final ToggleAction action,
-                                    @NonNull final String url) {
-        Timber.v("Action: %s, URL: %s", action, url);
+                                    @NonNull final PlaybackSource playbackSource) {
+        Timber.v("Action: %s, URL: %s", action, playbackSource);
         switch (action) {
             case PLAY:
-                play(url);
+                play(playbackSource);
                 break;
             case PAUSE:
             case UNPAUSE:
@@ -155,10 +156,10 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
 
     }
 
-    private void play(@NonNull final String url) {
-        exoPlayer.prepare(mediaSourceFactory.create(get(url)));
+    private void play(@NonNull final PlaybackSource playbackSource) {
+        exoPlayer.prepare(mediaSourceFactory.create(get(playbackSource.url())));
         exoPlayer.setPlayWhenReady(true);
-        currentUrl.set(Option.ofObj(url));
+        currentSource.set(Option.ofObj(playbackSource));
     }
 
     private void toggle(@NonNull final ToggleAction action) {
@@ -166,7 +167,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     private void stop() {
-        currentUrl.set(Option.none());
+        currentSource.set(Option.none());
         exoPlayer.stop();
     }
 
@@ -174,9 +175,9 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
         return state == ExoPlayer.STATE_IDLE || state == ExoPlayer.STATE_ENDED;
     }
 
-    private boolean hasSourceUrlChanged(@NonNull final String url) {
-        return currentUrl.get()
-                         .map(id -> !id.equals(url))
-                         .orDefault(() -> false);
+    private boolean hasSourceChanged(@NonNull final PlaybackSource source) {
+        return currentSource.get()
+                            .map(playbackSource -> !playbackSource.equals(source))
+                            .orDefault(() -> false);
     }
 }

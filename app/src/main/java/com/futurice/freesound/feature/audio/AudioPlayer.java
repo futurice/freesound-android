@@ -53,9 +53,9 @@ public interface AudioPlayer extends Releasable {
      *
      * Starts playback if currently playing, otherwise will pause.
      *
-     * @param url the audio source URL.
+     * @param playbackSource the audio source.
      */
-    void togglePlayback(@NonNull String url);
+    void togglePlayback(@NonNull PlaybackSource playbackSource);
 
     /**
      * Stops the current playback and reset state.

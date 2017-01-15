@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,18 @@ import com.google.auto.value.AutoValue;
 
 import android.support.annotation.NonNull;
 
-import polanski.option.Option;
-
 @AutoValue
-public abstract class PlayerState {
+public abstract class PlaybackSource {
 
     @NonNull
-    public abstract ExoPlayerState playerState();
+    public abstract Id id();
 
     @NonNull
-    public abstract Option<PlaybackSource> source();
+    public abstract String url();
 
     @NonNull
-    static PlayerState create(@NonNull final ExoPlayerState exoPlayerState,
-                              @NonNull final Option<PlaybackSource> source) {
-        return new AutoValue_PlayerState(exoPlayerState, source);
+    public static PlaybackSource create(@NonNull final Id id,
+                                        @NonNull final String url) {
+        return new AutoValue_PlaybackSource(id, url);
     }
 }
