@@ -183,7 +183,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     @NonNull
-    private static PlayerState.State toState(ExoPlayerState exoPlayerState) {
+    private static PlayerState.State toState(@NonNull final ExoPlayerState exoPlayerState) {
         int exoplaybackState = exoPlayerState.playbackState();
         if (exoplaybackState == ExoPlayer.STATE_IDLE) {
             return PlayerState.State.IDLE;
@@ -192,9 +192,10 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
         } else if (exoplaybackState == ExoPlayer.STATE_BUFFERING) {
             return PlayerState.State.BUFFERING;
         } else if (exoplaybackState == ExoPlayer.STATE_READY) {
-            return exoPlayerState.playWhenReady() ? PlayerState.State.PLAYING
-                    : PlayerState.State.PAUSED;
+            return exoPlayerState.playWhenReady() ?
+                    PlayerState.State.PLAYING : PlayerState.State.PAUSED;
+        } else {
+            throw new IllegalStateException("Unsupported Exoplayer state: " + exoplaybackState);
         }
-        return PlayerState.State.ERROR;
     }
 }
