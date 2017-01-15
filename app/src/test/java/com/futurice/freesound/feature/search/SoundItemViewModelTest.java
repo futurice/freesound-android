@@ -156,7 +156,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer() {
+    public void progress_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionNonZero() {
         long positionMs = TimeUnit.SECONDS.toMillis(10);
         float durationSec = 200f;
         int expectedPercentage = 5;
@@ -180,10 +180,82 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progress_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionZero() {
+    public void progress_expectedPercentage_0() {
         long positionMs = 0;
         float durationSec = 200f;
         int expectedPercentage = 0;
+        Sound sound = TEST_SOUND.toBuilder()
+                                .id(1L)
+                                .url("url")
+                                .duration(durationSec)
+                                .build();
+        new ArrangeBuilder()
+                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
+                                                         Option.ofObj(PlaybackSource
+                                                                              .create(Id.from(
+                                                                                      sound.id()),
+                                                                                      sound.url()))))
+                .withPlayerProgressEvent(positionMs);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.progressPercentage()
+          .test()
+          .assertValue(Option.ofObj(expectedPercentage));
+    }
+
+    @Test
+    public void progress_expectedPercentage_99Point9() {
+        long positionMs = 999;
+        float durationSec = 1;
+        int expectedPercentage = 99;
+        Sound sound = TEST_SOUND.toBuilder()
+                                .id(1L)
+                                .url("url")
+                                .duration(durationSec)
+                                .build();
+        new ArrangeBuilder()
+                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
+                                                         Option.ofObj(PlaybackSource
+                                                                              .create(Id.from(
+                                                                                      sound.id()),
+                                                                                      sound.url()))))
+                .withPlayerProgressEvent(positionMs);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.progressPercentage()
+          .test()
+          .assertValue(Option.ofObj(expectedPercentage));
+    }
+
+    @Test
+    public void progress_expectedPercentage_100() {
+        long positionMs = 1000;
+        float durationSec = 1;
+        int expectedPercentage = 100;
+        Sound sound = TEST_SOUND.toBuilder()
+                                .id(1L)
+                                .url("url")
+                                .duration(durationSec)
+                                .build();
+        new ArrangeBuilder()
+                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
+                                                         Option.ofObj(PlaybackSource
+                                                                              .create(Id.from(
+                                                                                      sound.id()),
+                                                                                      sound.url()))))
+                .withPlayerProgressEvent(positionMs);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+
+        vm.progressPercentage()
+          .test()
+          .assertValue(Option.ofObj(expectedPercentage));
+    }
+
+    @Test
+    public void progress_percentageLimitedTo100() {
+        long positionMs = 2000;
+        float durationSec = 1;
+        int expectedPercentage = 100;
         Sound sound = TEST_SOUND.toBuilder()
                                 .id(1L)
                                 .url("url")
