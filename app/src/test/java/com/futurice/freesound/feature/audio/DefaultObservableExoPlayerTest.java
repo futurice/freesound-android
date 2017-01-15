@@ -23,7 +23,6 @@ import com.futurice.freesound.common.rx.TimeSkipScheduler;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
 
 import java.util.concurrent.TimeUnit;
 
@@ -39,15 +38,17 @@ public class DefaultObservableExoPlayerTest {
 
     private static final long TEST_INITIAL_EXOPLAYER_PROGRESS = 0L;
 
-    private BehaviorSubject<ExoPlayerState> exoPlayerStateOnceAndStream = BehaviorSubject.create();
+    private BehaviorSubject<ExoPlayerState> exoPlayerStateOnceAndStream;
 
-    private BehaviorSubject<Long> exoPlayerProgressObservable = BehaviorSubject.create();
+    private BehaviorSubject<Long> exoPlayerProgressObservable;
 
     private DefaultObservableExoPlayer defaultObservableExoPlayer;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        exoPlayerStateOnceAndStream = BehaviorSubject.createDefault(TEST_INITIAL_EXOPLAYER_STATE);
+        exoPlayerProgressObservable = BehaviorSubject
+                .createDefault(TEST_INITIAL_EXOPLAYER_PROGRESS);
         defaultObservableExoPlayer = new DefaultObservableExoPlayer(exoPlayerStateOnceAndStream,
                                                                     exoPlayerProgressObservable);
     }
@@ -131,7 +132,7 @@ public class DefaultObservableExoPlayerTest {
 
     private class ArrangeBuilder {
 
-        public ArrangeBuilder() {
+        ArrangeBuilder() {
             exoPlayerStateOnceAndStream.onNext(TEST_INITIAL_EXOPLAYER_STATE);
             exoPlayerProgressObservable.onNext(TEST_INITIAL_EXOPLAYER_PROGRESS);
             withTimeSkipScheduler();
