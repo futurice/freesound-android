@@ -21,7 +21,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.futurice.freesound.common.rx.TimeScheduler;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,8 +32,7 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
-    @VisibleForTesting
-    final String PLAYER_PROGRESS_SCHEDULER_TAG = "PLAYER_PROGRESS_SCHEDULER";
+    private static final String PLAYER_PROGRESS_SCHEDULER_TAG = "PLAYER_PROGRESS_SCHEDULER";
 
     @NonNull
     private final Observable<ExoPlayerState> stateOnceAndStream;
@@ -58,7 +56,8 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
     @NonNull
     @Override
-    public Observable<Long> getTimePositionMsOnceAndStream(long updatePeriod, TimeUnit timeUnit) {
+    public Observable<Long> getTimePositionMsOnceAndStream(long updatePeriod,
+                                                           @NonNull final TimeUnit timeUnit) {
         return getExoPlayerStateOnceAndStream()
                 .map(DefaultObservableExoPlayer::isTimelineChanging)
                 .switchMap(isTimelineChanging -> timePositionMsOnceAndStream(isTimelineChanging,
@@ -67,8 +66,9 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     }
 
     @NonNull
-    private Observable<Long> timePositionMsOnceAndStream(
-            final boolean isTimelineChanging, final long updatePeriod, final TimeUnit timeUnit) {
+    private Observable<Long> timePositionMsOnceAndStream(final boolean isTimelineChanging,
+                                                         final long updatePeriod,
+                                                         @NonNull final TimeUnit timeUnit) {
         return isTimelineChanging ?
                 Observable.timer(updatePeriod, timeUnit,
                                  TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))

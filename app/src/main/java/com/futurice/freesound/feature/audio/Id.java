@@ -32,7 +32,7 @@ public abstract class Id {
     }
 
     @NonNull
-    public static Id from(@NonNull final Long id) {
+    public static Id from(final long id) {
         return create(String.valueOf(id));
     }
 }

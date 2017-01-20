@@ -123,8 +123,8 @@ final class SoundItemViewModel extends SimpleViewModel {
                           .map(Option::ofObj);
     }
 
-    private static int toPercentage(@NonNull final Long positionMs,
-                                    @NonNull final Float durationSec) {
+    private static int toPercentage(final long positionMs,
+                                    final float durationSec) {
         return Math.min(100, (int) ((positionMs / (durationSec * 1000.0F)) * 100L));
     }
 

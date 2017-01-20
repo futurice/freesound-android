@@ -52,6 +52,8 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
  */
 final class ExoPlayerAudioPlayer implements AudioPlayer {
 
+    private static final int DEFAULT_UPDATE_PERIOD_MILLIS = 50;
+
     private enum ToggleAction {
         PAUSE,
         UNPAUSE,
@@ -109,7 +111,8 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @NonNull
     @Override
     public Observable<Long> getTimePositionMsOnceAndStream() {
-        return observableExoPlayer.getTimePositionMsOnceAndStream(50, TimeUnit.MILLISECONDS);
+        return observableExoPlayer.getTimePositionMsOnceAndStream(DEFAULT_UPDATE_PERIOD_MILLIS,
+                                                                  TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -199,4 +202,5 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
                 throw new IllegalStateException("Unsupported Exoplayer state: " + exoplaybackState);
         }
     }
+
 }
