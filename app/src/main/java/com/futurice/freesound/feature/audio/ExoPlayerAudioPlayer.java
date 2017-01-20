@@ -18,10 +18,10 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import com.futurice.freesound.common.functional.Functions;
 import com.futurice.freesound.common.utils.Preconditions;
 
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 
 import java.util.concurrent.TimeUnit;
 
@@ -94,8 +94,9 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
                         .getExoPlayerStateOnceAndStream()
                         .take(1)
                         .map(exoPlayerState -> toToggleAction(playbackSource, exoPlayerState))
-                        .doOnNext(action -> handleToggleAction(action, playbackSource)))
-                                       .subscribe(Functions.nothing1(),
+                        .map(action -> Pair.create(action, playbackSource)))
+                                       .subscribe(pair -> handleToggleAction(pair.first,
+                                                                             pair.second),
                                                   e -> Timber
                                                           .e(e, "Fatal error toggling playback")));
     }
