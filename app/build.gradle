@@ -46,6 +46,20 @@ android {
         }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def apkFileName = applicationName
+            apkFileName += "-${variant.versionName}"
+            apkFileName += ".apk"
+
+            //noinspection GroovyAssignabilityCheck
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    apkFileName
+            )
+        }
+    }
+
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
