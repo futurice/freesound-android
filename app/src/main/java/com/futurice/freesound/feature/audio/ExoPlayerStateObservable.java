@@ -20,6 +20,8 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -37,6 +39,7 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
 
     private final boolean emitInitial;
 
+    @Inject
     ExoPlayerStateObservable(@NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }

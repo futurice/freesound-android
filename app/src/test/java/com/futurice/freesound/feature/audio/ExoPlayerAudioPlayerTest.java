@@ -25,6 +25,8 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
@@ -67,9 +69,10 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void stop_clearsCurrentUrl() {
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create("id"), "url");
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.act()
-                      .togglePlayback("url")
+                      .togglePlayback(playbackSource)
                       .init();
         arrangeBuilder.withPlayingExoPlayer();
 
@@ -78,7 +81,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isNone(PlayerState::id));
+                            .assertValue(isNone(PlayerState::source));
     }
 
     @Test
@@ -90,19 +93,21 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isNone(PlayerState::id));
+                            .assertValue(isNone(PlayerState::source));
     }
 
     @Test
     public void toggle_toPlay_playsSource() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource()
                 .act()
                 .init();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
 
         verify(mediaSourceFactory).create(url);
         verify(exoPlayer).prepare(any(MediaSource.class));
@@ -111,71 +116,79 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void toggle_toPlay_setsPlaybackUrl() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
                       .act()
                       .init();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.id().equals(Option.ofObj(url)));
+                            .assertValue(v -> v.source().equals(Option.ofObj(playbackSource)));
     }
 
     @Test
     public void toggle_toPause_pausesSource() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
                       .act()
                       .init()
-                      .togglePlayback(url);
+                      .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
 
         verify(exoPlayer).setPlayWhenReady(false);
     }
 
     @Test
     public void toggle_toPause_retainsPlaybackUrl() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
                       .act()
                       .init()
-                      .togglePlayback(url);
+                      .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isSome(PlayerState::id));
+                            .assertValue(isSome(PlayerState::source));
     }
 
     @Test
     public void toggle_toUnpause_unpausesSource() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
                       .act()
                       .init()
-                      .togglePlayback(url);
+                      .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
         arrangeBuilder.act()
-                      .togglePlayback(url);
+                      .togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
 
         InOrder inOrder = inOrder(exoPlayer, mediaSourceFactory);
         inOrder.verify(mediaSourceFactory).create(url);
@@ -186,36 +199,42 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void toggle_doesNotClearPlaybackUrl_whenPausing() {
+        String id = "id";
         String url = "url";
+        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
                       .init()
-                      .togglePlayback(url);
+                      .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isSome(PlayerState::id));
+                            .assertValue(isSome(PlayerState::source));
     }
 
     @Test
     public void toggle_withNewUrl_playsNewSource_whenPlaying() {
+        String id1 = "id1";
+        String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
+        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
+        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
                       .init()
-                      .togglePlayback(url1);
+                      .togglePlayback(playbackSource1);
         arrangeBuilder.withPlayingExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url2);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource2);
 
         InOrder inOrder = inOrder(exoPlayer, mediaSourceFactory);
         inOrder.verify(mediaSourceFactory).create(url1);
@@ -228,17 +247,21 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void toggle_withNewUrl_playsNewSource_whenEnded() {
+        String id1 = "id1";
+        String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
+        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
+        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
                       .init()
-                      .togglePlayback(url1);
+                      .togglePlayback(playbackSource1);
         arrangeBuilder.withEndedExoPlayer();
 
-        exoPlayerAudioPlayer.togglePlayback(url2);
+        exoPlayerAudioPlayer.togglePlayback(playbackSource2);
 
         InOrder inOrder = inOrder(exoPlayer, mediaSourceFactory);
         inOrder.verify(mediaSourceFactory).create(url1);
@@ -265,7 +288,7 @@ public class ExoPlayerAudioPlayerTest {
         ArrangeBuilder() {
             when(observableExoPlayer.getExoPlayerStateOnceAndStream())
                     .thenReturn(exoPlayerStateStream);
-            when(observableExoPlayer.getTimePositionMsOnceAndStream())
+            when(observableExoPlayer.getTimePositionMsOnceAndStream(1, TimeUnit.SECONDS))
                     .thenReturn(exoPlayerProgressStream);
         }
 
@@ -308,8 +331,8 @@ public class ExoPlayerAudioPlayerTest {
             return this;
         }
 
-        Act togglePlayback(String url) {
-            exoPlayerAudioPlayer.togglePlayback(url);
+        Act togglePlayback(PlaybackSource playbackSource) {
+            exoPlayerAudioPlayer.togglePlayback(playbackSource);
             return this;
         }
 

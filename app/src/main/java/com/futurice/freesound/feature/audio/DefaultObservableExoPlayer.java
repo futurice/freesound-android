@@ -18,7 +18,11 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
+import com.futurice.freesound.common.rx.TimeScheduler;
+
 import android.support.annotation.NonNull;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -28,23 +32,59 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
+    private static final String PLAYER_PROGRESS_SCHEDULER_TAG = "PLAYER_PROGRESS_SCHEDULER";
+
     @NonNull
-    private final ExoPlayer exoPlayer;
+    private final Observable<ExoPlayerState> stateOnceAndStream;
+
+    @NonNull
+    private final Observable<Long> progressOnceAndStream;
 
     @Inject
-    DefaultObservableExoPlayer(@NonNull final ExoPlayer exoPlayer) {
-        this.exoPlayer = get(exoPlayer);
+    DefaultObservableExoPlayer(
+            @NonNull final Observable<ExoPlayerState> stateOnceAndStream,
+            @NonNull final Observable<Long> progressOnceAndStream) {
+        this.stateOnceAndStream = get(stateOnceAndStream);
+        this.progressOnceAndStream = get(progressOnceAndStream);
     }
 
     @NonNull
     @Override
     public Observable<ExoPlayerState> getExoPlayerStateOnceAndStream() {
-        return new ExoPlayerStateObservable(exoPlayer);
+        return stateOnceAndStream;
     }
 
     @NonNull
     @Override
-    public Observable<Long> getTimePositionMsOnceAndStream() {
-        return new ExoPlayerProgressObservable(exoPlayer);
+    public Observable<Long> getTimePositionMsOnceAndStream(long updatePeriod,
+                                                           @NonNull final TimeUnit timeUnit) {
+        return getExoPlayerStateOnceAndStream()
+                .map(DefaultObservableExoPlayer::isTimelineChanging)
+                .switchMap(isTimelineChanging -> timePositionMsOnceAndStream(isTimelineChanging,
+                                                                             updatePeriod,
+                                                                             timeUnit));
+    }
+
+    @NonNull
+    private Observable<Long> timePositionMsOnceAndStream(final boolean isTimelineChanging,
+                                                         final long updatePeriod,
+                                                         @NonNull final TimeUnit timeUnit) {
+        return isTimelineChanging ?
+                updatingProgressOnceAndStream(updatePeriod, timeUnit)
+                : progressOnceAndStream;
+    }
+
+    @NonNull
+    private Observable<Long> updatingProgressOnceAndStream(final long updatePeriod,
+                                                           final @NonNull TimeUnit timeUnit) {
+        return Observable.timer(updatePeriod, timeUnit,
+                                TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
+                         .repeat()
+                         .startWith(0L)
+                         .switchMap(__ -> progressOnceAndStream);
+    }
+
+    private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
+        return playerState.playbackState() == ExoPlayer.STATE_READY && playerState.playWhenReady();
     }
 }

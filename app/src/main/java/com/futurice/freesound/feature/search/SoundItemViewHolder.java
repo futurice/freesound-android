@@ -85,6 +85,11 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
                                                        .into(playbackWaveformViewTarget),
                                          e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
+            disposables.add(vm.progressPercentage()
+                              .observeOn(mainThread())
+                              .subscribe(playbackWaveformView::setProgress,
+                                         e -> Timber.e(e, "Unable to set SoundItem progress")));
+
             playbackWaveformView.setOnClickListener(__ -> vm.toggleSoundPlayback());
         }
 

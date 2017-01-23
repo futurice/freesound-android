@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,29 +20,19 @@ import com.google.auto.value.AutoValue;
 
 import android.support.annotation.NonNull;
 
-import polanski.option.Option;
-
 @AutoValue
-public abstract class PlayerState {
+public abstract class Id {
 
-    public enum State {
-        IDLE,
-        BUFFERING,
-        PLAYING,
-        PAUSED,
-        ENDED,
-        ERROR
+    @NonNull
+    public abstract String id();
+
+    @NonNull
+    public static Id create(@NonNull final String id) {
+        return new AutoValue_Id(id);
     }
 
     @NonNull
-    public abstract State state();
-
-    @NonNull
-    public abstract Option<PlaybackSource> source();
-
-    @NonNull
-    public static PlayerState create(@NonNull final State state,
-                                     @NonNull final Option<PlaybackSource> source) {
-        return new AutoValue_PlayerState(state, source);
+    public static Id from(final long id) {
+        return create(String.valueOf(id));
     }
 }

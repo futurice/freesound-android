@@ -21,15 +21,21 @@ import com.google.android.exoplayer2.Timeline;
 
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
- * Make an Observable from the ExoPlayer player state.
+ * Make an Observable from the ExoPlayer playback progress.
  *
  * Based upon techniques used in the RxBinding library.
+ *
+ * Note: There's no callback notification trigger only when the playback progress updates.
+ * This means that consumers will need to resubscribe whenever they want to check the progress
+ * updates. It's not much of an Observable!
  */
 final class ExoPlayerProgressObservable extends Observable<Long> {
 
@@ -38,6 +44,7 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
     private final boolean emitInitial;
 
+    @Inject
     ExoPlayerProgressObservable(@NonNull final ExoPlayer exoPlayer) {
         this(exoPlayer, true);
     }
@@ -67,11 +74,24 @@ final class ExoPlayerProgressObservable extends Observable<Long> {
 
         @Override
         public void onTimelineChanged(final Timeline timeline, final Object manifest) {
+            safeEmitValue();
+        }
+
+        @Override
+        public void onPositionDiscontinuity() {
+            safeEmitValue();
+        }
+
+        @Override
+        public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
+            safeEmitValue();
+        }
+
+        private void safeEmitValue() {
             if (!isDisposed()) {
                 emitValue(exoPlayer, observer);
             }
         }
-
     }
 
     private static void emitValue(@NonNull final ExoPlayer exoPlayer,

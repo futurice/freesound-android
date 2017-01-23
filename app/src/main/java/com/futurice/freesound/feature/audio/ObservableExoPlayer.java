@@ -18,12 +18,14 @@ package com.futurice.freesound.feature.audio;
 
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observable;
 
 /**
  * Represent the {@link com.google.android.exoplayer2.ExoPlayer} through Observables.
  */
-public interface ObservableExoPlayer {
+interface ObservableExoPlayer {
 
     /**
      * ExoPlayer state {@link Observable} with initial value.
@@ -36,10 +38,8 @@ public interface ObservableExoPlayer {
     /**
      * ExoPlayer current playback time position with initial value.
      *
-     * The value is in milliseconds
-     *
-     * @return the Observable playback position.
+     * @return the Observable playback time position in milliseconds.
      */
     @NonNull
-    Observable<Long> getTimePositionMsOnceAndStream();
+    Observable<Long> getTimePositionMsOnceAndStream(long update, TimeUnit timeUnit);
 }

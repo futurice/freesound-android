@@ -21,13 +21,18 @@ import com.google.auto.factory.Provided;
 
 import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.audio.AudioPlayer;
+import com.futurice.freesound.feature.audio.Id;
+import com.futurice.freesound.feature.audio.PlaybackSource;
+import com.futurice.freesound.feature.audio.PlayerState;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
+import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 import static polanski.option.Option.ofObj;
@@ -81,12 +86,46 @@ final class SoundItemViewModel extends SimpleViewModel {
                      .map(duration -> Math.max(duration, 1));
     }
 
+    @NonNull
+    Observable<Option<Integer>> progressPercentage() {
+        return audioPlayer.getPlayerStateOnceAndStream()
+                          .switchMap(this::progressOrNothing);
+    }
+
     void openDetails() {
         navigator.openSoundDetails(sound);
     }
 
     void toggleSoundPlayback() {
-        audioPlayer.togglePlayback(sound.previews().lowQualityMp3Url());
+        audioPlayer.togglePlayback(PlaybackSource.create(Id.from(sound.id()),
+                                                         sound.previews().lowQualityMp3Url()));
+    }
+
+    @NonNull
+    private Observable<Option<Integer>> progressOrNothing(@NonNull final PlayerState playerState) {
+        return isThisSound(playerState) ?
+                getCurrentPercentage() :
+                Observable.just(Option.none());
+    }
+
+    private boolean isThisSound(@NonNull final PlayerState playerState) {
+        return playerState.source()
+                          .filter(playbackSource -> playbackSource.id().equals(Id.from(sound.id())))
+                          .isSome();
+    }
+
+    @NonNull
+    private Observable<Option<Integer>> getCurrentPercentage() {
+        return audioPlayer.getTimePositionMsOnceAndStream()
+                          .map(positionMs -> toPercentage(
+                                  positionMs,
+                                  sound.duration()))
+                          .map(Option::ofObj);
+    }
+
+    private static int toPercentage(final long positionMs,
+                                    final float durationSec) {
+        return Math.min(100, (int) ((positionMs / (durationSec * 1000.0F)) * 100L));
     }
 
 }
