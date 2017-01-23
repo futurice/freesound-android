@@ -70,12 +70,18 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
                                                          final long updatePeriod,
                                                          @NonNull final TimeUnit timeUnit) {
         return isTimelineChanging ?
-                Observable.timer(updatePeriod, timeUnit,
-                                 TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
-                          .repeat()
-                          .startWith(0L)
-                          .switchMap(__ -> progressOnceAndStream)
+                updatingProgressOnceAndStream(updatePeriod, timeUnit)
                 : progressOnceAndStream;
+    }
+
+    @NonNull
+    private Observable<Long> updatingProgressOnceAndStream(final long updatePeriod,
+                                                           final @NonNull TimeUnit timeUnit) {
+        return Observable.timer(updatePeriod, timeUnit,
+                                TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
+                         .repeat()
+                         .startWith(0L)
+                         .switchMap(__ -> progressOnceAndStream);
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
