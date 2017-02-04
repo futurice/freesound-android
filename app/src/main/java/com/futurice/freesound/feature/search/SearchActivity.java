@@ -66,6 +66,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     SearchSnackbar searchSnackbar;
 
     @Nullable
+    @Inject
     SchedulerProvider schedulerProvider;
 
     @Nullable
