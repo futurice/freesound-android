@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import com.futurice.freesound.common.rx.TimeScheduler;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 
 import android.support.annotation.NonNull;
 
@@ -40,12 +40,16 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     @NonNull
     private final Observable<Long> progressOnceAndStream;
 
+    @NonNull
+    private final SchedulerProvider schedulerProvider;
+
     @Inject
-    DefaultObservableExoPlayer(
-            @NonNull final Observable<ExoPlayerState> stateOnceAndStream,
-            @NonNull final Observable<Long> progressOnceAndStream) {
+    DefaultObservableExoPlayer(@NonNull final Observable<ExoPlayerState> stateOnceAndStream,
+                               @NonNull final Observable<Long> progressOnceAndStream,
+                               @NonNull final SchedulerProvider schedulerProvider) {
         this.stateOnceAndStream = get(stateOnceAndStream);
         this.progressOnceAndStream = get(progressOnceAndStream);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @NonNull
@@ -78,7 +82,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     private Observable<Long> updatingProgressOnceAndStream(final long updatePeriod,
                                                            final @NonNull TimeUnit timeUnit) {
         return Observable.timer(updatePeriod, timeUnit,
-                                TimeScheduler.time(PLAYER_PROGRESS_SCHEDULER_TAG))
+                                schedulerProvider.time(PLAYER_PROGRESS_SCHEDULER_TAG))
                          .repeat()
                          .startWith(0L)
                          .switchMap(__ -> progressOnceAndStream);
