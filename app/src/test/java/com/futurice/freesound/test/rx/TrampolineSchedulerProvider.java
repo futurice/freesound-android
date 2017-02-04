@@ -25,7 +25,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- *
+ * A SchedulerProvider used for testing which allows uses the trampoline Scheduler by default,
+ * but allows overriding of the time Scheduler based upon supplied criteria.
  */
 public class TrampolineSchedulerProvider implements SchedulerProvider {
 
