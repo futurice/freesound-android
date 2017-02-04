@@ -21,6 +21,7 @@ import com.futurice.freesound.core.adapter.SimpleAdapterInteractor;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.squareup.picasso.Picasso;
@@ -44,8 +45,12 @@ class SearchFragmentModule {
     static SoundItemAdapter provideSoundItemAdapter(
             AdapterInteractor<DisplayableItem> adapterInteractor,
             Picasso picasso,
-            SoundItemViewModelFactory viewModelFactory) {
-        return new SoundItemAdapter(adapterInteractor, picasso, viewModelFactory);
+            SoundItemViewModelFactory viewModelFactory,
+            SchedulerProvider schedulerProvider) {
+        return new SoundItemAdapter(adapterInteractor,
+                                    picasso,
+                                    viewModelFactory,
+                                    schedulerProvider);
     }
 
     @Provides

@@ -17,6 +17,7 @@
 package com.futurice.freesound.app;
 
 import com.futurice.freesound.feature.analytics.Analytics;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.app.BaseApplicationComponent;
 import com.futurice.freesound.inject.app.ForApplication;
 import com.futurice.freesound.network.api.FreeSoundApi;
@@ -42,6 +43,8 @@ public interface FreesoundApplicationComponent extends BaseApplicationComponent 
     Picasso getPicasso();
 
     Analytics getAnalytics();
+
+    SchedulerProvider getSchedulerProvider();
 
     void inject(final FreesoundApplication application);
 }

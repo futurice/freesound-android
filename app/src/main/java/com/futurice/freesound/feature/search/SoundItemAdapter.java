@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.adapter.AdapterInteractor;
 import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.model.Sound;
 import com.squareup.picasso.Picasso;
 
@@ -43,14 +44,19 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
     private final SoundItemViewModelFactory viewModelFactory;
 
     @NonNull
+    private final SchedulerProvider schedulerProvider;
+
+    @NonNull
     private final Picasso picasso;
 
     SoundItemAdapter(@NonNull final AdapterInteractor<DisplayableItem> adapterInteractor,
                      @NonNull final Picasso picasso,
-                     @NonNull final SoundItemViewModelFactory viewModelFactory) {
+                     @NonNull final SoundItemViewModelFactory viewModelFactory,
+                     @NonNull final SchedulerProvider schedulerProvider) {
         this.adapterInteractor = get(adapterInteractor);
         this.viewModelFactory = get(viewModelFactory);
         this.picasso = get(picasso);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @Override
@@ -58,7 +64,7 @@ final class SoundItemAdapter extends RecyclerView.Adapter<SoundItemViewHolder> {
                                                   int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                                   .inflate(R.layout.view_sound_item, parent, false);
-        return new SoundItemViewHolder(view, picasso);
+        return new SoundItemViewHolder(view, picasso, schedulerProvider);
     }
 
     @Override

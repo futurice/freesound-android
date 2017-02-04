@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
@@ -32,13 +33,15 @@ import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
 final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
     private final FreeSoundSearchService freeSoundSearchService;
+
+    @NonNull
+    private final SchedulerProvider schedulerProvider;
 
     @NonNull
     private final BehaviorSubject<Option<List<Sound>>> lastResultsOnceAndStream =
@@ -48,8 +51,10 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final Subject<Option<Throwable>> lastErrorOnceAndStream =
             BehaviorSubject.createDefault(Option.none());
 
-    DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
+    DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService,
+                           @NonNull final SchedulerProvider schedulerProvider) {
         this.freeSoundSearchService = get(freeSoundSearchService);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @Override
@@ -65,13 +70,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
-        return lastResultsOnceAndStream.observeOn(computation());
+        return lastResultsOnceAndStream.observeOn(schedulerProvider.computation());
     }
 
     @Override
     @NonNull
     public Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
-        return lastErrorOnceAndStream.observeOn(computation());
+        return lastErrorOnceAndStream.observeOn(schedulerProvider.computation());
     }
 
     @Override

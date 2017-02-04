@@ -16,10 +16,10 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.common.rx.TimeScheduler;
 import com.futurice.freesound.common.rx.TimeSkipScheduler;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
 
@@ -38,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
@@ -47,6 +46,7 @@ import polanski.option.Option;
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TAG;
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.endsWith;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -68,14 +68,19 @@ public class SearchActivityViewModelTest {
     @Mock
     private Analytics analytics;
 
+    @Mock
+    private SchedulerProvider schedulerProvider;
+
     private SearchActivityViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
 
-        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
+        viewModel = new SearchActivityViewModel(searchDataModel,
+                                                audioPlayer,
+                                                analytics,
+                                                schedulerProvider);
     }
 
     @Test
@@ -107,6 +112,8 @@ public class SearchActivityViewModelTest {
 
     @Test
     public void clear_isDisabled_afterInitialized() {
+        new ArrangeBuilder();
+
         viewModel.isClearEnabledOnceAndStream()
                  .test()
                  .assertValue(false)
@@ -280,24 +287,27 @@ public class SearchActivityViewModelTest {
             Mockito.when(searchDataModel.querySearch(anyString()))
                    .thenReturn(Completable.complete());
             withSuccessfulSearchResultStream();
+            withTrampolineAsComputationScheduler();
             withTimeSkipScheduler();
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler, String tag) {
-            TimeScheduler.setTimeSchedulerHandler((s, t) ->
-                                                          t.endsWith(tag)
-                                                                  ? scheduler
-                                                                  : TimeSkipScheduler.instance());
+            when(schedulerProvider.time(endsWith(tag))).thenReturn(scheduler);
             return this;
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler) {
-            TimeScheduler.setTimeSchedulerHandler((s, __) -> scheduler);
+            when(schedulerProvider.time(anyString())).thenReturn(scheduler);
             return this;
         }
 
         ArrangeBuilder withTimeSkipScheduler() {
             return withTimeScheduler(TimeSkipScheduler.instance());
+        }
+
+        ArrangeBuilder withTrampolineAsComputationScheduler() {
+            when(schedulerProvider.computation()).thenReturn(Schedulers.trampoline());
+            return this;
         }
 
         ArrangeBuilder withSuccessfulSearchResultStream() {

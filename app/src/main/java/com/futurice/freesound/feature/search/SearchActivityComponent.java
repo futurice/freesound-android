@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.app.FreesoundApplicationComponent;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
 import com.futurice.freesound.inject.app.ForApplication;
@@ -33,16 +34,18 @@ import dagger.Component;
         modules = SearchActivityModule.class)
 interface SearchActivityComponent extends BaseActivityComponent {
 
+    @ForApplication
+    Context getContext();
+
+    SearchDataModel getSearchDataModel();
+
+    Navigator getNavigator();
+
     Picasso getPicasso();
 
     AudioPlayer getAudioPlayer();
 
-    @ForApplication
-    Context getContext();
-
-    Navigator getNavigator();
-
-    SearchDataModel getSearchDataModel();
+    SchedulerProvider getSchedulerProvider();
 
     void inject(final SearchActivity activity);
 }
