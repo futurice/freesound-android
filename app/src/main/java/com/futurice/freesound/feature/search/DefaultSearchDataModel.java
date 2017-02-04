@@ -28,6 +28,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
@@ -48,12 +49,17 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final Subject<Option<Throwable>> lastErrorOnceAndStream =
             BehaviorSubject.createDefault(Option.none());
 
+    @NonNull
+    private final Subject<Boolean> searchTriggeredStream =
+            PublishSubject.create();
+
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
         this.freeSoundSearchService = get(freeSoundSearchService);
     }
 
     @Override
     public Completable querySearch(@NonNull final String query) {
+        searchTriggeredStream.onNext(Boolean.TRUE);
         return freeSoundSearchService.search(get(query))
                                      .map(DefaultSearchDataModel::toResults)
                                      .doOnSuccess(this::storeValueAndClearError)
@@ -76,6 +82,12 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
+    public Observable<Boolean> getSearchTriggeredStream() {
+        return searchTriggeredStream.observeOn(computation());
+    }
+
+    @Override
+    @NonNull
     public Completable clear() {
         return Completable.fromAction(this::clearResultAndError);
     }
@@ -89,11 +101,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private void storeValueAndClearError(@NonNull final Option<List<Sound>> listOption) {
         lastResultsOnceAndStream.onNext(listOption);
         lastErrorOnceAndStream.onNext(Option.none());
+        searchTriggeredStream.onNext(Boolean.FALSE);
     }
 
     @NonNull
     private Consumer<Throwable> storeError(@NonNull final String query) {
         return e -> {
+            searchTriggeredStream.onNext(Boolean.FALSE);
             lastErrorOnceAndStream.onNext(Option.ofObj(e));
             e(e, "Error searching Freesound for query: %s ", query);
         };

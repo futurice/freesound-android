@@ -38,5 +38,8 @@ interface SearchDataModel {
     Observable<Option<Throwable>> getSearchErrorOnceAndStream();
 
     @NonNull
+    Observable<Boolean> getSearchTriggeredStream();
+
+    @NonNull
     Completable clear();
 }

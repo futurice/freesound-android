@@ -58,6 +58,11 @@ final class SearchFragmentViewModel extends SimpleViewModel {
                               .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
+    @NonNull
+    Observable<Boolean> getSearchTriggeredStream() {
+        return searchDataModel.getSearchTriggeredStream();
+    }
+
     void stopPlayback() {
         audioPlayer.stopPlayback();
     }

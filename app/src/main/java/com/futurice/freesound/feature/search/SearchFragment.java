@@ -30,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -66,6 +67,10 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @BindView(R.id.textView_searchNoResults)
     TextView noResultsTextView;
 
+    @Nullable
+    @BindView(R.id.progressBar_searchProgress)
+    ProgressBar progressBar;
+
     @NonNull
     private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
@@ -79,6 +84,12 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
+            disposables.add(viewModel().getSearchTriggeredStream()
+                                       .subscribeOn(Schedulers.computation())
+                                       .observeOn(mainThread())
+                                       .subscribe(SearchFragment.this::showProgress,
+                                                  e -> Timber.e(e,
+                                                                "Error receiving search triggered Events")));
         }
 
         @Override
@@ -164,6 +175,14 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
             get(noResultsTextView).setVisibility(View.GONE);
             get(resultsRecyclerView).setVisibility(View.VISIBLE);
             get(soundItemAdapter).setItems(get(sounds));
+        }
+    }
+
+    private void showProgress(@NonNull final Boolean searchTriggered) {
+        if (searchTriggered) {
+            get(progressBar).setVisibility(View.VISIBLE);
+        } else {
+            get(progressBar).setVisibility(View.GONE);
         }
     }
 
