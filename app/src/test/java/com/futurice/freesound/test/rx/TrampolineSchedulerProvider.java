@@ -21,12 +21,15 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Scheduler;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
  *
  */
-public class TrampolineTestSchedulerProvider implements SchedulerProvider {
+public class TrampolineSchedulerProvider implements SchedulerProvider {
+
+    private Function<String, Scheduler> timeSchedulerHandler = null;
 
     @NonNull
     @Override
@@ -61,6 +64,9 @@ public class TrampolineTestSchedulerProvider implements SchedulerProvider {
     @NonNull
     @Override
     public Scheduler time(@NonNull final String tag) {
+        if (timeSchedulerHandler != null) {
+            return applyOrThrow(timeSchedulerHandler, tag);
+        }
         return Schedulers.trampoline();
     }
 
@@ -73,5 +79,29 @@ public class TrampolineTestSchedulerProvider implements SchedulerProvider {
     @Override
     public boolean isUiThread() {
         return false;
+    }
+
+    /**
+     * Override the time Scheduler with the Scheduler evaluated from the supplied function.
+     *
+     * @param schedulerFunction a function which returns the override or null to use the default.
+     */
+    public void setTimeScheduler(@NonNull Function<String, Scheduler> schedulerFunction) {
+        this.timeSchedulerHandler = schedulerFunction;
+    }
+
+    /**
+     * Resets the time Scheduler to use the default trampoline Scheduler.
+     */
+    public void reset() {
+        this.timeSchedulerHandler = null;
+    }
+
+    private static <T, R> R applyOrThrow(@NonNull Function<T, R> function, T value) {
+        try {
+            return function.apply(value);
+        } catch (Exception e) {
+            throw new RuntimeException("Error evaluating Scheduler", e);
+        }
     }
 }

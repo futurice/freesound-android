@@ -20,7 +20,7 @@ import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
-import com.futurice.freesound.test.rx.TrampolineTestSchedulerProvider;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class DefaultSearchDataModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         defaultSearchDataModel = new DefaultSearchDataModel(freeSoundSearchService,
-                                                            new TrampolineTestSchedulerProvider());
+                                                            new TrampolineSchedulerProvider());
     }
 
     @Test
