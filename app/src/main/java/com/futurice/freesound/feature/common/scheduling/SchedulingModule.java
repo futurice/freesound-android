@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app;
+package com.futurice.freesound.feature.common.scheduling;
 
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
-
-import android.content.Context;
-
-import javax.inject.Singleton;
-
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
 
 @Module
-final class ImagesModule {
+public abstract class SchedulingModule {
 
-    @Provides
-    @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return Picasso.with(context);
-    }
-
+    @Binds
+    abstract SchedulerProvider provideSchedulerProvider(DefaultSchedulerProvider schedulerProvider);
 }

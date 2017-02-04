@@ -47,8 +47,13 @@ public final class AndroidPreconditions {
         }
     }
 
-    private static boolean isMainThread() {
-        return Objects.equals(Looper.getMainLooper(), Looper.myLooper());
+    /**
+     * Returns whether the current thread is the Android main thread
+     *
+     * @return true if the current thread is the main thread, otherwise; false.
+     */
+    public static boolean isMainThread() {
+        return Objects.equals(Looper.getMainLooper().getThread(), Thread.currentThread());
     }
 
     private AndroidPreconditions() {
