@@ -59,7 +59,7 @@ final class DefaultSchedulerProvider implements SchedulerProvider {
 
     @NonNull
     @Override
-    public Scheduler time(@NonNull String tag) {
+    public Scheduler time(@NonNull final String tag) {
         return TimeScheduler.time(tag);
     }
 
