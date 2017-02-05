@@ -21,6 +21,7 @@ import com.futurice.freesound.R.layout;
 import com.futurice.freesound.R.string;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.SimpleDataBinder;
@@ -45,14 +46,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.Option;
 
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.common.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
-import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
@@ -64,6 +64,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Nullable
     @Inject
     SearchSnackbar searchSnackbar;
+
+    @Nullable
+    @Inject
+    SchedulerProvider schedulerProvider;
 
     @Nullable
     @BindView(id.search_view)
@@ -82,19 +86,20 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         public void bind(@NonNull final CompositeDisposable d) {
             checkNotNull(searchViewModel, "View Model cannot be null.");
             checkNotNull(searchView, "Search view cannot be null.");
+            checkNotNull(schedulerProvider, "Scheduler Provider cannot be null.");
 
             d.add(searchViewModel.isClearEnabledOnceAndStream()
-                                 .observeOn(mainThread())
+                                 .observeOn(schedulerProvider.ui())
                                  .subscribe(SearchActivity.this::setClearSearchVisible,
                                             e -> e(e, "Error setting query string")));
 
-            d.add(getTextChangeStream(searchView)
-                          .observeOn(computation())
+            d.add(getTextChangeStream(searchView, schedulerProvider.ui())
+                          .observeOn(schedulerProvider.computation())
                           .subscribe(searchViewModel::search,
                                      e -> e(e, "Error getting changed text")));
 
             d.add(searchViewModel.getSearchErrorOnceAndStream()
-                                 .observeOn(mainThread())
+                                 .observeOn(schedulerProvider.ui())
                                  .subscribe(SearchActivity.this::handleErrorState,
                                             e -> e(e, "Error receiving Errors")));
         }
@@ -142,9 +147,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @NonNull
-    private static Observable<String> getTextChangeStream(@NonNull final SearchView view) {
+    private static Observable<String> getTextChangeStream(@NonNull final SearchView view,
+                                                          @NonNull final Scheduler uiScheduler) {
         return Observable.<String>create(e -> subscribeToSearchView(view, e))
-                .subscribeOn(mainThread());
+                .subscribeOn(uiScheduler);
     }
 
     private static void subscribeToSearchView(@NonNull final SearchView view,

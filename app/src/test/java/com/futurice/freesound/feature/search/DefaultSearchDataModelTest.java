@@ -20,6 +20,7 @@ import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +33,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.plugins.RxJavaPlugins;
-import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,8 +53,8 @@ public class DefaultSearchDataModelTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
-        defaultSearchDataModel = new DefaultSearchDataModel(freeSoundSearchService);
+        defaultSearchDataModel = new DefaultSearchDataModel(freeSoundSearchService,
+                                                            new TrampolineSchedulerProvider());
     }
 
     @Test

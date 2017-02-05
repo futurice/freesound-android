@@ -17,6 +17,8 @@
 package com.futurice.freesound.app;
 
 import com.futurice.freesound.feature.analytics.AnalyticsModule;
+import com.futurice.freesound.feature.common.scheduling.SchedulingModule;
+import com.futurice.freesound.feature.images.ImagesModule;
 import com.futurice.freesound.feature.logging.LoggingModule;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 import com.futurice.freesound.network.api.ApiModule;
@@ -26,6 +28,7 @@ import dagger.Module;
 @Module(includes = {BaseApplicationModule.class,
                     ApiModule.class,
                     ImagesModule.class,
+                    SchedulingModule.class,
                     AnalyticsModule.class,
                     LoggingModule.class})
 final class FreesoundApplicationModule {

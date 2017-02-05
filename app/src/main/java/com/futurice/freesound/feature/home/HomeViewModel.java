@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
@@ -27,7 +28,6 @@ import polanski.option.Unit;
 import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 final class HomeViewModel extends SimpleViewModel {
 
@@ -35,10 +35,15 @@ final class HomeViewModel extends SimpleViewModel {
     private final Navigator navigator;
 
     @NonNull
+    private final SchedulerProvider schedulerProvider;
+
+    @NonNull
     private final PublishSubject<Unit> openSearchStream = PublishSubject.create();
 
-    HomeViewModel(@NonNull final Navigator navigator) {
+    HomeViewModel(@NonNull final Navigator navigator,
+                  @NonNull final SchedulerProvider schedulerProvider) {
         this.navigator = get(navigator);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     void openSearch() {
@@ -47,7 +52,7 @@ final class HomeViewModel extends SimpleViewModel {
 
     @Override
     protected void bind(@NonNull final CompositeDisposable disposables) {
-        disposables.add(openSearchStream.observeOn(mainThread())
+        disposables.add(openSearchStream.observeOn(schedulerProvider.ui())
                                         .subscribe(__ -> navigator.openSearch(),
                                                    e -> Timber.e(e, "Error clearing search")));
 

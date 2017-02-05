@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.home;
 import com.futurice.freesound.R;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.core.BindingBaseFragment;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
@@ -42,8 +43,6 @@ import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
-import static io.reactivex.schedulers.Schedulers.computation;
 
 public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponent> {
 
@@ -54,6 +53,10 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @Nullable
     @Inject
     Picasso picasso;
+
+    @Nullable
+    @Inject
+    SchedulerProvider schedulerProvider;
 
     @Nullable
     @BindView(R.id.avatar_image)
@@ -78,21 +81,21 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
             Preconditions.checkNotNull(homeFragmentViewModel);
 
             d.add(homeFragmentViewModel.getImage()
-                                       .subscribeOn(computation())
-                                       .observeOn(mainThread())
+                                       .subscribeOn(schedulerProvider.computation())
+                                       .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> get(picasso).load(it)
                                                                     .into(avatarImage),
                                                   e -> Timber.e(e, "Error setting image")));
 
             d.add(homeFragmentViewModel.getUserName()
-                                       .subscribeOn(computation())
-                                       .observeOn(mainThread())
+                                       .subscribeOn(schedulerProvider.computation())
+                                       .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> get(userName).setText(it),
                                                   e -> Timber.e(e, "Error setting user")));
 
             d.add(homeFragmentViewModel.getAbout()
-                                       .subscribeOn(computation())
-                                       .observeOn(mainThread())
+                                       .subscribeOn(schedulerProvider.computation())
+                                       .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> get(about).setText(it),
                                                   e -> Timber.e(e, "Error setting about")));
         }

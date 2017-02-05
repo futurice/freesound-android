@@ -18,6 +18,7 @@ package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.app.FreesoundApplicationComponent;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
 import com.squareup.picasso.Picasso;
@@ -36,6 +37,8 @@ public interface HomeActivityComponent extends BaseActivityComponent {
     UserDataModel getUserDataModel();
 
     Picasso getPicasso();
+
+    SchedulerProvider getSchedulerProvider();
 
     void inject(final HomeActivity activity);
 }

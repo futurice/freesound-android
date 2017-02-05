@@ -18,8 +18,8 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import com.futurice.freesound.common.rx.TimeScheduler;
-import com.futurice.freesound.common.rx.TimeSkipScheduler;
+import com.futurice.freesound.test.rx.TimeSkipScheduler;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,13 +44,17 @@ public class DefaultObservableExoPlayerTest {
 
     private DefaultObservableExoPlayer defaultObservableExoPlayer;
 
+    private TrampolineSchedulerProvider schedulerProvider;
+
     @Before
     public void setUp() throws Exception {
         exoPlayerStateOnceAndStream = BehaviorSubject.createDefault(TEST_INITIAL_EXOPLAYER_STATE);
         exoPlayerProgressOnceAndStream = BehaviorSubject
                 .createDefault(TEST_INITIAL_EXOPLAYER_PROGRESS);
+        schedulerProvider = new TrampolineSchedulerProvider();
         defaultObservableExoPlayer = new DefaultObservableExoPlayer(exoPlayerStateOnceAndStream,
-                                                                    exoPlayerProgressOnceAndStream);
+                                                                    exoPlayerProgressOnceAndStream,
+                                                                    schedulerProvider);
     }
 
     @Test
@@ -170,7 +174,7 @@ public class DefaultObservableExoPlayerTest {
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler) {
-            TimeScheduler.setTimeSchedulerHandler((s, __) -> scheduler);
+            schedulerProvider.setTimeScheduler(__ -> scheduler);
             return this;
         }
 

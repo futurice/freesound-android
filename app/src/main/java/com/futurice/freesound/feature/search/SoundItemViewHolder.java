@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
 import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
@@ -36,7 +37,6 @@ import timber.log.Timber;
 
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
 
@@ -53,6 +53,9 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     private final Picasso picasso;
 
     @NonNull
+    private final SchedulerProvider schedulerProvider;
+
+    @NonNull
     private final Target playbackWaveformViewTarget;
 
     @NonNull
@@ -66,27 +69,27 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             playbackWaveformView.clearWaveform();
 
             disposables.add(vm.name()
-                              .observeOn(mainThread())
+                              .observeOn(schedulerProvider.ui())
                               .subscribe(titleTextView::setText,
                                          e -> Timber.e(e, "Unable to set SoundItem name")));
             disposables.add(vm.description()
-                              .observeOn(mainThread())
+                              .observeOn(schedulerProvider.ui())
                               .subscribe(descriptionTextView::setText,
                                          e -> Timber.e(e, "Unable to set SoundItem description")));
 
             disposables.add(vm.duration()
-                              .observeOn(mainThread())
+                              .observeOn(schedulerProvider.ui())
                               .subscribe(playbackWaveformView::setMetadata,
                                          e -> Timber.e(e, "Unable to set SoundItem duration")));
 
             disposables.add(vm.thumbnailImageUrl()
-                              .observeOn(mainThread())
+                              .observeOn(schedulerProvider.ui())
                               .subscribe(url -> picasso.load(url)
                                                        .into(playbackWaveformViewTarget),
                                          e -> Timber.e(e, "Unable to set SoundItem thumbnail")));
 
             disposables.add(vm.progressPercentage()
-                              .observeOn(mainThread())
+                              .observeOn(schedulerProvider.ui())
                               .subscribe(playbackWaveformView::setProgress,
                                          e -> Timber.e(e, "Unable to set SoundItem progress")));
 
@@ -102,13 +105,15 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
     };
 
     SoundItemViewHolder(@NonNull final View view,
-                        @NonNull final Picasso picasso) {
+                        @NonNull final Picasso picasso,
+                        @NonNull final SchedulerProvider schedulerProvider) {
         super(get(view));
         ButterKnife.bind(this, view);
         this.picasso = get(picasso);
         this.playbackWaveformViewTarget = new WaveformViewTarget(
                 findById(view, R.id.playbackWaveformView_soundItem),
                 new BlackBackgroundWaveformExtractor());
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @NonNull

@@ -16,12 +16,12 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.common.rx.TimeScheduler;
-import com.futurice.freesound.common.rx.TimeSkipScheduler;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.test.rx.TimeSkipScheduler;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.observers.TestObserver;
-import io.reactivex.plugins.RxJavaPlugins;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
@@ -68,14 +66,18 @@ public class SearchActivityViewModelTest {
     @Mock
     private Analytics analytics;
 
+    private TrampolineSchedulerProvider schedulerProvider;
+
     private SearchActivityViewModel viewModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        RxJavaPlugins.setComputationSchedulerHandler(scheduler -> Schedulers.trampoline());
-
-        viewModel = new SearchActivityViewModel(searchDataModel, audioPlayer, analytics);
+        schedulerProvider = new TrampolineSchedulerProvider();
+        viewModel = new SearchActivityViewModel(searchDataModel,
+                                                audioPlayer,
+                                                analytics,
+                                                schedulerProvider);
     }
 
     @Test
@@ -107,6 +109,8 @@ public class SearchActivityViewModelTest {
 
     @Test
     public void clear_isDisabled_afterInitialized() {
+        new ArrangeBuilder();
+
         viewModel.isClearEnabledOnceAndStream()
                  .test()
                  .assertValue(false)
@@ -284,15 +288,12 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler, String tag) {
-            TimeScheduler.setTimeSchedulerHandler((s, t) ->
-                                                          t.endsWith(tag)
-                                                                  ? scheduler
-                                                                  : TimeSkipScheduler.instance());
+            schedulerProvider.setTimeScheduler(s -> s.endsWith(tag) ? scheduler : null);
             return this;
         }
 
         ArrangeBuilder withTimeScheduler(Scheduler scheduler) {
-            TimeScheduler.setTimeSchedulerHandler((s, __) -> scheduler);
+            schedulerProvider.setTimeScheduler(__ -> scheduler);
             return this;
         }
 
