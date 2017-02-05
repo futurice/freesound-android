@@ -18,14 +18,15 @@ package com.futurice.freesound.feature.common.scheduling;
 
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 
 @Module
-public abstract class SchedulingModule {
+public class SchedulingModule {
 
-    @Binds
+    @Provides
     @Singleton
-    abstract SchedulerProvider provideSchedulerProvider(
-            DefaultSchedulerProvider defaultSchedulerProvider);
+    SchedulerProvider provideSchedulerProvider() {
+        return new DefaultSchedulerProvider();
+    }
 }
