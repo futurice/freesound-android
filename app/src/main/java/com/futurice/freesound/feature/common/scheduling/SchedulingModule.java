@@ -26,7 +26,7 @@ public class SchedulingModule {
 
     @Provides
     @Singleton
-    SchedulerProvider provideSchedulerProvider() {
+    static SchedulerProvider provideSchedulerProvider() {
         return new DefaultSchedulerProvider();
     }
 }
