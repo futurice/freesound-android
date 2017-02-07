@@ -54,11 +54,8 @@ public final class InstrumentationModule {
     @Provides
     @Singleton
     static HttpLoggingInterceptor provideLoggingInterceptor() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
-                message -> Timber.tag("OkHttp").d(message));
-        // TODO Headers only: Bug in HttpLoggingInterceptor, uses not public api
-        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-        return interceptor;
+        return new HttpLoggingInterceptor(message -> Timber.tag("OkHttp").d(message))
+                .setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
     @Provides
