@@ -99,7 +99,7 @@ public class HomeFragmentViewModelTest {
         return new UserBuilder()
                 .largeAvatar("large.com")
                 .userName("user name")
-                .about("about")
+                .about("aboutTextView")
                 .build();
     }
 

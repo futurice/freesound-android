@@ -45,27 +45,21 @@ import polanski.option.Option;
 import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
-import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {
 
-    @Nullable
     @Inject
     SearchFragmentViewModel searchFragmentViewModel;
 
-    @Nullable
     @Inject
     SoundItemAdapter soundItemAdapter;
 
-    @Nullable
     @Inject
     SchedulerProvider schedulerProvider;
 
-    @Nullable
     @BindView(R.id.recyclerView_searchResults)
     RecyclerView resultsRecyclerView;
 
-    @Nullable
     @BindView(R.id.textView_searchNoResults)
     TextView noResultsTextView;
 
@@ -78,7 +72,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
             disposables.add(viewModel().getSoundsOnceAndStream()
-                                       .subscribeOn(get(schedulerProvider).computation())
+                                       .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
@@ -107,7 +101,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         unbinder.setIfNone(bind(this, view));
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setRecycleChildrenOnDetach(true);
-        get(resultsRecyclerView).setLayoutManager(layoutManager);
+        resultsRecyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
@@ -120,7 +114,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        get(resultsRecyclerView).setAdapter(get(soundItemAdapter));
+        resultsRecyclerView.setAdapter(soundItemAdapter);
     }
 
     @Override
@@ -141,7 +135,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @NonNull
     @Override
     protected SearchFragmentViewModel viewModel() {
-        return get(searchFragmentViewModel);
+        return searchFragmentViewModel;
     }
 
     @NonNull
@@ -155,18 +149,18 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     }
 
     private void showNothing() {
-        get(noResultsTextView).setVisibility(View.GONE);
-        get(resultsRecyclerView).setVisibility(View.GONE);
+        noResultsTextView.setVisibility(View.GONE);
+        resultsRecyclerView.setVisibility(View.GONE);
     }
 
     private void showResults(@NonNull final List<DisplayableItem> sounds) {
-        if (get(sounds).isEmpty()) {
-            get(noResultsTextView).setVisibility(View.VISIBLE);
-            get(resultsRecyclerView).setVisibility(View.GONE);
+        if (sounds.isEmpty()) {
+            noResultsTextView.setVisibility(View.VISIBLE);
+            resultsRecyclerView.setVisibility(View.GONE);
         } else {
-            get(noResultsTextView).setVisibility(View.GONE);
-            get(resultsRecyclerView).setVisibility(View.VISIBLE);
-            get(soundItemAdapter).setItems(get(sounds));
+            noResultsTextView.setVisibility(View.GONE);
+            resultsRecyclerView.setVisibility(View.VISIBLE);
+            soundItemAdapter.setItems(sounds);
         }
     }
 

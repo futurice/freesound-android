@@ -22,18 +22,14 @@ import com.futurice.freesound.inject.app.BaseApplicationModule;
 import com.squareup.leakcanary.LeakCanary;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static com.futurice.freesound.common.utils.Preconditions.get;
-
 public class FreesoundApplication extends BaseApplication<FreesoundApplicationComponent> {
 
     @Inject
-    @Nullable
     Timber.Tree loggingTree;
 
     @Override
@@ -64,7 +60,7 @@ public class FreesoundApplication extends BaseApplication<FreesoundApplicationCo
 
     private void initLogging() {
         Timber.uprootAll();
-        Timber.plant(get(loggingTree));
+        Timber.plant(loggingTree);
     }
 
     private void initStetho() {
