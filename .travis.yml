@@ -4,19 +4,20 @@ sudo: false
 notifications:
   email: false
 env:
-    global:
-     - ADB_INSTALL_TIMEOUT=8
-     - secure: DkjhtJyH7CLPt2e6upzfSrAO8us25q2WLIe0WhBo9/QuQTByn/h7+nV9pxjp1yRd8MKie1eSXMMiJ8Asr5g4CMh/82CmeqezDZqbZdTNZqS08Diu8/zDichdVW0Zl9t/gSDA3x9hWo2nfX+mMKyngycsracNmT6Og1a89hpa2KRI4gcy/0yrFYTEvchQUDBkNxAaVMWyObZYB/HuFeZUBbMM+cM65lw3Bn62sEDgiWLacJS87V+sDxx892HS0kNbsoOC+tkcAAU9sopwCD2Zh0MylBVbSpjXRIRZPJUWjIKXZmFPNIXoYTRwdCzVEfgPPWbV3aZawYp//WG/Lu/yUDxapeyAeqWfaeoHDA1scmVDDkMLnwDA02UUf0ZdgU1Aiq1ljBW2ZTg5XX4LSIfYCGQFEKm+opfv4tzgf6T6njtEJmWz23LrdZ9oRxRLjHxgAqnWVyoSmD8ffUUnn5M8pP5PAhh3jmlzUhFO41/D0zoi0TtSD1HHNQ2TnAh/3lW7AZdAWQxLhq1lzQywUVU+kohdw15wHT9i0QbYpSWSnuVnh4g1Xzi6YNgLEfUdV4dqM3Gu/lhUnawEXma4wq0AByq/ueH7zWKe5/hNBEn2K1vUWt7RLiQ3IWxlJPvF83+HWGhZKmDqj0YBVq4DJQrCQ+HbhUDQ3LEkJRPZ4OIShWM=
+  global:
+  - ADB_INSTALL_TIMEOUT=8
+  - secure: DkjhtJyH7CLPt2e6upzfSrAO8us25q2WLIe0WhBo9/QuQTByn/h7+nV9pxjp1yRd8MKie1eSXMMiJ8Asr5g4CMh/82CmeqezDZqbZdTNZqS08Diu8/zDichdVW0Zl9t/gSDA3x9hWo2nfX+mMKyngycsracNmT6Og1a89hpa2KRI4gcy/0yrFYTEvchQUDBkNxAaVMWyObZYB/HuFeZUBbMM+cM65lw3Bn62sEDgiWLacJS87V+sDxx892HS0kNbsoOC+tkcAAU9sopwCD2Zh0MylBVbSpjXRIRZPJUWjIKXZmFPNIXoYTRwdCzVEfgPPWbV3aZawYp//WG/Lu/yUDxapeyAeqWfaeoHDA1scmVDDkMLnwDA02UUf0ZdgU1Aiq1ljBW2ZTg5XX4LSIfYCGQFEKm+opfv4tzgf6T6njtEJmWz23LrdZ9oRxRLjHxgAqnWVyoSmD8ffUUnn5M8pP5PAhh3jmlzUhFO41/D0zoi0TtSD1HHNQ2TnAh/3lW7AZdAWQxLhq1lzQywUVU+kohdw15wHT9i0QbYpSWSnuVnh4g1Xzi6YNgLEfUdV4dqM3Gu/lhUnawEXma4wq0AByq/ueH7zWKe5/hNBEn2K1vUWt7RLiQ3IWxlJPvF83+HWGhZKmDqj0YBVq4DJQrCQ+HbhUDQ3LEkJRPZ4OIShWM=
+  - secure: JSZ4KlnmKxvhBua4OHKysoeTCWVTafrsCb8LQw7hW5Wy3kfMQ4aByYNXFQTHgRA+FuK3q3Cg2i5Ob83CDRNjgVTbM0m2rv/pOrkQ2cVyN/aFNtNtjGj3T1d2kzbRPbRWuPznIVloJaZpVFA0NQ4p6sddUqTt3hqwrrPQ92+dxhFDY/FwCImwt0nlPR5GEswe9RgsSDFaCoZYb4eH8EBi/5UcFuhi05dn7YkFNRK1W7yxRLDXrfD8qwqSqEc5mk/VNPuMQj+OQp3E/HzRtCfE8FVWtbdEf5w18FkhQCDYr7vKWgFrThnfqAyj51c1b94eYd7ymhMUArG70U3iL8ZT5HcKbnezoyFCXFERaZmhtP15ztTnCP0eWTn9ZEluvVzfxCg0gsiGJhs6dfRslp5FMMFAxQKULQO1D/Z7K7q0n3L9nyKjD011C6ZUKKvRxFHA4OngAXCwxYSXSAwc5o9w9wt9id9U9UpMVnYKJNdZJk6UpDKsN7BtxlpOk2Rnk128FwnAlmrq1CZsumuZBUEArRY8BkfyPsioVazkRhGGMD3vitbwW+xV84aYtbgpc+w4zWrcEUkNniIJd86XuwRXfzBAvOOD2/vw53t0hZIW/Dnis9Y1H4Hr/Anlx//qSe4nsBpqRVlpmRG211uPM3ji+bmIQL6/h3RegFyglmvxifM=
 addons:
   sonarqube:
     token:
-        secure: "BS0mcGFozsATMw0AZgMWA0ZCV92fmSjaEXvO9HIb64Zp5IwHuGVJSeTuRvVo3nm5DKJUpTF3fXA1VlpMndOpEf5xD4ph2AOR4PJoiMcv1EPEYKWMkiV+XH4mJEkpvN8R4VVmY8ShtF5JJ1W9X6L/JRULIhiGDaV6bJZ4v2gJ8O69MTSPsD8ILg4Gp7ueel3c49fklvJ3NhyDmaEbNEu50zD67ACpsSwGpccrzzs25S5Ep7G9WDPI5BH7IGUbegXpmOb1hkfYjc/QuGg62PkkclQNJ+cruJBGD2VtiRF63lNZiVXZb/7FNwatMumFgVSjXeku1HKiCVfBSFAtpx/Yo5uSHWvf0bPUWmbypzcLpwNRWGoqUMeyExu/a49GvaQIsl3u2VYqADi0hmUzxxZaDP/u5WSwr8y2fqEVj8SEKT81+Fqv20ZhcWMjn7A0eBRWbQ3Rn2MX27tuNP3PHzSZ6btURToQp432ViQWcDfXRETtHpwH+4GsIfQOWhl/LY/K8OuHjFPfqfLVsEi3uR+jn68uzMaxCDSsVuye+NPN53r9J28x/zTq5GC3mP8iLiz8fnR95L9ulmtk6bJBdt5uvzJHIG4ErmnW229CrdYW4u5jGTk1lBXPClUnuz+QgQu7fOkUbPS/e9vR3I0fTMHbkVz1HCwf3PLOtU89/N2rP2o="
+      secure: BS0mcGFozsATMw0AZgMWA0ZCV92fmSjaEXvO9HIb64Zp5IwHuGVJSeTuRvVo3nm5DKJUpTF3fXA1VlpMndOpEf5xD4ph2AOR4PJoiMcv1EPEYKWMkiV+XH4mJEkpvN8R4VVmY8ShtF5JJ1W9X6L/JRULIhiGDaV6bJZ4v2gJ8O69MTSPsD8ILg4Gp7ueel3c49fklvJ3NhyDmaEbNEu50zD67ACpsSwGpccrzzs25S5Ep7G9WDPI5BH7IGUbegXpmOb1hkfYjc/QuGg62PkkclQNJ+cruJBGD2VtiRF63lNZiVXZb/7FNwatMumFgVSjXeku1HKiCVfBSFAtpx/Yo5uSHWvf0bPUWmbypzcLpwNRWGoqUMeyExu/a49GvaQIsl3u2VYqADi0hmUzxxZaDP/u5WSwr8y2fqEVj8SEKT81+Fqv20ZhcWMjn7A0eBRWbQ3Rn2MX27tuNP3PHzSZ6btURToQp432ViQWcDfXRETtHpwH+4GsIfQOWhl/LY/K8OuHjFPfqfLVsEi3uR+jn68uzMaxCDSsVuye+NPN53r9J28x/zTq5GC3mP8iLiz8fnR95L9ulmtk6bJBdt5uvzJHIG4ErmnW229CrdYW4u5jGTk1lBXPClUnuz+QgQu7fOkUbPS/e9vR3I0fTMHbkVz1HCwf3PLOtU89/N2rP2o=
 cache:
-    directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
-    - '$HOME/.gradle'
-    - '.gradle'
+  directories:
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
+  - "$HOME/.gradle"
+  - ".gradle"
 jdk:
 - oraclejdk8
 android:
@@ -24,17 +25,12 @@ android:
   - platform-tools
   - tools
   - tools
-
   - build-tools-25.0.0
   - android-25
   - android-24
-
   - extra-google-m2repository
   - extra-android-m2repository
-
-  # AVD image
   - sys-img-armeabi-v7a-android-24
-
 before_script:
 - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
 - emulator -avd test -no-window &
@@ -44,4 +40,4 @@ before_script:
 - adb shell settings put global animator_duration_scale 0 &
 - adb shell input keyevent 82 &
 script:
-- ./gradlew check sonarqube
+- "./gradlew check sonarqube"
