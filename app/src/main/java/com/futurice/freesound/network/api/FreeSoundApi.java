@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.network.api;
 
+import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.UserResult;
@@ -25,6 +26,8 @@ import android.support.annotation.Nullable;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -37,11 +40,19 @@ public interface FreeSoundApi {
 
     @NonNull
     @GET("/apiv2/search/text/")
-    Single<SoundSearchResult> search(@Query("query") @NonNull final String query,
-                                     @Query("filter") @Nullable final String filter,
-                                     @Query("fields") @NonNull final SoundFields fields);
+    Single<SoundSearchResult> search(@Query("query") @NonNull String query,
+                                     @Query("filter") @Nullable String filter,
+                                     @Query("fields") @NonNull SoundFields fields);
 
     @NonNull
     @GET("/apiv2/users/{user}/")
     Single<UserResult> user(@Path("user") @NonNull final String user);
+
+    @NonNull
+    @POST("/apiv2/oauth2/access_token/")
+    Single<AccessToken> accessToken(@Header("client_id") @NonNull String clientId,
+                                    @Header("client_secret") @NonNull String clientSecret,
+                                    @Header("grant_type") @NonNull String grantType,
+                                    @Header("code") @NonNull String code);
+
 }

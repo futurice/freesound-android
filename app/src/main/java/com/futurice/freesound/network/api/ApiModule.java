@@ -41,15 +41,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Module(includes = {ConfigModule.class, InstrumentationModule.class})
+@Module(includes = {ApiConfigModule.class, InstrumentationModule.class})
 public final class ApiModule {
 
-    static final String URL_CONFIG = "ApiModule.URL_CONFIG";
-    static final String API_TOKEN_CONFIG = "ApiModule.API_TOKEN_CONFIG";
+    static final String API_URL_CONFIG = "ApiModule.API_URL_CONFIG";
+    static final String API_CLIENT_SECRET_CONFIG = "ApiModule.API_CLIENT_ID_SECRET";
+    static final String API_CLIENT_ID_CONFIG = "ApiModule.API_CLIENT_ID_CONFIG";
 
     @Provides
     @Singleton
-    static FreeSoundApi provideFreeSoundApi(@Named(URL_CONFIG) String url,
+    static FreeSoundApi provideFreeSoundApi(@Named(API_URL_CONFIG) String url,
                                             @ForFreeSoundApi Gson gson,
                                             @ForFreeSoundApi OkHttpClient client) {
         return new Retrofit.Builder()
@@ -95,8 +96,8 @@ public final class ApiModule {
 
     @Provides
     @Singleton
-    static FreeSoundApiInterceptor provideApiInterceptor(@Named(API_TOKEN_CONFIG) String apiToken) {
-        return new FreeSoundApiInterceptor(apiToken);
+    static FreeSoundApiInterceptor provideApiInterceptor(@Named(API_CLIENT_SECRET_CONFIG) String clientSecret) {
+        return new FreeSoundApiInterceptor(clientSecret);
     }
 
     @Qualifier

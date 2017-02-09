@@ -16,30 +16,39 @@
 
 ext {
     // Freesound API
-    freesound_api_key = getFreesoundApiKey()
+    freesound_api_client_secret = getFreesoundApiClientSecret()
+    freesound_api_client_id = getFreesoundApiClientId()
     freesound_api_url = "\"https://www.freesound.org/\""
 }
 
-def String getFreesoundApiKey() {
-    String freesoundApiKey = isCiBuild() ? getApiKeyFromEnv() : getApiKeyFromFile();
-    if (freesoundApiKey == null || freesoundApiKey.isEmpty()) {
+def String getFreesoundApiClientSecret() {
+    return getProperty("freesound.api.clientSecret", "FREESOUND_API_KEY")
+}
+
+def String getFreesoundApiClientId() {
+    return getProperty("freesound.api.clientId", "FREESOUND_API_CLIENT_ID")
+}
+
+def String getProperty(String property, String envVariable) {
+    String value = isCiBuild() ? fromEnv(envVariable) : fromFile(property);
+    if (value == null || value.isEmpty()) {
         throw new IllegalStateException(
-                "Could not find Freesound API key value in environment or property file")
+                "Could not find property: " + property + " value in property file or environment")
     }
-    return "\"$freesoundApiKey\""
+    return "\"$value\""
 }
 
 private boolean isCiBuild() {
-    System.getenv("TRAVIS") == "true"
+    fromEnv("TRAVIS") == "true"
 }
 
-private String getApiKeyFromFile() {
+private static fromEnv(String property) {
+    System.getenv(property)
+}
+
+private String fromFile(String property) {
     Properties apiProperties = loadFileProperties("$projectDir/freesound-api.properties")
-    return apiProperties.getProperty("freesound.api.key")
-}
-
-private String getApiKeyFromEnv() {
-    System.getenv("FREESOUND_API_KEY")
+    return apiProperties.getProperty(property)
 }
 
 def Properties loadFileProperties(String fileLocation) {

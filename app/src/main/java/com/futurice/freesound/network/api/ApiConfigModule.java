@@ -25,20 +25,27 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public final class ConfigModule {
+public final class ApiConfigModule {
 
     @Provides
     @Singleton
-    @Named(ApiModule.URL_CONFIG)
+    @Named(ApiModule.API_URL_CONFIG)
     static String provideApiModuleUrlConfig() {
         return BuildConfig.FREESOUND_API_URL;
     }
 
     @Provides
     @Singleton
-    @Named(ApiModule.API_TOKEN_CONFIG)
-    static String provideApiModuleApiTokenConfig() {
-        return BuildConfig.FREESOUND_API_KEY;
+    @Named(ApiModule.API_CLIENT_SECRET_CONFIG)
+    static String provideApiModuleApiClientSecretConfig() {
+        return BuildConfig.FREESOUND_API_CLIENT_SECRET;
+    }
+
+    @Provides
+    @Singleton
+    @Named(ApiModule.API_CLIENT_ID_CONFIG)
+    static String provideApiModuleApiClientIdConfig() {
+        return BuildConfig.FREESOUND_API_CLIENT_ID;
     }
 
 }

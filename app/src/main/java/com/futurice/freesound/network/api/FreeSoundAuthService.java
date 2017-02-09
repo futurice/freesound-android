@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,14 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.common.InstantiationForbiddenError;
+import com.futurice.freesound.network.api.model.AccessToken;
 
-/**
- * Constants used in the Freesound API.
- */
-final class ApiConstants {
+import android.support.annotation.NonNull;
 
-    static final String TOKEN_QUERY_PARAM = "token";
-    static final String IS_GEO_TAGGED_FILTER_QUERY_PARAM = "is_geotagged";
-    static final String AUTHORIZATION_CODE = "authorization_code";
+import io.reactivex.Single;
 
-    private ApiConstants() {
-        throw new InstantiationForbiddenError();
-    }
+public interface FreeSoundAuthService {
+
+    @NonNull
+    Single<AccessToken> getAccessToken(@NonNull String code);
 }

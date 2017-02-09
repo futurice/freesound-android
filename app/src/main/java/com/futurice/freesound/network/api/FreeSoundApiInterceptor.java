@@ -30,13 +30,16 @@ import static com.futurice.freesound.network.api.ApiConstants.TOKEN_QUERY_PARAM;
 
 /**
  * An {@link Interceptor} which adds the required API token query parameter to the request.
+ * This token is the secret identifier of the app, not an authentication token for user.
+ *
+ * The naming reflects that used in the Freesound documentation: the token is the client secret.
  */
-public final class FreeSoundApiInterceptor implements Interceptor {
+final class FreeSoundApiInterceptor implements Interceptor {
 
     @NonNull
     private final String apiToken;
 
-    public FreeSoundApiInterceptor(@NonNull final String apiToken) {
+    FreeSoundApiInterceptor(@NonNull final String apiToken) {
         this.apiToken = get(apiToken);
     }
 
