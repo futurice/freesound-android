@@ -88,8 +88,8 @@ Brought to you by the power of the [Chilicorn](http://spiceprogram.org/chilicorn
 
 # Other Sound Repositories
 
-- [BioAcoustica](bio.acousti.ca)
-- [British Library - Sounds](sounds.bl.uk)
+- [BioAcoustica](http://bio.acousti.ca)
+- [British Library - Sounds](http://sounds.bl.uk)
 
 License
 =======
