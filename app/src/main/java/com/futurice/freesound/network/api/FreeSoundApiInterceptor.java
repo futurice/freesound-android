@@ -20,6 +20,8 @@ import android.support.annotation.NonNull;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -30,17 +32,19 @@ import static com.futurice.freesound.network.api.ApiConstants.TOKEN_QUERY_PARAM;
 
 /**
  * An {@link Interceptor} which adds the required API token query parameter to the request.
- * This token is the secret identifier of the app, not an authentication token for user.
+ * This token is the secret identifier of the app, not an authentication token for user, nor the
+ * application client id.
  *
  * The naming reflects that used in the Freesound documentation: the token is the client secret.
  */
 final class FreeSoundApiInterceptor implements Interceptor {
 
     @NonNull
-    private final String apiToken;
+    private final String clientSecret;
 
-    FreeSoundApiInterceptor(@NonNull final String apiToken) {
-        this.apiToken = get(apiToken);
+    @Inject
+    FreeSoundApiInterceptor(@NonNull final String clientSecret) {
+        this.clientSecret = get(clientSecret);
     }
 
     @Override
@@ -59,7 +63,7 @@ final class FreeSoundApiInterceptor implements Interceptor {
                     .url()
                     .newBuilder()
                     .addQueryParameter(TOKEN_QUERY_PARAM,
-                                       apiToken)
+                                       clientSecret)
                     .build();
     }
 }

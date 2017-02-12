@@ -40,11 +40,11 @@ import static org.mockito.Mockito.when;
 
 public class DefaultFreeSoundApiServiceTest {
 
-    private static final String DUMMY_CLIENT_ID = "clientId";
+    private static final String TEST_CLIENT_ID = "clientId";
 
-    private static final String DUMMY_CLIENT_SECRET = "clientSecret";
+    private static final String TEST_CLIENT_SECRET = "clientSecret";
 
-    private static final SoundSearchResult DUMMY_SEARCH_RESULT = TestData.searchResult(5);
+    private static final SoundSearchResult TEST_SEARCH_RESULT = TestData.searchResult(5);
 
     private static final User DUMMY_USER = TestData.user();
 
@@ -63,8 +63,8 @@ public class DefaultFreeSoundApiServiceTest {
         MockitoAnnotations.initMocks(this);
 
         defaultFreeSoundApiService = new DefaultFreeSoundApiService(freeSoundApi,
-                                                                    DUMMY_CLIENT_ID,
-                                                                    DUMMY_CLIENT_SECRET);
+                                                                    TEST_CLIENT_ID,
+                                                                    TEST_CLIENT_SECRET);
     }
 
     @Test
@@ -113,8 +113,8 @@ public class DefaultFreeSoundApiServiceTest {
         defaultFreeSoundApiService.getAccessToken(code).subscribe();
 
         //noinspection deprecation
-        verify(freeSoundApi).accessToken(DUMMY_CLIENT_ID,
-                                         DUMMY_CLIENT_SECRET,
+        verify(freeSoundApi).accessToken(TEST_CLIENT_ID,
+                                         TEST_CLIENT_SECRET,
                                          ApiConstants.AUTHORIZATION_CODE_GRANT_TYPE_VALUE,
                                          code);
     }
@@ -130,16 +130,16 @@ public class DefaultFreeSoundApiServiceTest {
 
     @Test
     public void search_emitsResults_whenApiSuccessful() {
-        new Arrangement().withApiSearchResult(DUMMY_SEARCH_RESULT);
+        new Arrangement().withApiSearchResult(TEST_SEARCH_RESULT);
 
         defaultFreeSoundApiService.search("query")
                                   .test()
-                                  .assertValue(DUMMY_SEARCH_RESULT);
+                                  .assertValue(TEST_SEARCH_RESULT);
     }
 
     @Test
     public void search_invokesApiWithCorrectParameters() {
-        new Arrangement().withApiSearchResult(DUMMY_SEARCH_RESULT);
+        new Arrangement().withApiSearchResult(TEST_SEARCH_RESULT);
         String query = "query";
         defaultFreeSoundApiService.search(query).subscribe();
 

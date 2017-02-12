@@ -24,6 +24,9 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
 
+/**
+ * The application access interface for interactions with the Freesound API.
+ */
 public interface FreeSoundApiService {
 
     @NonNull

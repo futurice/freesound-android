@@ -39,17 +39,17 @@ import retrofit2.http.Query;
 interface FreeSoundApi {
 
     @NonNull
-    @GET("/apiv2/search/text/")
+    @GET("/search/text/")
     Single<SoundSearchResult> search(@Query("query") @NonNull String query,
                                      @Query("filter") @Nullable String filter,
                                      @Query("fields") @NonNull SoundFields fields);
 
     @NonNull
-    @GET("/apiv2/users/{user}/")
+    @GET("/users/{user}/")
     Single<User> user(@Path("user") @NonNull final String user);
 
     @NonNull
-    @POST("/apiv2/oauth2/access_token/")
+    @POST("/oauth2/access_token/")
     Single<AccessToken> accessToken(@Header("client_id") @NonNull String clientId,
                                     @Header("client_secret") @NonNull String clientSecret,
                                     @Header("grant_type") @NonNull String grantType,

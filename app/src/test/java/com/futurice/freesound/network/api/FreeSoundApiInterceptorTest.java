@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FreeSoundApiInterceptorTest {
 
-    private static final String TEST_TOKEN = "test-token";
+    private static final String TEST_CLIENT_SECRET = "test-clientSecret";
 
     @Rule
     public final MockWebServer mockWebServer = new MockWebServer();
@@ -43,11 +43,12 @@ public class FreeSoundApiInterceptorTest {
 
     @Before
     public void setUp() throws IOException {
-        interceptor = new FreeSoundApiInterceptor(TEST_TOKEN);
+        interceptor = new FreeSoundApiInterceptor(TEST_CLIENT_SECRET);
     }
 
     @Test
-    public void interceptor_addsApiTokenQueryParameter() throws InterruptedException, IOException {
+    public void interceptor_addsClientSecretAsApiTokenQueryParameter()
+            throws InterruptedException, IOException {
         new ArrangeBuilder()
                 .withNewOkHttpClient()
                 .withInterceptor(interceptor)
@@ -57,7 +58,8 @@ public class FreeSoundApiInterceptorTest {
 
         RecordedRequest request = mockWebServer.takeRequest();
         assertThat(request.getPath())
-                .endsWith(String.format("?%s=%s", ApiConstants.TOKEN_QUERY_PARAM, TEST_TOKEN));
+                .endsWith(String.format("?%s=%s", ApiConstants.TOKEN_QUERY_PARAM,
+                                        TEST_CLIENT_SECRET));
     }
 
     private Request request() {

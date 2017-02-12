@@ -18,15 +18,15 @@ ext {
     // Freesound API
     freesound_api_client_secret = getFreesoundApiClientSecret()
     freesound_api_client_id = getFreesoundApiClientId()
-    freesound_api_url = "\"https://www.freesound.org/\""
-}
-
-def String getFreesoundApiClientSecret() {
-    return getProperty("freesound.api.clientSecret", "FREESOUND_API_KEY")
+    freesound_api_url = "\"https://www.freesound.org/apiv2\""
 }
 
 def String getFreesoundApiClientId() {
     return getProperty("freesound.api.clientId", "FREESOUND_API_CLIENT_ID")
+}
+
+def String getFreesoundApiClientSecret() {
+    return getProperty("freesound.api.clientSecret", "FREESOUND_API_CLIENT_SECRET")
 }
 
 def String getProperty(String property, String envVariable) {
