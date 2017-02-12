@@ -23,6 +23,7 @@ import com.google.gson.annotations.SerializedName;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -47,6 +48,33 @@ public abstract class AccessToken {
     @NonNull
     public static TypeAdapter<AccessToken> typeAdapter(@NonNull final Gson gson) {
         return new AutoValue_AccessToken.GsonTypeAdapter(get(gson));
+    }
+
+    @VisibleForTesting
+    @SuppressWarnings("NullableProblems")
+    @AutoValue.Builder
+    public interface Builder {
+
+        @NonNull
+        Builder accessToken(@NonNull final String accessToken);
+
+        @NonNull
+        Builder scope(@NonNull final String scope);
+
+        @NonNull
+        Builder expiresIn(@NonNull final Long expiresIn);
+
+        @NonNull
+        Builder refreshToken(@NonNull final String refreshToken);
+
+        @NonNull
+        AccessToken build();
+    }
+
+    @VisibleForTesting
+    @NonNull
+    public static Builder builder() {
+        return new AutoValue_AccessToken.Builder();
     }
 
 }

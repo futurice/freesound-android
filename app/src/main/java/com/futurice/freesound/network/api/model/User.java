@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -25,6 +26,7 @@ public abstract class User {
         return new AutoValue_User.GsonTypeAdapter(get(gson));
     }
 
+    @VisibleForTesting
     @SuppressWarnings("NullableProblems")
     @AutoValue.Builder
     public interface Builder {
@@ -42,6 +44,7 @@ public abstract class User {
         User build();
     }
 
+    @VisibleForTesting
     @NonNull
     public static Builder builder() {
         return new AutoValue_User.Builder();

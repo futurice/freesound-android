@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.network.api;
 
+import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.User;
@@ -45,7 +46,9 @@ public class DefaultFreeSoundApiServiceTest {
 
     private static final SoundSearchResult DUMMY_SEARCH_RESULT = TestData.searchResult(5);
 
-    private static final User DUMMY_USER_RESULT = TestData.user();
+    private static final User DUMMY_USER = TestData.user();
+
+    private static final AccessToken DUMMY_ACCESS_TOKEN = TestData.accessToken();
 
     @SuppressWarnings("ThrowableInstanceNeverThrown")
     private static final Throwable ERROR = new Throwable();
@@ -65,23 +68,23 @@ public class DefaultFreeSoundApiServiceTest {
     }
 
     @Test
-    public void getUser_emitsResults_whenApiSuccessful() {
-        new Arrangement().withApiUserResult(DUMMY_USER_RESULT);
+    public void getUser_emitsUser_whenApiSuccessful() {
+        new Arrangement().withApiUser(DUMMY_USER);
 
         defaultFreeSoundApiService.getUser("username")
                                   .test()
-                                  .assertValue(DUMMY_USER_RESULT);
+                                  .assertValue(DUMMY_USER);
     }
 
     @Test
     public void getUser_invokesApiWithUsernameParameter() {
-        new Arrangement().withApiUserResult(DUMMY_USER_RESULT);
+        new Arrangement().withApiUser(DUMMY_USER);
         String username = "username";
 
         defaultFreeSoundApiService.getUser(username).subscribe();
 
         //noinspection deprecation
-        verify(freeSoundApi).user(eq(username));
+        verify(freeSoundApi).user(username);
     }
 
     @Test
@@ -89,6 +92,38 @@ public class DefaultFreeSoundApiServiceTest {
         new Arrangement().withApiUserError(ERROR);
 
         defaultFreeSoundApiService.getUser("username")
+                                  .test()
+                                  .assertError(ERROR);
+    }
+
+    @Test
+    public void getAccessToken_emitsAccessToken_whenApiSuccessful() {
+        new Arrangement().withApiAccessToken(DUMMY_ACCESS_TOKEN);
+
+        defaultFreeSoundApiService.getAccessToken("code")
+                                  .test()
+                                  .assertValue(DUMMY_ACCESS_TOKEN);
+    }
+
+    @Test
+    public void getAccessToken_invokesApiWithCorrectParameters() {
+        new Arrangement().withApiAccessToken(DUMMY_ACCESS_TOKEN);
+        String code = "code";
+
+        defaultFreeSoundApiService.getAccessToken(code).subscribe();
+
+        //noinspection deprecation
+        verify(freeSoundApi).accessToken(DUMMY_CLIENT_ID,
+                                         DUMMY_CLIENT_SECRET,
+                                         ApiConstants.AUTHORIZATION_CODE_GRANT_TYPE_VALUE,
+                                         code);
+    }
+
+    @Test
+    public void getAccessToken_emitsError_whenApiError() {
+        new Arrangement().withApiAccessTokenError(ERROR);
+
+        defaultFreeSoundApiService.getAccessToken("code")
                                   .test()
                                   .assertError(ERROR);
     }
@@ -135,13 +170,29 @@ public class DefaultFreeSoundApiServiceTest {
             return this;
         }
 
-        Arrangement withApiUserResult(@NonNull final User result) {
-            when(freeSoundApi.user(anyString())).thenReturn(Single.just(result));
+        Arrangement withApiUser(@NonNull final User user) {
+            when(freeSoundApi.user(anyString())).thenReturn(Single.just(user));
             return this;
         }
 
         Arrangement withApiUserError(@NonNull final Throwable error) {
             when(freeSoundApi.user(anyString())).thenReturn(Single.error(error));
+            return this;
+        }
+
+        Arrangement withApiAccessToken(@NonNull final AccessToken accessToken) {
+            when(freeSoundApi.accessToken(anyString(),
+                                          anyString(),
+                                          anyString(),
+                                          anyString())).thenReturn(Single.just(accessToken));
+            return this;
+        }
+
+        Arrangement withApiAccessTokenError(@NonNull final Throwable error) {
+            when(freeSoundApi.accessToken(anyString(),
+                                          anyString(),
+                                          anyString(),
+                                          anyString())).thenReturn(Single.error(error));
             return this;
         }
 

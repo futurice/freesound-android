@@ -17,6 +17,7 @@
 package com.futurice.freesound.test.data;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
+import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.Avatar;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.Sound;
@@ -30,6 +31,16 @@ import java.util.List;
 import ix.Ix;
 
 public final class TestData {
+
+    @NonNull
+    public static AccessToken accessToken() {
+        return AccessToken.builder()
+                          .accessToken("accessToken")
+                          .scope("scope")
+                          .expiresIn(2000L)
+                          .refreshToken("refreshToken")
+                          .build();
+    }
 
     @NonNull
     public static User user() {
@@ -125,4 +136,5 @@ public final class TestData {
     private TestData() {
         throw new InstantiationForbiddenError();
     }
+
 }
