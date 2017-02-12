@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.network.api.model.UserResult;
+import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
 
@@ -25,5 +25,5 @@ import io.reactivex.Single;
 interface UserDataModel {
 
     @NonNull
-    Single<UserResult> getHomeUser();
+    Single<User> getHomeUser();
 }

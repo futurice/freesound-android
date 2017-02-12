@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
-import com.futurice.freesound.network.api.FreeSoundSearchService;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
@@ -37,7 +37,7 @@ import static timber.log.Timber.e;
 final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
-    private final FreeSoundSearchService freeSoundSearchService;
+    private final FreeSoundApiService freeSoundApiService;
 
     @NonNull
     private final SchedulerProvider schedulerProvider;
@@ -46,22 +46,23 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final Subject<SearchState> searchStateOnceAndStream =
             BehaviorSubject.createDefault(SearchState.idle());
 
-    DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService,
+    DefaultSearchDataModel(@NonNull final FreeSoundApiService freeSoundApiService,
                            @NonNull final SchedulerProvider schedulerProvider) {
-        this.freeSoundSearchService = get(freeSoundSearchService);
+        this.freeSoundApiService = get(freeSoundApiService);
         this.schedulerProvider = get(schedulerProvider);
     }
 
+    @NonNull
     @Override
     public Completable querySearch(@NonNull final String query) {
-        return freeSoundSearchService.search(get(query))
-                                     .map(DefaultSearchDataModel::toResults)
-                                     .doOnSubscribe(__ -> searchStateOnceAndStream
-                                             .onNext(SearchState.inProgress()))
-                                     .doOnSuccess(this::storeValueAndClearError)
-                                     .doOnError(storeError(query))
-                                     .toCompletable()
-                                     .onErrorComplete();
+        return freeSoundApiService.search(get(query))
+                                  .map(DefaultSearchDataModel::toResults)
+                                  .doOnSubscribe(__ -> searchStateOnceAndStream
+                                          .onNext(SearchState.inProgress()))
+                                  .doOnSuccess(this::storeValueAndClearError)
+                                  .doOnError(storeError(query))
+                                  .toCompletable()
+                                  .onErrorComplete();
     }
 
     @Override

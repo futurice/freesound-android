@@ -17,9 +17,11 @@
 package com.futurice.freesound.test.data;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
+import com.futurice.freesound.network.api.model.Avatar;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
+import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
 
@@ -28,6 +30,24 @@ import java.util.List;
 import ix.Ix;
 
 public final class TestData {
+
+    @NonNull
+    public static User user() {
+        return User.builder()
+                   .about("about")
+                   .avatar(avatar())
+                   .username("username")
+                   .build();
+    }
+
+    @NonNull
+    public static Avatar avatar() {
+        return Avatar.builder()
+                     .small("http://futurice.com/small.png")
+                     .medium("http://futurice.com/medium.png")
+                     .large("http://futurice.com/large.png")
+                     .build();
+    }
 
     @NonNull
     public static SoundSearchResult searchResult(int count) {

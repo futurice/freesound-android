@@ -9,20 +9,20 @@ import android.support.annotation.NonNull;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 @AutoValue
-public abstract class AvatarResult {
+public abstract class User {
 
     @NonNull
-    public abstract String small();
+    public abstract String username();
 
     @NonNull
-    public abstract String medium();
+    public abstract String about();
 
     @NonNull
-    public abstract String large();
+    public abstract Avatar avatar();
 
     @NonNull
-    public static TypeAdapter<AvatarResult> typeAdapter(@NonNull final Gson gson) {
-        return new AutoValue_AvatarResult.GsonTypeAdapter(get(gson));
+    public static TypeAdapter<User> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_User.GsonTypeAdapter(get(gson));
     }
 
     @SuppressWarnings("NullableProblems")
@@ -30,20 +30,20 @@ public abstract class AvatarResult {
     public interface Builder {
 
         @NonNull
-        Builder small(@NonNull final String small);
+        Builder username(@NonNull final String username);
 
         @NonNull
-        Builder medium(@NonNull final String medium);
+        Builder about(@NonNull final String about);
 
         @NonNull
-        Builder large(@NonNull final String large);
+        Builder avatar(@NonNull final Avatar avatar);
 
         @NonNull
-        AvatarResult build();
+        User build();
     }
 
     @NonNull
     public static Builder builder() {
-        return new AutoValue_AvatarResult.Builder();
+        return new AutoValue_User.Builder();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,22 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.network.api.model.SoundFields;
+import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
+import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
 
-import static com.futurice.freesound.common.utils.Preconditions.get;
-
-public final class DefaultFreeSoundSearchService implements FreeSoundSearchService {
+public interface FreeSoundApiService {
 
     @NonNull
-    private final FreeSoundApi freeSoundApi;
+    Single<User> getUser(@NonNull final String user);
 
-    public DefaultFreeSoundSearchService(@NonNull final FreeSoundApi freeSoundApi) {
-        this.freeSoundApi = get(freeSoundApi);
-    }
-
-    @Override
     @NonNull
-    public Single<SoundSearchResult> search(@NonNull final String query) {
-        return freeSoundApi.search(get(query), null, SoundFields.BASE);
-    }
+    Single<AccessToken> getAccessToken(@NonNull String code);
 
+    @NonNull
+    Single<SoundSearchResult> search(@NonNull String query);
 }

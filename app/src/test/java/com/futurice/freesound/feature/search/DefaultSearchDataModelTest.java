@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.network.api.FreeSoundSearchService;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
@@ -42,14 +42,14 @@ public class DefaultSearchDataModelTest {
     private static final String QUERY = "trains";
 
     @Mock
-    private FreeSoundSearchService freeSoundSearchService;
+    private FreeSoundApiService freeSoundApiService;
 
     private DefaultSearchDataModel defaultSearchDataModel;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        defaultSearchDataModel = new DefaultSearchDataModel(freeSoundSearchService,
+        defaultSearchDataModel = new DefaultSearchDataModel(freeSoundApiService,
                                                             new TrampolineSchedulerProvider());
     }
 
@@ -59,7 +59,7 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.querySearch(QUERY).test();
 
-        verify(freeSoundSearchService).search(eq(QUERY));
+        verify(freeSoundApiService).search(eq(QUERY));
     }
 
     @Test
@@ -202,18 +202,18 @@ public class DefaultSearchDataModelTest {
     private class Arrangement {
 
         Arrangement withDummySearchResult() {
-            when(freeSoundSearchService.search(anyString()))
+            when(freeSoundApiService.search(anyString()))
                     .thenReturn(Single.just(dummyResults()));
             return this;
         }
 
         Arrangement withSearchResultsFor(String query, SoundSearchResult results) {
-            when(freeSoundSearchService.search(eq(query))).thenReturn(Single.just(results));
+            when(freeSoundApiService.search(eq(query))).thenReturn(Single.just(results));
             return this;
         }
 
         Arrangement withSearchResultError(Exception exception) {
-            when(freeSoundSearchService.search(any())).thenReturn(Single.error(exception));
+            when(freeSoundApiService.search(any())).thenReturn(Single.error(exception));
             return this;
         }
 

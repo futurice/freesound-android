@@ -20,7 +20,7 @@ import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.app.BaseApplicationComponent;
 import com.futurice.freesound.inject.app.ForApplication;
-import com.futurice.freesound.network.api.FreeSoundApi;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -38,7 +38,7 @@ public interface FreesoundApplicationComponent extends BaseApplicationComponent 
     @ForApplication
     Context getApplicationContext();
 
-    FreeSoundApi getApi();
+    FreeSoundApiService getFreeSoundApiService();
 
     Picasso getPicasso();
 

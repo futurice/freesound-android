@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.network.api.FreeSoundApi;
-import com.futurice.freesound.network.api.model.UserResult;
+import com.futurice.freesound.network.api.FreeSoundApiService;
+import com.futurice.freesound.network.api.model.User;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class DefaultUserDataModelTest {
 
     @Mock
-    private FreeSoundApi freeSoundApi;
+    private FreeSoundApiService freeSoundApiService;
 
     private DefaultUserDataModel dataModel;
 
@@ -42,19 +42,19 @@ public class DefaultUserDataModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        dataModel = new DefaultUserDataModel(freeSoundApi);
+        dataModel = new DefaultUserDataModel(freeSoundApiService);
     }
 
     @Test
     public void getHomeUser_looksForSpiceProgram() {
         dataModel.getHomeUser();
 
-        verify(freeSoundApi).user(DefaultUserDataModel.USER_NAME);
+        verify(freeSoundApiService).getUser(DefaultUserDataModel.USER_NAME);
     }
 
     @Test
     public void getHomeUser_returnsResultOfSearch() {
-        UserResult result = mock(UserResult.class);
+        User result = mock(User.class);
         new ArrangeBuilder()
                 .withUser(result);
 
@@ -65,8 +65,8 @@ public class DefaultUserDataModelTest {
 
     private class ArrangeBuilder {
 
-        ArrangeBuilder withUser(UserResult user) {
-            when(freeSoundApi.user(anyString())).thenReturn(Single.just(user));
+        ArrangeBuilder withUser(User user) {
+            when(freeSoundApiService.getUser(anyString())).thenReturn(Single.just(user));
             return this;
         }
     }

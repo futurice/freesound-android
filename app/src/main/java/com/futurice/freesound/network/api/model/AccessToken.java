@@ -19,6 +19,7 @@ package com.futurice.freesound.network.api.model;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,15 +30,18 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 public abstract class AccessToken {
 
     @Nullable
+    @SerializedName("access_token")
     public abstract String accessToken();
 
     @Nullable
     public abstract String scope();
 
     @Nullable
+    @SerializedName("expires_in")
     public abstract Long expiresIn();
 
     @Nullable
+    @SerializedName("refresh_token")
     public abstract String refreshToken();
 
     @NonNull

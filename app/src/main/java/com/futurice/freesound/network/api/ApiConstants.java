@@ -23,9 +23,9 @@ import com.futurice.freesound.common.InstantiationForbiddenError;
  */
 final class ApiConstants {
 
+    // Authentication
     static final String TOKEN_QUERY_PARAM = "token";
-    static final String IS_GEO_TAGGED_FILTER_QUERY_PARAM = "is_geotagged";
-    static final String AUTHORIZATION_CODE = "authorization_code";
+    static final String AUTHORIZATION_CODE_GRANT_TYPE_VALUE = "authorization_code";
 
     private ApiConstants() {
         throw new InstantiationForbiddenError();
