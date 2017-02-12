@@ -19,10 +19,11 @@ Thanks for your interest!
 
 # Building
 
-To build the app, you will need a Freesound API key stored in the file: `<repo>/app/freesound-api.properties`, as per:
+To build the app, you will need a Freesound API client id and secret stored in the file: `<repo>/app/freesound-api.properties`, as per:
 
 ```
-freesound.api.key=yourapikeyvaluegoeshere
+freesound.api.clientId=yourapiclientidvaluegoeshere
+freesound.api.clientSecret=yourapiclientsecretvaluegoeshere
 ```
 
 If you don't have a key and you're not in the Futurice organization, then you will have to [generate your own from the Freesound website.](https://www.freesound.org/docs/api/overview.html)
