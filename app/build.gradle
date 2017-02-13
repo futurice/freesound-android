@@ -38,8 +38,8 @@ android {
         multiDexEnabled true
 
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
-        buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
+        buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
     }
     signingConfigs {
         debug {
