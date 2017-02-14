@@ -146,27 +146,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     }
 
-    @NonNull
-    private static Observable<String> getTextChangeStream(@NonNull final SearchView view,
-                                                          @NonNull final Scheduler uiScheduler) {
-        return Observable.<String>create(e -> subscribeToSearchView(view, e))
-                .subscribeOn(uiScheduler);
-    }
-
-    private static void subscribeToSearchView(@NonNull final SearchView view,
-                                              @NonNull final ObservableEmitter<String> emitter) {
-        view.setOnQueryTextListener(new OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                emitter.onNext(get(newText));
-                return true;
-            }
-        });
+    @Override
+    public void onPause() {
+        dismissSnackbar();
+        super.onPause();
     }
 
     @NonNull
@@ -203,12 +186,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                    .commit();
     }
 
-    @Override
-    public void onPause() {
-        dismissSnackbar();
-        super.onPause();
-    }
-
     private void showSnackbar(@NonNull final CharSequence charSequence) {
         checkNotNull(charSequence);
         get(searchSnackbar).showNewSnackbar(get(coordinatorLayout), charSequence);
@@ -216,5 +193,28 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     private void dismissSnackbar() {
         get(searchSnackbar).dismissSnackbar();
+    }
+
+    @NonNull
+    private static Observable<String> getTextChangeStream(@NonNull final SearchView view,
+                                                          @NonNull final Scheduler uiScheduler) {
+        return Observable.<String>create(e -> subscribeToSearchView(view, e))
+                .subscribeOn(uiScheduler);
+    }
+
+    private static void subscribeToSearchView(@NonNull final SearchView view,
+                                              @NonNull final ObservableEmitter<String> emitter) {
+        view.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                emitter.onNext(get(newText));
+                return true;
+            }
+        });
     }
 }
