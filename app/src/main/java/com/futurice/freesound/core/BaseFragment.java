@@ -31,8 +31,7 @@ import android.support.v4.app.Fragment;
  */
 public abstract class BaseFragment<T> extends Fragment implements Injector<T> {
 
-    @Nullable
-    protected T component;
+    private T component;
 
     @CallSuper
     @Override

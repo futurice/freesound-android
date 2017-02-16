@@ -21,7 +21,6 @@ import com.futurice.freesound.inject.Injector;
 import android.app.Application;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 /**
  * A base Application which provides a dependency injection mechanism.
@@ -30,8 +29,7 @@ import android.support.annotation.Nullable;
  */
 public abstract class BaseApplication<T> extends Application implements Injector<T> {
 
-    @Nullable
-    protected T component;
+    private T component;
 
     @CallSuper
     @Override

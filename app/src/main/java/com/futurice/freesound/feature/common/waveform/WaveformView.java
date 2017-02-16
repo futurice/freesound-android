@@ -26,7 +26,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -47,7 +46,6 @@ public class WaveformView extends View implements WaveformRender {
     private final int columnWidthPx; // waveform column
     private final int columnGapPx; // padding between columns
 
-    @Nullable
     private float[] waveform;
 
     public WaveformView(final Context context, AttributeSet attrs) {
