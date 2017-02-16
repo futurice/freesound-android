@@ -20,6 +20,7 @@ import com.futurice.freesound.common.Text;
 import com.futurice.freesound.common.utils.TextUtils;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 
 import android.support.annotation.NonNull;
@@ -34,9 +35,7 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
 import static com.futurice.freesound.common.functional.Functions.nothing1;
-import static com.futurice.freesound.common.rx.TimeScheduler.time;
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
 final class SearchActivityViewModel extends BaseViewModel {
@@ -59,27 +58,32 @@ final class SearchActivityViewModel extends BaseViewModel {
     private final Analytics analytics;
 
     @NonNull
+    private final SchedulerProvider schedulerProvider;
+
+    @NonNull
     private final Subject<String> searchTermOnceAndStream = BehaviorSubject
             .createDefault(NO_SEARCH);
 
     SearchActivityViewModel(@NonNull final SearchDataModel searchDataModel,
                             @NonNull final AudioPlayer audioPlayer,
-                            @NonNull final Analytics analytics) {
+                            @NonNull final Analytics analytics,
+                            @NonNull final SchedulerProvider schedulerProvider) {
         this.searchDataModel = get(searchDataModel);
         this.audioPlayer = get(audioPlayer);
         this.analytics = get(analytics);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @Override
     protected void bind(@NonNull final CompositeDisposable d) {
         audioPlayer.init();
 
-        d.add(searchTermOnceAndStream.observeOn(computation())
+        d.add(searchTermOnceAndStream.observeOn(schedulerProvider.computation())
                                      .distinctUntilChanged()
                                      .switchMap(query -> TextUtils.isNotEmpty(query)
                                              ? querySearch(query).toObservable()
                                              : searchDataModel.clear().toObservable())
-                                     .subscribeOn(computation())
+                                     .subscribeOn(schedulerProvider.computation())
                                      .subscribe(nothing1(),
                                                 e -> e(e,
                                                        "Fatal error when setting search term")));
@@ -97,7 +101,7 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     @NonNull
     Observable<Boolean> isClearEnabledOnceAndStream() {
-        return searchTermOnceAndStream.observeOn(computation())
+        return searchTermOnceAndStream.observeOn(schedulerProvider.computation())
                                       .map(SearchActivityViewModel::isCloseEnabled);
 
     }
@@ -111,7 +115,7 @@ final class SearchActivityViewModel extends BaseViewModel {
     private Completable querySearch(@NonNull final String query) {
         return Observable.timer(SEARCH_DEBOUNCE_TIME_SECONDS,
                                 TimeUnit.SECONDS,
-                                time(SEARCH_DEBOUNCE_TAG))
+                                schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
                          .flatMapCompletable(__ -> searchDataModel.querySearch(query));
     }
 

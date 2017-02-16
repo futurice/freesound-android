@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.app;
+package com.futurice.freesound.feature.images;
 
 import com.futurice.freesound.inject.app.ForApplication;
 import com.squareup.picasso.Picasso;
@@ -27,7 +27,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-final class ImagesModule {
+public final class ImagesModule {
 
     @Provides
     @Singleton

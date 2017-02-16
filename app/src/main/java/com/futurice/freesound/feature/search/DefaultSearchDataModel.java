@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.FreeSoundSearchService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
@@ -35,13 +36,15 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 import static com.futurice.freesound.feature.search.SearchState.SEARCH_CLEARED;
 import static com.futurice.freesound.feature.search.SearchState.SEARCH_ERROR;
 import static com.futurice.freesound.feature.search.SearchState.SEARCH_TRIGGERED;
-import static io.reactivex.schedulers.Schedulers.computation;
 import static timber.log.Timber.e;
 
 final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
     private final FreeSoundSearchService freeSoundSearchService;
+
+    @NonNull
+    private final SchedulerProvider schedulerProvider;
 
     @NonNull
     private final BehaviorSubject<Option<List<Sound>>> lastResultsOnceAndStream =
@@ -51,8 +54,10 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final Subject<SearchState> searchStateOnceAndStream =
             BehaviorSubject.createDefault(SEARCH_CLEARED());
 
-    DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService) {
+    DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService,
+                           @NonNull final SchedulerProvider schedulerProvider) {
         this.freeSoundSearchService = get(freeSoundSearchService);
+        this.schedulerProvider = get(schedulerProvider);
     }
 
     @Override
@@ -69,13 +74,13 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
-        return lastResultsOnceAndStream.observeOn(computation());
+        return lastResultsOnceAndStream.observeOn(schedulerProvider.computation());
     }
 
     @Override
     @NonNull
     public Observable<SearchState> getSearchStateOnceAndStream() {
-        return searchStateOnceAndStream.observeOn(computation());
+        return searchStateOnceAndStream.observeOn(schedulerProvider.computation());
     }
 
     @Override

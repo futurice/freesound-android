@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.viewmodel.DataBinder;
 
@@ -40,14 +41,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import polanski.option.AtomicOption;
 import polanski.option.Option;
 import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 public final class SearchFragment extends BindingBaseFragment<SearchFragmentComponent> {
 
@@ -58,6 +57,10 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @Nullable
     @Inject
     SoundItemAdapter soundItemAdapter;
+
+    @Nullable
+    @Inject
+    SchedulerProvider schedulerProvider;
 
     @Nullable
     @BindView(R.id.recyclerView_searchResults)
@@ -80,13 +83,13 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         @Override
         public void bind(@NonNull final CompositeDisposable disposables) {
             disposables.add(viewModel().getSoundsOnceAndStream()
-                                       .subscribeOn(Schedulers.computation())
-                                       .observeOn(mainThread())
+                                       .subscribeOn(get(schedulerProvider).computation())
+                                       .observeOn(schedulerProvider.ui())
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
             disposables.add(viewModel().getSearchStateOnceAndStream()
-                                       .subscribeOn(Schedulers.computation())
-                                       .observeOn(mainThread())
+                                       .subscribeOn(schedulerProvider.computation())
+                                       .observeOn(schedulerProvider.ui())
                                        .subscribe(SearchFragment.this::showProgress,
                                                   e -> Timber.e(e,
                                                                 "Error receiving search triggered Events")));

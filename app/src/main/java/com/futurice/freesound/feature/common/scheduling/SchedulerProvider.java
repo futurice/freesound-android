@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,40 +14,37 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.test.rx;
+package com.futurice.freesound.feature.common.scheduling;
 
 import android.support.annotation.NonNull;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Scheduler;
 
 /**
- * An {@link Observer} which swallows all events without side effects.
+ * Provides RxJava Schedulers.
  */
-public final class IgnoringObserver<T> implements Observer<T> {
+public interface SchedulerProvider {
 
     @NonNull
-    public static <T> Observer<T> create() {
-        return new IgnoringObserver<>();
-    }
+    Scheduler computation();
 
-    @Override
-    public void onError(final Throwable e) {
+    @NonNull
+    Scheduler trampoline();
 
-    }
+    @NonNull
+    Scheduler single();
 
-    @Override
-    public void onComplete() {
+    @NonNull
+    Scheduler newThread();
 
-    }
+    @NonNull
+    Scheduler io();
 
-    @Override
-    public void onSubscribe(final Disposable d) {
+    @NonNull
+    Scheduler time(@NonNull String tag);
 
-    }
+    @NonNull
+    Scheduler ui();
 
-    @Override
-    public void onNext(final T t) {
-
-    }
+    boolean isUiThread();
 }

@@ -86,6 +86,11 @@ Brought to you by the power of the [Chilicorn](http://spiceprogram.org/chilicorn
 
 ![Chilicorn Logo](https://raw.githubusercontent.com/futurice/spiceprogram/gh-pages/assets/img/logo/chilicorn_no_text-256.png)
 
+# Other Sound Repositories
+
+- [BioAcoustica](http://bio.acousti.ca)
+- [British Library - Sounds](http://sounds.bl.uk)
+
 License
 =======
 

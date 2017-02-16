@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home;
+package com.futurice.freesound.feature.common.scheduling;
 
-import com.futurice.freesound.inject.fragment.BaseFragmentModule;
-import com.futurice.freesound.inject.fragment.FragmentScope;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = BaseFragmentModule.class)
-class HomeFragmentModule {
+@Module
+public class SchedulingModule {
 
     @Provides
-    @FragmentScope
-    static HomeFragmentViewModel provideHomeFragmentViewModel(UserDataModel userDataModel) {
-        return new HomeFragmentViewModel(userDataModel);
+    @Singleton
+    static SchedulerProvider provideSchedulerProvider() {
+        return new DefaultSchedulerProvider();
     }
-
 }
