@@ -36,6 +36,7 @@ import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import polanski.option.Option;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -128,10 +129,12 @@ public class DefaultSearchDataModelTest {
 
     @Test
     public void getSearchErrorOnceAndStream_hasNoneAsDefault() {
-        defaultSearchDataModel.getSearchErrorOnceAndStream()
-                              .test()
-                              .assertNotTerminated()
-                              .assertValue(Option.none());
+        assertEquals(defaultSearchDataModel.getSearchStateOnceAndStream()
+                                           .test()
+                                           .assertNotTerminated()
+                                           .values()
+                                           .get(0),
+                     SearchState.SEARCH_CLEARED());
     }
 
     @Test
@@ -141,9 +144,11 @@ public class DefaultSearchDataModelTest {
                          .act()
                          .querySearch();
 
-        defaultSearchDataModel.getSearchErrorOnceAndStream()
-                              .test()
-                              .assertValue(Option.ofObj(searchError));
+        assertEquals(defaultSearchDataModel.getSearchStateOnceAndStream()
+                                           .test()
+                                           .values()
+                                           .get(0),
+                     SearchState.SEARCH_ERROR(searchError));
     }
 
     @Test
@@ -152,9 +157,11 @@ public class DefaultSearchDataModelTest {
                          .act()
                          .querySearch();
 
-        defaultSearchDataModel.getSearchErrorOnceAndStream()
-                              .test()
-                              .assertValue(Option.none());
+        assertEquals(defaultSearchDataModel.getSearchStateOnceAndStream()
+                                           .test()
+                                           .values()
+                                           .get(0),
+                     SearchState.SEARCH_CLEARED());
     }
 
     @Test
@@ -163,7 +170,7 @@ public class DefaultSearchDataModelTest {
                          .act()
                          .querySearch();
 
-        defaultSearchDataModel.getSearchErrorOnceAndStream()
+        defaultSearchDataModel.getSearchStateOnceAndStream()
                               .test()
                               .assertNotTerminated();
     }
@@ -171,8 +178,8 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchErrorOnceAndStream_doesNotTerminate_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError();
-        TestObserver<Option<Throwable>> ts = defaultSearchDataModel.getSearchErrorOnceAndStream()
-                                                                   .test();
+        TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
+                                                             .test();
 
         defaultSearchDataModel.querySearch(QUERY).subscribe();
 
@@ -201,10 +208,12 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.clear().subscribe();
 
-        defaultSearchDataModel.getSearchErrorOnceAndStream()
-                              .test()
-                              .assertValue(Option.none())
-                              .assertNotTerminated();
+        assertEquals(defaultSearchDataModel.getSearchStateOnceAndStream()
+                                           .test()
+                                           .assertNotTerminated()
+                                           .values()
+                                           .get(0),
+                     SearchState.SEARCH_CLEARED());
     }
 
     @Test

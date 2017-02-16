@@ -84,7 +84,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::handleResults,
                                                   e -> Timber.e(e, "Error setting Sound items")));
-            disposables.add(viewModel().getSearchTriggeredStream()
+            disposables.add(viewModel().getSearchStateOnceAndStream()
                                        .subscribeOn(Schedulers.computation())
                                        .observeOn(mainThread())
                                        .subscribe(SearchFragment.this::showProgress,
@@ -178,8 +178,8 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         }
     }
 
-    private void showProgress(@NonNull final Boolean searchTriggered) {
-        if (searchTriggered) {
+    private void showProgress(@NonNull final SearchState searchState) {
+        if (searchState.searchTriggered()) {
             get(progressBar).setVisibility(View.VISIBLE);
         } else {
             get(progressBar).setVisibility(View.GONE);

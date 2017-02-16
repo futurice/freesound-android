@@ -35,10 +35,7 @@ interface SearchDataModel {
     Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
 
     @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
-
-    @NonNull
-    Observable<Boolean> getSearchTriggeredStream();
+    Observable<SearchState> getSearchStateOnceAndStream();
 
     @NonNull
     Completable clear();

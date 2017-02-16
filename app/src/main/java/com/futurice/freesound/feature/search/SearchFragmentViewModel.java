@@ -59,8 +59,8 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    Observable<Boolean> getSearchTriggeredStream() {
-        return searchDataModel.getSearchTriggeredStream();
+    Observable<SearchState> getSearchStateOnceAndStream() {
+        return searchDataModel.getSearchStateOnceAndStream();
     }
 
     void stopPlayback() {
