@@ -26,6 +26,8 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import ix.Ix;
+
 public final class TestData {
 
     @NonNull
@@ -41,9 +43,8 @@ public final class TestData {
     @NonNull
     public static List<Sound> sounds(int count) {
         List<Sound> sounds = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            sounds.add(sound((long) i));
-        }
+        Ix.range(1, count)
+          .foreach(i -> sounds.add(sound((long) i)));
         return sounds;
     }
 
@@ -65,9 +66,8 @@ public final class TestData {
     @NonNull
     public static List<String> tags(long index, int count) {
         List<String> tags = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            tags.add(indexed("tag", index));
-        }
+        Ix.range(1, count)
+          .foreach(__ -> tags.add(indexed("tag", index)));
         return tags;
     }
 
