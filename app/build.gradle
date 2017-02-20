@@ -80,12 +80,13 @@ task checkstyle(type: Checkstyle) {
 
 ext {
     dependencyVersions = [
-            androidSupportLibrary  : '25.0.1',
+            androidSupportLibrary  : '25.1.1',
             javaPoet               : '1.7.0',
             dagger2                : '2.4',
             javaxAnnotation        : '10.0-b28',
             rxJava2                : '2.0.1',
             rxAndroid              : '2.0.1',
+            ixJava                 : '1.0.0-RC5',
             okHttp                 : '3.4.1',
             picasso                : '2.5.2',
             retrofit2              : '2.1.0',
@@ -127,6 +128,9 @@ dependencies {
     // RxJava
     compile "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
     compile "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
+
+    // IxJava
+    compile "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
 
     // Networking
     compile "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"

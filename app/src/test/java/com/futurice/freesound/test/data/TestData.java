@@ -23,8 +23,9 @@ import com.futurice.freesound.network.api.model.SoundSearchResult;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import ix.Ix;
 
 public final class TestData {
 
@@ -40,11 +41,9 @@ public final class TestData {
 
     @NonNull
     public static List<Sound> sounds(int count) {
-        List<Sound> sounds = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            sounds.add(sound((long) i));
-        }
-        return sounds;
+        return Ix.range(1, count)
+                 .map(i -> sound((long) i))
+                 .toList();
     }
 
     @NonNull
@@ -64,11 +63,9 @@ public final class TestData {
 
     @NonNull
     public static List<String> tags(long index, int count) {
-        List<String> tags = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            tags.add(indexed("tag", index));
-        }
-        return tags;
+        return Ix.range(1, count)
+                 .map(__ -> indexed("tag", index))
+                 .toList();
     }
 
     @NonNull
