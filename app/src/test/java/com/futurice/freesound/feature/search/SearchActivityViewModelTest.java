@@ -40,7 +40,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
-import polanski.option.Option;
 
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TAG;
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS;
@@ -51,7 +50,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static polanski.option.Option.ofObj;
 
 public class SearchActivityViewModelTest {
 

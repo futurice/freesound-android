@@ -21,19 +21,19 @@ abstract class SearchState {
 
     abstract boolean isInProgress();
 
-    static SearchState idle(){
+    static SearchState idle() {
         return new AutoValue_SearchState(Option.none(), Option.none(), false);
     }
 
-    static SearchState inProgress(){
+    static SearchState inProgress() {
         return new AutoValue_SearchState(Option.none(), Option.none(), true);
     }
 
-    static SearchState error(@NonNull Throwable throwable){
+    static SearchState error(@NonNull Throwable throwable) {
         return new AutoValue_SearchState(Option.none(), Option.ofObj(throwable), false);
     }
 
-    static SearchState success(@NonNull List<Sound> results){
+    static SearchState success(@NonNull List<Sound> results) {
         return new AutoValue_SearchState(Option.ofObj(results), Option.none(), false);
     }
 }

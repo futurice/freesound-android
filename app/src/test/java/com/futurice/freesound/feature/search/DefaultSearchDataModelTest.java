@@ -128,8 +128,8 @@ public class DefaultSearchDataModelTest {
                          .act()
                          .querySearch();
 
-
-        TestObserver<SearchState> testObserver = defaultSearchDataModel.getSearchStateOnceAndStream().test();
+        TestObserver<SearchState> testObserver = defaultSearchDataModel
+                .getSearchStateOnceAndStream().test();
         testObserver.assertNotTerminated();
         testObserver.assertValueCount(1);
         testObserver.assertValue(SearchState.error(searchError));
@@ -180,8 +180,8 @@ public class DefaultSearchDataModelTest {
 
         defaultSearchDataModel.clear().subscribe();
 
-
-        TestObserver<SearchState> testObserver = defaultSearchDataModel.getSearchStateOnceAndStream().test();
+        TestObserver<SearchState> testObserver = defaultSearchDataModel
+                .getSearchStateOnceAndStream().test();
         testObserver.assertNotTerminated();
         testObserver.assertValueCount(1);
         testObserver.assertValue(SearchState.idle());

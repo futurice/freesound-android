@@ -30,7 +30,6 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 import static timber.log.Timber.e;
