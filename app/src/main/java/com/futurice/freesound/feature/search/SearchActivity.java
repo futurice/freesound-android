@@ -106,7 +106,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     };
 
     private void handleErrorState(@NonNull final SearchState searchState) {
-        searchState.getError()
+        searchState.error()
                    .ifSome(__ -> showSnackbar(getString(string.search_error)))
                    .ifNone(this::dismissSnackbar);
     }

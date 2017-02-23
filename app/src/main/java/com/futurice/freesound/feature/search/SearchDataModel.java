@@ -32,9 +32,6 @@ interface SearchDataModel {
     Completable querySearch(@NonNull String query);
 
     @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
-
-    @NonNull
     Observable<SearchState> getSearchStateOnceAndStream();
 
     @NonNull

@@ -33,9 +33,6 @@ import io.reactivex.subjects.Subject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static com.futurice.freesound.feature.search.SearchState.SEARCH_CLEARED;
-import static com.futurice.freesound.feature.search.SearchState.SEARCH_ERROR;
-import static com.futurice.freesound.feature.search.SearchState.SEARCH_TRIGGERED;
 import static timber.log.Timber.e;
 
 final class DefaultSearchDataModel implements SearchDataModel {
@@ -47,12 +44,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
     private final SchedulerProvider schedulerProvider;
 
     @NonNull
-    private final BehaviorSubject<Option<List<Sound>>> lastResultsOnceAndStream =
-            BehaviorSubject.createDefault(Option.none());
-
-    @NonNull
     private final Subject<SearchState> searchStateOnceAndStream =
-            BehaviorSubject.createDefault(SEARCH_CLEARED());
+            BehaviorSubject.createDefault(SearchState.idle());
 
     DefaultSearchDataModel(@NonNull final FreeSoundSearchService freeSoundSearchService,
                            @NonNull final SchedulerProvider schedulerProvider) {
@@ -62,19 +55,14 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     public Completable querySearch(@NonNull final String query) {
-        searchStateOnceAndStream.onNext(SEARCH_TRIGGERED());
         return freeSoundSearchService.search(get(query))
                                      .map(DefaultSearchDataModel::toResults)
+                                     .doOnSubscribe(__ -> searchStateOnceAndStream
+                                             .onNext(SearchState.inProgress()))
                                      .doOnSuccess(this::storeValueAndClearError)
                                      .doOnError(storeError(query))
                                      .toCompletable()
                                      .onErrorComplete();
-    }
-
-    @Override
-    @NonNull
-    public Observable<Option<List<Sound>>> getSearchResultsOnceAndStream() {
-        return lastResultsOnceAndStream.observeOn(schedulerProvider.computation());
     }
 
     @Override
@@ -90,26 +78,23 @@ final class DefaultSearchDataModel implements SearchDataModel {
     }
 
     @NonNull
-    private static Option<List<Sound>> toResults(
-            @NonNull final SoundSearchResult soundSearchResult) {
-        return Option.ofObj(soundSearchResult.results());
+    private static List<Sound> toResults(@NonNull final SoundSearchResult soundSearchResult) {
+        return soundSearchResult.results();
     }
 
-    private void storeValueAndClearError(@NonNull final Option<List<Sound>> listOption) {
-        lastResultsOnceAndStream.onNext(listOption);
-        searchStateOnceAndStream.onNext(SEARCH_CLEARED());
+    private void storeValueAndClearError(@NonNull final List<Sound> results) {
+        searchStateOnceAndStream.onNext(SearchState.success(results));
     }
 
     @NonNull
     private Consumer<Throwable> storeError(@NonNull final String query) {
         return e -> {
-            searchStateOnceAndStream.onNext(SEARCH_ERROR(e));
+            searchStateOnceAndStream.onNext(SearchState.error(e));
             e(e, "Error searching Freesound for query: %s ", query);
         };
     }
 
     private void clearResultAndError() {
-        lastResultsOnceAndStream.onNext(Option.none());
-        searchStateOnceAndStream.onNext(SEARCH_CLEARED());
+        searchStateOnceAndStream.onNext(SearchState.idle());
     }
 }
