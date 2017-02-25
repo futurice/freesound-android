@@ -17,6 +17,10 @@
 package com.futurice.freesound.network.api;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.futurice.freesound.inject.app.ForApplication;
+import com.readystatesoftware.chuck.ChuckInterceptor;
+
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,8 +51,8 @@ public final class InstrumentationModule {
     @Provides
     @Singleton
     @ApiModule.AppInterceptors
-    static List<Interceptor> provideAppInterceptors() {
-        return Collections.emptyList();
+    static List<Interceptor> provideAppInterceptors(ChuckInterceptor chuckInterceptor) {
+        return Collections.singletonList(chuckInterceptor);
     }
 
     @Provides
@@ -62,5 +66,10 @@ public final class InstrumentationModule {
     @Singleton
     static StethoInterceptor provideStethoInterceptor() {
         return new StethoInterceptor();
+    }
+
+    @Provides
+    static ChuckInterceptor provideChuckInterceptor(@ForApplication Context context) {
+        return new ChuckInterceptor(context);
     }
 }

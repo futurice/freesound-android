@@ -26,7 +26,6 @@ import com.futurice.freesound.viewmodel.ViewModel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,7 +39,6 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
 
     @Inject
-    @Nullable
     HomeViewModel homeViewModel;
 
     @NonNull
@@ -81,7 +79,7 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
             case R.id.action_about:
                 return true;
             case R.id.action_search:
-                get(homeViewModel).openSearch();
+                homeViewModel.openSearch();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

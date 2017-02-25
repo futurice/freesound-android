@@ -46,29 +46,23 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponent> {
 
-    @Nullable
     @Inject
     HomeFragmentViewModel homeFragmentViewModel;
 
-    @Nullable
     @Inject
     Picasso picasso;
 
-    @Nullable
     @Inject
     SchedulerProvider schedulerProvider;
 
-    @Nullable
     @BindView(R.id.avatar_image)
     ImageView avatarImage;
 
-    @Nullable
     @BindView(R.id.username_textView)
-    TextView userName;
+    TextView userNameTextView;
 
-    @Nullable
     @BindView(R.id.about_textView)
-    TextView about;
+    TextView aboutTextView;
 
     @NonNull
     private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
@@ -83,26 +77,26 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
             d.add(homeFragmentViewModel.getImage()
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
-                                       .subscribe(it -> get(picasso).load(it)
-                                                                    .into(avatarImage),
+                                       .subscribe(it -> picasso.load(it)
+                                                               .into(avatarImage),
                                                   e -> Timber.e(e, "Error setting image")));
 
             d.add(homeFragmentViewModel.getUserName()
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
-                                       .subscribe(it -> get(userName).setText(it),
+                                       .subscribe(it -> userNameTextView.setText(it),
                                                   e -> Timber.e(e, "Error setting user")));
 
             d.add(homeFragmentViewModel.getAbout()
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
-                                       .subscribe(it -> get(about).setText(it),
-                                                  e -> Timber.e(e, "Error setting about")));
+                                       .subscribe(it -> aboutTextView.setText(it),
+                                                  e -> Timber.e(e, "Error setting aboutTextView")));
         }
 
         @Override
         public void unbind() {
-            get(picasso).cancelRequest(avatarImage);
+            picasso.cancelRequest(avatarImage);
         }
 
     };

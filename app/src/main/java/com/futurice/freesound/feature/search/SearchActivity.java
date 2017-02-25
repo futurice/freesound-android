@@ -31,9 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.appcompat.R;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
@@ -57,26 +55,21 @@ import static timber.log.Timber.e;
 
 public class SearchActivity extends BindingBaseActivity<SearchActivityComponent> {
 
-    @Nullable
     @Inject
     SearchActivityViewModel searchViewModel;
 
-    @Nullable
     @Inject
     SearchSnackbar searchSnackbar;
 
-    @Nullable
     @Inject
     SchedulerProvider schedulerProvider;
 
-    @Nullable
     @BindView(id.search_view)
     SearchView searchView;
 
-    @Nullable
-    private ImageView closeButton;
+    @BindView(id.search_close_btn)
+    ImageView closeButton;
 
-    @Nullable
     @BindView(id.search_coordinatorlayout)
     CoordinatorLayout coordinatorLayout;
 
@@ -112,9 +105,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     private void setClearSearchVisible(final boolean clearVisible) {
-        checkNotNull(closeButton, "Close Button has not been bound");
-
-        get(closeButton).setVisibility(clearVisible ? View.VISIBLE : View.GONE);
+        closeButton.setVisibility(clearVisible ? View.VISIBLE : View.GONE);
     }
 
     public static void open(@NonNull final Context context) {
@@ -136,8 +127,7 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        get(searchView).setIconified(false);
-        closeButton = findById(searchView, R.id.search_close_btn);
+        searchView.setIconified(false);
 
         searchView.setOnCloseListener(() -> {
             searchView.setQuery(SearchActivityViewModel.NO_SEARCH, true);
@@ -211,10 +201,10 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {
         checkNotNull(charSequence);
-        get(searchSnackbar).showNewSnackbar(get(coordinatorLayout), charSequence);
+        searchSnackbar.showNewSnackbar(coordinatorLayout, charSequence);
     }
 
     private void dismissSnackbar() {
-        get(searchSnackbar).dismissSnackbar();
+        searchSnackbar.dismissSnackbar();
     }
 }
