@@ -64,7 +64,6 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @BindView(R.id.textView_searchNoResults)
     TextView noResultsTextView;
 
-    @Nullable
     @BindView(R.id.progressBar_searchProgress)
     ProgressBar progressBar;
 
