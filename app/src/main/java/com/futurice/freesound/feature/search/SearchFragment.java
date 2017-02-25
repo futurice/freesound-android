@@ -176,7 +176,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     }
 
     private void showProgress(@NonNull final SearchState searchState) {
-        get(progressBar).setVisibility(searchState.isInProgress() ? View.VISIBLE : View.GONE);
+        progressBar.setVisibility(searchState.isInProgress() ? View.VISIBLE : View.GONE);
     }
 
 }
