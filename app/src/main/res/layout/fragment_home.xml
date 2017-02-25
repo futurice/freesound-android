@@ -45,4 +45,10 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/avatar_image"
             tools:text="About"/>
+    <Button
+            android:id="@+id/login_button"
+            android:text="Login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 </RelativeLayout>
