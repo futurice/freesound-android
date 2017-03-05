@@ -138,10 +138,9 @@ public class SearchFragmentViewModelTest {
         }
 
         Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
-            sounds
-                    .ifSome(soundList -> mockedSearchResultsStream
-                            .onNext(SearchState.success(soundList)))
-                    .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.idle()));
+            sounds.ifSome(
+                    soundList -> mockedSearchResultsStream.onNext(SearchState.success(soundList)))
+                  .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.idle()));
             return this;
         }
 
