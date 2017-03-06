@@ -91,17 +91,17 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                           .subscribe(searchViewModel::search,
                                      e -> e(e, "Error getting changed text")));
 
-            d.add(searchViewModel.getSearchErrorOnceAndStream()
+            d.add(searchViewModel.getSearchStateOnceAndStream()
                                  .observeOn(schedulerProvider.ui())
                                  .subscribe(SearchActivity.this::handleErrorState,
                                             e -> e(e, "Error receiving Errors")));
         }
     };
 
-    private void handleErrorState(@NonNull final Option<Throwable> errorOption) {
-        errorOption
-                .ifSome(__ -> showSnackbar(getString(string.search_error)))
-                .ifNone(this::dismissSnackbar);
+    private void handleErrorState(@NonNull final SearchState searchState) {
+        searchState.error()
+                   .ifSome(__ -> showSnackbar(getString(string.search_error)))
+                   .ifNone(this::dismissSnackbar);
     }
 
     private void setClearSearchVisible(final boolean clearVisible) {

@@ -16,15 +16,10 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.network.api.model.Sound;
-
 import android.support.annotation.NonNull;
-
-import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import polanski.option.Option;
 
 interface SearchDataModel {
 
@@ -32,10 +27,7 @@ interface SearchDataModel {
     Completable querySearch(@NonNull String query);
 
     @NonNull
-    Observable<Option<List<Sound>>> getSearchResultsOnceAndStream();
-
-    @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream();
+    Observable<SearchState> getSearchStateOnceAndStream();
 
     @NonNull
     Completable clear();

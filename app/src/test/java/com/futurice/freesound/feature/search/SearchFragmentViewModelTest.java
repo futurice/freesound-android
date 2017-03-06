@@ -124,21 +124,23 @@ public class SearchFragmentViewModelTest {
 
     private class Arrangement {
 
-        private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(Option.none());
+        private final BehaviorSubject<SearchState> mockedSearchResultsStream
+                = BehaviorSubject.createDefault(SearchState.idle());
 
         Arrangement() {
             withSuccessfulSearchResultStream();
         }
 
         Arrangement withSuccessfulSearchResultStream() {
-            when(searchDataModel.getSearchResultsOnceAndStream())
+            when(searchDataModel.getSearchStateOnceAndStream())
                     .thenReturn(mockedSearchResultsStream);
             return this;
         }
 
         Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
-            mockedSearchResultsStream.onNext(sounds);
+            sounds.ifSome(
+                    soundList -> mockedSearchResultsStream.onNext(SearchState.success(soundList)))
+                  .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.idle()));
             return this;
         }
 

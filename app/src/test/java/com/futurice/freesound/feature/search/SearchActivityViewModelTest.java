@@ -40,7 +40,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
-import polanski.option.Option;
 
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TAG;
 import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS;
@@ -51,7 +50,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static polanski.option.Option.ofObj;
 
 public class SearchActivityViewModelTest {
 
@@ -220,7 +218,7 @@ public class SearchActivityViewModelTest {
 
         arrangement
                 .withSuccessfulSearchResultStream()
-                .enqueueSearchResults(ofObj(TestData.sounds(10)))
+                .enqueueSearchResults(TestData.sounds(10))
                 .act()
                 .bind()
                 .search();
@@ -271,14 +269,14 @@ public class SearchActivityViewModelTest {
 
     private class ArrangeBuilder {
 
-        private final BehaviorSubject<Option<List<Sound>>> searchResultsStream = BehaviorSubject
-                .createDefault(Option.none());
+        private final BehaviorSubject<SearchState> searchResultsStream = BehaviorSubject
+                .createDefault(SearchState.idle());
 
-        private final BehaviorSubject<Option<List<Sound>>> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(Option.none());
+        private final BehaviorSubject<SearchState> mockedSearchResultsStream
+                = BehaviorSubject.createDefault(SearchState.idle());
 
         ArrangeBuilder() {
-            Mockito.when(searchDataModel.getSearchResultsOnceAndStream())
+            Mockito.when(searchDataModel.getSearchStateOnceAndStream())
                    .thenReturn(searchResultsStream);
             Mockito.when(searchDataModel.clear()).thenReturn(Completable.complete());
             Mockito.when(searchDataModel.querySearch(anyString()))
@@ -302,13 +300,13 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder withSuccessfulSearchResultStream() {
-            when(searchDataModel.getSearchResultsOnceAndStream())
+            when(searchDataModel.getSearchStateOnceAndStream())
                     .thenReturn(mockedSearchResultsStream);
             return this;
         }
 
-        ArrangeBuilder enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
-            mockedSearchResultsStream.onNext(sounds);
+        ArrangeBuilder enqueueSearchResults(@NonNull final List<Sound> sounds) {
+            mockedSearchResultsStream.onNext(SearchState.success(sounds));
             return this;
         }
 

@@ -33,7 +33,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
-import polanski.option.Option;
 
 import static com.futurice.freesound.common.functional.Functions.nothing1;
 import static com.futurice.freesound.common.utils.Preconditions.get;
@@ -108,8 +107,8 @@ final class SearchActivityViewModel extends BaseViewModel {
     }
 
     @NonNull
-    Observable<Option<Throwable>> getSearchErrorOnceAndStream() {
-        return searchDataModel.getSearchErrorOnceAndStream();
+    Observable<SearchState> getSearchStateOnceAndStream() {
+        return searchDataModel.getSearchStateOnceAndStream();
     }
 
     @NonNull
