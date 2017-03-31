@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,55 +19,62 @@ package com.futurice.freesound.network.api.model;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
-import java.util.List;
-
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 @AutoValue
-public abstract class SoundSearchResult {
-
-    @NonNull
-    public abstract Integer count();
+public abstract class AccessToken {
 
     @Nullable
-    public abstract String next();
-
-    @NonNull
-    public abstract List<Sound> results();
+    @SerializedName("access_token")
+    public abstract String accessToken();
 
     @Nullable
-    public abstract String previous();
+    public abstract String scope();
+
+    @Nullable
+    @SerializedName("expires_in")
+    public abstract Long expiresIn();
+
+    @Nullable
+    @SerializedName("refresh_token")
+    public abstract String refreshToken();
 
     @NonNull
-    public static TypeAdapter<SoundSearchResult> typeAdapter(@NonNull final Gson gson) {
-        return new AutoValue_SoundSearchResult.GsonTypeAdapter(get(gson));
+    public static TypeAdapter<AccessToken> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_AccessToken.GsonTypeAdapter(get(gson));
     }
 
     @VisibleForTesting
     @SuppressWarnings("NullableProblems")
     @AutoValue.Builder
-    public abstract static class Builder {
-
-        public abstract Builder count(@NonNull final Integer count);
-
-        public abstract Builder next(@Nullable final String next);
-
-        public abstract Builder results(@NonNull final List<Sound> results);
-
-        public abstract Builder previous(@Nullable final String previous);
+    public interface Builder {
 
         @NonNull
-        public abstract SoundSearchResult build();
+        Builder accessToken(@NonNull final String accessToken);
+
+        @NonNull
+        Builder scope(@NonNull final String scope);
+
+        @NonNull
+        Builder expiresIn(@NonNull final Long expiresIn);
+
+        @NonNull
+        Builder refreshToken(@NonNull final String refreshToken);
+
+        @NonNull
+        AccessToken build();
     }
 
     @VisibleForTesting
     @NonNull
     public static Builder builder() {
-        return new AutoValue_SoundSearchResult.Builder();
+        return new AutoValue_AccessToken.Builder();
     }
+
 }

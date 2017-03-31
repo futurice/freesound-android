@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.network.api.FreeSoundApi;
-import com.futurice.freesound.network.api.model.UserResult;
+import com.futurice.freesound.network.api.FreeSoundApiService;
+import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -32,15 +32,15 @@ final class DefaultUserDataModel implements UserDataModel {
     static final String USER_NAME = "SpiceProgram";
 
     @NonNull
-    private final FreeSoundApi freeSoundApi;
+    private final FreeSoundApiService freeSoundApi;
 
-    DefaultUserDataModel(@NonNull final FreeSoundApi freeSoundApi) {
-        this.freeSoundApi = get(freeSoundApi);
+    DefaultUserDataModel(@NonNull final FreeSoundApiService freeSoundApiService) {
+        this.freeSoundApi = get(freeSoundApiService);
     }
 
     @NonNull
     @Override
-    public Single<UserResult> getHomeUser() {
-        return freeSoundApi.user(USER_NAME);
+    public Single<User> getHomeUser() {
+        return freeSoundApi.getUser(USER_NAME);
     }
 }

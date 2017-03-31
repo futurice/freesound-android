@@ -5,11 +5,12 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 @AutoValue
-public abstract class AvatarResult {
+public abstract class Avatar {
 
     @NonNull
     public abstract String small();
@@ -21,10 +22,11 @@ public abstract class AvatarResult {
     public abstract String large();
 
     @NonNull
-    public static TypeAdapter<AvatarResult> typeAdapter(@NonNull final Gson gson) {
-        return new AutoValue_AvatarResult.GsonTypeAdapter(get(gson));
+    public static TypeAdapter<Avatar> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_Avatar.GsonTypeAdapter(get(gson));
     }
 
+    @VisibleForTesting
     @SuppressWarnings("NullableProblems")
     @AutoValue.Builder
     public interface Builder {
@@ -39,11 +41,12 @@ public abstract class AvatarResult {
         Builder large(@NonNull final String large);
 
         @NonNull
-        AvatarResult build();
+        Avatar build();
     }
 
+    @VisibleForTesting
     @NonNull
     public static Builder builder() {
-        return new AutoValue_AvatarResult.Builder();
+        return new AutoValue_Avatar.Builder();
     }
 }

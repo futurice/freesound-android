@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.network.api.model.UserResult;
+import com.futurice.freesound.network.api.model.User;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
@@ -28,7 +28,7 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 final class HomeFragmentViewModel extends SimpleViewModel {
 
     @NonNull
-    private final Single<UserResult> homeUser;
+    private final Single<User> homeUser;
 
     HomeFragmentViewModel(@NonNull final UserDataModel userDataModel) {
         this.homeUser = get(userDataModel).getHomeUser()
@@ -42,11 +42,11 @@ final class HomeFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     Single<String> getUserName() {
-        return homeUser.map(UserResult::username);
+        return homeUser.map(User::username);
     }
 
     @NonNull
     Single<String> getAbout() {
-        return homeUser.map(UserResult::about);
+        return homeUser.map(User::about);
     }
 }

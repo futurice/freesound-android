@@ -1,7 +1,7 @@
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.network.api.model.AvatarResult;
-import com.futurice.freesound.network.api.model.UserResult;
+import com.futurice.freesound.network.api.model.Avatar;
+import com.futurice.freesound.network.api.model.User;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class HomeFragmentViewModelTest {
 
-    private static final UserResult USER = createUser();
+    private static final User USER = createUser();
 
     @Mock
     private UserDataModel userDataModel;
@@ -71,7 +71,7 @@ public class HomeFragmentViewModelTest {
     public void getHomeUser_doesNotSubscribeInCtor() {
         AtomicBoolean isSubscribed = new AtomicBoolean();
         when(userDataModel.getHomeUser())
-                .thenReturn(Single.<UserResult>never()
+                .thenReturn(Single.<User>never()
                                     .doOnSubscribe(__ -> isSubscribed.set(true)));
 
         viewModel = createVm();
@@ -95,7 +95,7 @@ public class HomeFragmentViewModelTest {
         return new HomeFragmentViewModel(userDataModel);
     }
 
-    private static UserResult createUser() {
+    private static User createUser() {
         return new UserBuilder()
                 .largeAvatar("large.com")
                 .userName("user name")
@@ -129,10 +129,10 @@ public class HomeFragmentViewModelTest {
             return this;
         }
 
-        UserResult build() {
-            AvatarResult avatar = mock(AvatarResult.class);
+        User build() {
+            Avatar avatar = mock(Avatar.class);
             when(avatar.large()).thenReturn(largeAvatar);
-            UserResult user = mock(UserResult.class);
+            User user = mock(User.class);
             when(user.avatar()).thenReturn(avatar);
             when(user.username()).thenReturn(userName);
             when(user.about()).thenReturn(about);

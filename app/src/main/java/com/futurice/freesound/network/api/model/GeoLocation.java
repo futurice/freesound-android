@@ -30,6 +30,7 @@ public abstract class GeoLocation implements Parcelable {
     @NonNull
     public abstract Double longitude();
 
+    @SuppressWarnings("NullableProblems")
     @AutoValue.Builder
     public abstract static class Builder {
 
