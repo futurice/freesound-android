@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:indeterminate="true"
             android:theme="@style/CircularProgressBarOverlayTheme"/>
 
     <TextView

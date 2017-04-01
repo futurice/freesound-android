@@ -34,7 +34,8 @@
     </style>
 
     <style name="CircularProgressBarOverlayTheme" parent="ThemeOverlay.AppCompat">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTint">@color/colorPrimary</item>
     </style>
 
 </resources>

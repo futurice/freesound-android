@@ -20,13 +20,12 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'checkstyle'
 
 apply from: 'app-config.gradle'
-apply from: 'proguard-config.gradle'
 
 def STRING = "String"
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.futurice.freesound"
@@ -52,8 +51,16 @@ android {
             versionNameSuffix '-DEBUG'
         }
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), releaseProguardFiles
             minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    './proguard-rules/android-support-rules.pro',
+                    './proguard-rules/autovalue-rules.pro',
+                    './proguard-rules/okhttp3-rules.pro',
+                    './proguard-rules/picasso-rules.pro',
+                    './proguard-rules/retrofit2-rules.pro',
+                    './proguard-rules/retrolambda-rules.pro',
+                    './proguard-rules/rxjava2-rules.pro',
+                    './proguard-rules/okio-rules.pro'
         }
     }
 
