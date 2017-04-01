@@ -17,17 +17,25 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
+import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.feature.common.ui.adapter.ViewHolderBinder;
+import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
 import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
 import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
+import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -121,4 +129,46 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         return viewDataBinder;
     }
 
+    static class SoundItemViewHolderFactory extends ViewHolderFactory {
+
+        @NonNull
+        private final Picasso picasso;
+
+        @NonNull
+        private final SchedulerProvider schedulerProvider;
+
+        SoundItemViewHolderFactory(@NonNull final Context context,
+                                   @NonNull final Picasso picasso,
+                                   @NonNull final SchedulerProvider schedulerProvider) {
+            super(context);
+            this.picasso = picasso;
+            this.schedulerProvider = schedulerProvider;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder createViewHolder(@NonNull final ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext())
+                                      .inflate(R.layout.view_sound_item, parent, false);
+            return new SoundItemViewHolder(view, picasso, schedulerProvider);
+        }
+    }
+
+    static class SoundItemViewHolderBinder implements ViewHolderBinder {
+
+        @NonNull
+        private final SoundItemViewModelFactory viewModelFactory;
+
+        SoundItemViewHolderBinder(@NonNull final SoundItemViewModelFactory viewModelFactory) {
+            this.viewModelFactory = viewModelFactory;
+        }
+
+        @Override
+        public void bind(@NonNull final RecyclerView.ViewHolder viewHolder,
+                         @NonNull final DisplayableItem item) {
+            SoundItemViewHolder soundItemViewHolder = SoundItemViewHolder.class.cast(viewHolder);
+            Sound sound = Sound.class.cast(item.model());
+            soundItemViewHolder.bind(viewModelFactory.create(sound));
+        }
+    }
 }
