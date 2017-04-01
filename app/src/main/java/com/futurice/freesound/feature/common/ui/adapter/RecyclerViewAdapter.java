@@ -54,6 +54,12 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    public void onViewRecycled(final RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        ViewHolderBinder.unbind(holder);
+    }
+
+    @Override
     public int getItemCount() {
         return modelItems.size();
     }
