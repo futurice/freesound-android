@@ -20,10 +20,10 @@
       tools:context=".feature.home.HomeActivity">
 
     <item android:id="@+id/action_about"
-          android:title="@string/action_about"/>
+          android:title="@string/home_action_about"/>
 
     <item android:id="@+id/action_search"
-          android:title="@string/menu_item_title_search"
+          android:title="@string/home_menu_item_search"
           app:showAsAction="always"
           android:icon="@drawable/ic_search_white_24px"/>
 

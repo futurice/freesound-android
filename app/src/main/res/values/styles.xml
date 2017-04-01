@@ -33,4 +33,8 @@
         <item name="android:padding">@dimen/spacing_micro</item>
     </style>
 
+    <style name="CircularProgressBarOverlayTheme" parent="ThemeOverlay.AppCompat">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>
