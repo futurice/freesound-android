@@ -13,7 +13,7 @@ public interface ItemComparator {
     boolean areItemsTheSame(final DisplayableItem item1, final DisplayableItem item2);
 
     /**
-     * Checks whether the visual representation of two {@link DisplayableItem}s is the same.
+     * Checks whether the visual representation of two {@link DisplayableItem}s are the same.
      *
      * This method is called only if {@link #areItemsTheSame(DisplayableItem, DisplayableItem)}
      * returns {@code true} for these items. For instance, when the item is the same with different

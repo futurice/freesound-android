@@ -1,6 +1,7 @@
 package com.futurice.freesound.feature.common.ui.adapter;
 
 import com.futurice.freesound.common.utils.AndroidPreconditions;
+import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
 
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+
+import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
  * Implementation of {@link RecyclerView.Adapter} for {@link DisplayableItem}.
@@ -41,13 +44,13 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return factoryMap.get(viewType).createViewHolder(parent);
+        return factoryMap.get(viewType).createViewHolder(get(parent));
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final DisplayableItem item = modelItems.get(position);
-        binderMap.get(item.type()).bind(holder, item);
+        binderMap.get(item.type()).bind(get(holder), item);
     }
 
     @Override
@@ -57,7 +60,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(final int position) {
-        return modelItems.get(position).type().ordinal();
+        return modelItems.get(position).type();
     }
 
     /**
@@ -66,6 +69,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
      * @param items collection to update the previous values
      */
     public void update(@NonNull final List<DisplayableItem> items) {
+        Preconditions.checkNotNull(items);
         AndroidPreconditions.assertUiThread();
 
         if (modelItems.isEmpty()) {

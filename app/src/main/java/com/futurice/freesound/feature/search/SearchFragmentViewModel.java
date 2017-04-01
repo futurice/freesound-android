@@ -30,7 +30,7 @@ import io.reactivex.Observable;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
+import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
 
 final class SearchFragmentViewModel extends SimpleViewModel {
 
