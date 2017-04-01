@@ -3,6 +3,7 @@ package com.futurice.freesound.feature.common.ui.adapter;
 import com.futurice.freesound.common.utils.AndroidPreconditions;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
@@ -56,7 +57,9 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onViewRecycled(final RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
-        ViewHolderBinder.unbind(holder);
+        if (holder instanceof BaseBindingViewHolder) {
+            ((BaseBindingViewHolder) holder).unbind();
+        }
     }
 
     @Override
