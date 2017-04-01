@@ -2,7 +2,7 @@ package com.futurice.freesound.feature.common.ui.adapter;
 
 import com.futurice.freesound.feature.common.DisplayableItem;
 
-public interface IListItemComparator {
+public interface ItemComparator {
 
     /**
      * Decides whether two {@link DisplayableItem} represent the same Item.

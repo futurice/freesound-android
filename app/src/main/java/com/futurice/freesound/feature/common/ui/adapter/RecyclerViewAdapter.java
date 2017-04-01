@@ -2,7 +2,6 @@ package com.futurice.freesound.feature.common.ui.adapter;
 
 import com.futurice.freesound.common.utils.AndroidPreconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
-import com.futurice.freesound.inject.fragment.FragmentScope;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
@@ -11,94 +10,102 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import javax.inject.Inject;
+import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
- * Implementation of {@link android.support.v7.widget.RecyclerView.Adapter} for {@link
- * DisplayableItem}.
+ * Implementation of {@link RecyclerView.Adapter} for {@link DisplayableItem}.
  */
-@FragmentScope
 public final class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     @NonNull
-    private final List<DisplayableItem> mItems = new ArrayList<>();
+    private final List<DisplayableItem> modelItems = new ArrayList<>();
 
     @NonNull
-    private final IListItemComparator mComparator;
+    private final ItemComparator comparator;
 
     @NonNull
-    private final IViewHolderFactory mInstantiator;
+    private final Map<Integer, ViewHolderFactory> factoryMap;
 
     @NonNull
-    private final IViewHolderBinder<DisplayableItem> mBinder;
+    private final Map<Integer, ViewHolderBinder> binderMap;
 
-    private Executor mExecutor = Executors.newSingleThreadExecutor();
-
-    @Inject
-    RecyclerViewAdapter(@NonNull final IListItemComparator comparator,
-                        @NonNull final IViewHolderFactory instantiator,
-                        @NonNull final IViewHolderBinder<DisplayableItem> binder) {
-        mComparator = comparator;
-        mInstantiator = instantiator;
-        mBinder = binder;
+    public RecyclerViewAdapter(@NonNull final ItemComparator comparator,
+                               @NonNull final Map<Integer, ViewHolderFactory> factoryMap,
+                               @NonNull final Map<Integer, ViewHolderBinder> binderMap) {
+        this.comparator = comparator;
+        this.factoryMap = factoryMap;
+        this.binderMap = binderMap;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return mInstantiator.createViewHolder(parent, viewType);
+        return factoryMap.get(viewType).createViewHolder(parent);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        mBinder.bind(holder, mItems.get(position));
+        final DisplayableItem item = modelItems.get(position);
+        binderMap.get(item.type()).bind(holder, item);
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return modelItems.size();
     }
 
     @Override
     public int getItemViewType(final int position) {
-        return mItems.get(position).type().ordinal();
+        return modelItems.get(position).type().ordinal();
     }
 
     /**
-     * Updates mItems currently stored in adapter with the new mItems.
+     * Updates modelItems currently stored in adapter with the new modelItems.
      *
      * @param items collection to update the previous values
      */
     public void update(@NonNull final List<DisplayableItem> items) {
+        AndroidPreconditions.assertUiThread();
+
+        if (modelItems.isEmpty()) {
+            updateAllItems(items);
+        } else {
+            updateDiffItemsOnly(items);
+        }
+    }
+
+    /**
+     * Only use for the first update of the adapter, whe it is still empty.
+     */
+    private void updateAllItems(@NonNull final List<DisplayableItem> items) {
+        Observable.just(items)
+                  .doOnNext(this::updateItemsInModel)
+                  .subscribe(__ -> notifyDataSetChanged());
+    }
+
+    /**
+     * Do not use for first update of the adapter.
+     * The method {@link DiffUtil.DiffResult#dispatchUpdatesTo(RecyclerView.Adapter)} is
+     * significantly slower than {@link RecyclerViewAdapter#notifyDataSetChanged()} when it comes
+     * to update all the items in the adapter.
+     */
+    private void updateDiffItemsOnly(@NonNull final List<DisplayableItem> items) {
         Observable.fromCallable(() -> calculateDiff(items))
-                  .doOnNext(__ -> updateItems(items))
-                  .subscribeOn(Schedulers.from(mExecutor))
-                  .observeOn(AndroidSchedulers.mainThread())
+                  .doOnNext(__ -> updateItemsInModel(items))
                   .subscribe(this::updateAdapterWithDiffResult);
     }
 
     private DiffUtil.DiffResult calculateDiff(@NonNull final List<DisplayableItem> newItems) {
-        AndroidPreconditions.assertWorkerThread();
-
-        return DiffUtil.calculateDiff(new DiffUtilCallback(mItems, newItems, mComparator));
+        return DiffUtil.calculateDiff(new DiffUtilCallback(modelItems, newItems, comparator));
     }
 
-    private void updateItems(@NonNull final List<DisplayableItem> items) {
-        AndroidPreconditions.assertWorkerThread();
-
-        mItems.clear();
-        mItems.addAll(items);
+    private void updateItemsInModel(@NonNull final List<DisplayableItem> items) {
+        modelItems.clear();
+        modelItems.addAll(items);
     }
 
     private void updateAdapterWithDiffResult(@NonNull final DiffUtil.DiffResult result) {
-        AndroidPreconditions.assertUiThread();
-
         result.dispatchUpdatesTo(this);
     }
 }

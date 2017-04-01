@@ -16,11 +16,11 @@ final class DiffUtilCallback extends DiffUtil.Callback {
     private final List<DisplayableItem> mNewItems;
 
     @NonNull
-    private final IListItemComparator mComparator;
+    private final ItemComparator mComparator;
 
     DiffUtilCallback(@NonNull final List<DisplayableItem> oldItems,
                      @NonNull final List<DisplayableItem> newItems,
-                     @NonNull final IListItemComparator comparator) {
+                     @NonNull final ItemComparator comparator) {
         mOldItems = oldItems;
         mNewItems = newItems;
         mComparator = comparator;
@@ -48,5 +48,4 @@ final class DiffUtilCallback extends DiffUtil.Callback {
         return mComparator.areContentsTheSame(mOldItems.get(oldItemPosition),
                                               mNewItems.get(newItemPosition));
     }
-
 }
