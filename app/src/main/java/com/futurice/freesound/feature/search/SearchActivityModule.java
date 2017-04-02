@@ -44,8 +44,17 @@ class SearchActivityModule {
 
     @Provides
     @ActivityScope
-    static SearchDataModel provideSearchDataModel(FreeSoundApiService freeSoundApiService,
-                                                  SchedulerProvider schedulerProvider) {
+    static SearchDataModel provideTypingSearchDataModel(
+            DefaultSearchDataModel defaultSearchDataModel,
+            SchedulerProvider schedulerProvider) {
+        return new TypingSearchDataModel(defaultSearchDataModel, schedulerProvider);
+    }
+
+    @Provides
+    @ActivityScope
+    static DefaultSearchDataModel provideDefaultSearchDataModel(
+            FreeSoundApiService freeSoundApiService,
+            SchedulerProvider schedulerProvider) {
         return new DefaultSearchDataModel(freeSoundApiService, schedulerProvider);
     }
 

@@ -24,7 +24,6 @@ import com.futurice.freesound.network.api.model.SoundSearchResult;
 import android.support.annotation.NonNull;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -35,6 +34,10 @@ import io.reactivex.subjects.Subject;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 import static timber.log.Timber.e;
 
+/**
+ * Performs the basic searching operations and reporting the actual status of the API service
+ * calls.
+ */
 final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
@@ -56,21 +59,12 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     @Override
     public Completable querySearch(@NonNull final String query) {
-        return Observable.timer(1,
-                                TimeUnit.SECONDS,
-                                schedulerProvider.time("s"))
-                         .doOnSubscribe(
-                                 __ -> searchStateOnceAndStream.onNext(SearchState.inProgress()))
-                         .flatMapCompletable(__ ->
-                                                     freeSoundApiService.search(get(query))
-                                                                        .map(DefaultSearchDataModel::toResults)
-
-                                                                        .doOnSuccess(
-                                                                                this::storeValueAndClearError)
-                                                                        .doOnError(
-                                                                                storeError(query))
-                                                                        .toCompletable()
-                                                                        .onErrorComplete());
+        return freeSoundApiService.search(get(query))
+                                  .map(DefaultSearchDataModel::toResults)
+                                  .doOnSuccess(this::storeValueAndClearError)
+                                  .doOnError(storeError(query))
+                                  .toCompletable()
+                                  .onErrorComplete();
     }
 
     @Override

@@ -24,7 +24,6 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.viewmodel.BaseViewModel;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -38,12 +37,7 @@ import static timber.log.Timber.e;
 
 final class SearchActivityViewModel extends BaseViewModel {
 
-    @VisibleForTesting
-    static final int SEARCH_DEBOUNCE_TIME_SECONDS = 2;
-
     static final String NO_SEARCH = Text.EMPTY;
-
-
 
     @NonNull
     private final SearchDataModel searchDataModel;
