@@ -1,5 +1,7 @@
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.R;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -30,6 +32,8 @@ class SearchSnackbar {
         dismissSnackbar();
 
         snackbar = Snackbar.make(view, charSequence, Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction(android.R.string.ok, __ -> dismissSnackbar());
+        snackbar.setActionTextColor(view.getResources().getColor(R.color.colorContrastAccent));
         snackbar.show();
     }
 

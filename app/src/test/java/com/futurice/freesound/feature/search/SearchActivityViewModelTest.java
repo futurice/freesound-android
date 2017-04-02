@@ -33,15 +33,19 @@ import org.mockito.MockitoAnnotations;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -125,7 +129,7 @@ public class SearchActivityViewModelTest {
 
         viewModel.search(DUMMY_QUERY);
 
-        verify(searchDataModel).querySearch(eq(DUMMY_QUERY));
+        verify(searchDataModel).querySearch(eq(DUMMY_QUERY), any(Completable.class));
     }
 
     @Test
@@ -140,7 +144,7 @@ public class SearchActivityViewModelTest {
         viewModel.search(DUMMY_QUERY);
         viewModel.search(DUMMY_QUERY);
 
-        verify(searchDataModel).querySearch(DUMMY_QUERY);
+        verify(searchDataModel).querySearch(DUMMY_QUERY, any(Completable.class));
     }
 
     @Test
@@ -169,7 +173,7 @@ public class SearchActivityViewModelTest {
 
         InOrder order = inOrder(searchDataModel);
         order.verify(searchDataModel).clear();
-        order.verify(searchDataModel).querySearch(DUMMY_QUERY);
+        order.verify(searchDataModel).querySearch(DUMMY_QUERY, any(Completable.class));
         order.verify(searchDataModel).clear();
     }
 
@@ -218,12 +222,10 @@ public class SearchActivityViewModelTest {
                 .bind()
                 .search();
 
-        verify(searchDataModel, times(2)).querySearch(eq(DUMMY_QUERY));
+        verify(searchDataModel, times(2)).querySearch(eq(DUMMY_QUERY), any(Completable.class));
     }
 
-    // TODO Fix these tests
-
-/*    @Test
+    @Test
     public void search_withEmptyQuery_clearsSearchImmediately_afterNonEmptySearch() {
         TestScheduler testScheduler = new TestScheduler();
         Act act = new ArrangeBuilder()
@@ -232,7 +234,8 @@ public class SearchActivityViewModelTest {
                 .bind()
                 .search();
 
-        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
+        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+                                    TimeUnit.SECONDS);
         act.search("");
 
         verify(searchDataModel, times(2)).clear();
@@ -254,15 +257,16 @@ public class SearchActivityViewModelTest {
     public void search_withNonEmptyQuery_triggersAfterDelay() {
         TestScheduler testScheduler = new TestScheduler();
         Act act = new ArrangeBuilder()
-                .withTimeScheduler(testScheduler, SEARCH_DEBOUNCE_TAG)
+                .withTimeScheduler(testScheduler, SearchActivityViewModel.SEARCH_DEBOUNCE_TAG)
                 .act()
                 .bind();
 
         act.search(DUMMY_QUERY);
-        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
+        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+                                    TimeUnit.SECONDS);
 
         verify(searchDataModel).querySearch(DUMMY_QUERY);
-    }*/
+    }
 
     private class ArrangeBuilder {
 
@@ -308,7 +312,7 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder withErrorWhenSearching() {
-            when(searchDataModel.querySearch(anyString())).thenReturn(
+            when(searchDataModel.querySearch(anyString(), any())).thenReturn(
                     Completable.error(new Exception()));
             return this;
         }

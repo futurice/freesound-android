@@ -28,6 +28,7 @@ import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.observers.TestObserver;
 
@@ -57,7 +58,7 @@ public class DefaultSearchDataModelTest {
     public void querySearch_queriesFreesoundSearchService() {
         new Arrangement().withDummySearchResult();
 
-        defaultSearchDataModel.querySearch(QUERY).test();
+        defaultSearchDataModel.querySearch(QUERY, Completable.complete()).test();
 
         verify(freeSoundApiService).search(eq(QUERY));
     }
@@ -66,7 +67,7 @@ public class DefaultSearchDataModelTest {
     public void querySearch_completes_whenQuerySearchSuccessful() {
         new Arrangement().withSearchResultsFor(QUERY, dummyResults());
 
-        defaultSearchDataModel.querySearch(QUERY)
+        defaultSearchDataModel.querySearch(QUERY, Completable.complete())
                               .test()
                               .assertComplete();
     }
@@ -75,7 +76,7 @@ public class DefaultSearchDataModelTest {
     public void querySearch_doesNotEmitError_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError(new Exception());
 
-        defaultSearchDataModel.querySearch("should-error")
+        defaultSearchDataModel.querySearch("should-error", Completable.complete())
                               .test()
                               .assertComplete();
     }
@@ -93,7 +94,7 @@ public class DefaultSearchDataModelTest {
         SoundSearchResult expected = dummyResults();
         new Arrangement().withSearchResultsFor(QUERY, expected);
 
-        defaultSearchDataModel.querySearch(QUERY).subscribe();
+        defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
         defaultSearchDataModel.getSearchStateOnceAndStream()
                               .test()
@@ -109,7 +110,7 @@ public class DefaultSearchDataModelTest {
                 .getSearchStateOnceAndStream()
                 .test();
 
-        defaultSearchDataModel.querySearch("should-error").subscribe();
+        defaultSearchDataModel.querySearch("should-error", Completable.complete()).subscribe();
 
         ts.assertNotTerminated();
     }
@@ -152,7 +153,7 @@ public class DefaultSearchDataModelTest {
         TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
                                                              .test();
 
-        defaultSearchDataModel.querySearch(QUERY).subscribe();
+        defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
         ts.assertNotTerminated();
     }
@@ -229,7 +230,7 @@ public class DefaultSearchDataModelTest {
     private class Act {
 
         void querySearch(String query) {
-            defaultSearchDataModel.querySearch(query).subscribe();
+            defaultSearchDataModel.querySearch(query, Completable.complete()).subscribe();
         }
 
         void querySearch() {

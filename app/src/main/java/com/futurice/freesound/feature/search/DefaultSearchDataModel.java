@@ -58,13 +58,15 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
     @Override
-    public Completable querySearch(@NonNull final String query) {
-        return freeSoundApiService.search(get(query))
-                                  .map(DefaultSearchDataModel::toResults)
-                                  .doOnSuccess(this::storeValueAndClearError)
-                                  .doOnError(storeError(query))
-                                  .toCompletable()
-                                  .onErrorComplete();
+    public Completable querySearch(@NonNull final String query,
+                                   @NonNull final Completable afterThis) {
+        return afterThis.doOnSubscribe(__ -> reportInProgress())
+                        .andThen(freeSoundApiService.search(get(query))
+                                                    .map(DefaultSearchDataModel::toResults)
+                                                    .doOnSuccess(this::storeValueAndClearError)
+                                                    .doOnError(storeError(query))
+                                                    .toCompletable()
+                                                    .onErrorComplete());
     }
 
     @Override
@@ -82,6 +84,10 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     private static List<Sound> toResults(@NonNull final SoundSearchResult soundSearchResult) {
         return soundSearchResult.results();
+    }
+
+    private void reportInProgress() {
+        searchStateOnceAndStream.onNext(SearchState.inProgress());
     }
 
     private void storeValueAndClearError(@NonNull final List<Sound> results) {

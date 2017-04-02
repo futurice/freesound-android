@@ -92,7 +92,7 @@ ext {
             javaPoet               : '1.7.0',
             dagger2                : '2.4',
             javaxAnnotation        : '10.0-b28',
-            rxJava2                : '2.0.1',
+            rxJava2                : '2.0.8',
             rxAndroid              : '2.0.1',
             ixJava                 : '1.0.0-RC5',
             okHttp                 : '3.6.0',
