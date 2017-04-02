@@ -22,6 +22,9 @@
     <color name="colorPrimaryDark">@color/brandDark</color>
     <color name="colorAccent">@color/white</color>
 
+    <!-- Additional, non-canon colors -->
+    <color name="colorContrastAccent">#82B1FF</color>
+
     <!-- Brand Colors -->
     <color name="brand">#CB3D44</color>
     <color name="brandDark">#BA2C33</color>

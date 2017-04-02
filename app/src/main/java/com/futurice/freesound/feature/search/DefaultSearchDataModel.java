@@ -24,6 +24,7 @@ import com.futurice.freesound.network.api.model.SoundSearchResult;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -55,14 +56,21 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     @Override
     public Completable querySearch(@NonNull final String query) {
-        return freeSoundApiService.search(get(query))
-                                  .map(DefaultSearchDataModel::toResults)
-                                  .doOnSubscribe(__ -> searchStateOnceAndStream
-                                          .onNext(SearchState.inProgress()))
-                                  .doOnSuccess(this::storeValueAndClearError)
-                                  .doOnError(storeError(query))
-                                  .toCompletable()
-                                  .onErrorComplete();
+        return Observable.timer(1,
+                                TimeUnit.SECONDS,
+                                schedulerProvider.time("s"))
+                         .doOnSubscribe(
+                                 __ -> searchStateOnceAndStream.onNext(SearchState.inProgress()))
+                         .flatMapCompletable(__ ->
+                                                     freeSoundApiService.search(get(query))
+                                                                        .map(DefaultSearchDataModel::toResults)
+
+                                                                        .doOnSuccess(
+                                                                                this::storeValueAndClearError)
+                                                                        .doOnError(
+                                                                                storeError(query))
+                                                                        .toCompletable()
+                                                                        .onErrorComplete());
     }
 
     @Override

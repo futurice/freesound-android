@@ -26,8 +26,6 @@ import com.futurice.freesound.viewmodel.BaseViewModel;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -45,8 +43,7 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     static final String NO_SEARCH = Text.EMPTY;
 
-    @VisibleForTesting
-    static final String SEARCH_DEBOUNCE_TAG = "SEARCH DEBOUNCE";
+
 
     @NonNull
     private final SearchDataModel searchDataModel;
@@ -113,10 +110,7 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     @NonNull
     private Completable querySearch(@NonNull final String query) {
-        return Observable.timer(SEARCH_DEBOUNCE_TIME_SECONDS,
-                                TimeUnit.SECONDS,
-                                schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
-                         .flatMapCompletable(__ -> searchDataModel.querySearch(query));
+        return searchDataModel.querySearch(query);
     }
 
     private static boolean isCloseEnabled(@NonNull final String query) {

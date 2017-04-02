@@ -31,7 +31,7 @@
     <ProgressBar android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:id="@+id/progressBar_playbackProgress"
-                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                 style="@style/PlaybackProgressBarStyle"
                  android:max="100"
                  android:visibility="gone"
                  android:layout_gravity="bottom"/>

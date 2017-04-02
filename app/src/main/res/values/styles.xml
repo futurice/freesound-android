@@ -22,7 +22,7 @@
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -33,9 +33,13 @@
         <item name="android:padding">@dimen/spacing_micro</item>
     </style>
 
-    <style name="CircularProgressBarOverlayTheme" parent="ThemeOverlay.AppCompat">
+    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminate">true</item>
-        <item name="android:indeterminateTint">@color/colorPrimary</item>
+        <item name="android:indeterminateTint">@color/colorContrastAccent</item>
+    </style>
+
+    <style name="PlaybackProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressTint">@color/colorContrastAccent</item>
     </style>
 
 </resources>
