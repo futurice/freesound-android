@@ -100,6 +100,7 @@ ext {
             autoFactory            : '1.0-beta3',
             options                : '1.2.4',
             exoplayer              : 'r2.1.1',
+            butterknife            : '8.4.0',
             firebase               : '9.4.0',
             stetho                 : '1.4.2',
             chuck                  : '1.0.4',
@@ -168,6 +169,10 @@ dependencies {
     // Audio player
     compile "com.google.android.exoplayer:exoplayer:$dependencyVersions.exoplayer"
 
+    // Butter Knife
+    compile "com.jakewharton:butterknife:$dependencyVersions.butterknife"
+    apt "com.jakewharton:butterknife-compiler:$dependencyVersions.butterknife"
+
     // Timber
     compile "com.jakewharton.timber:timber:$dependencyVersions.timber"
 
@@ -179,10 +184,6 @@ dependencies {
     // Firebase
     compile "com.google.firebase:firebase-core:$dependencyVersions.firebase"
     compile "com.google.firebase:firebase-crash:$dependencyVersions.firebase"
-
-    //Butter Knife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 
     // Unit Testing
     testCompile "junit:junit:$dependencyVersions.junit"
