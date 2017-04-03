@@ -34,10 +34,6 @@ import io.reactivex.subjects.Subject;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 import static timber.log.Timber.e;
 
-/**
- * Performs the basic searching operations and reporting the actual status of the API service
- * calls.
- */
 final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
