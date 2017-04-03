@@ -68,7 +68,8 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<SearchState> getSearchStateOnceAndStream() {
-        return searchStateOnceAndStream.observeOn(schedulerProvider.computation());
+        return searchStateOnceAndStream.observeOn(schedulerProvider.computation())
+                                       .distinctUntilChanged();
     }
 
     @Override

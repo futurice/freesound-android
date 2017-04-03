@@ -129,11 +129,11 @@ public class DefaultSearchDataModelTest {
                          .act()
                          .querySearch();
 
-        TestObserver<SearchState> testObserver = defaultSearchDataModel
-                .getSearchStateOnceAndStream().test();
-        testObserver.assertNotTerminated();
-        testObserver.assertValueCount(1);
-        testObserver.assertValue(SearchState.error(searchError));
+        defaultSearchDataModel
+                .getSearchStateOnceAndStream().test()
+                .assertNotTerminated()
+                .assertValueCount(1)
+                .assertValue(SearchState.error(searchError));
     }
 
     @Test
@@ -156,6 +156,19 @@ public class DefaultSearchDataModelTest {
         defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
         ts.assertNotTerminated();
+    }
+
+    @Test
+    public void getSearchStateOnceAndStream_doesNotEmitDuplicateEvents() {
+        new Arrangement().withDummySearchResult();
+        TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
+                                                             .skip(1) // ignore initial value
+                                                             .test();
+
+        defaultSearchDataModel.querySearch(QUERY, Completable.never()).subscribe();
+        defaultSearchDataModel.querySearch(QUERY, Completable.never()).subscribe();
+
+        ts.assertValueCount(1);
     }
 
     @Test

@@ -108,8 +108,7 @@ final class SearchActivityViewModel extends BaseViewModel {
 
     @NonNull
     Observable<SearchState> getSearchStateOnceAndStream() {
-        return searchDataModel.getSearchStateOnceAndStream()
-                              .distinctUntilChanged();
+        return searchDataModel.getSearchStateOnceAndStream();
     }
 
     @NonNull
