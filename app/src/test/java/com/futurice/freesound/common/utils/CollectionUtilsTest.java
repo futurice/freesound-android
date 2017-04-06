@@ -29,8 +29,8 @@ public class CollectionUtilsTest {
 
     @Test
     public void areEqual_returnsTrue_whenTheCollectionsContainSameElementsInSameOrder() {
-        Collection collection1 = createRangeCollection(0, 5);
-        Collection collection2 = createRangeCollection(0, 5);
+        Collection<Integer> collection1 = createRangeCollection(0, 5);
+        Collection<Integer> collection2 = createRangeCollection(0, 5);
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -39,8 +39,8 @@ public class CollectionUtilsTest {
 
     @Test
     public void areEqual_returnsFalse_whenTheCollectionsHaveSameElementsInDifferentOrder() {
-        Collection collection1 = createRangeCollection(0, 5);
-        Collection collection2 = createRangeCollection(5, 0);
+        Collection<Integer> collection1 = createRangeCollection(0, 5);
+        Collection<Integer> collection2 = createRangeCollection(5, 0);
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -49,8 +49,8 @@ public class CollectionUtilsTest {
 
     @Test
     public void areEqual_returnsFalse_whenTheCollectionsContainDifferentElements() {
-        Collection collection1 = createRangeCollection(0, 5);
-        Collection collection2 = createRangeCollection(5, 10);
+        Collection<Integer> collection1 = createRangeCollection(0, 5);
+        Collection<Integer> collection2 = createRangeCollection(5, 10);
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -59,8 +59,8 @@ public class CollectionUtilsTest {
 
     @Test
     public void areEqual_returnsFalse_whenTheCollectionsHaveDifferentSizes() {
-        Collection collection1 = createRangeCollection(0, 5);
-        Collection collection2 = createRangeCollection(0, 4);
+        Collection<Integer> collection1 = createRangeCollection(0, 5);
+        Collection<Integer> collection2 = createRangeCollection(0, 4);
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -70,8 +70,8 @@ public class CollectionUtilsTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     public void areEqual_returnsFalse_whenOneCollectionIsNull() {
-        Collection collection1 = createRangeCollection(0, 5);
-        Collection collection2 = null;
+        Collection<Integer> collection1 = createRangeCollection(0, 5);
+        Collection<Integer> collection2 = null;
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -80,9 +80,9 @@ public class CollectionUtilsTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    public void areEqual_returnsFalse_whenBothCollectionsAreNull() {
-        Collection collection1 = null;
-        Collection collection2 = null;
+    public <T> void areEqual_returnsFalse_whenBothCollectionsAreNull() {
+        Collection<T> collection1 = null;
+        Collection<T> collection2 = null;
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 
@@ -90,9 +90,9 @@ public class CollectionUtilsTest {
     }
 
     @Test
-    public void areEqual_returnsTrue_whenTheTwoCollectionsAreEmpty() {
-        Collection collection1 = Collections.EMPTY_LIST;
-        Collection collection2 = Collections.EMPTY_LIST;
+    public <T> void areEqual_returnsTrue_whenTheTwoCollectionsAreEmpty() {
+        Collection<T> collection1 = Collections.emptyList();
+        Collection<T> collection2 = Collections.emptyList();
 
         boolean areEqual = CollectionUtils.areEqual(collection1, collection2);
 

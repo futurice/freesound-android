@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
