@@ -24,7 +24,7 @@ import io.reactivex.Observable;
 interface SearchDataModel {
 
     @NonNull
-    Completable querySearch(@NonNull String query, @NonNull final Completable afterThis);
+    Completable querySearch(@NonNull String query, @NonNull final Completable preliminaryTask);
 
     @NonNull
     Observable<SearchState> getSearchStateOnceAndStream();

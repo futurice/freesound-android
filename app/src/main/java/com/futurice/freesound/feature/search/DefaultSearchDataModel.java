@@ -55,14 +55,15 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @NonNull
     @Override
     public Completable querySearch(@NonNull final String query,
-                                   @NonNull final Completable afterThis) {
-        return afterThis.doOnSubscribe(__ -> reportInProgress())
-                        .andThen(freeSoundApiService.search(get(query))
-                                                    .map(DefaultSearchDataModel::toResults)
-                                                    .doOnSuccess(this::storeValueAndClearError)
-                                                    .doOnError(storeError(query))
-                                                    .toCompletable()
-                                                    .onErrorComplete());
+                                   @NonNull final Completable preliminaryTask) {
+        return preliminaryTask.doOnSubscribe(__ -> reportInProgress())
+                              .andThen(freeSoundApiService.search(get(query))
+                                                          .map(DefaultSearchDataModel::toResults)
+                                                          .doOnSuccess(
+                                                                  this::storeValueAndClearError)
+                                                          .doOnError(storeError(query))
+                                                          .toCompletable()
+                                                          .onErrorComplete());
     }
 
     @Override
