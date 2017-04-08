@@ -125,7 +125,7 @@ public class SearchFragmentViewModelTest {
     private class Arrangement {
 
         private final BehaviorSubject<SearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(SearchState.idle());
+                = BehaviorSubject.createDefault(SearchState.cleared());
 
         Arrangement() {
             withSuccessfulSearchResultStream();
@@ -140,7 +140,7 @@ public class SearchFragmentViewModelTest {
         Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
             sounds.ifSome(
                     soundList -> mockedSearchResultsStream.onNext(SearchState.success(soundList)))
-                  .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.idle()));
+                  .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.cleared()));
             return this;
         }
 

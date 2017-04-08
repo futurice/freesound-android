@@ -290,10 +290,10 @@ public class SearchActivityViewModelTest {
     private class ArrangeBuilder {
 
         private final BehaviorSubject<SearchState> searchResultsStream = BehaviorSubject
-                .createDefault(SearchState.idle());
+                .createDefault(SearchState.cleared());
 
         private final BehaviorSubject<SearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(SearchState.idle());
+                = BehaviorSubject.createDefault(SearchState.cleared());
 
         ArrangeBuilder() {
             Mockito.when(searchDataModel.getSearchStateOnceAndStream())

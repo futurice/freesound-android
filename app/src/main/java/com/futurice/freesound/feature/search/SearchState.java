@@ -21,18 +21,23 @@ abstract class SearchState {
 
     abstract boolean isInProgress();
 
-    static SearchState idle() {
+    @NonNull
+    static SearchState create(Option<List<Sound>> results, Option<Throwable> error,
+                              boolean isInProgress) {
+        return new AutoValue_SearchState(results, error, isInProgress);
+    }
+
+    @NonNull
+    static SearchState cleared() {
         return new AutoValue_SearchState(Option.none(), Option.none(), false);
     }
 
-    static SearchState inProgress() {
-        return new AutoValue_SearchState(Option.none(), Option.none(), true);
-    }
-
+    @NonNull
     static SearchState error(@NonNull Throwable throwable) {
         return new AutoValue_SearchState(Option.none(), Option.ofObj(throwable), false);
     }
 
+    @NonNull
     static SearchState success(@NonNull List<Sound> results) {
         return new AutoValue_SearchState(Option.ofObj(results), Option.none(), false);
     }

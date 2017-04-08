@@ -73,6 +73,14 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     @NonNull
     private final DataBinder dataBinder = new SimpleDataBinder() {
+
+        @NonNull
+        private Observable<String> getTextChangeStream(@NonNull final SearchView view,
+                                                       @NonNull final Scheduler uiScheduler) {
+            return Observable.<String>create(e -> subscribeToSearchView(view, e))
+                    .subscribeOn(uiScheduler);
+        }
+
         @Override
         public void bind(@NonNull final CompositeDisposable d) {
             checkNotNull(searchViewModel, "View Model cannot be null.");
@@ -95,16 +103,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                             e -> e(e, "Error receiving Errors")));
         }
     };
-
-    private void handleErrorState(@NonNull final SearchState searchState) {
-        searchState.error()
-                   .ifSome(__ -> showSnackbar(getString(R.string.search_error)))
-                   .ifNone(this::dismissSnackbar);
-    }
-
-    private void setClearSearchVisible(final boolean isClearButtonVisible) {
-        closeButton.setVisibility(isClearButtonVisible ? View.VISIBLE : View.GONE);
-    }
 
     public static void open(@NonNull final Context context) {
         checkNotNull(context, "Launching context cannot be null");
@@ -135,29 +133,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     }
 
     @NonNull
-    private static Observable<String> getTextChangeStream(@NonNull final SearchView view,
-                                                          @NonNull final Scheduler uiScheduler) {
-        return Observable.<String>create(e -> subscribeToSearchView(view, e))
-                .subscribeOn(uiScheduler);
-    }
-
-    private static void subscribeToSearchView(@NonNull final SearchView view,
-                                              @NonNull final ObservableEmitter<String> emitter) {
-        view.setOnQueryTextListener(new OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                emitter.onNext(get(newText));
-                return true;
-            }
-        });
-    }
-
-    @NonNull
     @Override
     protected ViewModel viewModel() {
         return get(searchViewModel);
@@ -185,16 +160,42 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                             .build();
     }
 
+    @Override
+    public void onPause() {
+        dismissSnackbar();
+        super.onPause();
+    }
+
     private void addSearchFragment() {
         getSupportFragmentManager().beginTransaction()
                                    .add(R.id.container, SearchFragment.create())
                                    .commit();
     }
 
-    @Override
-    public void onPause() {
-        dismissSnackbar();
-        super.onPause();
+    private void handleErrorState(@NonNull final SearchState searchState) {
+        searchState.error()
+                   .ifSome(__ -> showSnackbar(getString(R.string.search_error)))
+                   .ifNone(this::dismissSnackbar);
+    }
+
+    private void setClearSearchVisible(final boolean isClearButtonVisible) {
+        closeButton.setVisibility(isClearButtonVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private static void subscribeToSearchView(@NonNull final SearchView view,
+                                              @NonNull final ObservableEmitter<String> emitter) {
+        view.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                emitter.onNext(get(newText));
+                return true;
+            }
+        });
     }
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {
