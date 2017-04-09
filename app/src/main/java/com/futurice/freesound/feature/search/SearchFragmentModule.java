@@ -54,8 +54,9 @@ class SearchFragmentModule {
     @FragmentScope
     RecyclerViewAdapter provideRecyclerAdapter(ItemComparator itemComparator,
                                                Map<Integer, ViewHolderFactory> factoryMap,
-                                               Map<Integer, ViewHolderBinder> binderMap) {
-        return new RecyclerViewAdapter(itemComparator, factoryMap, binderMap);
+                                               Map<Integer, ViewHolderBinder> binderMap,
+                                               SchedulerProvider schedulerProvider) {
+        return new RecyclerViewAdapter(itemComparator, factoryMap, binderMap, schedulerProvider);
     }
 
     @Provides

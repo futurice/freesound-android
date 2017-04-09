@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.common.ui.adapter;
 import com.futurice.freesound.common.utils.AndroidPreconditions;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -51,12 +53,17 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     @NonNull
     private final Map<Integer, ViewHolderBinder> binderMap;
 
+    @NonNull
+    private final SchedulerProvider schedulerProvider;
+
     public RecyclerViewAdapter(@NonNull final ItemComparator comparator,
                                @NonNull final Map<Integer, ViewHolderFactory> factoryMap,
-                               @NonNull final Map<Integer, ViewHolderBinder> binderMap) {
+                               @NonNull final Map<Integer, ViewHolderBinder> binderMap,
+                               @NonNull final SchedulerProvider schedulerProvider) {
         this.comparator = comparator;
         this.factoryMap = factoryMap;
         this.binderMap = binderMap;
+        this.schedulerProvider = schedulerProvider;
     }
 
     @Override
@@ -120,7 +127,10 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
      * to update all the items in the adapter.
      */
     private void updateDiffItemsOnly(@NonNull final List<DisplayableItem> items) {
-        Observable.fromCallable(() -> calculateDiff(items))
+        final List<DisplayableItem> itemsCopy = new ArrayList<>(items);
+        Observable.fromCallable(() -> calculateDiff(itemsCopy))
+                  .subscribeOn(schedulerProvider.computation())
+                  .observeOn(schedulerProvider.ui())
                   .doOnNext(__ -> updateItemsInModel(items))
                   .subscribe(this::updateAdapterWithDiffResult);
     }
