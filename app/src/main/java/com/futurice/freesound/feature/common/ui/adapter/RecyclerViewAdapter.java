@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -117,7 +117,8 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     private void updateAllItems(@NonNull final List<DisplayableItem> items) {
         Observable.just(items)
                   .doOnNext(this::updateItemsInModel)
-                  .subscribe(__ -> notifyDataSetChanged());
+                  .subscribe(__ -> notifyDataSetChanged(),
+                             e -> Timber.e(e, "Error notifying data set changed in adapter"));
     }
 
     /**
@@ -132,7 +133,8 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
                   .subscribeOn(schedulerProvider.computation())
                   .observeOn(schedulerProvider.ui())
                   .doOnNext(__ -> updateItemsInModel(items))
-                  .subscribe(this::updateAdapterWithDiffResult);
+                  .subscribe(this::updateAdapterWithDiffResult,
+                             e -> Timber.e(e, "Error dispatching updates to adapter"));
     }
 
     private DiffUtil.DiffResult calculateDiff(@NonNull final List<DisplayableItem> newItems) {
