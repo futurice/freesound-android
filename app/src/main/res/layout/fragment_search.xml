@@ -17,34 +17,57 @@
 
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_searchResults"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
-
     <!-- Negative margin because drawable has own unwanted padding -->
+
+    <!-- Negative margins are not supported in Constraint Layout
+         as per issue: https://code.google.com/p/android/issues/detail?id=212499 The solution here
+         is to move the ProgressBar into a wrapping FrameLayout (which does support negative margins -->
     <ProgressBar
             android:id="@+id/progressBar_searchProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:visibility="gone"
             android:layout_marginTop="-6dp"
-            android:layout_marginBottom="-6dp"
-            style="@style/ProgressBarStyle"/>
+            android:visibility="gone"
+            style="@style/HorizontalProgressBarStyle"/>
 
-    <TextView
-            android:id="@+id/textView_searchNoResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="@dimen/text_title"
-            android:text="@string/search_no_results_found"
-            android:visibility="gone"/>
+    <!-- Use of ConstraintLayout is perhaps unnecessary, but I wanted an excuse to use it! -->
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_searchResults"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scrollbars="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+                android:id="@+id/textView_searchNoResults"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_title"
+                android:text="@string/search_no_results_found"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintVertical_bias="0.25"
+                android:visibility="gone"/>
+
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>

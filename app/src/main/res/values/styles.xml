@@ -33,7 +33,7 @@
         <item name="android:padding">@dimen/spacing_micro</item>
     </style>
 
-    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    <style name="HorizontalProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminate">true</item>
         <item name="android:indeterminateTint">@color/colorContrastAccent</item>
     </style>

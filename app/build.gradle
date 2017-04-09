@@ -88,34 +88,35 @@ task checkstyle(type: Checkstyle) {
 
 ext {
     dependencyVersions = [
-            androidSupportLibrary  : '25.1.1',
-            javaPoet               : '1.7.0',
-            dagger2                : '2.4',
-            javaxAnnotation        : '10.0-b28',
-            rxJava2                : '2.0.8',
-            rxAndroid              : '2.0.1',
-            ixJava                 : '1.0.0-RC5',
-            okHttp                 : '3.6.0',
-            picasso                : '2.5.2',
-            retrofit2              : '2.2.0',
-            retrofit2RxJava2Adapter: '1.0.0',
-            retrofit2GsonConverter : '2.0.0',
-            gson                   : '2.7',
-            autoValue              : '1.3',
-            autoValueGson          : '0.4.4',
-            autoValueParcelable    : '0.2.5',
-            autoFactory            : '1.0-beta3',
-            options                : '1.2.4',
-            exoplayer              : 'r2.1.1',
-            butterknife            : '8.4.0',
-            firebase               : '9.4.0',
-            stetho                 : '1.4.2',
-            chuck                  : '1.0.4',
-            timber                 : '4.2.0',
-            junit                  : '4.12',
-            mockito                : '2.2.2',
-            assertJ                : '1.7.1',
-            leakCanary             : '1.5']
+            androidSupportLibrary          : '25.3.1',
+            androidSupportConstraintLibrary: '1.0.2',
+            javaPoet                       : '1.7.0',
+            dagger2                        : '2.4',
+            javaxAnnotation                : '10.0-b28',
+            rxJava2                        : '2.0.8',
+            rxAndroid                      : '2.0.1',
+            ixJava                         : '1.0.0-RC5',
+            okHttp                         : '3.6.0',
+            picasso                        : '2.5.2',
+            retrofit2                      : '2.2.0',
+            retrofit2RxJava2Adapter        : '1.0.0',
+            retrofit2GsonConverter         : '2.0.0',
+            gson                           : '2.7',
+            autoValue                      : '1.3',
+            autoValueGson                  : '0.4.4',
+            autoValueParcelable            : '0.2.5',
+            autoFactory                    : '1.0-beta3',
+            options                        : '1.2.4',
+            exoplayer                      : 'r2.1.1',
+            butterknife                    : '8.4.0',
+            firebase                       : '9.4.0',
+            stetho                         : '1.4.2',
+            chuck                          : '1.0.4',
+            timber                         : '4.2.0',
+            junit                          : '4.12',
+            mockito                        : '2.2.2',
+            assertJ                        : '1.7.1',
+            leakCanary                     : '1.5']
 }
 
 dependencies {
@@ -128,6 +129,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
     compile "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
     compile "com.android.support:design:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraintLibrary"
 
     // Dagger 2
     apt "com.squareup:javapoet:$dependencyVersions.javaPoet"
