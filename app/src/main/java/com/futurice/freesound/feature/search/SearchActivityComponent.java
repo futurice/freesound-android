@@ -23,6 +23,7 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
 import com.futurice.freesound.inject.app.ForApplication;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -44,6 +45,8 @@ interface SearchActivityComponent extends BaseActivityComponent {
     Picasso getPicasso();
 
     AudioPlayer getAudioPlayer();
+
+    FreeSoundApiService getFreeSoundApiService();
 
     SchedulerProvider getSchedulerProvider();
 
