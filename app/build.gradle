@@ -121,6 +121,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
     compile "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
     compile "com.android.support:design:$dependencyVersions.androidSupportLibrary"
+    compile "com.android.support:customtabs:$dependencyVersions.androidSupportLibrary"
 
     // Dagger 2
     apt "com.squareup:javapoet:$dependencyVersions.javaPoet"

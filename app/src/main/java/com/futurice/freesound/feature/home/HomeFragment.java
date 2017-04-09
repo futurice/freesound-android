@@ -26,22 +26,19 @@ import com.squareup.picasso.Picasso;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
-import polanski.option.AtomicOption;
 import timber.log.Timber;
 
-import static butterknife.ButterKnife.bind;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponent> {
@@ -64,8 +61,8 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @BindView(R.id.about_textView)
     TextView aboutTextView;
 
-    @NonNull
-    private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
+    @BindView(R.id.login_button)
+    Button login;
 
     @NonNull
     private final DataBinder dataBinder = new DataBinder() {
@@ -110,19 +107,6 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-
-    @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        unbinder.setIfNone(bind(this, view));
-    }
-
-    @Override
-    public void onDestroyView() {
-        unbinder.getAndClear()
-                .ifSome(Unbinder::unbind);
-        super.onDestroyView();
     }
 
     @Override
