@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:background="@color/gray_very_light"
-                android:contentDescription="@string/accessibility_sound_item_image"/>
+                android:contentDescription="@string/waveform_accessibility_sound_item_image"/>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -16,9 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.R.id;
-import com.futurice.freesound.R.layout;
-import com.futurice.freesound.R.string;
+import com.futurice.freesound.R;
 import com.futurice.freesound.app.FreesoundApplication;
 import com.futurice.freesound.core.BindingBaseActivity;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
@@ -64,17 +62,25 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Inject
     SchedulerProvider schedulerProvider;
 
-    @BindView(id.search_view)
+    @BindView(R.id.search_view)
     SearchView searchView;
 
-    @BindView(id.search_close_btn)
+    @BindView(R.id.search_close_btn)
     ImageView closeButton;
 
-    @BindView(id.search_coordinatorlayout)
+    @BindView(R.id.search_coordinatorlayout)
     CoordinatorLayout coordinatorLayout;
 
     @NonNull
     private final DataBinder dataBinder = new SimpleDataBinder() {
+
+        @NonNull
+        private Observable<String> getTextChangeStream(@NonNull final SearchView view,
+                                                       @NonNull final Scheduler uiScheduler) {
+            return Observable.<String>create(e -> subscribeToSearchView(view, e))
+                    .subscribeOn(uiScheduler);
+        }
+
         @Override
         public void bind(@NonNull final CompositeDisposable d) {
             checkNotNull(searchViewModel, "View Model cannot be null.");
@@ -98,16 +104,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
         }
     };
 
-    private void handleErrorState(@NonNull final SearchState searchState) {
-        searchState.error()
-                   .ifSome(__ -> showSnackbar(getString(string.search_error)))
-                   .ifNone(this::dismissSnackbar);
-    }
-
-    private void setClearSearchVisible(final boolean clearVisible) {
-        closeButton.setVisibility(clearVisible ? View.VISIBLE : View.GONE);
-    }
-
     public static void open(@NonNull final Context context) {
         checkNotNull(context, "Launching context cannot be null");
 
@@ -118,12 +114,12 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.activity_search);
+        setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         Option.ofObj(savedInstanceState)
               .ifNone(this::addSearchFragment);
 
-        Toolbar toolbar = findById(this, id.toolbar_search);
+        Toolbar toolbar = findById(this, R.id.toolbar_search);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -134,29 +130,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
             return true;
         });
 
-    }
-
-    @NonNull
-    private static Observable<String> getTextChangeStream(@NonNull final SearchView view,
-                                                          @NonNull final Scheduler uiScheduler) {
-        return Observable.<String>create(e -> subscribeToSearchView(view, e))
-                .subscribeOn(uiScheduler);
-    }
-
-    private static void subscribeToSearchView(@NonNull final SearchView view,
-                                              @NonNull final ObservableEmitter<String> emitter) {
-        view.setOnQueryTextListener(new OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                emitter.onNext(get(newText));
-                return true;
-            }
-        });
     }
 
     @NonNull
@@ -187,16 +160,42 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                             .build();
     }
 
-    private void addSearchFragment() {
-        getSupportFragmentManager().beginTransaction()
-                                   .add(id.container, SearchFragment.create())
-                                   .commit();
-    }
-
     @Override
     public void onPause() {
         dismissSnackbar();
         super.onPause();
+    }
+
+    private void addSearchFragment() {
+        getSupportFragmentManager().beginTransaction()
+                                   .add(R.id.container, SearchFragment.create())
+                                   .commit();
+    }
+
+    private void handleErrorState(@NonNull final SearchState searchState) {
+        searchState.error()
+                   .ifSome(__ -> showSnackbar(getString(R.string.search_error)))
+                   .ifNone(this::dismissSnackbar);
+    }
+
+    private void setClearSearchVisible(final boolean isClearButtonVisible) {
+        closeButton.setVisibility(isClearButtonVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private static void subscribeToSearchView(@NonNull final SearchView view,
+                                              @NonNull final ObservableEmitter<String> emitter) {
+        view.setOnQueryTextListener(new OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                emitter.onNext(get(newText));
+                return true;
+            }
+        });
     }
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {

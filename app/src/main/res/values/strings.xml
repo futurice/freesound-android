@@ -18,11 +18,16 @@
 <resources>
 
     <string name="app_name">Freesound</string>
-    <string name="action_about">About</string>
-    <string name="search_no_results_found">No results found</string>
 
-    <string name="accessibility_sound_item_image">Sound item image</string>
-    <string name="menu_item_title_search">Search</string>
+    <!-- Home -->
+    <string name="home_action_about">About</string>
+    <string name="home_menu_item_search">Search</string>
+
+    <!-- Search -->
+    <string name="search_no_results_found">No results found</string>
     <string name="search_error">There was an error searching</string>
+
+    <!-- Waveform -->
+    <string name="waveform_accessibility_sound_item_image">Sound item image</string>
 
 </resources>

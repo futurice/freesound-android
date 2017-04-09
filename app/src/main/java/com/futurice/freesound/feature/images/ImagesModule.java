@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.images;
 
+import com.futurice.freesound.BuildConfig;
 import com.futurice.freesound.inject.app.ForApplication;
 import com.squareup.picasso.Picasso;
 
@@ -32,7 +33,10 @@ public final class ImagesModule {
     @Provides
     @Singleton
     static Picasso providePicasso(@ForApplication Context context) {
-        return Picasso.with(context);
+        return new Picasso.Builder(context)
+                .indicatorsEnabled(BuildConfig.DEBUG)
+                .loggingEnabled(BuildConfig.DEBUG)
+                .build();
     }
 
 }

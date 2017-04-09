@@ -25,6 +25,8 @@ import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -41,12 +43,11 @@ import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
 
-import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TAG;
-import static com.futurice.freesound.feature.search.SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -63,6 +64,12 @@ public class SearchActivityViewModelTest {
 
     @Mock
     private Analytics analytics;
+
+    @Captor
+    private ArgumentCaptor<String> searchTermCaptor;
+
+    @Captor
+    private ArgumentCaptor<Completable> searchDelayCaptor;
 
     private TrampolineSchedulerProvider schedulerProvider;
 
@@ -130,7 +137,7 @@ public class SearchActivityViewModelTest {
 
         viewModel.search(DUMMY_QUERY);
 
-        verify(searchDataModel).querySearch(eq(DUMMY_QUERY));
+        verify(searchDataModel).querySearch(eq(DUMMY_QUERY), any(Completable.class));
     }
 
     @Test
@@ -145,7 +152,7 @@ public class SearchActivityViewModelTest {
         viewModel.search(DUMMY_QUERY);
         viewModel.search(DUMMY_QUERY);
 
-        verify(searchDataModel).querySearch(DUMMY_QUERY);
+        verify(searchDataModel).querySearch(eq(DUMMY_QUERY), any(Completable.class));
     }
 
     @Test
@@ -174,7 +181,7 @@ public class SearchActivityViewModelTest {
 
         InOrder order = inOrder(searchDataModel);
         order.verify(searchDataModel).clear();
-        order.verify(searchDataModel).querySearch(DUMMY_QUERY);
+        order.verify(searchDataModel).querySearch(eq(DUMMY_QUERY), any(Completable.class));
         order.verify(searchDataModel).clear();
     }
 
@@ -223,7 +230,7 @@ public class SearchActivityViewModelTest {
                 .bind()
                 .search();
 
-        verify(searchDataModel, times(2)).querySearch(eq(DUMMY_QUERY));
+        verify(searchDataModel, times(2)).querySearch(eq(DUMMY_QUERY), any(Completable.class));
     }
 
     @Test
@@ -235,7 +242,8 @@ public class SearchActivityViewModelTest {
                 .bind()
                 .search();
 
-        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
+        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+                                    TimeUnit.SECONDS);
         act.search("");
 
         verify(searchDataModel, times(2)).clear();
@@ -243,43 +251,55 @@ public class SearchActivityViewModelTest {
 
     @Test
     public void search_withNonEmptyQuery_doesNotTriggerImmediately() {
+        TestScheduler testScheduler = new TestScheduler();
+
         Act act = new ArrangeBuilder()
-                .withTimeScheduler(new TestScheduler())
+                .withTimeScheduler(testScheduler)
                 .act()
                 .bind();
 
         act.search(DUMMY_QUERY);
 
-        verify(searchDataModel, never()).querySearch(eq(DUMMY_QUERY));
+        verify(searchDataModel).querySearch(searchTermCaptor.capture(),
+                                            searchDelayCaptor.capture());
+
+        assertThat(searchTermCaptor.getValue()).isEqualTo(DUMMY_QUERY);
+        searchDelayCaptor.getValue().test().assertNotTerminated();
     }
 
     @Test
     public void search_withNonEmptyQuery_triggersAfterDelay() {
         TestScheduler testScheduler = new TestScheduler();
         Act act = new ArrangeBuilder()
-                .withTimeScheduler(testScheduler, SEARCH_DEBOUNCE_TAG)
+                .withTimeScheduler(testScheduler, SearchActivityViewModel.SEARCH_DEBOUNCE_TAG)
                 .act()
                 .bind();
 
         act.search(DUMMY_QUERY);
-        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS, TimeUnit.SECONDS);
 
-        verify(searchDataModel).querySearch(DUMMY_QUERY);
+        verify(searchDataModel).querySearch(searchTermCaptor.capture(),
+                                            searchDelayCaptor.capture());
+
+        assertThat(searchTermCaptor.getValue()).isEqualTo(DUMMY_QUERY);
+        TestObserver<Void> testObserver = searchDelayCaptor.getValue().test();
+        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+                                    TimeUnit.SECONDS);
+        testObserver.assertComplete();
     }
 
     private class ArrangeBuilder {
 
         private final BehaviorSubject<SearchState> searchResultsStream = BehaviorSubject
-                .createDefault(SearchState.idle());
+                .createDefault(SearchState.cleared());
 
         private final BehaviorSubject<SearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(SearchState.idle());
+                = BehaviorSubject.createDefault(SearchState.cleared());
 
         ArrangeBuilder() {
             Mockito.when(searchDataModel.getSearchStateOnceAndStream())
                    .thenReturn(searchResultsStream);
             Mockito.when(searchDataModel.clear()).thenReturn(Completable.complete());
-            Mockito.when(searchDataModel.querySearch(anyString()))
+            Mockito.when(searchDataModel.querySearch(anyString(), any(Completable.class)))
                    .thenReturn(Completable.complete());
             withSuccessfulSearchResultStream();
             withTimeSkipScheduler();
@@ -311,7 +331,7 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder withErrorWhenSearching() {
-            when(searchDataModel.querySearch(anyString())).thenReturn(
+            when(searchDataModel.querySearch(anyString(), any())).thenReturn(
                     Completable.error(new Exception()));
             return this;
         }
