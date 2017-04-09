@@ -32,7 +32,7 @@ android:
         - extra-android-m2repository
         - sys-img-armeabi-v7a-android-24
     before_install:
-        - echo $ANDROID_HOME
+        - echo ""$ANDROID_HOME"
         - mkdir "$ANDROID_HOME/licenses" || true
         - ls -la "$ANDROID_HOME/licenses"
         - echo -e "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
