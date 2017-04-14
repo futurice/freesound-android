@@ -48,6 +48,9 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
     @BindView(R.id.textView_username)
     TextView usernameTextView;
 
+    @BindView(R.id.textView_date)
+    TextView dateTextView;
+
     @BindView(R.id.textView_title)
     TextView titleTextView;
 
@@ -87,7 +90,11 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
 
             disposables.add(vm.username()
                               .subscribe(usernameTextView::setText,
-                                         e -> Timber.e(e, "Unable to set SoundItem name")));
+                                         e -> Timber.e(e, "Unable to set SoundItem username")));
+
+            disposables.add(vm.createdDate()
+                              .subscribe(dateTextView::setText,
+                                         e -> Timber.e(e, "Unable to set SoundItem created date")));
 
             disposables.add(vm.name()
                               .observeOn(schedulerProvider.ui())

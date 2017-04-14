@@ -76,6 +76,9 @@ public abstract class Sound implements Parcelable {
     @Nullable
     public abstract Float duration();
 
+    @Nullable
+    public abstract String created();
+
     @NonNull
     public static TypeAdapter<Sound> typeAdapter(@NonNull final Gson gson) {
         return new AutoValue_Sound.GsonTypeAdapter(get(gson));
@@ -103,6 +106,8 @@ public abstract class Sound implements Parcelable {
         public abstract Builder previews(@NonNull final Preview previews);
 
         public abstract Builder duration(@NonNull final Float duration);
+
+        public abstract Builder created(@NonNull final String created);
 
         @NonNull
         public abstract Sound build();

@@ -31,8 +31,7 @@ import android.content.Context;
 import dagger.Component;
 
 @ActivityScope
-@Component(dependencies = FreesoundApplicationComponent.class,
-        modules = SearchActivityModule.class)
+@Component(dependencies = FreesoundApplicationComponent.class, modules = SearchActivityModule.class)
 interface SearchActivityComponent extends BaseActivityComponent {
 
     @ForApplication
