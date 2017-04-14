@@ -49,6 +49,6 @@ final class RoundEdgeTransformation implements Transformation {
 
     @Override
     public String key() {
-        return "roundEdge()";
+        return "roundEdge";
     }
 }
