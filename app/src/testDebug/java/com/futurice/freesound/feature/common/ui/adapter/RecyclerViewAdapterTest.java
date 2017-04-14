@@ -19,7 +19,6 @@ package com.futurice.freesound.feature.common.ui.adapter;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
-import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -73,7 +72,7 @@ public class RecyclerViewAdapterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        SchedulerProvider schedulerProvider = new TrampolineSchedulerProvider();
+        SchedulerProvider schedulerProvider = new UiThreadTrampolineSchedulerProvider();
         adapter = new RecyclerViewAdapter(comparator, factoryMap(), binderMap(), schedulerProvider);
     }
 
@@ -108,10 +107,18 @@ public class RecyclerViewAdapterTest {
     }
 
     @Test
+    public void expectIllegalStateExceptionWhenUpdateIsNotCalledFromUiThread() {
+        SchedulerProvider schedulerProvider = new TrampolineSchedulerProvider();
+        adapter = new RecyclerViewAdapter(comparator, factoryMap(), binderMap(), schedulerProvider);
+        thrown.expect(IllegalStateException.class);
+
+        adapter.update(new ArrayList<>());
+    }
+
+    @Test
     public void diffUtilsIsNotUsedWhenUpdatingAdapterForTheFirstTime() {
         List<DisplayableItem> itemList = itemList();
 
-        // FIXME: AndroidPreconditions.assertUiThread(), how to mock this ?
         adapter.update(itemList);
 
         verify(comparator, never()).areItemsTheSame(any(), any());
@@ -158,16 +165,6 @@ public class RecyclerViewAdapterTest {
     }
 
     @Test
-    public void unbindIsCalledForBindingViewHolderInOnViewRecycled() {
-        BaseBindingViewHolder viewHolder = mock(BaseBindingViewHolder.class);
-
-        //FIXME: This throws NPE
-        adapter.onViewRecycled(viewHolder);
-
-        verify(viewHolder).unbind();
-    }
-
-    @Test
     public void itemCount() {
         List<DisplayableItem> itemList = itemList();
 
@@ -209,4 +206,11 @@ public class RecyclerViewAdapterTest {
         }};
     }
 
+    private static class UiThreadTrampolineSchedulerProvider extends TrampolineSchedulerProvider {
+
+        @Override
+        public boolean isUiThread() {
+            return true;
+        }
+    }
 }

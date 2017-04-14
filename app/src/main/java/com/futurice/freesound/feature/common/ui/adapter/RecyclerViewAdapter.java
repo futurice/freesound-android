@@ -16,7 +16,6 @@
 
 package com.futurice.freesound.feature.common.ui.adapter;
 
-import com.futurice.freesound.common.utils.AndroidPreconditions;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
@@ -102,7 +101,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
      */
     public void update(@NonNull final List<DisplayableItem> items) {
         Preconditions.checkNotNull(items);
-        AndroidPreconditions.assertUiThread();
+        assertUiThread();
 
         if (modelItems.isEmpty()) {
             updateAllItems(items);
@@ -148,5 +147,12 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     private void updateAdapterWithDiffResult(@NonNull final DiffUtil.DiffResult result) {
         result.dispatchUpdatesTo(this);
+    }
+
+    private void assertUiThread() {
+        if (!schedulerProvider.isUiThread()) {
+            throw new IllegalStateException(
+                "This task must be run on the Main thread and not on a worker thread.");
+        }
     }
 }
