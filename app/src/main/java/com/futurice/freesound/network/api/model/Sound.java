@@ -25,6 +25,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
@@ -77,7 +78,7 @@ public abstract class Sound implements Parcelable {
     public abstract Float duration();
 
     @Nullable
-    public abstract String created();
+    public abstract Date created();
 
     @NonNull
     public static TypeAdapter<Sound> typeAdapter(@NonNull final Gson gson) {
@@ -107,7 +108,7 @@ public abstract class Sound implements Parcelable {
 
         public abstract Builder duration(@NonNull final Float duration);
 
-        public abstract Builder created(@NonNull final String created);
+        public abstract Builder created(@NonNull final Date created);
 
         @NonNull
         public abstract Sound build();

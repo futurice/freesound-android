@@ -30,9 +30,9 @@ import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
-import android.text.format.DateUtils;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -85,15 +85,16 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     Single<String> userAvatar() {
-        return freeSoundApiService.getUser(sound.username()).map(user -> user.avatar().medium());
+        return freeSoundApiService.getUser(sound.username())
+                                  .map(user -> user.avatar().medium())
+                                  .cache();
     }
 
     @NonNull
     Single<String> createdDate() {
         return Single.just(sound.created())
-                     .map(c -> new SimpleDateFormat().parse(c).getTime())
-                     .map(d -> DateUtils.getRelativeTimeSpanString(d))
-                     .map(d -> d.toString());
+                     .map(Date::getTime)
+                     .map(d -> DateFormat.getDateInstance().format(d));
     }
 
     @NonNull

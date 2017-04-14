@@ -52,14 +52,14 @@
                 android:layout_marginStart="8dp"/>
 
         <TextView
-                android:text="12 days ago"
+                android:id="@+id/textView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_caption"
                 android:textColor="@color/text_caption"
                 app:layout_constraintBaseline_toBaselineOf="@id/textView_username"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/textView_date"/>
+                tools:text="12 days ago"/>
 
         <TextView
                 android:id="@+id/textView_title"
@@ -68,7 +68,6 @@
                 android:textSize="@dimen/text_body1"
                 android:textColor="@color/text_body1"
                 tools:text="Demo title" tools:layout_editor_absoluteY="41dp"
-                tools:layout_editor_absoluteX="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView_avatar"
                 android:layout_marginTop="8dp"/>
@@ -81,8 +80,7 @@
                 android:textColor="@color/text_caption"
                 android:maxLines="2"
                 android:ellipsize="end"
-                tools:text="Demo description" tools:layout_editor_absoluteY="41dp"
-                tools:layout_editor_absoluteX="22dp"
+                tools:text="Demo description"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="2dp"
                 app:layout_constraintTop_toBottomOf="@+id/textView_title"/>
@@ -93,12 +91,11 @@
                 android:layout_height="128dp"
                 android:background="@color/gray_very_light"
                 android:contentDescription="@string/waveform_accessibility_sound_item_image"
-                tools:layout_editor_absoluteY="41dp" tools:layout_editor_absoluteX="22dp"
                 app:layout_constraintTop_toBottomOf="@id/textView_description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"/>
-
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
 
     </android.support.constraint.ConstraintLayout>
 

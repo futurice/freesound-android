@@ -27,6 +27,14 @@ final class ApiConstants {
     static final String TOKEN_QUERY_PARAM = "token";
     static final String AUTHORIZATION_CODE_GRANT_TYPE_VALUE = "authorization_code";
 
+    // The pattern used is a compromise because the Freesound API data pattern inconsistent.
+    // Some Sound objects have up to 6 decimal places for the seconds value, whereas others
+    // don't have any.
+    //
+    // This pattern might not be sufficient for fields that require high accuracy because it
+    // truncates sub-second values.
+    static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+
     private ApiConstants() {
         throw new InstantiationForbiddenError();
     }

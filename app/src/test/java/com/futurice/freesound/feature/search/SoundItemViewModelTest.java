@@ -21,6 +21,7 @@ import com.futurice.freesound.feature.audio.Id;
 import com.futurice.freesound.feature.audio.PlaybackSource;
 import com.futurice.freesound.feature.audio.PlayerState;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
 
@@ -50,6 +51,9 @@ public class SoundItemViewModelTest {
     @Mock
     private AudioPlayer audioPlayer;
 
+    @Mock
+    private FreeSoundApiService freeSoundApiService;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -61,7 +65,8 @@ public class SoundItemViewModelTest {
                                 .images(null)
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.thumbnailImageUrl()
           .test()
@@ -74,7 +79,8 @@ public class SoundItemViewModelTest {
                                 .images(Sound.Image.builder().build())
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.thumbnailImageUrl()
           .test()
@@ -83,8 +89,10 @@ public class SoundItemViewModelTest {
 
     @Test
     public void thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
-        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND, navigator,
-                                                                       audioPlayer);
+        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND,
+                                                                       navigator,
+                                                                       audioPlayer,
+                                                                       freeSoundApiService);
 
         soundItemViewModel.thumbnailImageUrl()
                           .test()
@@ -93,8 +101,10 @@ public class SoundItemViewModelTest {
 
     @Test
     public void name_emitsSoundName() {
-        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND, navigator,
-                                                                       audioPlayer);
+        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND,
+                                                                       navigator,
+                                                                       audioPlayer,
+                                                                       freeSoundApiService);
 
         soundItemViewModel.name()
                           .test()
@@ -103,8 +113,10 @@ public class SoundItemViewModelTest {
 
     @Test
     public void description_emitsSoundDescription() {
-        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND, navigator,
-                                                                       audioPlayer);
+        SoundItemViewModel soundItemViewModel = new SoundItemViewModel(TEST_SOUND,
+                                                                       navigator,
+                                                                       audioPlayer,
+                                                                       freeSoundApiService);
 
         soundItemViewModel.description()
                           .test()
@@ -117,7 +129,8 @@ public class SoundItemViewModelTest {
                                 .duration(0.4f)
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.duration()
           .test()
@@ -130,7 +143,8 @@ public class SoundItemViewModelTest {
                                 .duration(2.6f)
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.duration()
           .test()
@@ -143,7 +157,8 @@ public class SoundItemViewModelTest {
                                 .duration(1f)
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.duration()
           .test()
@@ -156,7 +171,8 @@ public class SoundItemViewModelTest {
                                 .duration(0f)
                                 .build();
 
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.duration()
           .test()
@@ -164,7 +180,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progressPercentange_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionNonZero() {
+    public void progressPercentage_isAudioPlayerProgressPercentage_whenSoundActiveInPlayer_andPositionNonZero() {
         long positionMs = TimeUnit.SECONDS.toMillis(10);
         float durationSec = 200f;
         int expectedPercentage = 5;
@@ -176,7 +192,8 @@ public class SoundItemViewModelTest {
         new ArrangeBuilder()
                 .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -184,7 +201,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progressPercentange_expectedPercentage_0() {
+    public void progressPercentage_expectedPercentage_0() {
         long positionMs = 0;
         float durationSec = 200f;
         int expectedPercentage = 0;
@@ -196,7 +213,8 @@ public class SoundItemViewModelTest {
         new ArrangeBuilder()
                 .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -204,7 +222,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progressPercentange_expectedPercentage_99Point9() {
+    public void progressPercentage_expectedPercentage_99Point9() {
         long positionMs = 999;
         float durationSec = 1;
         int expectedPercentage = 99;
@@ -216,7 +234,8 @@ public class SoundItemViewModelTest {
         new ArrangeBuilder()
                 .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -224,7 +243,7 @@ public class SoundItemViewModelTest {
     }
 
     @Test
-    public void progressPercentange_expectedPercentage_100() {
+    public void progressPercentage_expectedPercentage_100() {
         long positionMs = 1000;
         float durationSec = 1;
         int expectedPercentage = 100;
@@ -236,7 +255,8 @@ public class SoundItemViewModelTest {
         new ArrangeBuilder()
                 .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -256,7 +276,8 @@ public class SoundItemViewModelTest {
         new ArrangeBuilder()
                 .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -277,7 +298,8 @@ public class SoundItemViewModelTest {
                                                          Option.ofObj(PlaybackSource
                                                                               .create(Id.from(id2),
                                                                                       url1))));
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -298,7 +320,8 @@ public class SoundItemViewModelTest {
                                                          Option.ofObj(PlaybackSource
                                                                               .create(Id.from(id2),
                                                                                       url1))));
-        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer);
+        SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
+                                                       freeSoundApiService);
 
         vm.progressPercentage()
           .test()
@@ -307,7 +330,7 @@ public class SoundItemViewModelTest {
 
     @Test
     public void openDetails_openSoundViaNavigator() {
-        new SoundItemViewModel(TEST_SOUND, navigator, audioPlayer)
+        new SoundItemViewModel(TEST_SOUND, navigator, audioPlayer, freeSoundApiService)
                 .openDetails();
 
         verify(navigator).openSoundDetails(eq(TEST_SOUND));

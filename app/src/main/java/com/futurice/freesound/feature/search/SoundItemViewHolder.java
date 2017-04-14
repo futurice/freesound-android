@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,6 +77,14 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
         public void bind(@NonNull final CompositeDisposable disposables) {
             final SoundItemViewModel vm = get(getViewModel());
 
+            long now = System.currentTimeMillis();
+            long time2 = now - DateUtils.WEEK_IN_MILLIS + 1;
+
+            Timber.d("### TIME AGO: %s",
+                     DateUtils.getRelativeTimeSpanString(time2,
+                                                         now,
+                                                         DateUtils.MINUTE_IN_MILLIS));
+
             // Synchronously clear the waveform, it might be recycled.
             playbackWaveformView.clearWaveform();
 
@@ -83,7 +92,6 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
                               .subscribeOn(schedulerProvider.computation())
                               .observeOn(schedulerProvider.ui())
                               .subscribe(url -> picasso.load(url)
-                                                       .placeholder(R.drawable.avatar_placeholder)
                                                        .transform(PicassoTransformations.circular())
                                                        .into(avatarImageView),
                                          e -> Timber.e(e, "Unable to set SoundItem avatar")));
