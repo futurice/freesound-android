@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,39 +14,21 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.scheduling;
+package com.futurice.freesound.feature.common.ui.adapter;
+
+import com.futurice.freesound.feature.common.DisplayableItem;
 
 import android.support.annotation.NonNull;
-
-import io.reactivex.Scheduler;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 
 /**
- * Provides RxJava Schedulers.
+ * Populates a {@link ViewHolder} with the model details.
  */
-public interface SchedulerProvider {
+public interface ViewHolderBinder {
 
-    @NonNull
-    Scheduler computation();
-
-    @NonNull
-    Scheduler trampoline();
-
-    @NonNull
-    Scheduler single();
-
-    @NonNull
-    Scheduler newThread();
-
-    @NonNull
-    Scheduler io();
-
-    @NonNull
-    Scheduler time(@NonNull String tag);
-
-    @NonNull
-    Scheduler ui();
-
-    boolean isUiThread();
-
-    void assertUiThread();
+    /**
+     * Populates the passed {@link ViewHolder} with the details of the passed
+     * {@link DisplayableItem}.
+     */
+    void bind(@NonNull final ViewHolder viewHolder, @NonNull final DisplayableItem item);
 }

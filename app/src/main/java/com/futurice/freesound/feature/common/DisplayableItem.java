@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 Futurice GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.futurice.freesound.feature.common;
 
 import com.google.auto.value.AutoValue;
@@ -11,14 +27,7 @@ import android.support.annotation.NonNull;
 @AutoValue
 public abstract class DisplayableItem<T> {
 
-    // List types
-    public enum Type {
-        SOUND,
-        AD // this is just for demo only
-    }
-
-    @NonNull
-    public abstract Type type();
+    public abstract int type();
 
     @NonNull
     public abstract T model();
@@ -28,7 +37,7 @@ public abstract class DisplayableItem<T> {
     public interface Builder<T> {
 
         @NonNull
-        Builder<T> type(@NonNull Type type);
+        Builder<T> type(int type);
 
         @NonNull
         Builder<T> model(@NonNull T model);
@@ -43,7 +52,7 @@ public abstract class DisplayableItem<T> {
     }
 
     @NonNull
-    public static DisplayableItem create(@NonNull final Object model, final Type type) {
+    public static <T> DisplayableItem create(@NonNull final T model, final int type) {
         return DisplayableItem.builder().type(type).model(model).build();
     }
 }

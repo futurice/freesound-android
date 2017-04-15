@@ -82,6 +82,14 @@ public class TrampolineSchedulerProvider implements SchedulerProvider {
         return false;
     }
 
+    @Override
+    public void assertUiThread() {
+        if (!isUiThread()) {
+            throw new IllegalStateException(
+                "This task must be run on the Main thread and not on a worker thread.");
+        }
+    }
+
     /**
      * Override the time Scheduler with the Scheduler evaluated from the supplied function.
      *

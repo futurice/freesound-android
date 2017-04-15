@@ -16,18 +16,28 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.core.adapter.AdapterInteractor;
-import com.futurice.freesound.core.adapter.SimpleAdapterInteractor;
 import com.futurice.freesound.feature.audio.AudioPlayer;
-import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.feature.common.ui.adapter.ItemComparator;
+import com.futurice.freesound.feature.common.ui.adapter.RecyclerViewAdapter;
+import com.futurice.freesound.feature.common.ui.adapter.ViewHolderBinder;
+import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
+import com.futurice.freesound.inject.activity.ForActivity;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.squareup.picasso.Picasso;
 
+import android.content.Context;
+
+import java.util.Map;
+
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntKey;
+import dagger.multibindings.IntoMap;
+
+import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
 
 @Module(includes = BaseFragmentModule.class)
 class SearchFragmentModule {
@@ -42,20 +52,33 @@ class SearchFragmentModule {
 
     @Provides
     @FragmentScope
-    static SoundItemAdapter provideSoundItemAdapter(
-            AdapterInteractor<DisplayableItem> adapterInteractor,
-            Picasso picasso,
-            SoundItemViewModelFactory viewModelFactory,
-            SchedulerProvider schedulerProvider) {
-        return new SoundItemAdapter(adapterInteractor,
-                                    picasso,
-                                    viewModelFactory,
-                                    schedulerProvider);
+    RecyclerViewAdapter provideRecyclerAdapter(ItemComparator itemComparator,
+                                               Map<Integer, ViewHolderFactory> factoryMap,
+                                               Map<Integer, ViewHolderBinder> binderMap,
+                                               SchedulerProvider schedulerProvider) {
+        return new RecyclerViewAdapter(itemComparator, factoryMap, binderMap, schedulerProvider);
     }
 
     @Provides
-    @FragmentScope
-    static AdapterInteractor<DisplayableItem> provideAdapterInteractor() {
-        return new SimpleAdapterInteractor<>();
+    ItemComparator provideComparator() {
+        return new SearchResultItemComparator();
+    }
+
+    @IntoMap
+    @IntKey(SOUND)
+    @Provides
+    ViewHolderFactory provideSoundViewHolderFactory(@ForActivity Context context,
+                                                    Picasso picasso,
+                                                    SchedulerProvider schedulerProvider) {
+        return new SoundItemViewHolder.SoundItemViewHolderFactory(context,
+                                                                  picasso,
+                                                                  schedulerProvider);
+    }
+
+    @IntoMap
+    @IntKey(SOUND)
+    @Provides
+    ViewHolderBinder provideSoundViewHolderBinder(SoundItemViewModelFactory viewModelFactory) {
+        return new SoundItemViewHolder.SoundItemViewHolderBinder(viewModelFactory);
     }
 }
