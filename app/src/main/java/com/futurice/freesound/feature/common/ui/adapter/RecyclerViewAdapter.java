@@ -121,7 +121,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     /**
-     * Only used for first update of the adapter.
+     * Only used after the first update of the adapter.
      * The method {@link DiffUtil.DiffResult#dispatchUpdatesTo(RecyclerView.Adapter)} is
      * significantly slower than {@link RecyclerViewAdapter#notifyDataSetChanged()} when it comes
      * to update all the items in the adapter.
