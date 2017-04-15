@@ -38,7 +38,7 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 /**
  * Implementation of {@link RecyclerView.Adapter} for {@link DisplayableItem}.
  */
-public final class RecyclerViewAdapter extends RecyclerView.Adapter {
+public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull
     private final List<DisplayableItem> modelItems = new ArrayList<>();
@@ -111,7 +111,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * Only use for the first update of the adapter, when it is still empty.
+     * Only used for the first update of the adapter, when it is still empty.
      */
     private void updateAllItems(@NonNull final List<DisplayableItem> items) {
         Observable.just(items)
@@ -121,7 +121,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * Do not use for first update of the adapter.
+     * Only used for first update of the adapter.
      * The method {@link DiffUtil.DiffResult#dispatchUpdatesTo(RecyclerView.Adapter)} is
      * significantly slower than {@link RecyclerViewAdapter#notifyDataSetChanged()} when it comes
      * to update all the items in the adapter.

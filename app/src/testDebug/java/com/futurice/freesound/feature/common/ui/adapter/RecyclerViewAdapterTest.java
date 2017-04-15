@@ -43,9 +43,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by Futurice
- */
 public class RecyclerViewAdapterTest {
 
     @Mock

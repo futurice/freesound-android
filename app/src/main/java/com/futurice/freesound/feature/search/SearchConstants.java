@@ -16,10 +16,21 @@
 
 package com.futurice.freesound.feature.search;
 
-interface SearchConstants {
+import com.futurice.freesound.common.InstantiationForbiddenError;
 
-    interface SearchResultListItems {
-        int SOUND = 0;
-        int AD = 1;
+final class SearchConstants {
+
+    static final class SearchResultListItems {
+
+        static final int SOUND = 0;
+        static final int AD = 1;
+
+        SearchResultListItems() {
+            throw new InstantiationForbiddenError();
+        }
+    }
+
+    SearchConstants() {
+        throw new InstantiationForbiddenError();
     }
 }

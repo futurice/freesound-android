@@ -112,9 +112,9 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
 
     };
 
-    SoundItemViewHolder(@NonNull final View view,
-                        @NonNull final Picasso picasso,
-                        @NonNull final SchedulerProvider schedulerProvider) {
+    private SoundItemViewHolder(@NonNull final View view,
+                                @NonNull final Picasso picasso,
+                                @NonNull final SchedulerProvider schedulerProvider) {
         super(get(view));
         ButterKnife.bind(this, view);
         this.picasso = get(picasso);

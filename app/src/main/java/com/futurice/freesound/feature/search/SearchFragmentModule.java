@@ -67,7 +67,7 @@ class SearchFragmentModule {
     @IntoMap
     @IntKey(SOUND)
     @Provides
-    ViewHolderFactory provideSoundViewHolderFActory(@ForActivity Context context,
+    ViewHolderFactory provideSoundViewHolderFactory(@ForActivity Context context,
                                                     Picasso picasso,
                                                     SchedulerProvider schedulerProvider) {
         return new SoundItemViewHolder.SoundItemViewHolderFactory(context,
