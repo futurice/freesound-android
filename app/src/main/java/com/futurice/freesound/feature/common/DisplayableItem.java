@@ -52,7 +52,7 @@ public abstract class DisplayableItem<T> {
     }
 
     @NonNull
-    public static DisplayableItem create(@NonNull final Object model, final int type) {
+    public static <T> DisplayableItem create(@NonNull final T model, final int type) {
         return DisplayableItem.builder().type(type).model(model).build();
     }
 }
