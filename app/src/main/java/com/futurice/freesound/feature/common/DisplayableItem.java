@@ -27,7 +27,6 @@ import android.support.annotation.NonNull;
 @AutoValue
 public abstract class DisplayableItem<T> {
 
-    @NonNull
     public abstract int type();
 
     @NonNull
@@ -38,7 +37,7 @@ public abstract class DisplayableItem<T> {
     public interface Builder<T> {
 
         @NonNull
-        Builder<T> type(@NonNull int type);
+        Builder<T> type(int type);
 
         @NonNull
         Builder<T> model(@NonNull T model);
