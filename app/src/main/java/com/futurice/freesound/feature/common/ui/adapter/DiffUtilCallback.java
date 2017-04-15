@@ -23,6 +23,8 @@ import android.support.v7.util.DiffUtil;
 
 import java.util.List;
 
+import static com.futurice.freesound.common.utils.Preconditions.get;
+
 final class DiffUtilCallback extends DiffUtil.Callback {
 
     @NonNull
@@ -37,9 +39,9 @@ final class DiffUtilCallback extends DiffUtil.Callback {
     DiffUtilCallback(@NonNull final List<DisplayableItem> oldItems,
                      @NonNull final List<DisplayableItem> newItems,
                      @NonNull final ItemComparator comparator) {
-        this.oldItems = oldItems;
-        this.newItems = newItems;
-        this.comparator = comparator;
+        this.oldItems = get(oldItems);
+        this.newItems = get(newItems);
+        this.comparator = get(comparator);
     }
 
     @Override

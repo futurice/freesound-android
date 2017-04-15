@@ -101,7 +101,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
      */
     public void update(@NonNull final List<DisplayableItem> items) {
         Preconditions.checkNotNull(items);
-        assertUiThread();
+        schedulerProvider.assertUiThread();
 
         if (modelItems.isEmpty()) {
             updateAllItems(items);
@@ -111,7 +111,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * Only use for the first update of the adapter, whe it is still empty.
+     * Only use for the first update of the adapter, when it is still empty.
      */
     private void updateAllItems(@NonNull final List<DisplayableItem> items) {
         Observable.just(items)
@@ -147,12 +147,5 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     private void updateAdapterWithDiffResult(@NonNull final DiffUtil.DiffResult result) {
         result.dispatchUpdatesTo(this);
-    }
-
-    private void assertUiThread() {
-        if (!schedulerProvider.isUiThread()) {
-            throw new IllegalStateException(
-                "This task must be run on the Main thread and not on a worker thread.");
-        }
     }
 }

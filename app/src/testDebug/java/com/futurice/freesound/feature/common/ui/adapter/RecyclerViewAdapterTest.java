@@ -209,8 +209,7 @@ public class RecyclerViewAdapterTest {
     private static class UiThreadTrampolineSchedulerProvider extends TrampolineSchedulerProvider {
 
         @Override
-        public boolean isUiThread() {
-            return true;
+        public void assertUiThread() {
         }
     }
 }

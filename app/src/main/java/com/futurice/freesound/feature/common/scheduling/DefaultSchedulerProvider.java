@@ -73,4 +73,12 @@ final class DefaultSchedulerProvider implements SchedulerProvider {
     public boolean isUiThread() {
         return AndroidPreconditions.isMainThread();
     }
+
+    @Override
+    public void assertUiThread() {
+        if (!isUiThread()) {
+            throw new IllegalStateException(
+                "This task must be run on the Main thread and not on a worker thread.");
+        }
+    }
 }

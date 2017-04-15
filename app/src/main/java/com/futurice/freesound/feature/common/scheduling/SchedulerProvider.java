@@ -47,4 +47,6 @@ public interface SchedulerProvider {
     Scheduler ui();
 
     boolean isUiThread();
+
+    void assertUiThread();
 }
