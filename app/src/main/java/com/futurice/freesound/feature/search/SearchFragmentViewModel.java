@@ -27,10 +27,11 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
+import ix.Ix;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
-import static com.futurice.freesound.feature.common.DisplayableItem.Type.SOUND;
+import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
 
 final class SearchFragmentViewModel extends SimpleViewModel {
 
@@ -74,9 +75,8 @@ final class SearchFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     private static List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
-        return Observable.fromIterable(sounds)
-                         .map(sound -> DisplayableItem.create(sound, SOUND))
-                         .toList()
-                         .blockingGet();
+        return Ix.from(sounds)
+                 .map(sound -> DisplayableItem.create(sound, SOUND))
+                 .toList();
     }
 }
