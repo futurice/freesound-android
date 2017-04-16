@@ -34,7 +34,6 @@ public final class ImagesModule {
     @Singleton
     static Picasso providePicasso(@ForApplication Context context) {
         return new Picasso.Builder(context)
-                //    .indicatorsEnabled(BuildConfig.DEBUG)
                 .loggingEnabled(BuildConfig.DEBUG)
                 .build();
     }
