@@ -40,6 +40,7 @@ public final class SoundFields {
             .images()
             .previews()
             .duration()
+            .created()
             .build();
 
     private static final String ID = "id";
@@ -52,6 +53,7 @@ public final class SoundFields {
     private static final String IMAGES = "images";
     private static final String PREVIEWS = "previews";
     private static final String DURATION = "duration";
+    private static final String CREATED = "created";
 
     @NonNull
     private final Set<String> fields;
@@ -117,6 +119,11 @@ public final class SoundFields {
 
         Builder duration() {
             add(DURATION);
+            return this;
+        }
+
+        Builder created() {
+            add(CREATED);
             return this;
         }
 

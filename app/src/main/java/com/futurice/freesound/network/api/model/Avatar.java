@@ -49,4 +49,8 @@ public abstract class Avatar {
     public static Builder builder() {
         return new AutoValue_Avatar.Builder();
     }
+
+    @VisibleForTesting
+    @NonNull
+    public abstract Builder toBuilder();
 }

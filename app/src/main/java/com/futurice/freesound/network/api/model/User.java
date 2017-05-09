@@ -49,4 +49,8 @@ public abstract class User {
     public static Builder builder() {
         return new AutoValue_User.Builder();
     }
+
+    @VisibleForTesting
+    @NonNull
+    public abstract Builder toBuilder();
 }

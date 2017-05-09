@@ -27,39 +27,76 @@
                                     app:cardCornerRadius="4dp"
                                     app:cardElevation="4dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+        <ImageView
+                android:id="@+id/imageView_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/avatar_placeholder"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+                android:id="@+id/textView_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/text_body1"
+                android:textColor="@color/text_body1"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="@id/imageView_avatar"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_avatar"
+                app:layout_constraintStart_toEndOf="@id/imageView_avatar"/>
+
+        <TextView
+                android:id="@+id/textView_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_caption"
+                app:layout_constraintBaseline_toBaselineOf="@id/textView_username"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="12 days ago"/>
 
         <TextView
                 android:id="@+id/textView_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:textSize="@dimen/text_body1"
-                android:textStyle="bold"
                 android:textColor="@color/text_body1"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_avatar"
                 tools:text="Demo title"/>
 
         <TextView
                 android:id="@+id/textView_description"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_caption"
                 android:textColor="@color/text_caption"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_title"
                 tools:text="Demo description"/>
 
         <com.futurice.freesound.feature.common.waveform.PlaybackWaveformView
                 android:id="@+id/playbackWaveformView_soundItem"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="128dp"
                 android:background="@color/gray_very_light"
-                android:contentDescription="@string/waveform_accessibility_sound_item_image"/>
+                android:contentDescription="@string/waveform_accessibility_sound_item_image"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/textView_description"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.v7.widget.CardView>

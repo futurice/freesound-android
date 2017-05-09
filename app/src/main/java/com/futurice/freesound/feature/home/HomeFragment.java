@@ -20,6 +20,7 @@ import com.futurice.freesound.R;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
@@ -78,6 +79,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> picasso.load(it)
+                                                               .transform(PicassoTransformations.circular())
                                                                .into(avatarImage),
                                                   e -> Timber.e(e, "Error setting image")));
 

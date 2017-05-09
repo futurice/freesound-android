@@ -25,10 +25,14 @@ import com.futurice.freesound.feature.audio.Id;
 import com.futurice.freesound.feature.audio.PlaybackSource;
 import com.futurice.freesound.feature.audio.PlayerState;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.SimpleViewModel;
 
 import android.support.annotation.NonNull;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -49,12 +53,17 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     private final AudioPlayer audioPlayer;
 
+    @NonNull
+    private final FreeSoundApiService freeSoundApiService;
+
     SoundItemViewModel(@NonNull final Sound sound,
                        @Provided @NonNull final Navigator navigator,
-                       @Provided @NonNull final AudioPlayer audioPlayer) {
+                       @Provided @NonNull final AudioPlayer audioPlayer,
+                       @Provided @NonNull final FreeSoundApiService freeSoundApiService) {
         this.sound = get(sound);
         this.navigator = get(navigator);
         this.audioPlayer = get(audioPlayer);
+        this.freeSoundApiService = get(freeSoundApiService);
     }
 
     @NonNull
@@ -72,6 +81,25 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     Single<String> name() {
         return Single.just(sound.name());
+    }
+
+    @NonNull
+    Single<String> userAvatar() {
+        return freeSoundApiService.getUser(sound.username())
+                                  .map(user -> user.avatar().medium())
+                                  .cache();
+    }
+
+    @NonNull
+    Single<String> createdDate() {
+        return Single.just(sound.created())
+                     .map(Date::getTime)
+                     .map(d -> DateFormat.getDateInstance().format(d));
+    }
+
+    @NonNull
+    Single<String> username() {
+        return Single.just(sound.username());
     }
 
     @NonNull
@@ -103,9 +131,7 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     private Observable<Option<Integer>> progressOrNothing(@NonNull final PlayerState playerState) {
-        return isThisSound(playerState) ?
-                getCurrentPercentage() :
-                Observable.just(Option.none());
+        return isThisSound(playerState) ? getCurrentPercentage() : Observable.just(Option.none());
     }
 
     private boolean isThisSound(@NonNull final PlayerState playerState) {
@@ -117,9 +143,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     private Observable<Option<Integer>> getCurrentPercentage() {
         return audioPlayer.getTimePositionMsOnceAndStream()
-                          .map(positionMs -> toPercentage(
-                                  positionMs,
-                                  sound.duration()))
+                          .map(positionMs -> toPercentage(positionMs, sound.duration()))
                           .map(Option::ofObj);
     }
 

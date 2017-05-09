@@ -67,6 +67,7 @@ public class ApiNetworkModule {
     @ForFreeSoundApi
     static Gson provideGson() {
         return new GsonBuilder()
+                .setDateFormat(ApiConstants.DATE_FORMAT_PATTERN)
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
                 .registerTypeAdapterFactory(FreesoundTypeAdapterFactory.create())
                 .create();

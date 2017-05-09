@@ -27,7 +27,6 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.functions.Function3;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
@@ -76,23 +75,10 @@ final class DefaultSearchDataModel implements SearchDataModel {
     @Override
     @NonNull
     public Observable<SearchState> getSearchStateOnceAndStream() {
-
-//        return searchStateOnceAndStream.observeOn(schedulerProvider.computation())
-
-        return Observable.combineLatest(resultsOnceAndStream, errorOnceAndStream,
+        return Observable.combineLatest(resultsOnceAndStream,
+                                        errorOnceAndStream,
                                         inProgressOnceAndStream,
-                                        new Function3<Option<List<Sound>>, Option<Throwable>, Boolean, SearchState>() {
-                                            @Override
-                                            public SearchState apply(
-                                                    @io.reactivex.annotations.NonNull final Option<List<Sound>> listOption,
-                                                    @io.reactivex.annotations.NonNull final Option<Throwable> throwableOption,
-                                                    @io.reactivex.annotations.NonNull final Boolean aBoolean)
-                                                    throws Exception {
-                                                return SearchState
-                                                        .create(listOption, throwableOption,
-                                                                aBoolean);
-                                            }
-                                        })
+                                        SearchState::create)
                          .observeOn(schedulerProvider.computation())
                          .distinctUntilChanged();
     }

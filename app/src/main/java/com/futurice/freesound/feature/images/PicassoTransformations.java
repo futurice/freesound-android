@@ -16,26 +16,21 @@
 
 package com.futurice.freesound.feature.images;
 
-import com.futurice.freesound.BuildConfig;
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
+import com.futurice.freesound.common.InstantiationForbiddenError;
+import com.squareup.picasso.Transformation;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import javax.inject.Singleton;
+public final class PicassoTransformations {
 
-import dagger.Module;
-import dagger.Provides;
+    private static final Transformation CIRCULAR = new RoundEdgeTransformation();
 
-@Module
-public final class ImagesModule {
-
-    @Provides
-    @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return new Picasso.Builder(context)
-                .loggingEnabled(BuildConfig.DEBUG)
-                .build();
+    @NonNull
+    public static Transformation circular() {
+        return CIRCULAR;
     }
 
+    private PicassoTransformations() {
+        throw new InstantiationForbiddenError();
+    }
 }

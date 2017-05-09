@@ -24,7 +24,10 @@ import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
 import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
 import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
+
+import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.network.api.model.Sound;
+
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
@@ -35,6 +38,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import android.widget.ImageView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -46,7 +51,16 @@ import timber.log.Timber;
 import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
-class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
+final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
+
+    @BindView(R.id.imageView_avatar)
+    ImageView avatarImageView;
+
+    @BindView(R.id.textView_username)
+    TextView usernameTextView;
+
+    @BindView(R.id.textView_date)
+    TextView dateTextView;
 
     @BindView(R.id.textView_title)
     TextView titleTextView;
@@ -76,10 +90,27 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
             // Synchronously clear the waveform, it might be recycled.
             playbackWaveformView.clearWaveform();
 
+            disposables.add(vm.userAvatar()
+                              .subscribeOn(schedulerProvider.computation())
+                              .observeOn(schedulerProvider.ui())
+                              .subscribe(url -> picasso.load(url)
+                                                       .transform(PicassoTransformations.circular())
+                                                       .into(avatarImageView),
+                                         e -> Timber.e(e, "Unable to set SoundItem avatar")));
+
+            disposables.add(vm.username()
+                              .subscribe(usernameTextView::setText,
+                                         e -> Timber.e(e, "Unable to set SoundItem username")));
+
+            disposables.add(vm.createdDate()
+                              .subscribe(dateTextView::setText,
+                                         e -> Timber.e(e, "Unable to set SoundItem created date")));
+
             disposables.add(vm.name()
                               .observeOn(schedulerProvider.ui())
                               .subscribe(titleTextView::setText,
                                          e -> Timber.e(e, "Unable to set SoundItem name")));
+
             disposables.add(vm.description()
                               .observeOn(schedulerProvider.ui())
                               .subscribe(descriptionTextView::setText,
@@ -108,6 +139,8 @@ class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
         public void unbind() {
             playbackWaveformView.setOnClickListener(null);
             picasso.cancelRequest(playbackWaveformViewTarget);
+            picasso.cancelRequest(avatarImageView);
+            avatarImageView.setImageResource(R.drawable.avatar_placeholder);
         }
 
     };
