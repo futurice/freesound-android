@@ -118,8 +118,6 @@ ext {
 
 dependencies {
 
-    annotationProcessor "com.squareup:javapoet:$dependencyVersions.javaPoet"
-
     // Android Support
     compile "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
     compile "com.android.support:support-annotations:$dependencyVersions.androidSupportLibrary"
@@ -131,9 +129,9 @@ dependencies {
     compile "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraintLibrary"
 
     // Dagger 2
-    compile "com.google.dagger:dagger:$dependencyVersions.dagger2"
+    annotationProcessor "com.squareup:javapoet:$dependencyVersions.javaPoet"
     annotationProcessor "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
-    provided "org.glassfish:javax.annotation:$dependencyVersions.javaxAnnotation"
+    compile "com.google.dagger:dagger:$dependencyVersions.dagger2"
 
     // RxJava
     compile "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
@@ -160,8 +158,8 @@ dependencies {
     annotationProcessor "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
 
     // Auto-Value GSON
-    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
     compileOnly "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
 
     // Auto-Value Parcelable
     compileOnly "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
