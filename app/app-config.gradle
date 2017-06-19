@@ -21,15 +21,15 @@ ext {
     freesound_api_url = "\"https://www.freesound.org/apiv2/\""
 }
 
-def String getFreesoundApiClientId() {
+String getFreesoundApiClientId() {
     return getProperty("freesound.api.clientId", "FREESOUND_API_CLIENT_ID")
 }
 
-def String getFreesoundApiClientSecret() {
+String getFreesoundApiClientSecret() {
     return getProperty("freesound.api.clientSecret", "FREESOUND_API_CLIENT_SECRET")
 }
 
-def String getProperty(String property, String envVariable) {
+String getProperty(String property, String envVariable) {
     String value = isCiBuild() ? fromEnv(envVariable) : fromFile(property);
     if (value == null || value.isEmpty()) {
         throw new IllegalStateException(
@@ -51,8 +51,8 @@ private String fromFile(String property) {
     return apiProperties.getProperty(property)
 }
 
-def Properties loadFileProperties(String fileLocation) {
-    def Properties properties = new Properties()
+Properties loadFileProperties(String fileLocation) {
+    Properties properties = new Properties()
     try {
         properties.load(new FileInputStream(fileLocation))
     } catch (FileNotFoundException fnf) {

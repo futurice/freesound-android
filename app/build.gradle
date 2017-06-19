@@ -15,8 +15,6 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'checkstyle'
 
 apply from: 'app-config.gradle'
@@ -58,7 +56,6 @@ android {
                     './proguard-rules/okhttp3-rules.pro',
                     './proguard-rules/picasso-rules.pro',
                     './proguard-rules/retrofit2-rules.pro',
-                    './proguard-rules/retrolambda-rules.pro',
                     './proguard-rules/rxjava2-rules.pro',
                     './proguard-rules/okio-rules.pro'
         }
@@ -90,10 +87,10 @@ ext {
     dependencyVersions = [
             androidSupportLibrary          : '25.3.1',
             androidSupportConstraintLibrary: '1.0.2',
-            javaPoet                       : '1.7.0',
+            javaPoet                       : '1.9.0',
             dagger2                        : '2.4',
             javaxAnnotation                : '10.0-b28',
-            rxJava2                        : '2.0.8',
+            rxJava2                        : '2.1.0',
             rxAndroid                      : '2.0.1',
             ixJava                         : '1.0.0-RC5',
             okHttp                         : '3.6.0',
@@ -101,18 +98,18 @@ ext {
             retrofit2                      : '2.2.0',
             retrofit2RxJava2Adapter        : '1.0.0',
             retrofit2GsonConverter         : '2.0.0',
-            gson                           : '2.7',
-            autoValue                      : '1.3',
-            autoValueGson                  : '0.4.4',
+            gson                           : '2.8.1',
+            autoValue                      : '1.4.1',
+            autoValueGson                  : '0.4.6',
             autoValueParcelable            : '0.2.5',
-            autoFactory                    : '1.0-beta3',
+            autoFactory                    : '1.0-beta5',
             options                        : '1.2.4',
             exoplayer                      : 'r2.1.1',
-            butterknife                    : '8.4.0',
+            butterknife                    : '8.6.0',
             firebase                       : '9.4.0',
             stetho                         : '1.4.2',
             chuck                          : '1.0.4',
-            timber                         : '4.2.0',
+            timber                         : '4.5.1',
             junit                          : '4.12',
             mockito                        : '2.2.2',
             assertJ                        : '1.7.1',
@@ -122,88 +119,88 @@ ext {
 dependencies {
 
     // Android Support
-    compile "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:support-annotations:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:appcompat-v7:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:palette-v7:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support:design:$dependencyVersions.androidSupportLibrary"
-    compile "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraintLibrary"
+    implementation "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:support-annotations:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:appcompat-v7:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:palette-v7:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support:design:$dependencyVersions.androidSupportLibrary"
+    implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraintLibrary"
 
     // Dagger 2
-    apt "com.squareup:javapoet:$dependencyVersions.javaPoet"
-    compile "com.google.dagger:dagger:$dependencyVersions.dagger2"
-    apt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
-    provided "org.glassfish:javax.annotation:$dependencyVersions.javaxAnnotation"
+    annotationProcessor "com.squareup:javapoet:$dependencyVersions.javaPoet"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
+    implementation "com.google.dagger:dagger:$dependencyVersions.dagger2"
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
-    compile "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
+    implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
+    implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
 
     // IxJava
-    compile "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
+    implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
 
     // Networking
-    compile "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
-    compile "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"
-    compile "com.squareup.picasso:picasso:$dependencyVersions.picasso"
+    implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"
+    implementation "com.squareup.picasso:picasso:$dependencyVersions.picasso"
 
     // Networking Retrofit
-    compile "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit2"
-    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$dependencyVersions.retrofit2RxJava2Adapter"
-    compile "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit2GsonConverter"
+    implementation "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit2"
+    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$dependencyVersions.retrofit2RxJava2Adapter"
+    implementation "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit2GsonConverter"
 
     // GSON
-    compile "com.google.code.gson:gson:$dependencyVersions.gson"
+    implementation "com.google.code.gson:gson:$dependencyVersions.gson"
 
     // Auto-Value
-    provided "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
-    apt "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+    compileOnly "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+    annotationProcessor "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
 
     // Auto-Value GSON
-    apt "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
-    provided "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
+    compileOnly "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
 
     // Auto-Value Parcelable
-    compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
-    apt "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
+    compileOnly "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
 
     // AutoFactory
-    compile "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
+    compileOnly "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
+    annotationProcessor "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
 
     // Optionals for Java 6/7
-    compile "com.github.tomaszpolanski:options:$dependencyVersions.options"
+    implementation "com.github.tomaszpolanski:options:$dependencyVersions.options"
 
     // Audio player
-    compile "com.google.android.exoplayer:exoplayer:$dependencyVersions.exoplayer"
+    implementation "com.google.android.exoplayer:exoplayer:$dependencyVersions.exoplayer"
 
     // Butter Knife
-    compile "com.jakewharton:butterknife:$dependencyVersions.butterknife"
-    apt "com.jakewharton:butterknife-compiler:$dependencyVersions.butterknife"
+    implementation "com.jakewharton:butterknife:$dependencyVersions.butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$dependencyVersions.butterknife"
 
     // Timber
-    compile "com.jakewharton.timber:timber:$dependencyVersions.timber"
+    implementation "com.jakewharton.timber:timber:$dependencyVersions.timber"
 
     // Instrumentation
-    compile "com.facebook.stetho:stetho:$dependencyVersions.stetho"
-    compile "com.facebook.stetho:stetho-okhttp3:$dependencyVersions.stetho"
-    debugCompile "com.readystatesoftware.chuck:library:$dependencyVersions.chuck"
+    implementation "com.facebook.stetho:stetho:$dependencyVersions.stetho"
+    implementation "com.facebook.stetho:stetho-okhttp3:$dependencyVersions.stetho"
+    debugImplementation "com.readystatesoftware.chuck:library:$dependencyVersions.chuck"
 
     // Firebase
-    compile "com.google.firebase:firebase-core:$dependencyVersions.firebase"
-    compile "com.google.firebase:firebase-crash:$dependencyVersions.firebase"
+    implementation "com.google.firebase:firebase-core:$dependencyVersions.firebase"
+    implementation "com.google.firebase:firebase-crash:$dependencyVersions.firebase"
 
     // Unit Testing
-    testCompile "junit:junit:$dependencyVersions.junit"
-    testCompile "org.mockito:mockito-core:$dependencyVersions.mockito"
-    testCompile "org.assertj:assertj-core:$dependencyVersions.assertJ"
-    testCompile "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
+    testImplementation "junit:junit:$dependencyVersions.junit"
+    testImplementation "org.mockito:mockito-core:$dependencyVersions.mockito"
+    testImplementation "org.assertj:assertj-core:$dependencyVersions.assertJ"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
 
     // Leak Canary
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
-    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
-    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
+    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
 }
 
