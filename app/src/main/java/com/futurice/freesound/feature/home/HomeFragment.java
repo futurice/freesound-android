@@ -79,7 +79,8 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> picasso.load(it)
-                                                               .transform(PicassoTransformations.circular())
+                                                               .transform(PicassoTransformations
+                                                                                  .circular())
                                                                .into(avatarImage),
                                                   e -> Timber.e(e, "Error setting image")));
 
