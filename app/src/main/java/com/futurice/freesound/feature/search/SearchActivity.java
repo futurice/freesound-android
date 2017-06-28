@@ -102,6 +102,23 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
                                  .subscribe(SearchActivity.this::handleErrorState,
                                             e -> e(e, "Error receiving Errors")));
         }
+
+        private void subscribeToSearchView(@NonNull final SearchView view,
+                                           @NonNull final ObservableEmitter<String> emitter) {
+            view.setOnQueryTextListener(new OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(final String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(final String newText) {
+                    emitter.onNext(get(newText));
+                    return true;
+                }
+            });
+        }
+
     };
 
     public static void open(@NonNull final Context context) {
@@ -152,12 +169,8 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
     @NonNull
     @Override
     protected SearchActivityComponent createComponent() {
-        return DaggerSearchActivityComponent.builder()
-                                            .freesoundApplicationComponent(
-                                                    ((FreesoundApplication) getApplication())
-                                                            .component())
-                                            .baseActivityModule(new BaseActivityModule(this))
-                                            .build();
+        return ((FreesoundApplication) getApplication())
+                .component().plusSearchActivityComponent(new BaseActivityModule(this));
     }
 
     @Override
@@ -180,22 +193,6 @@ public class SearchActivity extends BindingBaseActivity<SearchActivityComponent>
 
     private void setClearSearchVisible(final boolean isClearButtonVisible) {
         closeButton.setVisibility(isClearButtonVisible ? View.VISIBLE : View.GONE);
-    }
-
-    private static void subscribeToSearchView(@NonNull final SearchView view,
-                                              @NonNull final ObservableEmitter<String> emitter) {
-        view.setOnQueryTextListener(new OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(final String newText) {
-                emitter.onNext(get(newText));
-                return true;
-            }
-        });
     }
 
     private void showSnackbar(@NonNull final CharSequence charSequence) {

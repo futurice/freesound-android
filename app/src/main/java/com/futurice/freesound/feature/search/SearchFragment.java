@@ -136,11 +136,9 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     @NonNull
     @Override
     protected SearchFragmentComponent createComponent() {
-        return DaggerSearchFragmentComponent.builder()
-                                            .searchActivityComponent(
-                                                    ((SearchActivity) getActivity()).component())
-                                            .baseFragmentModule(new BaseFragmentModule(this))
-                                            .build();
+        return ((SearchActivity) getActivity()).component()
+                                               .plusSearchFragmentComponent(
+                                                       new BaseFragmentModule(this));
     }
 
     @NonNull

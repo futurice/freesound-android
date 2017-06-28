@@ -90,7 +90,8 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     @Override
     protected HomeActivityComponent createComponent() {
         return ((FreesoundApplication) getApplication()).component()
-                                                        .plus(new BaseActivityModule(this));
+                                                        .plusHomeActivityComponent(
+                                                                new BaseActivityModule(this));
     }
 
     @Override
