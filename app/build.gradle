@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
 
 apply from: 'app-config.gradle'
@@ -85,6 +86,7 @@ task checkstyle(type: Checkstyle) {
 
 ext {
     dependencyVersions = [
+            kotlin                         : kotlin_version,
             androidSupportLibrary          : '25.3.1',
             androidSupportConstraintLibrary: '1.0.2',
             javaPoet                       : '1.9.0',
@@ -117,6 +119,9 @@ ext {
 }
 
 dependencies {
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
 
     // Android Support
     implementation "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
