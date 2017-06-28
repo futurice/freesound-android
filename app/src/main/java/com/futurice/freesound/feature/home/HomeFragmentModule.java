@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.home;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 
@@ -23,12 +24,16 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = BaseFragmentModule.class)
-public class HomeFragmentModule {
+class HomeFragmentModule {
 
     @Provides
     @FragmentScope
     static HomeFragmentViewModel provideHomeFragmentViewModel(UserDataModel userDataModel) {
         return new HomeFragmentViewModel(userDataModel);
+    }
+
+    private HomeFragmentModule() {
+        throw new InstantiationForbiddenError();
     }
 
 }

@@ -29,7 +29,7 @@ import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
-public final class HomeViewModel extends SimpleViewModel {
+final class HomeViewModel extends SimpleViewModel {
 
     @NonNull
     private final Navigator navigator;

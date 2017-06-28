@@ -27,8 +27,6 @@ import dagger.Subcomponent;
 @Subcomponent(modules = HomeActivityModule.class)
 public interface HomeActivityComponent extends BaseActivityComponent {
 
-    HomeViewModel getHomeViewModel();
-
     Navigator getNavigator();
 
     UserDataModel getUserDataModel();
