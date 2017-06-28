@@ -26,7 +26,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = BaseActivityModule.class)
-class HomeActivityModule {
+public class HomeActivityModule {
 
     @Provides
     @ActivityScope

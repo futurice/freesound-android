@@ -79,7 +79,8 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
                                        .subscribeOn(schedulerProvider.computation())
                                        .observeOn(schedulerProvider.ui())
                                        .subscribe(it -> picasso.load(it)
-                                                               .transform(PicassoTransformations.circular())
+                                                               .transform(PicassoTransformations
+                                                                                  .circular())
                                                                .into(avatarImage),
                                                   e -> Timber.e(e, "Error setting image")));
 
@@ -135,11 +136,8 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @NonNull
     @Override
     protected HomeFragmentComponent createComponent() {
-        return DaggerHomeFragmentComponent.builder()
-                                          .homeActivityComponent(
-                                                  ((HomeActivity) getActivity()).component())
-                                          .baseFragmentModule(new BaseFragmentModule(this))
-                                          .build();
+        return ((HomeActivity) getActivity())
+                .component().plus(new BaseFragmentModule(this));
     }
 
     @NonNull

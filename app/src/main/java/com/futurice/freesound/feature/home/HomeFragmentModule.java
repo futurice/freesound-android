@@ -23,7 +23,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = BaseFragmentModule.class)
-class HomeFragmentModule {
+public class HomeFragmentModule {
 
     @Provides
     @FragmentScope

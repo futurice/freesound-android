@@ -19,12 +19,13 @@ package com.futurice.freesound.feature.home;
 import com.futurice.freesound.inject.fragment.BaseFragmentComponent;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 
-import dagger.Component;
+import dagger.Subcomponent;
 
 @FragmentScope
-@Component(dependencies = HomeActivityComponent.class, modules = HomeFragmentModule.class)
-interface HomeFragmentComponent extends BaseFragmentComponent {
+@Subcomponent(modules = HomeFragmentModule.class)
+public interface HomeFragmentComponent extends BaseFragmentComponent {
 
     void inject(final HomeFragment homeFragment);
+
 }
 
