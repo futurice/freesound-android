@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioModule;
 import com.futurice.freesound.feature.audio.AudioPlayer;
@@ -28,7 +29,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = {BaseActivityModule.class, AudioModule.class})
-class SearchActivityModule {
+public class SearchActivityModule {
 
     @Provides
     @ActivityScope
@@ -53,6 +54,10 @@ class SearchActivityModule {
     @ActivityScope
     static SearchSnackbar provideSearchSnackbar() {
         return new SearchSnackbar();
+    }
+
+    private SearchActivityModule() {
+        throw new InstantiationForbiddenError();
     }
 
 }

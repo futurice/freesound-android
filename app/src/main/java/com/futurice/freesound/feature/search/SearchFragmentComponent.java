@@ -19,11 +19,11 @@ package com.futurice.freesound.feature.search;
 import com.futurice.freesound.inject.fragment.BaseFragmentComponent;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 
-import dagger.Component;
+import dagger.Subcomponent;
 
 @FragmentScope
-@Component(dependencies = SearchActivityComponent.class, modules = SearchFragmentModule.class)
-interface SearchFragmentComponent extends BaseFragmentComponent {
+@Subcomponent(modules = SearchFragmentModule.class)
+public interface SearchFragmentComponent extends BaseFragmentComponent {
 
     void inject(final SearchFragment searchFragment);
 }

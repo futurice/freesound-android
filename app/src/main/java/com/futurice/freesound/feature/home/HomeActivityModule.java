@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.home;
 
+import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
@@ -39,6 +40,10 @@ class HomeActivityModule {
     @ActivityScope
     static UserDataModel provideUserDataModel(FreeSoundApiService freeSoundApiService) {
         return new DefaultUserDataModel(freeSoundApiService);
+    }
+
+    private HomeActivityModule() {
+        throw new InstantiationForbiddenError();
     }
 
 }

@@ -16,40 +16,25 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.futurice.freesound.app.FreesoundApplicationComponent;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
-import com.futurice.freesound.inject.app.ForApplication;
-import com.futurice.freesound.network.api.FreeSoundApiService;
-import com.squareup.picasso.Picasso;
+import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 
-import android.content.Context;
-
-import dagger.Component;
+import dagger.Subcomponent;
 
 @ActivityScope
-@Component(dependencies = FreesoundApplicationComponent.class, modules = SearchActivityModule.class)
-interface SearchActivityComponent extends BaseActivityComponent {
-
-    @ForApplication
-    Context getContext();
+@Subcomponent(modules = SearchActivityModule.class)
+public interface SearchActivityComponent extends BaseActivityComponent {
 
     SearchDataModel getSearchDataModel();
 
     Navigator getNavigator();
 
-    Picasso getPicasso();
-
     AudioPlayer getAudioPlayer();
 
-    FreeSoundApiService getFreeSoundApiService();
-
-    SchedulerProvider getSchedulerProvider();
-
     void inject(final SearchActivity activity);
+
+    SearchFragmentComponent plusSearchFragmentComponent(BaseFragmentModule baseFragmentModule);
 }
-
-

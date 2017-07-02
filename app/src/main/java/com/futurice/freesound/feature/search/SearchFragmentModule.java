@@ -40,7 +40,7 @@ import dagger.multibindings.IntoMap;
 import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
 
 @Module(includes = BaseFragmentModule.class)
-class SearchFragmentModule {
+public class SearchFragmentModule {
 
     @Provides
     @FragmentScope

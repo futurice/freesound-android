@@ -16,31 +16,24 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.app.FreesoundApplicationComponent;
 import com.futurice.freesound.feature.common.Navigator;
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
-import com.squareup.picasso.Picasso;
+import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 
-import dagger.Component;
+import dagger.Subcomponent;
 
 @ActivityScope
-@Component(dependencies = FreesoundApplicationComponent.class,
-        modules = HomeActivityModule.class)
+@Subcomponent(modules = HomeActivityModule.class)
 public interface HomeActivityComponent extends BaseActivityComponent {
-
-    HomeViewModel getHomeViewModel();
 
     Navigator getNavigator();
 
     UserDataModel getUserDataModel();
 
-    Picasso getPicasso();
-
-    SchedulerProvider getSchedulerProvider();
-
     void inject(final HomeActivity activity);
+
+    HomeFragmentComponent plus(BaseFragmentModule baseFragmentModule);
 }
 
 

@@ -39,21 +39,25 @@ import com.futurice.freesound.inject.app.ForApplication;
 import android.content.Context;
 import android.net.Uri;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Observable;
 
 @Module
-public abstract class AudioModule {
+public class AudioModule {
+
+    /**
+     * Can't use @Binds because of this: https://github.com/google/dagger/issues/348
+     */
 
     /*
      * Current app visual design means that instances are not shared between Activities.
      */
-
-    @Binds
+    @Provides
     @ActivityScope
-    abstract AudioPlayer provideAudioPlayer(ExoPlayerAudioPlayer exoPlayerAudioPlayer);
+    AudioPlayer provideAudioPlayer(ExoPlayerAudioPlayer exoPlayerAudioPlayer) {
+        return exoPlayerAudioPlayer;
+    }
 
     //
     // Internal
@@ -68,20 +72,28 @@ public abstract class AudioModule {
                                                null, null);
     }
 
-    @Binds
-    abstract Observable<ExoPlayerState> provideExoPlayerStateObservable(
-            ExoPlayerStateObservable observable);
+    @Provides
+    Observable<ExoPlayerState> provideExoPlayerStateObservable(
+            ExoPlayerStateObservable observable) {
+        return observable;
+    }
 
-    @Binds
-    abstract Observable<Long> provideExoPlayerProgressObservable(
-            ExoPlayerProgressObservable observable);
+    @Provides
+    Observable<Long> provideExoPlayerProgressObservable(
+            ExoPlayerProgressObservable observable) {
+        return observable;
+    }
 
-    @Binds
+    @Provides
     @ActivityScope
-    abstract ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer);
+    ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer) {
+        return simpleExoPlayer;
+    }
 
-    @Binds
-    abstract ObservableExoPlayer provideObservableExoPlayer(DefaultObservableExoPlayer exoPlayer);
+    @Provides
+    ObservableExoPlayer provideObservableExoPlayer(DefaultObservableExoPlayer exoPlayer) {
+        return exoPlayer;
+    }
 
     @Provides
     static DataSource.Factory provideDataSourceFactory(@ForApplication Context context) {

@@ -89,12 +89,9 @@ public class HomeActivity extends BindingBaseActivity<HomeActivityComponent> {
     @NonNull
     @Override
     protected HomeActivityComponent createComponent() {
-        return DaggerHomeActivityComponent.builder()
-                                          .freesoundApplicationComponent(
-                                                  ((FreesoundApplication) getApplication())
-                                                          .component())
-                                          .baseActivityModule(new BaseActivityModule(this))
-                                          .build();
+        return ((FreesoundApplication) getApplication()).component()
+                                                        .plusHomeActivityComponent(
+                                                                new BaseActivityModule(this));
     }
 
     @Override

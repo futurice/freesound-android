@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
 
-interface UserDataModel {
+public interface UserDataModel {
 
     @NonNull
     Single<User> getHomeUser();
