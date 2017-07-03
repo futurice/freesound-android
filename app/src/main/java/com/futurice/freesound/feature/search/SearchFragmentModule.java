@@ -54,10 +54,11 @@ public class SearchFragmentModule {
     @Provides
     @FragmentScope
     RecyclerViewAdapter<Sound> provideRecyclerAdapter(ItemComparator itemComparator,
-                                                                Map<Integer, ViewHolderFactory> factoryMap,
-                                                                Map<Integer, ViewHolderBinder<Sound>> binderMap,
-                                                                SchedulerProvider schedulerProvider) {
-        return new RecyclerViewAdapter<Sound>(itemComparator, factoryMap, binderMap, schedulerProvider);
+                                                      Map<Integer, ViewHolderFactory> factoryMap,
+                                                      Map<Integer, ViewHolderBinder<Sound>> binderMap,
+                                                      SchedulerProvider schedulerProvider) {
+        return new RecyclerViewAdapter<>(itemComparator, factoryMap, binderMap,
+                                              schedulerProvider);
     }
 
     @Provides
@@ -79,7 +80,8 @@ public class SearchFragmentModule {
     @IntoMap
     @IntKey(SOUND)
     @Provides
-    ViewHolderBinder<Sound> provideSoundViewHolderBinder(SoundItemViewModelFactory viewModelFactory) {
+    ViewHolderBinder<Sound> provideSoundViewHolderBinder(
+            SoundItemViewModelFactory viewModelFactory) {
         return new SoundItemViewHolder.SoundItemViewHolderBinder(viewModelFactory);
     }
 }
