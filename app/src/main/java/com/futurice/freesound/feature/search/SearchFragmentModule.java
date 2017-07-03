@@ -26,6 +26,7 @@ import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
 import com.futurice.freesound.inject.activity.ForActivity;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.network.api.model.Sound;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -52,11 +53,11 @@ public class SearchFragmentModule {
 
     @Provides
     @FragmentScope
-    RecyclerViewAdapter provideRecyclerAdapter(ItemComparator itemComparator,
-                                               Map<Integer, ViewHolderFactory> factoryMap,
-                                               Map<Integer, ViewHolderBinder> binderMap,
-                                               SchedulerProvider schedulerProvider) {
-        return new RecyclerViewAdapter(itemComparator, factoryMap, binderMap, schedulerProvider);
+    RecyclerViewAdapter<Sound> provideRecyclerAdapter(ItemComparator itemComparator,
+                                                                Map<Integer, ViewHolderFactory> factoryMap,
+                                                                Map<Integer, ViewHolderBinder<Sound>> binderMap,
+                                                                SchedulerProvider schedulerProvider) {
+        return new RecyclerViewAdapter<Sound>(itemComparator, factoryMap, binderMap, schedulerProvider);
     }
 
     @Provides
@@ -78,7 +79,7 @@ public class SearchFragmentModule {
     @IntoMap
     @IntKey(SOUND)
     @Provides
-    ViewHolderBinder provideSoundViewHolderBinder(SoundItemViewModelFactory viewModelFactory) {
+    ViewHolderBinder<Sound> provideSoundViewHolderBinder(SoundItemViewModelFactory viewModelFactory) {
         return new SoundItemViewHolder.SoundItemViewHolderBinder(viewModelFactory);
     }
 }

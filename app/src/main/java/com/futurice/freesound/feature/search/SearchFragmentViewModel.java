@@ -53,7 +53,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    Observable<Option<List<DisplayableItem>>> getSoundsOnceAndStream() {
+    Observable<Option<List<DisplayableItem<Sound>>>> getSoundsOnceAndStream() {
         return searchDataModel.getSearchStateOnceAndStream()
                               .map(SearchState::results)
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
@@ -74,9 +74,10 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     }
 
     @NonNull
-    private static List<DisplayableItem> wrapInDisplayableItem(@NonNull final List<Sound> sounds) {
+    private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
+            @NonNull final List<Sound> sounds) {
         return Ix.from(sounds)
-                 .map(sound -> DisplayableItem.create(sound, SOUND))
+                 .map(sound -> new DisplayableItem<>(sound, SOUND))
                  .toList();
     }
 }

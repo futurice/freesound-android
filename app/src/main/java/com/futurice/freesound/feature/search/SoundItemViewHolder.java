@@ -187,7 +187,7 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
         }
     }
 
-    static class SoundItemViewHolderBinder implements ViewHolderBinder {
+    static class SoundItemViewHolderBinder implements ViewHolderBinder<Sound> {
 
         @NonNull
         private final SoundItemViewModelFactory viewModelFactory;
@@ -198,9 +198,9 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
 
         @Override
         public void bind(@NonNull final RecyclerView.ViewHolder viewHolder,
-                         @NonNull final DisplayableItem item) {
+                         @NonNull final DisplayableItem<Sound> item) {
             SoundItemViewHolder soundItemViewHolder = SoundItemViewHolder.class.cast(viewHolder);
-            Sound sound = Sound.class.cast(item.model());
+            Sound sound = Sound.class.cast(item.getModel());
             soundItemViewHolder.bind(viewModelFactory.create(sound));
         }
     }

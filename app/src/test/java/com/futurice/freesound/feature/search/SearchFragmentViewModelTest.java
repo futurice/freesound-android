@@ -114,10 +114,10 @@ public class SearchFragmentViewModelTest {
     // Helpers
 
     @NonNull
-    private static List<DisplayableItem> expectedDisplayableItems(
+    private static List<DisplayableItem<Sound>> expectedDisplayableItems(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
-                         .map(it -> DisplayableItem.create(it, SOUND))
+                         .map(it -> new DisplayableItem<>(it, SOUND))
                          .toList()
                          .blockingGet();
     }

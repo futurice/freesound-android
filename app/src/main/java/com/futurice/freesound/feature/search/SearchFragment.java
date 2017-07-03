@@ -22,6 +22,7 @@ import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.common.ui.adapter.RecyclerViewAdapter;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
+import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.viewmodel.DataBinder;
 
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
     SearchFragmentViewModel searchFragmentViewModel;
 
     @Inject
-    RecyclerViewAdapter searchResultAdapter;
+    RecyclerViewAdapter<Sound> searchResultAdapter;
 
     @Inject
     SchedulerProvider schedulerProvider;
@@ -153,7 +154,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         return dataBinder;
     }
 
-    private void handleResults(@NonNull final Option<List<DisplayableItem>> sounds) {
+    private void handleResults(@NonNull final Option<List<DisplayableItem<Sound>>> sounds) {
         sounds.matchAction(this::showResults, this::showNothing);
     }
 
@@ -162,7 +163,7 @@ public final class SearchFragment extends BindingBaseFragment<SearchFragmentComp
         resultsRecyclerView.setVisibility(View.GONE);
     }
 
-    private void showResults(@NonNull final List<DisplayableItem> sounds) {
+    private void showResults(@NonNull final List<DisplayableItem<Sound>> sounds) {
         if (sounds.isEmpty()) {
             noResultsTextView.setVisibility(View.VISIBLE);
             resultsRecyclerView.setVisibility(View.GONE);
