@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.audio;
+package com.futurice.freesound.feature.audio
 
-import com.google.auto.value.AutoValue;
+import polanski.option.Option
 
-import android.support.annotation.NonNull;
-
-@AutoValue
-public abstract class Id {
-
-    @NonNull
-    public abstract String id();
-
-    @NonNull
-    public static Id create(@NonNull final String id) {
-        return new AutoValue_Id(id);
-    }
-
-    @NonNull
-    public static Id from(final long id) {
-        return create(String.valueOf(id));
-    }
+enum class State {
+    IDLE,
+    BUFFERING,
+    PLAYING,
+    PAUSED,
+    ENDED,
+    ERROR
 }
+
+data class PlayerState(val state: State, val source: Option<PlaybackSource>)

@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.audio;
+package com.futurice.freesound.feature.audio
 
-import com.google.auto.value.AutoValue;
-
-import android.support.annotation.NonNull;
-
-@AutoValue
-abstract class ExoPlayerState {
-
-    abstract boolean playWhenReady();
-
-    /**
-     * See {@link com.google.android.exoplayer2.ExoPlayer} {@code STATE}
-     */
-    abstract int playbackState();
-
-    @NonNull
-    static ExoPlayerState create(final boolean playWhenReady, final int playbackState) {
-        return new AutoValue_ExoPlayerState(playWhenReady, playbackState);
-    }
-}
+/**
+ * See [com.google.android.exoplayer2.ExoPlayer] `STATE` for playbackState
+ */
+internal data class ExoPlayerState(val playWhenReady: Boolean, val playbackState: Int)

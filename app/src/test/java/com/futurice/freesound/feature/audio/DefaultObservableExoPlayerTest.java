@@ -34,7 +34,7 @@ import io.reactivex.subjects.BehaviorSubject;
 public class DefaultObservableExoPlayerTest {
 
     private static final ExoPlayerState TEST_INITIAL_EXOPLAYER_STATE =
-            ExoPlayerState.create(true, ExoPlayer.STATE_IDLE);
+            new ExoPlayerState(true, ExoPlayer.STATE_IDLE);
 
     private static final long TEST_INITIAL_EXOPLAYER_PROGRESS = 0L;
 
@@ -164,7 +164,8 @@ public class DefaultObservableExoPlayerTest {
         }
 
         ArrangeBuilder withExoPlayerStateStreamEvent(boolean playWhenReady, int state) {
-            exoPlayerStateOnceAndStream.onNext(ExoPlayerState.create(playWhenReady, state));
+            exoPlayerStateOnceAndStream.onNext(
+                   new ExoPlayerState(playWhenReady, state));
             return this;
         }
 

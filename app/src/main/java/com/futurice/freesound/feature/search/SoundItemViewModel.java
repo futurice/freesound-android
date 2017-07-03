@@ -39,6 +39,7 @@ import io.reactivex.Single;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
+import static com.futurice.freesound.feature.audio.IdKt.from;
 import static polanski.option.Option.ofObj;
 
 @AutoFactory
@@ -125,8 +126,8 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     void toggleSoundPlayback() {
-        audioPlayer.togglePlayback(PlaybackSource.create(Id.from(sound.id()),
-                                                         sound.previews().lowQualityMp3Url()));
+        audioPlayer.togglePlayback(new PlaybackSource(from(sound.id()),
+                                                                   sound.previews().lowQualityMp3Url()));
     }
 
     @NonNull
@@ -135,8 +136,9 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     private boolean isThisSound(@NonNull final PlayerState playerState) {
-        return playerState.source()
-                          .filter(playbackSource -> playbackSource.id().equals(Id.from(sound.id())))
+        return playerState.getSource()
+                          .filter(playbackSource -> playbackSource.getId().equals(
+                                  from(sound.id())))
                           .isSome();
     }
 
