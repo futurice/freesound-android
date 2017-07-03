@@ -163,12 +163,8 @@ class DefaultFreeSoundApiServiceTest {
                 .assertError(ERROR)
     }
 
-    fun arrange(init: Arrangement.() -> Unit): Arrangement {
-        val arrange = Arrangement()
-        arrange.init()
-        return arrange
-    }
-    
+    fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply { init() }
+
     inner class Arrangement {
 
         fun search(init: () -> SoundSearchResult): Any =
