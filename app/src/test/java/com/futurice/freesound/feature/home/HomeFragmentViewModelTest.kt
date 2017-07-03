@@ -33,8 +33,6 @@ class HomeFragmentViewModelTest {
             image.test()
                     .assertValue(USER.avatar().large())
         }
-
-
     }
 
     @Test
@@ -87,9 +85,7 @@ class HomeFragmentViewModelTest {
     private class UserBuilder {
 
         internal lateinit var largeAvatar: String
-
         internal lateinit var userName: String
-
         internal lateinit var about: String
 
         internal fun build() = mock<User>().apply {
@@ -99,7 +95,6 @@ class HomeFragmentViewModelTest {
             `when`(username()).thenReturn(userName)
             `when`(about()).thenReturn(about)
         }
-
     }
 
     companion object {

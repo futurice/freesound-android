@@ -61,10 +61,8 @@ class DefaultUserDataModelTest {
     }
 
     private inner class ArrangeBuilder {
-
         internal fun withUser(user: User): ArrangeBuilder =
                 apply { `when`(freeSoundApiService.getUser(anyString())).thenReturn(Single.just(user)) }
 
     }
-
 }
