@@ -381,9 +381,8 @@ public class SoundItemViewModelTest {
                                 .build();
         new ArrangeBuilder()
                 .withPlayerStateEvent(new PlayerState(State.PLAYING,
-                                                      Option.ofObj(
-                                                              new PlaybackSource(from(id2),
-                                                                                 url1))));
+                                                      Option.ofObj(new PlaybackSource(from(id2),
+                                                                                      url1))));
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
 
@@ -414,8 +413,7 @@ public class SoundItemViewModelTest {
     private class ArrangeBuilder {
 
         private BehaviorSubject<PlayerState> playerStateOnceAndStream =
-                BehaviorSubject.createDefault(new PlayerState(State.IDLE,
-                                                              Option.none()));
+                BehaviorSubject.createDefault(new PlayerState(State.IDLE, Option.none()));
         private BehaviorSubject<Long> playerProgressOnceAndStream = BehaviorSubject
                 .createDefault(0L);
 
