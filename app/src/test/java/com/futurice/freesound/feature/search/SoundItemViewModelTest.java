@@ -360,9 +360,8 @@ public class SoundItemViewModelTest {
                                 .build();
         new ArrangeBuilder()
                 .withPlayerStateEvent(new PlayerState(State.PLAYING,
-                                                      Option.ofObj(
-                                                              new PlaybackSource(from(id2),
-                                                                                 url1))));
+                                                      Option.ofObj(new PlaybackSource(from(id2),
+                                                                                      url1))));
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
 

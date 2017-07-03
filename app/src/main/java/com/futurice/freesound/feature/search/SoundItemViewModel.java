@@ -21,7 +21,6 @@ import com.google.auto.factory.Provided;
 
 import com.futurice.freesound.common.Text;
 import com.futurice.freesound.feature.audio.AudioPlayer;
-import com.futurice.freesound.feature.audio.Id;
 import com.futurice.freesound.feature.audio.PlaybackSource;
 import com.futurice.freesound.feature.audio.PlayerState;
 import com.futurice.freesound.feature.common.Navigator;
@@ -126,8 +125,9 @@ final class SoundItemViewModel extends SimpleViewModel {
     }
 
     void toggleSoundPlayback() {
-        audioPlayer.togglePlayback(new PlaybackSource(from(sound.id()),
-                                                                   sound.previews().lowQualityMp3Url()));
+        audioPlayer.togglePlayback(
+                new PlaybackSource(from(sound.id()),
+                                   sound.previews().lowQualityMp3Url()));
     }
 
     @NonNull
@@ -137,8 +137,7 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     private boolean isThisSound(@NonNull final PlayerState playerState) {
         return playerState.getSource()
-                          .filter(playbackSource -> playbackSource.getId().equals(
-                                  from(sound.id())))
+                          .filter(playbackSource -> playbackSource.getId().equals(from(sound.id())))
                           .isSome();
     }
 

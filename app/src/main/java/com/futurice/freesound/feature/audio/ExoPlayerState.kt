@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,4 +19,4 @@ package com.futurice.freesound.feature.audio
 /**
  * See [com.google.android.exoplayer2.ExoPlayer] `STATE` for playbackState
  */
-internal data class ExoPlayerState(val playWhenReady: Boolean, val playbackState: Int)
+data class ExoPlayerState(val playWhenReady: Boolean, val playbackState: Int)

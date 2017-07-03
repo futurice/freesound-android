@@ -89,7 +89,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
-        return playerState.getPlaybackState() == ExoPlayer.STATE_READY && playerState
-                .getPlayWhenReady();
+        return playerState.getPlaybackState() == ExoPlayer.STATE_READY
+               && playerState.getPlayWhenReady();
     }
 }

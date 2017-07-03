@@ -164,8 +164,7 @@ public class DefaultObservableExoPlayerTest {
         }
 
         ArrangeBuilder withExoPlayerStateStreamEvent(boolean playWhenReady, int state) {
-            exoPlayerStateOnceAndStream.onNext(
-                   new ExoPlayerState(playWhenReady, state));
+            exoPlayerStateOnceAndStream.onNext(new ExoPlayerState(playWhenReady, state));
             return this;
         }
 

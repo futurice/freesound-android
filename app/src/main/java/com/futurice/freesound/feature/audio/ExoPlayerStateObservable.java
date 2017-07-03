@@ -56,8 +56,7 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
         observer.onSubscribe(listener);
         exoPlayer.addListener(listener);
         if (emitInitial) {
-            emitValue(new ExoPlayerState(exoPlayer.getPlayWhenReady(),
-                                                      exoPlayer.getPlaybackState()),
+            emitValue(new ExoPlayerState(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState()),
                       observer);
         }
     }
