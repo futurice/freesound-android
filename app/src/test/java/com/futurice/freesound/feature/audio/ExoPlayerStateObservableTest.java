@@ -72,7 +72,7 @@ public class ExoPlayerStateObservableTest {
         new ExoPlayerTestEventGenerator()
                 .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
 
-        testObserver.assertValue(ExoPlayerState.create(true, ExoPlayer.STATE_IDLE))
+        testObserver.assertValue(new ExoPlayerState(true, ExoPlayer.STATE_IDLE))
                     .assertNotTerminated();
     }
 
@@ -106,7 +106,7 @@ public class ExoPlayerStateObservableTest {
 
         TestObserver<ExoPlayerState> testObserver = observable.test();
 
-        testObserver.assertValue(ExoPlayerState.create(true, 1000));
+        testObserver.assertValue(new ExoPlayerState(true, 1000));
     }
 
     // Helpers

@@ -80,7 +80,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
 
     @NonNull
     private Observable<Long> updatingProgressOnceAndStream(final long updatePeriod,
-                                                           final @NonNull TimeUnit timeUnit) {
+                                                           @NonNull final TimeUnit timeUnit) {
         return Observable.timer(updatePeriod, timeUnit,
                                 schedulerProvider.time(PLAYER_PROGRESS_SCHEDULER_TAG))
                          .repeat()
@@ -89,6 +89,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
-        return playerState.playbackState() == ExoPlayer.STATE_READY && playerState.playWhenReady();
+        return playerState.getPlaybackState() == ExoPlayer.STATE_READY
+               && playerState.getPlayWhenReady();
     }
 }

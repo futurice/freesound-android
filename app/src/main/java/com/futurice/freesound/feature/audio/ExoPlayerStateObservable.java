@@ -56,8 +56,7 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
         observer.onSubscribe(listener);
         exoPlayer.addListener(listener);
         if (emitInitial) {
-            emitValue(ExoPlayerState.create(exoPlayer.getPlayWhenReady(),
-                                            exoPlayer.getPlaybackState()),
+            emitValue(new ExoPlayerState(exoPlayer.getPlayWhenReady(), exoPlayer.getPlaybackState()),
                       observer);
         }
     }
@@ -74,7 +73,7 @@ final class ExoPlayerStateObservable extends Observable<ExoPlayerState> {
             // Strictly speaking, this check is not required because the listener is removed
             // upon disposal, therefore ExoPlayer won't keep it around to notify of changes.
             if (!isDisposed()) {
-                emitValue(ExoPlayerState.create(playWhenReady, playbackState), observer);
+                emitValue(new ExoPlayerState(playWhenReady, playbackState), observer);
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.audio;
+package com.futurice.freesound.feature.audio
 
-import com.google.auto.value.AutoValue;
+fun from(id: Long): Id = Id(id.toString())
 
-import android.support.annotation.NonNull;
-
-@AutoValue
-abstract class ExoPlayerState {
-
-    abstract boolean playWhenReady();
-
-    /**
-     * See {@link com.google.android.exoplayer2.ExoPlayer} {@code STATE}
-     */
-    abstract int playbackState();
-
-    @NonNull
-    static ExoPlayerState create(final boolean playWhenReady, final int playbackState) {
-        return new AutoValue_ExoPlayerState(playWhenReady, playbackState);
-    }
-}
+data class Id(val id: String)

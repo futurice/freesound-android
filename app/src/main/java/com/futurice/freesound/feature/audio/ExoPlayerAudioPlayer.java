@@ -106,7 +106,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
         return observableExoPlayer.getExoPlayerStateOnceAndStream()
                                   .map(ExoPlayerAudioPlayer::toState)
-                                  .map(state -> PlayerState.create(state, currentSource.get()));
+                                  .map(state -> new PlayerState(state, currentSource.get()));
     }
 
     @NonNull
@@ -136,10 +136,10 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     @NonNull
     private ToggleAction toToggleAction(@NonNull final PlaybackSource playbackSource,
                                         @NonNull final ExoPlayerState exoPlayerState) {
-        if (isIdle(exoPlayerState.playbackState()) || hasSourceChanged(playbackSource)) {
+        if (isIdle(exoPlayerState.getPlaybackState()) || hasSourceChanged(playbackSource)) {
             return ToggleAction.PLAY;
         } else {
-            return exoPlayerState.playWhenReady() ? ToggleAction.PAUSE : ToggleAction.UNPAUSE;
+            return exoPlayerState.getPlayWhenReady() ? ToggleAction.PAUSE : ToggleAction.UNPAUSE;
         }
     }
 
@@ -162,7 +162,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     private void play(@NonNull final PlaybackSource playbackSource) {
-        exoPlayer.prepare(mediaSourceFactory.create(get(playbackSource.url())));
+        exoPlayer.prepare(mediaSourceFactory.create(get(playbackSource.getUrl())));
         exoPlayer.setPlayWhenReady(true);
         currentSource.set(Option.ofObj(playbackSource));
     }
@@ -187,18 +187,18 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     @NonNull
-    private static PlayerState.State toState(@NonNull final ExoPlayerState exoPlayerState) {
-        int exoplaybackState = exoPlayerState.playbackState();
+    private static State toState(@NonNull final ExoPlayerState exoPlayerState) {
+        int exoplaybackState = exoPlayerState.getPlaybackState();
         switch (exoplaybackState) {
             case ExoPlayer.STATE_IDLE:
-                return PlayerState.State.IDLE;
+                return State.IDLE;
             case ExoPlayer.STATE_BUFFERING:
-                return PlayerState.State.BUFFERING;
+                return State.BUFFERING;
             case ExoPlayer.STATE_READY:
-                return exoPlayerState.playWhenReady() ?
-                        PlayerState.State.PLAYING : PlayerState.State.PAUSED;
+                return exoPlayerState.getPlayWhenReady() ?
+                        State.PLAYING : State.PAUSED;
             case ExoPlayer.STATE_ENDED:
-                return PlayerState.State.ENDED;
+                return State.ENDED;
             default:
                 throw new IllegalStateException("Unsupported Exoplayer state: " + exoplaybackState);
         }

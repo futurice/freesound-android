@@ -17,9 +17,9 @@
 package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.feature.audio.AudioPlayer;
-import com.futurice.freesound.feature.audio.Id;
 import com.futurice.freesound.feature.audio.PlaybackSource;
 import com.futurice.freesound.feature.audio.PlayerState;
+import com.futurice.freesound.feature.audio.State;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
@@ -41,6 +41,7 @@ import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
+import static com.futurice.freesound.feature.audio.IdKt.from;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -254,7 +255,7 @@ public class SoundItemViewModelTest {
                                 .duration(durationSec)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
+                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -275,7 +276,7 @@ public class SoundItemViewModelTest {
                                 .duration(durationSec)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
+                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -296,7 +297,7 @@ public class SoundItemViewModelTest {
                                 .duration(durationSec)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
+                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -317,7 +318,7 @@ public class SoundItemViewModelTest {
                                 .duration(durationSec)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
+                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -338,7 +339,7 @@ public class SoundItemViewModelTest {
                                 .duration(durationSec)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(PlayerState.State.PLAYING, sound))
+                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
                 .withPlayerProgressEvent(positionMs);
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -358,9 +359,8 @@ public class SoundItemViewModelTest {
                                 .url(url1)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
-                                                         Option.ofObj(PlaybackSource
-                                                                              .create(Id.from(id2),
+                .withPlayerStateEvent(new PlayerState(State.PLAYING,
+                                                      Option.ofObj(new PlaybackSource(from(id2),
                                                                                       url1))));
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -380,9 +380,8 @@ public class SoundItemViewModelTest {
                                 .url(url1)
                                 .build();
         new ArrangeBuilder()
-                .withPlayerStateEvent(PlayerState.create(PlayerState.State.PLAYING,
-                                                         Option.ofObj(PlaybackSource
-                                                                              .create(Id.from(id2),
+                .withPlayerStateEvent(new PlayerState(State.PLAYING,
+                                                      Option.ofObj(new PlaybackSource(from(id2),
                                                                                       url1))));
         SoundItemViewModel vm = new SoundItemViewModel(sound, navigator, audioPlayer,
                                                        freeSoundApiService);
@@ -403,18 +402,18 @@ public class SoundItemViewModelTest {
     // Helpers
 
     @NonNull
-    private static PlayerState playerStatewithSound(@NonNull final PlayerState.State state,
+    private static PlayerState playerStatewithSound(@NonNull final State state,
                                                     @NonNull final Sound sound) {
-        return PlayerState.create(state,
-                                  Option.ofObj(PlaybackSource.create(Id.from(sound.id()),
-                                                                     sound.url())));
+        return new PlayerState(state,
+                               Option.ofObj(
+                                       new PlaybackSource(from(sound.id()),
+                                                          sound.url())));
     }
 
     private class ArrangeBuilder {
 
         private BehaviorSubject<PlayerState> playerStateOnceAndStream =
-                BehaviorSubject.createDefault(PlayerState.create(PlayerState.State.IDLE,
-                                                                 Option.none()));
+                BehaviorSubject.createDefault(new PlayerState(State.IDLE, Option.none()));
         private BehaviorSubject<Long> playerProgressOnceAndStream = BehaviorSubject
                 .createDefault(0L);
 

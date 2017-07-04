@@ -69,7 +69,7 @@ public class ExoPlayerAudioPlayerTest {
 
     @Test
     public void stop_clearsCurrentUrl() {
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create("id"), "url");
+        PlaybackSource playbackSource = new PlaybackSource(new Id("id"), "url");
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.act()
                       .togglePlayback(playbackSource)
@@ -81,7 +81,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isNone(PlayerState::source));
+                            .assertValue(isNone(PlayerState::getSource));
     }
 
     @Test
@@ -93,14 +93,14 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isNone(PlayerState::source));
+                            .assertValue(isNone(PlayerState::getSource));
     }
 
     @Test
     public void toggle_toPlay_playsSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource()
@@ -118,7 +118,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPlay_setsPlaybackUrl() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -130,14 +130,14 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(v -> v.source().equals(Option.ofObj(playbackSource)));
+                            .assertValue(v -> v.getSource().equals(Option.ofObj(playbackSource)));
     }
 
     @Test
     public void toggle_toPause_pausesSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -155,7 +155,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_toPause_retainsPlaybackUrl() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -169,14 +169,14 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isSome(PlayerState::source));
+                            .assertValue(isSome(PlayerState::getSource));
     }
 
     @Test
     public void toggle_toUnpause_unpausesSource() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
                       .withMediaSource()
@@ -201,7 +201,7 @@ public class ExoPlayerAudioPlayerTest {
     public void toggle_doesNotClearPlaybackUrl_whenPausing() {
         String id = "id";
         String url = "url";
-        PlaybackSource playbackSource = PlaybackSource.create(Id.create(id), url);
+        PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
@@ -215,7 +215,7 @@ public class ExoPlayerAudioPlayerTest {
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
                             .test()
-                            .assertValue(isSome(PlayerState::source));
+                            .assertValue(isSome(PlayerState::getSource));
     }
 
     @Test
@@ -224,8 +224,8 @@ public class ExoPlayerAudioPlayerTest {
         String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
-        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
-        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
+        PlaybackSource playbackSource1 = new PlaybackSource(new Id(id1), url1);
+        PlaybackSource playbackSource2 = new PlaybackSource(new Id(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
@@ -251,8 +251,8 @@ public class ExoPlayerAudioPlayerTest {
         String id2 = "id2";
         String url1 = "url1";
         String url2 = "url2";
-        PlaybackSource playbackSource1 = PlaybackSource.create(Id.create(id1), url1);
-        PlaybackSource playbackSource2 = PlaybackSource.create(Id.create(id2), url2);
+        PlaybackSource playbackSource1 = new PlaybackSource(new Id(id1), url1);
+        PlaybackSource playbackSource2 = new PlaybackSource(new Id(id2), url2);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder()
                 .withIdleExoPlayer()
                 .withMediaSource();
@@ -314,7 +314,7 @@ public class ExoPlayerAudioPlayerTest {
         }
 
         ArrangeBuilder withExoPlayerStateStreamEvent(boolean playWhenReady, int state) {
-            exoPlayerStateStream.onNext(ExoPlayerState.create(playWhenReady, state));
+            exoPlayerStateStream.onNext(new ExoPlayerState(playWhenReady, state));
             return this;
         }
 
