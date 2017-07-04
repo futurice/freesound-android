@@ -26,7 +26,9 @@ class HomeFragmentViewModelTest {
 
     @Test
     fun getImage_returnsLargeImage() {
-        `when`(userDataModel.homeUser).thenReturn(Single.just(USER))
+        arrange {
+            homeUser { USER }
+        }
 
         with(createVm()) {
             image.test()
@@ -36,7 +38,9 @@ class HomeFragmentViewModelTest {
 
     @Test
     fun getUserName_returnsName() {
-        `when`(userDataModel.homeUser).thenReturn(Single.just(USER))
+        arrange {
+            homeUser { USER }
+        }
 
         with(createVm()) {
             userName.test()
@@ -46,7 +50,9 @@ class HomeFragmentViewModelTest {
 
     @Test
     fun getAbout_returnsAbout() {
-        `when`(userDataModel.homeUser).thenReturn(Single.just(USER))
+        arrange {
+            homeUser { USER }
+        }
 
         with(createVm()) {
             about.test()
@@ -70,7 +76,10 @@ class HomeFragmentViewModelTest {
 
     @Test
     fun getProperties_subscribesOnlyOnce() {
-        `when`(userDataModel.homeUser).thenReturn(Single.just(USER))
+        arrange {
+            homeUser { USER }
+        }
+
         with(createVm()) {
             image.test()
             userName.test()
@@ -84,5 +93,15 @@ class HomeFragmentViewModelTest {
 
     fun ignore(ignoreReturnValue: () -> Unit) {
         ignoreReturnValue()
+    }
+
+    fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
+
+    inner class Arrangement {
+
+        fun homeUser(init: () -> User) {
+            `when`(userDataModel.homeUser).thenReturn(Single.just(init()))
+        }
+
     }
 }
