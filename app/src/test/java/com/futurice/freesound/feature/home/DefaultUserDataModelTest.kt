@@ -46,23 +46,25 @@ class DefaultUserDataModelTest {
     fun getHomeUser_looksForSpiceProgram() {
         dataModel.homeUser
 
-        verify<FreeSoundApiService>(freeSoundApiService).getUser(DefaultUserDataModel.USER_NAME)
+        verify(freeSoundApiService).getUser(DefaultUserDataModel.USER_NAME)
     }
 
     @Test
     fun getHomeUser_returnsResultOfSearch() {
         val result = mock<User>()
-        ArrangeBuilder()
-                .withUser(result)
+        arrange {
+            user { result }
+        }
 
         dataModel.homeUser
                 .test()
                 .assertValue(result)
     }
 
-    private inner class ArrangeBuilder {
-        internal fun withUser(user: User): ArrangeBuilder =
-                apply { `when`(freeSoundApiService.getUser(anyString())).thenReturn(Single.just(user)) }
+    fun arrange(init: ArrangeBuilder.() -> Unit) = ArrangeBuilder().apply(init)
 
+    inner class ArrangeBuilder {
+        fun user(user: () -> User): Any =
+                `when`(freeSoundApiService.getUser(anyString())).thenReturn(Single.just(user()))
     }
 }

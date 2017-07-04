@@ -1,8 +1,7 @@
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.network.api.model.Avatar
 import com.futurice.freesound.network.api.model.User
-import com.futurice.freesound.test.mock
+import com.futurice.freesound.test.data.TestData
 import io.reactivex.Single
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -18,7 +17,7 @@ class HomeFragmentViewModelTest {
     @Mock
     private lateinit var userDataModel: UserDataModel
 
-    private lateinit var viewModel: HomeFragmentViewModel
+    private val USER = TestData.user()
 
     @Before
     fun setUp() {
@@ -62,7 +61,9 @@ class HomeFragmentViewModelTest {
                 .thenReturn(Single.never<User>()
                         .doOnSubscribe { isSubscribed.set(true) })
 
-        createVm()
+        ignore {
+            createVm()
+        }
 
         assertThat(isSubscribed.get()).isFalse()
     }
@@ -81,29 +82,7 @@ class HomeFragmentViewModelTest {
     private fun createVm(): HomeFragmentViewModel =
             HomeFragmentViewModel(userDataModel)
 
-
-    private class UserBuilder {
-
-        internal lateinit var largeAvatar: String
-        internal lateinit var userName: String
-        internal lateinit var about: String
-
-        internal fun build() = mock<User>().apply {
-            val avatar = mock<Avatar>()
-            `when`(avatar.large()).thenReturn(largeAvatar)
-            `when`(avatar()).thenReturn(avatar)
-            `when`(username()).thenReturn(userName)
-            `when`(about()).thenReturn(about)
-        }
-    }
-
-    companion object {
-
-        private val USER = UserBuilder()
-                .apply {
-                    largeAvatar = "large.com"
-                    userName = "user name"
-                    about = "aboutTextView"
-                }.build()
+    fun ignore(ignoreReturnValue: () -> Unit) {
+        ignoreReturnValue()
     }
 }
