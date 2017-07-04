@@ -162,31 +162,37 @@ class DefaultFreeSoundApiServiceTest {
 
     inner class Arrangement {
 
-        fun search(init: () -> SoundSearchResult): Any =
-                `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
-                        .thenReturn(Single.just(init()))
+        fun search(init: () -> SoundSearchResult) {
+            `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
+                    .thenReturn(Single.just(init()))
+        }
 
-        fun searchError(init: () -> Throwable): Any =
-                `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
-                        .thenReturn(Single.error<SoundSearchResult>(init()))
+        fun searchError(init: () -> Throwable) {
+            `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
+                    .thenReturn(Single.error<SoundSearchResult>(init()))
+        }
 
-        fun user(init: () -> User): Any =
-                `when`(freeSoundApi.user(anyString())).thenReturn(Single.just(init()))
+        fun user(init: () -> User) {
+            `when`(freeSoundApi.user(anyString())).thenReturn(Single.just(init()))
+        }
 
-        fun userError(init: () -> Throwable): Any =
-                `when`(freeSoundApi.user(anyString())).thenReturn(Single.error<User>(init()))
+        fun userError(init: () -> Throwable) {
+            `when`(freeSoundApi.user(anyString())).thenReturn(Single.error<User>(init()))
+        }
 
-        fun token(init: () -> AccessToken): Any =
-                `when`(freeSoundApi.accessToken(anyString(),
-                        anyString(),
-                        anyString(),
-                        anyString())).thenReturn(Single.just(init()))
+        fun token(init: () -> AccessToken) {
+            `when`(freeSoundApi.accessToken(anyString(),
+                    anyString(),
+                    anyString(),
+                    anyString())).thenReturn(Single.just(init()))
+        }
 
-        fun tokenError(init: () -> Throwable): Any =
-                `when`(freeSoundApi.accessToken(anyString(),
-                        anyString(),
-                        anyString(),
-                        anyString())).thenReturn(Single.error<AccessToken>(init()))
+        fun tokenError(init: () -> Throwable) {
+            `when`(freeSoundApi.accessToken(anyString(),
+                    anyString(),
+                    anyString(),
+                    anyString())).thenReturn(Single.error<AccessToken>(init()))
+        }
     }
 
 }
