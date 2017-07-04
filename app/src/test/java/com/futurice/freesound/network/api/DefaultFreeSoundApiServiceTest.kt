@@ -73,7 +73,6 @@ class DefaultFreeSoundApiServiceTest {
 
         defaultFreeSoundApiService.getUser(username).subscribe()
 
-
         verify(freeSoundApi).user(username)
     }
 
@@ -93,6 +92,7 @@ class DefaultFreeSoundApiServiceTest {
         arrange {
             token { DUMMY_ACCESS_TOKEN }
         }
+
         defaultFreeSoundApiService.getAccessToken("code")
                 .test()
                 .assertValue(DUMMY_ACCESS_TOKEN)
@@ -106,7 +106,6 @@ class DefaultFreeSoundApiServiceTest {
         val code = "code"
 
         defaultFreeSoundApiService.getAccessToken(code).subscribe()
-
 
         verify(freeSoundApi).accessToken(TEST_CLIENT_ID,
                 TEST_CLIENT_SECRET,
@@ -142,6 +141,7 @@ class DefaultFreeSoundApiServiceTest {
             search { TEST_SEARCH_RESULT }
         }
         val query = "query"
+
         defaultFreeSoundApiService.search(query).subscribe()
 
         verify(freeSoundApi).search(eq(query), isNull<String>(), eq(SoundFields.BASE))
@@ -163,11 +163,11 @@ class DefaultFreeSoundApiServiceTest {
     inner class Arrangement {
 
         fun search(init: () -> SoundSearchResult): Any =
-                `when`(freeSoundApi.search(anyString(), any<String>(), any(SoundFields::class.java)))
+                `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
                         .thenReturn(Single.just(init()))
 
         fun searchError(init: () -> Throwable): Any =
-                `when`(freeSoundApi.search(anyString(), any<String>(), any(SoundFields::class.java)))
+                `when`(freeSoundApi.search(anyString(), any<String>(), any<SoundFields>()))
                         .thenReturn(Single.error<SoundSearchResult>(init()))
 
         fun user(init: () -> User): Any =
@@ -175,7 +175,6 @@ class DefaultFreeSoundApiServiceTest {
 
         fun userError(init: () -> Throwable): Any =
                 `when`(freeSoundApi.user(anyString())).thenReturn(Single.error<User>(init()))
-
 
         fun token(init: () -> AccessToken): Any =
                 `when`(freeSoundApi.accessToken(anyString(),
