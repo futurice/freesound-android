@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.home
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
 
-interface Activity {
+internal interface Activity {
     data class UiModel(val thing: String)
 
     sealed class UiEvent(val log: String) {
@@ -30,7 +30,7 @@ interface Activity {
     fun uiEvents(): Observable<UiEvent>
 }
 
-interface Fragment {
+internal interface Fragment {
     data class UiModel(val username: String,
                        val about: String,
                        val avatarUrl: String)

@@ -19,10 +19,10 @@ package com.futurice.freesound.feature.home
 import io.reactivex.Observable
 import timber.log.Timber
 
-internal class HomeFragmentReducer(private val dataEvents: Observable<Fragment.DataEvent>) {
+internal class HomeFragmentReducer(private val dataEvents: Observable<Fragment.DataEvent>) : Reducer<Fragment.UiEvent, Fragment.UiModel> {
 
-    fun bind(uiEvents: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
-        return Observable.merge(processUiEvents(uiEvents), processResults(dataEvents))
+    override fun bind(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
+        return Observable.merge(processUiEvents(input), processResults(dataEvents))
                 .scan(INITIAL_UI_STATE, { model, change -> model.reduce(change) })
                 .doOnNext { model: Fragment.UiModel -> Timber.v(" $model") }
     }
@@ -55,7 +55,7 @@ internal class HomeFragmentReducer(private val dataEvents: Observable<Fragment.D
     companion object {
         // TODO The real initial state comes from whatever is in the data layer
         // It seems odd to have to define something here when that default is essentially None
-        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel("", "","") }
+        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel("", "", "") }
     }
 
 }

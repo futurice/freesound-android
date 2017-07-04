@@ -16,13 +16,8 @@
 
 package com.futurice.freesound.feature.home
 
-/**
- * This is held by the Fragment, its lifecycle reflects t hat
- */
-internal class HomeFragmentRenderer {
+import io.reactivex.Observable
 
-    private fun render(model: Fragment.UiModel) {
-
-    }
-
+interface Producer<E> {
+    fun uiEvents(): Observable<E>
 }

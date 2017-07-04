@@ -16,13 +16,22 @@
 
 package com.futurice.freesound.feature.home
 
+import io.reactivex.disposables.CompositeDisposable
+
 /**
- * This is held by the Fragment, its lifecycle reflects t hat
+ * Lifecycle scoped entity
  */
-internal class HomeFragmentRenderer {
+class UiBinder<M, E>(val renderer: Renderer<M>,
+                     val reducer: Reducer<E, M>,
+                     val producer: Producer<E>) {
 
-    private fun render(model: Fragment.UiModel) {
+    private val disposable: CompositeDisposable = CompositeDisposable()
 
+    fun bind() {
+        disposable.add(reducer.bind(producer.uiEvents()).subscribe({ renderer.render(it) }))
     }
 
+    fun unbind() {
+        disposable.clear()
+    }
 }

@@ -16,13 +16,7 @@
 
 package com.futurice.freesound.feature.home
 
-/**
- * This is held by the Fragment, its lifecycle reflects t hat
- */
-internal class HomeFragmentRenderer {
+interface Renderer<in T> {
 
-    private fun render(model: Fragment.UiModel) {
-
-    }
-
+    fun render(model: T)
 }

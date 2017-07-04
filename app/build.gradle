@@ -165,6 +165,10 @@ dependencies {
     implementation "com.android.support:design:$dependencyVersions.androidSupport"
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
+    implementation "android.arch.lifecycle:runtime:1.0.0-alpha3"
+    implementation "android.arch.lifecycle:extensions:1.0.0-alpha3"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha3"
+
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
     implementation "com.google.dagger:dagger:$dependencyVersions.dagger2"
