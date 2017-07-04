@@ -33,15 +33,10 @@ import org.mockito.MockitoAnnotations
 class DefaultFreeSoundApiServiceTest {
 
     private val TEST_CLIENT_ID = "clientId"
-
     private val TEST_CLIENT_SECRET = "clientSecret"
-
     private val TEST_SEARCH_RESULT = TestData.searchResult(5)
-
     private val DUMMY_USER = TestData.user()
-
     private val DUMMY_ACCESS_TOKEN = TestData.accessToken()
-
     private val ERROR = Throwable()
 
     @Mock
@@ -79,7 +74,7 @@ class DefaultFreeSoundApiServiceTest {
         defaultFreeSoundApiService.getUser(username).subscribe()
 
 
-        verify<FreeSoundApi>(freeSoundApi).user(username)
+        verify(freeSoundApi).user(username)
     }
 
     @Test
@@ -113,7 +108,7 @@ class DefaultFreeSoundApiServiceTest {
         defaultFreeSoundApiService.getAccessToken(code).subscribe()
 
 
-        verify<FreeSoundApi>(freeSoundApi).accessToken(TEST_CLIENT_ID,
+        verify(freeSoundApi).accessToken(TEST_CLIENT_ID,
                 TEST_CLIENT_SECRET,
                 ApiConstants.AUTHORIZATION_CODE_GRANT_TYPE_VALUE,
                 code)
@@ -149,7 +144,7 @@ class DefaultFreeSoundApiServiceTest {
         val query = "query"
         defaultFreeSoundApiService.search(query).subscribe()
 
-        verify<FreeSoundApi>(freeSoundApi).search(eq(query), isNull<String>(), eq(SoundFields.BASE))
+        verify(freeSoundApi).search(eq(query), isNull<String>(), eq(SoundFields.BASE))
     }
 
     @Test
@@ -163,7 +158,7 @@ class DefaultFreeSoundApiServiceTest {
                 .assertError(ERROR)
     }
 
-    fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply { init() }
+    fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
 
     inner class Arrangement {
 
