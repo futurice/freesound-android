@@ -44,6 +44,10 @@ class DefaultUserDataModelTest {
 
     @Test
     fun getHomeUser_looksForSpiceProgram() {
+        arrange {
+            user { mock<User>() }
+        }
+
         dataModel.homeUser
 
         verify(freeSoundApiService).getUser(DefaultUserDataModel.USER_NAME)
