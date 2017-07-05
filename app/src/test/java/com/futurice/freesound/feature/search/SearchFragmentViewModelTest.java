@@ -74,7 +74,7 @@ public class SearchFragmentViewModelTest {
 
     @Test
     public void getSounds_emitsSearchResultsWrappedInDisplayableItems() {
-        List<Sound> sounds = TestData.sounds(10);
+        List<Sound> sounds = TestData.Companion.sounds(10);
         new Arrangement().enqueueSearchResults(ofObj(sounds));
 
         viewModel.getSoundsOnceAndStream()
@@ -99,7 +99,7 @@ public class SearchFragmentViewModelTest {
                  .test();
         reset(audioPlayer); // is invoked by default, so reset the mock invocation count.
 
-        arrangement.enqueueSearchResults(ofObj(TestData.sounds(10)));
+        arrangement.enqueueSearchResults(ofObj(TestData.Companion.sounds(10)));
 
         verify(audioPlayer).stopPlayback();
     }

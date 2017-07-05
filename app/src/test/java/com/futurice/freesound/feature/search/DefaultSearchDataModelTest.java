@@ -209,7 +209,7 @@ public class DefaultSearchDataModelTest {
 
     @NonNull
     private static SoundSearchResult dummyResults() {
-        return TestData.searchResult(5);
+        return TestData.Companion.searchResult(5);
     }
 
     private class Arrangement {

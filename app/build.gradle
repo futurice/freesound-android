@@ -115,11 +115,12 @@ ext {
             junit                          : '4.12',
             mockito                        : '2.2.2',
             assertJ                        : '1.7.1',
-            leakCanary                     : '1.5']
+            leakCanary                     : '1.5',
+            moshi                          : '1.5.0',
+            moshiConverter                 : '2.3.0']
 }
 
 dependencies {
-
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
 
@@ -154,6 +155,11 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit2"
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$dependencyVersions.retrofit2RxJava2Adapter"
     implementation "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit2GsonConverter"
+
+    // Moshi
+    implementation "com.squareup.moshi:moshi:$dependencyVersions.moshi"
+    implementation "com.squareup.moshi:moshi-kotlin:$dependencyVersions.moshi"
+    implementation "com.squareup.retrofit2:converter-moshi:$dependencyVersions.moshiConverter"
 
     // GSON
     implementation "com.google.code.gson:gson:$dependencyVersions.gson"

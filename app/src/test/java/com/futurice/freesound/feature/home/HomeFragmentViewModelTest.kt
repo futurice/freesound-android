@@ -17,11 +17,12 @@ class HomeFragmentViewModelTest {
     @Mock
     private lateinit var userDataModel: UserDataModel
 
-    private val USER = TestData.user()
+    private lateinit var USER: User
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        USER = TestData.user()
     }
 
     @Test
@@ -32,7 +33,7 @@ class HomeFragmentViewModelTest {
 
         with(createVm()) {
             image.test()
-                    .assertValue(USER.avatar().large())
+                    .assertValue(USER.avatar.large)
         }
     }
 
@@ -44,7 +45,7 @@ class HomeFragmentViewModelTest {
 
         with(createVm()) {
             userName.test()
-                    .assertValue(USER.username())
+                    .assertValue(USER.username)
         }
     }
 
@@ -56,7 +57,7 @@ class HomeFragmentViewModelTest {
 
         with(createVm()) {
             about.test()
-                    .assertValue(USER.about())
+                    .assertValue(USER.about)
         }
     }
 
