@@ -16,9 +16,8 @@
 
 package com.futurice.freesound.feature.home
 
-import io.reactivex.Observable
-
-interface Reducer<T, R> {
-
-    fun reduce(input: Observable<T>): Observable<R>
+/**
+ * Created by ptac on 04/07/2017.
+ */
+interface Receiver {
 }

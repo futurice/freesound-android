@@ -105,9 +105,16 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
 //    };
 
     @Override
+    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        unbinder = new UiBinder<>(this,  );
+        // Get or create the ViewModel
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        uiBinder.bind();
+        uiBinder.bind(); // TODO Need to define the handling behavior here
     }
 
     @NonNull
@@ -155,7 +162,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @NonNull
     @Override
     protected DataBinder dataBinder() {
-        return dataBinder;
+        return uiBinder;
     }
 
 }

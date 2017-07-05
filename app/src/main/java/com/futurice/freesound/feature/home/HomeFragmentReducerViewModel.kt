@@ -16,13 +16,15 @@
 
 package com.futurice.freesound.feature.home
 
+import android.arch.lifecycle.ViewModel
 import io.reactivex.Observable
 import timber.log.Timber
 
-internal class HomeFragmentReducer(private val dataEvents: Observable<Fragment.DataEvent>) : Reducer<Fragment.UiEvent, Fragment.UiModel> {
+internal class HomeFragmentReducerViewModel(private val dataEvents: Observable<Fragment.DataEvent>)
+    : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel() {
 
-    override fun bind(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
-        return Observable.merge(processUiEvents(input), processResults(dataEvents))
+    override fun reduce(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
+        return Observable.merge(processUiEvents(input), processDataEvents(dataEvents))
                 .scan(INITIAL_UI_STATE, { model, change -> model.reduce(change) })
                 .doOnNext { model: Fragment.UiModel -> Timber.v(" $model") }
     }
@@ -30,7 +32,7 @@ internal class HomeFragmentReducer(private val dataEvents: Observable<Fragment.D
     private fun processUiEvents(uiEvents: Observable<Fragment.UiEvent>): Observable<Fragment.Change>
             = uiEvents.map { toChange(it) }
 
-    private fun processResults(dataEvents: Observable<Fragment.DataEvent>): Observable<Fragment.Change>
+    private fun processDataEvents(dataEvents: Observable<Fragment.DataEvent>): Observable<Fragment.Change>
             = dataEvents.map { toChange(it) }
 
     private fun toChange(uiEvent: Fragment.UiEvent): Fragment.Change =

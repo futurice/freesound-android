@@ -28,7 +28,7 @@ class UiBinder<M, E>(val renderer: Renderer<M>,
     private val disposable: CompositeDisposable = CompositeDisposable()
 
     fun bind() {
-        disposable.add(reducer.bind(producer.uiEvents()).subscribe({ renderer.render(it) }))
+        disposable.add(reducer.reduce(producer.uiEvents()).subscribe({ renderer.render(it) }))
     }
 
     fun unbind() {

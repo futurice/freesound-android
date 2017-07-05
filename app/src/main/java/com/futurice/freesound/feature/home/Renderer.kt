@@ -18,5 +18,9 @@ package com.futurice.freesound.feature.home
 
 interface Renderer<in T> {
 
-    fun render(model: T)
+    fun render(model: T){
+        val list : List<String>
+        list.flatMap {  }
+    }
+    ]
 }
