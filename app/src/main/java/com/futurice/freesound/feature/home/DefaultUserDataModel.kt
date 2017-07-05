@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home;
+package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.network.api.model.User;
+import android.support.annotation.VisibleForTesting
+import com.futurice.freesound.network.api.FreeSoundApiService
+import com.futurice.freesound.network.api.model.User
+import io.reactivex.Single
 
-import android.support.annotation.NonNull;
+internal class DefaultUserDataModel(private val freeSoundApi: FreeSoundApiService) : UserDataModel {
+    override val homeUser: Single<User>
+        get() = freeSoundApi.getUser(USER_NAME)
 
-import io.reactivex.Single;
-
-public interface UserDataModel {
-
-    @NonNull
-    Single<User> getHomeUser();
+    companion object {
+        @VisibleForTesting
+        val USER_NAME = "SpiceProgram"
+    }
 }
