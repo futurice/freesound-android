@@ -40,7 +40,9 @@ class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        savedInstanceState?.apply { addHomeFragment() }
+        if (savedInstanceState == null) {
+            addHomeFragment()
+        }
 
         setSupportActionBar(findById<Toolbar>(this, R.id.toolbar_home))
     }
