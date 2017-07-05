@@ -86,7 +86,6 @@ class SoundItemViewModelTest {
                 .username(username)
                 .build()
         val user = TestData.user().copy(username = username)
-
         ArrangeBuilder().withUserResponse(username, user)
 
         val vm = SoundItemViewModel(sound, navigator, audioPlayer,
@@ -262,7 +261,7 @@ class SoundItemViewModelTest {
 
     @Test
     fun progressPercentage_expectedPercentage_99Point9() {
-        val positionMs: Long = 999
+        val positionMs = 999L
         val durationSec = 1f
         val expectedPercentage = 99
         val sound = TEST_SOUND.toBuilder()

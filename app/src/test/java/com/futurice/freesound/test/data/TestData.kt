@@ -59,13 +59,13 @@ class TestData private constructor() {
                     .toList()
         }
 
-        fun sound(index: Long?): Sound {
+        fun sound(index: Long): Sound {
             return Sound.builder()
-                    .id(index!!)
-                    .url(indexed("url", index))
-                    .name(indexed("name", index))
-                    .description(indexed("description", index))
-                    .username(indexed("username", index))
+                    .id(index)
+                    .url("url $index")
+                    .name("name $index")
+                    .description("description $index")
+                    .username("username $index")
                     .tags(tags(index, (index % 5).toInt()))
                     .geotag(geotag(index))
                     .images(images())
@@ -75,7 +75,7 @@ class TestData private constructor() {
 
         fun tags(index: Long, count: Int): List<String> {
             return (1..(count - 1))
-                    .map { indexed("tag", index) }
+                    .map { "tag $index" }
                     .toList()
         }
 
@@ -102,11 +102,6 @@ class TestData private constructor() {
                     .lowQualityOggUrl("https://url.com/lqogg")
                     .highQualityOggUrl("https://url.com/hgogg")
                     .build()
-        }
-
-        private fun indexed(base: String,
-                            index: Long): String {
-            return String.format(base + "%d", index)
         }
     }
 
