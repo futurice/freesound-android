@@ -63,7 +63,7 @@ class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
                 homeViewModel.openSearch()
                 true
             }
-            else               -> super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
