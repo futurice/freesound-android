@@ -20,6 +20,7 @@ import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.mvi.ViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
@@ -27,7 +28,9 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
     : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
-    private val uiModel: PublishProcessor<Fragment.UiModel> = PublishProcessor.create()
+
+    // Repopulation on recreation with bundle.
+    private val uiModel: BehaviorProcessor<Fragment.UiModel> = BehaviorProcessor.create()
 
     private val disposable: Disposable
 
@@ -48,6 +51,11 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
         return Observable.merge(processUiEvents(input), processDataEvents(dataEvents))
                 .scan(INITIAL_UI_STATE, { model, change -> model.reduce(change) })
                 .doOnNext { model: Fragment.UiModel -> Timber.v(" $model") }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.dispose()
     }
 
     private fun processUiEvents(uiEvents: Observable<Fragment.UiEvent>): Observable<Fragment.Change>
