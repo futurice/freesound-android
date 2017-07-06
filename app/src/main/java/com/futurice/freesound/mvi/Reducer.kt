@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.mvi
 
 import io.reactivex.Observable
 
 interface Reducer<T, R> {
 
-    fun reduce(input: Observable<T>): Observable<R>
+    fun reduce(input: Observable<T>): io.reactivex.Observable<R>
 }

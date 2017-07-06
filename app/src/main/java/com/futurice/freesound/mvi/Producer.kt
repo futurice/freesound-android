@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.mvi
 
-/**
- * Created by ptac on 04/07/2017.
- */
-interface Receiver {
+import io.reactivex.Observable
+
+interface Producer<E> {
+    fun uiEvents(): Observable<E>
 }

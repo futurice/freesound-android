@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.mvi
 
-interface Renderer<in T> {
+/**
+ * Implementation have Activity lifecycle and Android dependencies
+ */
+interface Renderer<T> {
 
-    fun render(model: T){
-        val list : List<String>
-        list.flatMap {  }
-    }
-    ]
+    fun render(model: T)
+
 }

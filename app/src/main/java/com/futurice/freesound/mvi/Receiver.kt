@@ -14,24 +14,10 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
-
-import io.reactivex.disposables.CompositeDisposable
+package com.futurice.freesound.mvi
 
 /**
- * Lifecycle scoped entity
+ * Created by ptac on 04/07/2017.
  */
-class UiBinder<M, E>(val renderer: Renderer<M>,
-                     val reducer: Reducer<E, M>,
-                     val producer: Producer<E>) {
-
-    private val disposable: CompositeDisposable = CompositeDisposable()
-
-    fun bind() {
-        disposable.add(reducer.reduce(producer.uiEvents()).subscribe({ renderer.render(it) }))
-    }
-
-    fun unbind() {
-        disposable.clear()
-    }
+interface Receiver {
 }

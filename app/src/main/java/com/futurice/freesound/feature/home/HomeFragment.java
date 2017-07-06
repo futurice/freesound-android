@@ -17,11 +17,10 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
-import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
+import com.futurice.freesound.mvi.UiBinder;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
 
@@ -38,9 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
-import io.reactivex.disposables.CompositeDisposable;
 import polanski.option.AtomicOption;
-import timber.log.Timber;
 
 import static butterknife.ButterKnife.bind;
 import static com.futurice.freesound.common.utils.Preconditions.get;
@@ -114,7 +111,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @Override
     public void onStart() {
         super.onStart();
-        uiBinder.bind(); // TODO Need to define the handling behavior here
+        uiBinder.bind(this); // TODO Need to define the handling behavior here
     }
 
     @NonNull

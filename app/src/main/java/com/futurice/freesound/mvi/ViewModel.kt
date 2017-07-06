@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.mvi
 
+import android.arch.lifecycle.ViewModel
 import io.reactivex.Observable
 
-interface Producer<E> {
-    fun uiEvents(): Observable<E>
+abstract class ViewModel<in E, M> : ViewModel() {
+
+    abstract fun uiEvents(uiEvent: E)
+
+    abstract fun uiModel(): Observable<M>
+
 }

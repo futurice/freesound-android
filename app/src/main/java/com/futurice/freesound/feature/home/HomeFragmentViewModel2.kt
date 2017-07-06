@@ -16,12 +16,33 @@
 
 package com.futurice.freesound.feature.home
 
-import android.arch.lifecycle.ViewModel
+import com.futurice.freesound.mvi.Reducer
+import com.futurice.freesound.mvi.ViewModel
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-internal class HomeFragmentReducerViewModel(private val dataEvents: Observable<Fragment.DataEvent>)
-    : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel() {
+internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragment.DataEvent>)
+    : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
+
+    private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
+    private val uiModel: PublishProcessor<Fragment.UiModel> = PublishProcessor.create()
+
+    private val disposable: Disposable
+
+    init {
+        disposable = reduce(uiEvents.toObservable())
+                .subscribe { uiModel.offer(it) }
+    }
+
+    override fun uiEvents(uiEvent: Fragment.UiEvent) {
+        uiEvents.offer(uiEvent)
+    }
+
+    override fun uiModel(): Observable<Fragment.UiModel> {
+        return uiModel.toObservable()
+    }
 
     override fun reduce(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
         return Observable.merge(processUiEvents(input), processDataEvents(dataEvents))
