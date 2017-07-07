@@ -29,7 +29,7 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
 
-    // Repopulation on recreation with bundle.
+    // Repopulation on recreation with bundle to handle process death
     private val uiModel: BehaviorProcessor<Fragment.UiModel> = BehaviorProcessor.create()
 
     private val disposable: Disposable
