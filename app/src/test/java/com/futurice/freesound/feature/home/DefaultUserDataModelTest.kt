@@ -35,7 +35,7 @@ class DefaultUserDataModelTest {
 
     private lateinit var dataModel: DefaultUserDataModel
 
-    private val user: User get() = TestData.user()
+    private val testUser: User get() = TestData.user()
 
     @Before
     fun setUp() {
@@ -47,7 +47,7 @@ class DefaultUserDataModelTest {
     @Test
     fun getHomeUser_looksForSpiceProgram() {
         arrange {
-            user { user }
+            user { testUser }
         }
 
         dataModel.homeUser
@@ -57,7 +57,7 @@ class DefaultUserDataModelTest {
 
     @Test
     fun getHomeUser_returnsResultOfSearch() {
-        val result = user
+        val result = testUser
         arrange {
             user { result }
         }

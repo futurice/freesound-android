@@ -17,47 +17,46 @@ class HomeFragmentViewModelTest {
     @Mock
     private lateinit var userDataModel: UserDataModel
 
-    private lateinit var USER: User
+    private val testUser: User get() = TestData.user()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        USER = TestData.user()
     }
 
     @Test
     fun getImage_returnsLargeImage() {
         arrange {
-            homeUser { USER }
+            homeUser { testUser }
         }
 
         with(createVm()) {
             image.test()
-                    .assertValue(USER.avatar.large)
+                    .assertValue(testUser.avatar.large)
         }
     }
 
     @Test
     fun getUserName_returnsName() {
         arrange {
-            homeUser { USER }
+            homeUser { testUser }
         }
 
         with(createVm()) {
             userName.test()
-                    .assertValue(USER.username)
+                    .assertValue(testUser.username)
         }
     }
 
     @Test
     fun getAbout_returnsAbout() {
         arrange {
-            homeUser { USER }
+            homeUser { testUser }
         }
 
         with(createVm()) {
             about.test()
-                    .assertValue(USER.about)
+                    .assertValue(testUser.about)
         }
     }
 
@@ -78,7 +77,7 @@ class HomeFragmentViewModelTest {
     @Test
     fun getProperties_subscribesOnlyOnce() {
         arrange {
-            homeUser { USER }
+            homeUser { testUser }
         }
 
         with(createVm()) {
