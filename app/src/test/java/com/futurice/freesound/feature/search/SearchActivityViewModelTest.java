@@ -225,7 +225,7 @@ public class SearchActivityViewModelTest {
 
         arrangement
                 .withSuccessfulSearchResultStream()
-                .enqueueSearchResults(TestData.Companion.sounds(10))
+                .enqueueSearchResults(TestData.sounds(10))
                 .act()
                 .bind()
                 .search();

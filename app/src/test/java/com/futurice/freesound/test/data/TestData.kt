@@ -27,6 +27,7 @@ class TestData private constructor() {
 
     companion object {
 
+        @JvmStatic
         fun accessToken(): AccessToken {
             return AccessToken("accessToken",
                     "scope",
@@ -34,16 +35,19 @@ class TestData private constructor() {
                     "refreshToken")
         }
 
+        @JvmStatic
         fun user(): User {
             return User("username", "about", avatar())
         }
 
+        @JvmStatic
         fun avatar(): Avatar {
             return Avatar("http://futurice.com/small.png",
                     "http://futurice.com/medium.png",
                     "http://futurice.com/large.png")
         }
 
+        @JvmStatic
         fun searchResult(count: Int): SoundSearchResult {
             return SoundSearchResult.builder()
                     .count(count * 2)
@@ -53,12 +57,14 @@ class TestData private constructor() {
                     .build()
         }
 
+        @JvmStatic
         fun sounds(count: Int): List<Sound> {
             return (1L..(count - 1))
                     .map { sound(it) }
                     .toList()
         }
 
+        @JvmStatic
         fun sound(index: Long): Sound {
             return Sound.builder()
                     .id(index)
@@ -73,12 +79,14 @@ class TestData private constructor() {
                     .build()
         }
 
+        @JvmStatic
         fun tags(index: Long, count: Int): List<String> {
             return (1..(count - 1))
                     .map { "tag $index" }
                     .toList()
         }
 
+        @JvmStatic
         fun geotag(index: Long): GeoLocation {
             return GeoLocation.builder()
                     .latitude(index.toDouble())
@@ -86,6 +94,7 @@ class TestData private constructor() {
                     .build()
         }
 
+        @JvmStatic
         fun images(): Sound.Image {
             return Sound.Image.builder()
                     .medSizeWaveformUrl("https://url.com/mw")
@@ -95,6 +104,7 @@ class TestData private constructor() {
                     .build()
         }
 
+        @JvmStatic
         fun previews(): Sound.Preview {
             return Sound.Preview.builder()
                     .lowQualityMp3Url("https://url.com/lqmp3")
