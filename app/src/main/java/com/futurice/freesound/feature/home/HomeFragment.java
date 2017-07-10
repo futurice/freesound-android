@@ -21,9 +21,11 @@ import com.futurice.freesound.core.BindingBaseFragment;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.mvi.UiBinder;
+import com.futurice.freesound.mvi.ViewModel;
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -104,8 +106,12 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        unbinder = new UiBinder<>(this,  );
         // Get or create the ViewModel
+        ViewModel viewModel = ViewModelProviders.of(this)
+                                                .get(HomeFragmentViewModel2.class);
+
+        unbinder = new UiBinder<>(this, viewModel);
+
     }
 
     @Override

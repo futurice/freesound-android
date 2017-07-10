@@ -177,6 +177,11 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
     implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
 
+    // IxJava
+    // implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
+
+    implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
+
     // Networking
     implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"

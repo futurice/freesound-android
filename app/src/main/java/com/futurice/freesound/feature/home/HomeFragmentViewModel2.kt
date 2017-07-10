@@ -18,9 +18,10 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.mvi.ViewModel
+import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.disposables.SerialDisposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
@@ -28,15 +29,12 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
     : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
-
-    // Repopulation on recreation with bundle to handle process death
-    private val uiModel: BehaviorProcessor<Fragment.UiModel> = BehaviorProcessor.create()
-
-    private val disposable: Disposable
+    private val uiModel : Observable<Fragment.UiModel>
+    private val disposable : SerialDisposable = SerialDisposable()
 
     init {
-        disposable = reduce(uiEvents.toObservable())
-                .subscribe { uiModel.offer(it) }
+        uiModel = reduce(uiEvents.toObservable()).replayingShare()
+        disposable.set(uiModel.subscribe())
     }
 
     override fun uiEvents(uiEvent: Fragment.UiEvent) {
@@ -44,7 +42,7 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
     }
 
     override fun uiModel(): Observable<Fragment.UiModel> {
-        return uiModel.toObservable()
+        return uiModel
     }
 
     override fun reduce(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
