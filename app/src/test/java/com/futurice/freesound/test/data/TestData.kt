@@ -59,7 +59,7 @@ class TestData private constructor() {
 
         @JvmStatic
         fun sounds(count: Int): List<Sound> {
-            return (1L..(count - 1))
+            return (0L..count)
                     .map { sound(it) }
                     .toList()
         }
@@ -81,7 +81,7 @@ class TestData private constructor() {
 
         @JvmStatic
         fun tags(index: Long, count: Int): List<String> {
-            return (1..(count - 1))
+            return (0L..count)
                     .map { "tag $index" }
                     .toList()
         }
