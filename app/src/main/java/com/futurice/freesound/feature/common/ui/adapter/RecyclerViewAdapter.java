@@ -38,10 +38,10 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 /**
  * Implementation of {@link RecyclerView.Adapter} for {@link DisplayableItem}.
  */
-public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public final class RecyclerViewAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @NonNull
-    private final List<DisplayableItem> modelItems = new ArrayList<>();
+    private final List<DisplayableItem<T>> modelItems = new ArrayList<>();
 
     @NonNull
     private final ItemComparator comparator;
@@ -50,14 +50,14 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     private final Map<Integer, ViewHolderFactory> factoryMap;
 
     @NonNull
-    private final Map<Integer, ViewHolderBinder> binderMap;
+    private final Map<Integer, ViewHolderBinder<T>> binderMap;
 
     @NonNull
     private final SchedulerProvider schedulerProvider;
 
     public RecyclerViewAdapter(@NonNull final ItemComparator comparator,
                                @NonNull final Map<Integer, ViewHolderFactory> factoryMap,
-                               @NonNull final Map<Integer, ViewHolderBinder> binderMap,
+                               @NonNull final Map<Integer, ViewHolderBinder<T>> binderMap,
                                @NonNull final SchedulerProvider schedulerProvider) {
         this.comparator = comparator;
         this.factoryMap = factoryMap;
@@ -72,8 +72,8 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        final DisplayableItem item = modelItems.get(position);
-        binderMap.get(item.type()).bind(get(holder), item);
+        final DisplayableItem<T> item = modelItems.get(position);
+        binderMap.get(item.getType()).bind(get(holder), item);
     }
 
     @Override
@@ -91,7 +91,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(final int position) {
-        return modelItems.get(position).type();
+        return modelItems.get(position).getType();
     }
 
     /**
@@ -99,7 +99,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
      *
      * @param items collection to update the previous values
      */
-    public void update(@NonNull final List<DisplayableItem> items) {
+    public void update(@NonNull final List<DisplayableItem<T>> items) {
         Preconditions.checkNotNull(items);
         schedulerProvider.assertUiThread();
 
@@ -113,7 +113,7 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
     /**
      * Only used for the first update of the adapter, when it is still empty.
      */
-    private void updateAllItems(@NonNull final List<DisplayableItem> items) {
+    private void updateAllItems(@NonNull final List<DisplayableItem<T>> items) {
         Observable.just(items)
                   .doOnNext(this::updateItemsInModel)
                   .subscribe(__ -> notifyDataSetChanged(),
@@ -126,8 +126,8 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
      * significantly slower than {@link RecyclerViewAdapter#notifyDataSetChanged()} when it comes
      * to update all the items in the adapter.
      */
-    private void updateDiffItemsOnly(@NonNull final List<DisplayableItem> items) {
-        final List<DisplayableItem> itemsCopy = new ArrayList<>(items);
+    private void updateDiffItemsOnly(@NonNull final List<DisplayableItem<T>> items) {
+        final List<DisplayableItem<T>> itemsCopy = new ArrayList<>(items);
         Observable.fromCallable(() -> calculateDiff(itemsCopy))
                   .subscribeOn(schedulerProvider.computation())
                   .observeOn(schedulerProvider.ui())
@@ -136,11 +136,11 @@ public final class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView
                              e -> Timber.e(e, "Error dispatching updates to adapter"));
     }
 
-    private DiffUtil.DiffResult calculateDiff(@NonNull final List<DisplayableItem> newItems) {
-        return DiffUtil.calculateDiff(new DiffUtilCallback(modelItems, newItems, comparator));
+    private DiffUtil.DiffResult calculateDiff(@NonNull final List<DisplayableItem<T>> newItems) {
+        return DiffUtil.calculateDiff(new DiffUtilCallback<>(modelItems, newItems, comparator));
     }
 
-    private void updateItemsInModel(@NonNull final List<DisplayableItem> items) {
+    private void updateItemsInModel(@NonNull final List<DisplayableItem<T>> items) {
         modelItems.clear();
         modelItems.addAll(items);
     }

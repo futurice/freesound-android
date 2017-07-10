@@ -55,22 +55,22 @@ public class RecyclerViewAdapterTest {
     private ViewHolderFactory factory2;
 
     @Mock
-    private ViewHolderBinder binder1;
+    private ViewHolderBinder<Object> binder1;
 
     @Mock
-    private ViewHolderBinder binder2;
+    private ViewHolderBinder<Object> binder2;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private RecyclerViewAdapter adapter;
+    private RecyclerViewAdapter<Object> adapter;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
         SchedulerProvider schedulerProvider = new UiThreadTrampolineSchedulerProvider();
-        adapter = new RecyclerViewAdapter(comparator, factoryMap(), binderMap(), schedulerProvider);
+        adapter = new RecyclerViewAdapter<Object>(comparator, factoryMap(), binderMap(), schedulerProvider);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class RecyclerViewAdapterTest {
     @Test
     public void expectIllegalStateExceptionWhenUpdateIsNotCalledFromUiThread() {
         SchedulerProvider schedulerProvider = new TrampolineSchedulerProvider();
-        adapter = new RecyclerViewAdapter(comparator, factoryMap(), binderMap(), schedulerProvider);
+        adapter = new RecyclerViewAdapter<>(comparator, factoryMap(), binderMap(), schedulerProvider);
         thrown.expect(IllegalStateException.class);
 
         adapter.update(new ArrayList<>());
@@ -114,7 +114,7 @@ public class RecyclerViewAdapterTest {
 
     @Test
     public void diffUtilsIsNotUsedWhenUpdatingAdapterForTheFirstTime() {
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
 
         adapter.update(itemList);
 
@@ -123,7 +123,7 @@ public class RecyclerViewAdapterTest {
 
     @Test
     public void diffUtilsIsUsedWhenUpdatingAdapterForTheFirstTime() {
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
 
         adapter.update(itemList);
         adapter.update(itemList);
@@ -134,7 +134,7 @@ public class RecyclerViewAdapterTest {
     @Test
     public void expectedNPEWhenViewHolderIsNullInOnBindViewHolder() {
         thrown.expect(NullPointerException.class);
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
 
         adapter.update(itemList);
         adapter.onBindViewHolder(null, 1);
@@ -143,7 +143,7 @@ public class RecyclerViewAdapterTest {
     @Test
     public void expectedIndexOutOfBoundsExceptionWhenPositionIsOutOfBoundsInOnBindViewHolder() {
         thrown.expect(IndexOutOfBoundsException.class);
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
         RecyclerView.ViewHolder viewHolder = mock(RecyclerView.ViewHolder.class);
 
         adapter.update(itemList);
@@ -152,7 +152,7 @@ public class RecyclerViewAdapterTest {
 
     @Test
     public void binderForItemTypeBindsItemToViewHolder() {
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
         RecyclerView.ViewHolder viewHolder = mock(RecyclerView.ViewHolder.class);
 
         adapter.update(itemList);
@@ -163,7 +163,7 @@ public class RecyclerViewAdapterTest {
 
     @Test
     public void itemCount() {
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
 
         adapter.update(itemList);
 
@@ -172,20 +172,20 @@ public class RecyclerViewAdapterTest {
 
     @Test
     public void getItemViewType() {
-        List<DisplayableItem> itemList = itemList();
+        List<DisplayableItem<Object>> itemList = itemList();
 
         adapter.update(itemList);
 
-        assertThat(adapter.getItemViewType(0)).isEqualTo(itemList.get(0).type());
-        assertThat(adapter.getItemViewType(1)).isEqualTo(itemList.get(1).type());
-        assertThat(adapter.getItemViewType(2)).isEqualTo(itemList.get(2).type());
+        assertThat(adapter.getItemViewType(0)).isEqualTo(itemList.get(0).getType());
+        assertThat(adapter.getItemViewType(1)).isEqualTo(itemList.get(1).getType());
+        assertThat(adapter.getItemViewType(2)).isEqualTo(itemList.get(2).getType());
     }
 
-    private static List<DisplayableItem> itemList() {
-        return new ArrayList<DisplayableItem>() {{
-            add(DisplayableItem.create(new Object(), 1));
-            add(DisplayableItem.create(new Object(), 2));
-            add(DisplayableItem.create(new Object(), 1));
+    private static List<DisplayableItem<Object>> itemList() {
+        return new ArrayList<DisplayableItem<Object>>() {{
+            add(new DisplayableItem<>(new Object(), 1));
+            add(new DisplayableItem<>(new Object(), 2));
+            add(new DisplayableItem<>(new Object(), 1));
         }};
     }
 
@@ -196,8 +196,8 @@ public class RecyclerViewAdapterTest {
         }};
     }
 
-    private Map<Integer, ViewHolderBinder> binderMap() {
-        return new HashMap<Integer, ViewHolderBinder>() {{
+    private Map<Integer, ViewHolderBinder<Object>> binderMap() {
+        return new HashMap<Integer, ViewHolderBinder<Object>>() {{
             put(1, binder1);
             put(2, binder2);
         }};

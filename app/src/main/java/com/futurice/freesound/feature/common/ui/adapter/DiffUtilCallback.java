@@ -25,19 +25,19 @@ import java.util.List;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
-final class DiffUtilCallback extends DiffUtil.Callback {
+final class DiffUtilCallback<T> extends DiffUtil.Callback {
 
     @NonNull
-    private final List<DisplayableItem> oldItems;
+    private final List<DisplayableItem<T>> oldItems;
 
     @NonNull
-    private final List<DisplayableItem> newItems;
+    private final List<DisplayableItem<T>> newItems;
 
     @NonNull
     private final ItemComparator comparator;
 
-    DiffUtilCallback(@NonNull final List<DisplayableItem> oldItems,
-                     @NonNull final List<DisplayableItem> newItems,
+    DiffUtilCallback(@NonNull final List<DisplayableItem<T>> oldItems,
+                     @NonNull final List<DisplayableItem<T>> newItems,
                      @NonNull final ItemComparator comparator) {
         this.oldItems = get(oldItems);
         this.newItems = get(newItems);
