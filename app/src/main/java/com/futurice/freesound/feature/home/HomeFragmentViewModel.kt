@@ -25,11 +25,11 @@ internal class HomeFragmentViewModel(userDataModel: UserDataModel) : SimpleViewM
     private val homeUser: Single<User> = userDataModel.homeUser.cache()
 
     val image: Single<String>
-        get() = homeUser.map { it.avatar().large() }
+        get() = homeUser.map { it.avatar.large }
 
     val userName: Single<String>
-        get() = homeUser.map { it.username() }
+        get() = homeUser.map { it.username }
 
     val about: Single<String>
-        get() = homeUser.map { it.about() }
+        get() = homeUser.map { it.about }
 }

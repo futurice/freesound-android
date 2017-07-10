@@ -86,7 +86,7 @@ final class SoundItemViewModel extends SimpleViewModel {
     @NonNull
     Single<String> userAvatar() {
         return freeSoundApiService.getUser(sound.username())
-                                  .map(user -> user.avatar().medium())
+                                  .map(user -> user.getAvatar().getMedium())
                                   .cache();
     }
 

@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.User
-import com.futurice.freesound.test.mock
+import com.futurice.freesound.test.data.TestData
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -35,6 +35,8 @@ class DefaultUserDataModelTest {
 
     private lateinit var dataModel: DefaultUserDataModel
 
+    private val testUser: User get() = TestData.user()
+
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -45,7 +47,7 @@ class DefaultUserDataModelTest {
     @Test
     fun getHomeUser_looksForSpiceProgram() {
         arrange {
-            user { mock<User>() }
+            user { testUser }
         }
 
         dataModel.homeUser
@@ -55,7 +57,7 @@ class DefaultUserDataModelTest {
 
     @Test
     fun getHomeUser_returnsResultOfSearch() {
-        val result = mock<User>()
+        val result = testUser
         arrange {
             user { result }
         }

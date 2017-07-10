@@ -23,6 +23,8 @@ import com.futurice.freesound.network.api.model.FreesoundTypeAdapterFactory;
 import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.squareup.moshi.KotlinJsonAdapterFactory;
+import com.squareup.moshi.Moshi;
 
 import java.lang.annotation.Retention;
 import java.util.List;
@@ -38,6 +40,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 import static com.futurice.freesound.network.api.ApiConfigModule.API_CLIENT_SECRET_CONFIG;
 import static com.futurice.freesound.network.api.ApiConfigModule.API_URL_CONFIG;
@@ -50,10 +53,12 @@ public class ApiNetworkModule {
     @Singleton
     static FreeSoundApi provideFreeSoundApi(@Named(API_URL_CONFIG) String url,
                                             @ForFreeSoundApi Gson gson,
+                                            @ForFreeSoundApi Moshi moshi,
                                             @ForFreeSoundApi OkHttpClient client) {
         return new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .client(client)
                 .baseUrl(url)
                 .build()
@@ -71,6 +76,15 @@ public class ApiNetworkModule {
                 .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
                 .registerTypeAdapterFactory(FreesoundTypeAdapterFactory.create())
                 .create();
+    }
+
+    @Provides
+    @Singleton
+    @ForFreeSoundApi
+    static Moshi provideMoshi() {
+        return new Moshi.Builder()
+                .add(new KotlinJsonAdapterFactory())
+                .build();
     }
 
     @Provides
