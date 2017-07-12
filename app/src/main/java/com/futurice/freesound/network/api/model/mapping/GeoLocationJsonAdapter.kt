@@ -21,14 +21,11 @@ import com.squareup.moshi.JsonDataException
 
 class GeoLocationJsonAdapter {
 
-    @FromJson fun fromJson(json: String): GeoLocation {
-        val coordinateList = json.trim()
-                .split(' ')
-                .mapNotNull { it.toDoubleOrNull() }
-        return if (coordinateList.size == 2)
-            GeoLocation(latitude = coordinateList[0], longitude = coordinateList[1])
-        else
-            throw JsonDataException("Unable to deserialize latitude/long values from: $json")
-
-    }
+    @FromJson fun fromJson(json: String): GeoLocation =
+        json.trim()
+            .split(' ')
+            .mapNotNull { it.toDoubleOrNull() }
+            .takeIf { it.size == 2 }
+            ?.let { GeoLocation(latitude = it[0], longitude = it[1]) }
+            ?: throw JsonDataException("Unable to deserialize latitude/long values from: $json")
 }
