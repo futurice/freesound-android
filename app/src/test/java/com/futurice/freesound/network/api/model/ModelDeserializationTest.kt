@@ -103,6 +103,10 @@ class ModelDeserializationTest {
                                         "sound",
                                         "Sound"))
                                 .description("(WARNING HEADPHONE USERS!)\r\n\r\nA horrible sound for a contest, created by scraping a swimming noodle and then phasing it with 100% feedback (making the original noodle sound irrelevant). This phasing was then layered on top of itself.\r\n\r\nPlease comment on where you intend to use the sound, and feel free to post a link to the work where you used it if you want (I enjoy watching/listening to anything you create!)\r\n\r\nThe sound was recorded using a \"H1 Zoom V2 recorder\".\r\n\r\nOriginally edited using Audacity and Paulstretch on 25th September 2016.\r\n\r\nNote: Audio quality is always better when downloaded.")
+                                .geotag(GeoLocation.builder()
+                                        .latitude(4.65241157574)
+                                        .longitude(-74.0594869852)
+                                        .build())
                                 .created(toDate("2016-09-27T01:47:32.575865"))
                                 .duration(27.839f)
                                 .username("InspectorJ")
