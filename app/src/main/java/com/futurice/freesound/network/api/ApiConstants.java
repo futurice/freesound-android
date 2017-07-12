@@ -21,7 +21,7 @@ import com.futurice.freesound.common.InstantiationForbiddenError;
 /**
  * Constants used in the Freesound API.
  */
-final class ApiConstants {
+public final class ApiConstants {
 
     // Authentication
     static final String TOKEN_QUERY_PARAM = "token";
@@ -33,7 +33,7 @@ final class ApiConstants {
     //
     // This pattern might not be sufficient for fields that require high accuracy because it
     // truncates sub-second values.
-    static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
     private ApiConstants() {
         throw new InstantiationForbiddenError();
