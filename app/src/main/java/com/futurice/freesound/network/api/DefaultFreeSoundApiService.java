@@ -68,7 +68,7 @@ final class DefaultFreeSoundApiService implements FreeSoundApiService {
     @Override
     @NonNull
     public Single<SoundSearchResult> search(@NonNull final String query) {
-        return freeSoundApi.search(get(query), null, SoundFields.BASE);
+        return freeSoundApi.search(get(query), null, SoundFields.Companion.getBASE());
     }
 
 }

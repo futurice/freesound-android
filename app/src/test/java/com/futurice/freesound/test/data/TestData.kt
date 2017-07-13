@@ -64,17 +64,18 @@ class TestData private constructor() {
 
         @JvmStatic
         fun sound(index: Long): Sound {
-            return Sound.builder()
-                    .id(index)
-                    .url("url $index")
-                    .name("name $index")
-                    .description("description $index")
-                    .username("username $index")
-                    .tags(tags(index, (index % 5).toInt()))
-                    .geotag(geotag(index))
-                    .images(images())
-                    .previews(previews())
-                    .build()
+            return Sound(
+                    id = index,
+                    url = "url $index",
+                    name = "name $index",
+                    description = "description $index",
+                    username = "username $index",
+                    tags = tags(index, (index % 5).toInt()),
+                    geotag = geotag(index),
+                    images = images(),
+                    previews = previews(),
+                    created = null,
+                    duration = null)
         }
 
         @JvmStatic
@@ -91,23 +92,21 @@ class TestData private constructor() {
                     longitude = index.toDouble() + 1)
 
         @JvmStatic
-        fun images(): Sound.Image {
-            return Sound.Image.builder()
-                    .medSizeWaveformUrl("https://url.com/mw")
-                    .largeSizeWaveformUrl("https://url.com/lw")
-                    .medSizeSpectralUrl("https://url.com/ms")
-                    .largeSizeSpectralUrl("https://url.com/ls")
-                    .build()
+        fun images(): Image {
+            return Image(
+                    medSizeWaveformUrl = "https://url.com/mw",
+                    largeSizeWaveformUrl = "https://url.com/lw",
+                    medSizeSpectralUrl = "https://url.com/ms",
+                    largeSizeSpectralUrl = "https://url.com/ls")
         }
 
         @JvmStatic
-        fun previews(): Sound.Preview {
-            return Sound.Preview.builder()
-                    .lowQualityMp3Url("https://url.com/lqmp3")
-                    .highQualityMp3Url("https://url.com/hqmp3")
-                    .lowQualityOggUrl("https://url.com/lqogg")
-                    .highQualityOggUrl("https://url.com/hgogg")
-                    .build()
+        fun previews(): Preview {
+            return Preview(
+                    lowQualityMp3Url = "https://url.com/lqmp3",
+                    highQualityMp3Url = "https://url.com/hqmp3",
+                    lowQualityOggUrl = "https://url.com/lqogg",
+                    highQualityOggUrl = "https://url.com/hgogg")
         }
     }
 
