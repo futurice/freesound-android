@@ -16,12 +16,11 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.futurice.freesound.network.api.model.FreesoundTypeAdapterFactory;
-import com.futurice.freesound.network.api.model.GeoLocation;
+import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.squareup.moshi.KotlinJsonAdapterFactory;
 import com.squareup.moshi.Moshi;
