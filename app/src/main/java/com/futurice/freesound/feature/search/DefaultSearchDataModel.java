@@ -91,7 +91,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @NonNull
     private static List<Sound> toResults(@NonNull final SoundSearchResult soundSearchResult) {
-        return soundSearchResult.results();
+        return soundSearchResult.getResults();
     }
 
     private void reportClear() {

@@ -48,14 +48,12 @@ class TestData private constructor() {
         }
 
         @JvmStatic
-        fun searchResult(count: Int): SoundSearchResult {
-            return SoundSearchResult.builder()
-                    .count(count * 2)
-                    .next("nextUrl")
-                    .previous("prevUrl")
-                    .results(sounds(count))
-                    .build()
-        }
+        fun searchResult(count: Int): SoundSearchResult =
+            SoundSearchResult(
+                    count = count * 2,
+                    next = "nextUrl",
+                    previous = "prevUrl",
+                    results = sounds(count))
 
         @JvmStatic
         fun sounds(count: Int): List<Sound> {
@@ -87,12 +85,10 @@ class TestData private constructor() {
         }
 
         @JvmStatic
-        fun geotag(index: Long): GeoLocation {
-            return GeoLocation.builder()
-                    .latitude(index.toDouble())
-                    .longitude(index.toDouble() + 1)
-                    .build()
-        }
+        fun geotag(index: Long): GeoLocation =
+                GeoLocation(
+                    latitude = index.toDouble(),
+                    longitude = index.toDouble() + 1)
 
         @JvmStatic
         fun images(): Sound.Image {

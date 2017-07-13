@@ -114,8 +114,7 @@ public class DefaultSearchDataModelTest {
         defaultSearchDataModel.getSearchStateOnceAndStream()
                               .test()
                               .assertNoErrors()
-                              .assertValue(SearchState.success(expected.results()));
-
+                              .assertValue(SearchState.success(expected.getResults()));
     }
 
     @Test

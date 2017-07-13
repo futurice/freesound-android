@@ -20,8 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import com.futurice.freesound.network.api.model.FreesoundTypeAdapterFactory;
-import com.futurice.freesound.network.api.model.GeoLocation;
-import com.futurice.freesound.network.api.model.mapping.GeoLocationDeserializer;
+import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.squareup.moshi.KotlinJsonAdapterFactory;
 import com.squareup.moshi.Moshi;
@@ -73,7 +72,6 @@ public class ApiNetworkModule {
     static Gson provideGson() {
         return new GsonBuilder()
                 .setDateFormat(ApiConstants.DATE_FORMAT_PATTERN)
-                .registerTypeAdapter(GeoLocation.class, new GeoLocationDeserializer())
                 .registerTypeAdapterFactory(FreesoundTypeAdapterFactory.create())
                 .create();
     }
@@ -84,6 +82,7 @@ public class ApiNetworkModule {
     static Moshi provideMoshi() {
         return new Moshi.Builder()
                 .add(new KotlinJsonAdapterFactory())
+                .add(new GeoLocationJsonAdapter())
                 .build();
     }
 
