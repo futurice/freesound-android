@@ -80,5 +80,6 @@
         "spectral_l":"https://freesound.org/data/displays/360/360937_5121236_spec_L.jpg"
       }
     }
-  ]
+  ],
+  "previous":"http://freesound.org/apiv2/search/text/?&query=sound&page=0&fields=geotag,images,description,username,id,url,name,duration,previews,tags,created"
 }
