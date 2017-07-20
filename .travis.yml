@@ -32,7 +32,6 @@ android:
         - android-25
         - android-24
         - extra-google-m2repository
-        - extra-android-m2repository
         - sys-img-armeabi-v7a-android-24
 
 before_install:
