@@ -17,12 +17,11 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.R;
-import com.futurice.freesound.core.BindingBaseFragment;
+import com.futurice.freesound.core.BindingBaseFragment2;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
+import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
-import com.futurice.freesound.mvi.ViewModel;
-import com.futurice.freesound.viewmodel.DataBinder;
 import com.squareup.picasso.Picasso;
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -39,15 +38,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
-import polanski.option.AtomicOption;
+import io.reactivex.Observable;
 
 import static butterknife.ButterKnife.bind;
-import static com.futurice.freesound.common.utils.Preconditions.get;
 
-public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponent> {
+public final class HomeFragment extends BindingBaseFragment2<HomeFragmentComponent> {
 
     @Inject
-    UiBinder<Fragment.UiEvent, Fragment.UiModel> uiBinder;
+    UiBinder<Fragment.UiModel, Fragment.UiEvent> uiBinder;
 
     @Inject
     Picasso picasso;
@@ -63,9 +61,6 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
 
     @BindView(R.id.about_textView)
     TextView aboutTextView;
-
-    @NonNull
-    private final AtomicOption<Unbinder> unbinder = new AtomicOption<>();
 
 //    @NonNull
 //    private final DataBinder dataBinder = new DataBinder() {
@@ -107,17 +102,20 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Get or create the ViewModel
-        ViewModel viewModel = ViewModelProviders.of(this)
-                                                .get(HomeFragmentViewModel2.class);
 
-        unbinder = new UiBinder<>(this, viewModel);
 
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        uiBinder.bind(this); // TODO Need to define the handling behavior here
+        uiBinder.bind(Observable.never());
+    }
+
+    @Override
+    public void onStop() {
+        uiBinder.unbind();
+        super.onStop();
     }
 
     @NonNull
@@ -134,14 +132,7 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder.setIfNone(bind(this, view));
-    }
-
-    @Override
-    public void onDestroyView() {
-        unbinder.getAndClear()
-                .ifSome(Unbinder::unbind);
-        super.onDestroyView();
+        bind(this, view);
     }
 
     @Override
@@ -154,18 +145,6 @@ public final class HomeFragment extends BindingBaseFragment<HomeFragmentComponen
     protected HomeFragmentComponent createComponent() {
         return ((HomeActivity) getActivity())
                 .component().plus(new BaseFragmentModule(this));
-    }
-
-    @NonNull
-    @Override
-    protected HomeFragmentViewModel viewModel() {
-        return get(homeFragmentViewModel);
-    }
-
-    @NonNull
-    @Override
-    protected DataBinder dataBinder() {
-        return uiBinder;
     }
 
 }

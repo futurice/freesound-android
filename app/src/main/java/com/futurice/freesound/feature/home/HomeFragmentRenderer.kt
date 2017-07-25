@@ -16,12 +16,14 @@
 
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.mvi.Renderer
+
 /**
  * This is held by the Fragment, its lifecycle reflects t hat
  */
-internal class HomeFragmentRenderer {
+internal class HomeFragmentRenderer : Renderer<Fragment.UiModel> {
 
-    private fun render(model: Fragment.UiModel) {
+    override fun render(model: Fragment.UiModel) {
 
     }
 

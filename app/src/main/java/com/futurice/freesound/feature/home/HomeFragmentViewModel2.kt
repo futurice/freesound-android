@@ -20,7 +20,6 @@ import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.mvi.ViewModel
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
@@ -29,8 +28,8 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
     : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
-    private val uiModel : Observable<Fragment.UiModel>
-    private val disposable : SerialDisposable = SerialDisposable()
+    private val uiModel: Observable<Fragment.UiModel>
+    private val disposable: SerialDisposable = SerialDisposable()
 
     init {
         uiModel = reduce(uiEvents.toObservable()).replayingShare()

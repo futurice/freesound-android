@@ -19,7 +19,7 @@ package com.futurice.freesound.mvi
 /**
  * Implementation have Activity lifecycle and Android dependencies
  */
-interface Renderer<T> {
+interface Renderer<in T> {
 
     fun render(model: T)
 

@@ -24,14 +24,14 @@ import io.reactivex.disposables.CompositeDisposable
  *
  * The View holds this instance.
  */
-class UiBinder<M, E>(val renderer: Renderer<M>,
-                     val viewModel: ViewModel<E, M>) {
+class UiBinder<M, E>(private val renderer: Renderer<M>,
+                     private val viewModel: ViewModel<E, M>) {
 
     private val disposable: CompositeDisposable = CompositeDisposable()
 
     fun bind(uiEvents: Observable<E> = Observable.never()) {
-        disposable.add(uiEvents.subscribe { viewModel.reduce(it) })
-        disposable.add(ViewModel.uiModel().subscribe { renderer.render(it) })
+        disposable.add(uiEvents.subscribe { viewModel.uiEvents(it) })
+        disposable.add(viewModel.uiModel().subscribe { renderer.render(it) })
     }
 
     fun unbind() {
