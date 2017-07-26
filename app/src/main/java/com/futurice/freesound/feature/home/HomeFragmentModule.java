@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
 
 import android.arch.lifecycle.ViewModelProviders;
@@ -27,7 +27,13 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = BaseFragmentModule.class)
-class HomeFragmentModule {
+public class HomeFragmentModule {
+
+    private final HomeFragment homeFragment;
+
+    HomeFragmentModule(HomeFragment homeFragment) {
+        this.homeFragment = homeFragment;
+    }
 
     @Provides
     static HomeFragmentViewModel2 provideHomeFragmentViewModel2(android.support.v4.app.Fragment f) {
@@ -37,20 +43,15 @@ class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    static HomeFragmentRenderer provideRenderer() {
-        return new HomeFragmentRenderer();
+    Renderer<Fragment.UiModel> provideRenderer() {
+        return homeFragment;
     }
 
     @Provides
     @FragmentScope
     static UiBinder<Fragment.UiModel, Fragment.UiEvent> provideUiBinder(
-            HomeFragmentRenderer renderer,
+            Renderer<Fragment.UiModel> renderer,
             HomeFragmentViewModel2 viewModel) {
         return new UiBinder<>(renderer, viewModel);
     }
-
-    private HomeFragmentModule() {
-        throw new InstantiationForbiddenError();
-    }
-
 }

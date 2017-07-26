@@ -19,12 +19,12 @@ package com.futurice.freesound.feature.home;
 import com.futurice.freesound.R;
 import com.futurice.freesound.core.BindingBaseFragment2;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
 import com.squareup.picasso.Picasso;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,12 +37,12 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 
 import static butterknife.ButterKnife.bind;
 
-public final class HomeFragment extends BindingBaseFragment2<HomeFragmentComponent> {
+public final class HomeFragment extends BindingBaseFragment2<HomeFragmentComponent>
+        implements Renderer<Fragment.UiModel> {
 
     @Inject
     UiBinder<Fragment.UiModel, Fragment.UiEvent> uiBinder;
@@ -61,50 +61,6 @@ public final class HomeFragment extends BindingBaseFragment2<HomeFragmentCompone
 
     @BindView(R.id.about_textView)
     TextView aboutTextView;
-
-//    @NonNull
-//    private final DataBinder dataBinder = new DataBinder() {
-//
-//        @Override
-//        public void bind(@NonNull final CompositeDisposable d) {
-//            Preconditions.checkNotNull(homeFragmentViewModel);
-//
-//            d.add(homeFragmentViewModel.getImage()
-//                                       .subscribeOn(schedulerProvider.computation())
-//                                       .observeOn(schedulerProvider.ui())
-//                                       .subscribe(it -> picasso.load(it)
-//                                                               .transform(PicassoTransformations
-//                                                                                  .circular())
-//                                                               .into(avatarImage),
-//                                                  e -> Timber.e(e, "Error setting image")));
-//
-//            d.add(homeFragmentViewModel.getUserName()
-//                                       .subscribeOn(schedulerProvider.computation())
-//                                       .observeOn(schedulerProvider.ui())
-//                                       .subscribe(it -> userNameTextView.setText(it),
-//                                                  e -> Timber.e(e, "Error setting user")));
-//
-//            d.add(homeFragmentViewModel.getAbout()
-//                                       .subscribeOn(schedulerProvider.computation())
-//                                       .observeOn(schedulerProvider.ui())
-//                                       .subscribe(it -> aboutTextView.setText(it),
-//                                                  e -> Timber.e(e, "Error setting aboutTextView")));
-//        }
-//
-//        @Override
-//        public void unbind() {
-//            picasso.cancelRequest(avatarImage);
-//        }
-//
-//    };
-
-    @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Get or create the ViewModel
-
-
-    }
 
     @Override
     public void onStart() {
@@ -144,7 +100,24 @@ public final class HomeFragment extends BindingBaseFragment2<HomeFragmentCompone
     @Override
     protected HomeFragmentComponent createComponent() {
         return ((HomeActivity) getActivity())
-                .component().plus(new BaseFragmentModule(this));
+                .component().plus(new HomeFragmentModule(this),
+                                  new BaseFragmentModule(this));
     }
 
+    @Override
+    public void render(final Fragment.UiModel model) {
+        picasso.load(model.getAvatarUrl())
+               .transform(PicassoTransformations
+                                  .circular())
+               .into(avatarImage);
+
+        userNameTextView.setText(model.getUsername());
+
+        aboutTextView.setText(model.getAbout());
+    }
+
+    @Override
+    public void cancel() {
+        picasso.cancelRequest(avatarImage);
+    }
 }

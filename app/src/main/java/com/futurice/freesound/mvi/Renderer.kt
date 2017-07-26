@@ -23,4 +23,6 @@ interface Renderer<in T> {
 
     fun render(model: T)
 
+    fun cancel()
+
 }
