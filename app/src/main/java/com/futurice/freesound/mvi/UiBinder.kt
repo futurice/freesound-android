@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.mvi
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
@@ -25,13 +26,19 @@ import io.reactivex.disposables.CompositeDisposable
  * The View holds this instance.
  */
 class UiBinder<M, E>(private val renderer: Renderer<M>,
-                     private val viewModel: ViewModel<E, M>) {
+                     private val viewModel: ViewModel<E, M>,
+                     private val schedulers: SchedulerProvider) {
 
     private val disposable: CompositeDisposable = CompositeDisposable()
 
     fun bind(uiEvents: Observable<E> = Observable.never()) {
-        disposable.add(uiEvents.subscribe { viewModel.uiEvents(it) })
-        disposable.add(viewModel.uiModel().subscribe { renderer.render(it) })
+        disposable.add(uiEvents
+                .subscribeOn(schedulers.computation())
+                .subscribe { viewModel.uiEvents(it) })
+        disposable.add(viewModel.uiModel()
+             //   .subscribeOn(schedulers.computation())
+                .observeOn(schedulers.ui())
+                .subscribe { renderer.render(it) })
     }
 
     fun unbind() {

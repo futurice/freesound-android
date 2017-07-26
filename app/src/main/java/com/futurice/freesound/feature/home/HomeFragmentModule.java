@@ -16,11 +16,13 @@
 
 package com.futurice.freesound.feature.home;
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 
 import dagger.Module;
@@ -36,8 +38,20 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentViewModel2 provideHomeFragmentViewModel2(android.support.v4.app.Fragment f) {
-        return ViewModelProviders.of(f)
+    static HomeFragmentDataBinder provideHomeFragmentDataBinder(UserDataModel userDataModel) {
+        return new HomeFragmentDataBinder(userDataModel);
+    }
+
+    @Provides
+    static ViewModelProvider.Factory provideViewModelFactory(HomeFragmentDataBinder dataBinder,
+                                                             SchedulerProvider schedulerProvider) {
+        return new HomeFragmentViewModel2Factory(dataBinder, schedulerProvider);
+    }
+
+    @Provides
+    static HomeFragmentViewModel2 provideHomeFragmentViewModel2(android.support.v4.app.Fragment f,
+                                                                ViewModelProvider.Factory factory) {
+        return ViewModelProviders.of(f, factory)
                                  .get(HomeFragmentViewModel2.class);
     }
 
@@ -51,7 +65,8 @@ public class HomeFragmentModule {
     @FragmentScope
     static UiBinder<Fragment.UiModel, Fragment.UiEvent> provideUiBinder(
             Renderer<Fragment.UiModel> renderer,
-            HomeFragmentViewModel2 viewModel) {
-        return new UiBinder<>(renderer, viewModel);
+            HomeFragmentViewModel2 viewModel,
+            SchedulerProvider schedulerProvider) {
+        return new UiBinder<>(renderer, viewModel, schedulerProvider);
     }
 }

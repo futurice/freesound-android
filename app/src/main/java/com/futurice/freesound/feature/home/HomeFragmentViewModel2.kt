@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.mvi.ViewModel
 import com.jakewharton.rx.replayingShare
@@ -24,7 +25,8 @@ import io.reactivex.disposables.SerialDisposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragment.DataEvent>)
+internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragment.DataEvent>,
+                                      private val schedulers: SchedulerProvider)
     : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
@@ -33,7 +35,9 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
 
     init {
         uiModel = reduce(uiEvents.toObservable()).replayingShare()
-        disposable.set(uiModel.subscribe())
+        disposable.set(uiModel
+                .subscribeOn(schedulers.computation())
+                .subscribe())
     }
 
     override fun uiEvents(uiEvent: Fragment.UiEvent) {
@@ -68,13 +72,13 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
 
     private fun toChange(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
-                is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserModified(dataEvent.user)
+                is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
             }
 
     private fun Fragment.UiModel.reduce(event: Fragment.Change): Fragment.UiModel =
             when (event) {
                 Fragment.Change.NoOp -> this
-                is Fragment.Change.UserModified ->
+                is Fragment.Change.UserChanged ->
                     copy(username = event.user.username(),
                             about = event.user.about(),
                             avatarUrl = event.user.avatar().large())
@@ -83,7 +87,7 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
     companion object {
         // TODO The real initial state comes from whatever is in the data layer
         // It seems odd to have to define something here when that default is essentially None
-        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel("", "", "") }
+        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel("", "", "", true) }
     }
 
 }

@@ -33,7 +33,8 @@ internal interface Activity {
 internal interface Fragment {
     data class UiModel(val username: String,
                        val about: String,
-                       val avatarUrl: String)
+                       val avatarUrl: String,
+                       val isLoading: Boolean)
 
     sealed class UiEvent(val log: String) {
         object NoOp : UiEvent("No-op UIEvent")
@@ -49,7 +50,7 @@ internal interface Fragment {
 
     sealed class Change(val log: String) {
         object NoOp : Change("No-op Change")
-        class UserModified(val user: User) : Change("Home user modified: $user")
+        class UserChanged(val user: User) : Change("Home user changed: $user")
     }
 
 }
