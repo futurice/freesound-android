@@ -16,77 +16,12 @@
 
 package com.futurice.freesound.core;
 
-import com.futurice.freesound.viewmodel.BaseLifecycleViewDataBinder;
-import com.futurice.freesound.viewmodel.DataBinder;
-import com.futurice.freesound.viewmodel.ViewModel;
-
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import io.reactivex.disposables.CompositeDisposable;
-
 /**
  * A base Fragment which provides the binding mechanism hooks to a View Model.
  *
  * @param <T> The DI component class.
  */
 public abstract class BindingBaseFragment2<T> extends BaseFragment<T> {
-//
-//    @NonNull
-//    private final BaseLifecycleViewDataBinder lifecycleBinder = new BaseLifecycleViewDataBinder() {
-//
-//        @Override
-//        public void bind(@NonNull final CompositeDisposable disposables) {
-//            dataBinder().bind(disposables);
-//        }
-//
-//        @Override
-//        public void unbind() {
-//            dataBinder().unbind();
-//        }
-//
-//        @NonNull
-//        @Override
-//        public ViewModel viewModel() {
-//            return BindingBaseFragment2.this.viewModel();
-//        }
-//
-//    };
-//
-//    @Override
-//    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        lifecycleBinder.onCreate();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        lifecycleBinder.onResume();
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        lifecycleBinder.onPause();
-//        super.onPause();
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        lifecycleBinder.onDestroyView();
-//        super.onDestroyView();
-//    }
-//
-//    @Override
-//    public void onDestroy() {
-//        lifecycleBinder.onDestroy();
-//        super.onDestroy();
-//    }
-//
-//    @NonNull
-//    protected abstract ViewModel viewModel();
-//
-//    @NonNull
-//    protected abstract DataBinder dataBinder();
+
+    // TODO Add lifecycle binding methods here
 }

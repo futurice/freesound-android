@@ -26,7 +26,7 @@ import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
 internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragment.DataEvent>,
-                                      private val schedulers: SchedulerProvider)
+                                      schedulers: SchedulerProvider)
     : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
 
     private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
@@ -79,15 +79,13 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
             when (event) {
                 Fragment.Change.NoOp -> this
                 is Fragment.Change.UserChanged ->
-                    copy(username = event.user.username(),
+                    Fragment.UiModel.HomeUser(username = event.user.username(),
                             about = event.user.about(),
                             avatarUrl = event.user.avatar().large())
             }
 
     companion object {
-        // TODO The real initial state comes from whatever is in the data layer
-        // It seems odd to have to define something here when that default is essentially None
-        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel("", "", "", true) }
+        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel.HomeUserLoading }
     }
 
 }
