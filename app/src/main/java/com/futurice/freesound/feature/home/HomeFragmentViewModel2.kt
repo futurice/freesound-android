@@ -27,10 +27,7 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
 
     override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, true, null)
 
-    override fun fromUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change =
-            when (uiEvent) {
-                is Fragment.UiEvent.NoOp -> Fragment.Change.NoChange
-            }
+    override fun fromUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change = Fragment.Change.NoChange
 
     override fun fromDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
