@@ -17,17 +17,14 @@
 package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.network.api.model.User
-import io.reactivex.Observable
 
 interface Activity {
-    data class UiModel(val thing: String)
 
     sealed class UiEvent(val log: String) {
         object NoOp : UiEvent("No-op")
         object OpenSearchEvent : UiEvent("Open Search")
     }
 
-    fun uiEvents(): Observable<UiEvent>
 }
 
 interface Fragment {
@@ -41,11 +38,7 @@ interface Fragment {
                        val errorMsg: String?)
 
     sealed class UiEvent(val log: String) {
-        object NoOp : UiEvent("No-op UIEvent")
-    }
-
-    sealed class Action(val log: String) {
-        object NoOp : Action("No-op data Action")
+        object NoOp : UiEvent("No-op UiEvent")
     }
 
     sealed class DataEvent(val log: String) {

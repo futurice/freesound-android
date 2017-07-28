@@ -20,5 +20,5 @@ import io.reactivex.Observable
 
 interface Reducer<T, R> {
 
-    fun reduce(input: Observable<T>): io.reactivex.Observable<R>
+    fun reduce(input: Observable<T>): Observable<R>
 }

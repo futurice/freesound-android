@@ -42,6 +42,6 @@ class UiBinder<M, E>(private val renderer: Renderer<M>,
 
     fun unbind() {
         disposable.clear()
-        renderer.endRender()
+        renderer.cancelRender()
     }
 }

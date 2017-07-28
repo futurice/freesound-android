@@ -26,16 +26,12 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.mvi.Renderer
-import com.futurice.freesound.mvi.UiBinder
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fragment.UiModel> {
-
-    @Inject
-    internal lateinit var uiBinder: UiBinder<Fragment.UiModel, Fragment.UiEvent>
+class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiModel, Fragment.UiEvent>(), Renderer<Fragment.UiModel> {
 
     @Inject
     internal lateinit var picasso: Picasso
@@ -43,15 +39,6 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
     @Inject
     internal lateinit var schedulerProvider: SchedulerProvider
 
-    override fun onStart() {
-        super.onStart()
-        uiBinder.bind(Observable.never<Fragment.UiEvent>())
-    }
-
-    override fun onStop() {
-        uiBinder.unbind()
-        super.onStop()
-    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -66,6 +53,10 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
         return (activity as HomeActivity)
                 .component().plus(HomeFragmentModule(this),
                 BaseFragmentModule(this))
+    }
+
+    override fun uiEvents(): Observable<Fragment.UiEvent> {
+        return Observable.never()
     }
 
     override fun render(model: Fragment.UiModel) {
@@ -84,12 +75,12 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
 
     }
 
-    private fun hideUser() {
-        homeUser_container.visibility = View.GONE
+    override fun cancelRender() {
+        picasso.cancelRequest(avatar_image)
     }
 
-    override fun endRender() {
-        picasso.cancelRequest(avatar_image)
+    private fun hideUser() {
+        homeUser_container.visibility = View.GONE
     }
 
     private fun showUser(user: Fragment.UserUiModel) {

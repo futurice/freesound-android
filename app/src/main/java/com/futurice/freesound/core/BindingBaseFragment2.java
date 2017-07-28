@@ -16,12 +16,31 @@
 
 package com.futurice.freesound.core;
 
+import com.futurice.freesound.mvi.Producer;
+import com.futurice.freesound.mvi.UiBinder;
+
+import javax.inject.Inject;
+
 /**
  * A base Fragment which provides the binding mechanism hooks to a View Model.
  *
  * @param <T> The DI component class.
  */
-public abstract class BindingBaseFragment2<T> extends BaseFragment<T> {
+public abstract class BindingBaseFragment2<T, M, E> extends BaseFragment<T> implements Producer<E> {
 
-    // TODO Add lifecycle binding methods here
+    @Inject
+    UiBinder<M, E> uiBinder;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        uiBinder.bind(uiEvents());
+    }
+
+    @Override
+    public void onStop() {
+        uiBinder.unbind();
+        super.onStop();
+    }
+
 }
