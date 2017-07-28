@@ -46,7 +46,7 @@ abstract class BaseViewModel<E, D, M, C>(
         return uiModel
     }
 
-    abstract protected fun reduce(model: M, change: C): M
+    abstract protected fun M.reduce(change: C): M
 
     abstract fun fromUiEvent(uiEvent: E): C
 
@@ -57,7 +57,7 @@ abstract class BaseViewModel<E, D, M, C>(
     private fun reduce(uiEvents: Observable<E>,
                        dataEvents: Observable<D>): Observable<M> {
         return Observable.merge(processUiEvents(uiEvents), processDataEvents(dataEvents))
-                .scan(INITIAL_UI_STATE, { model: M, change -> reduce(model, change) })
+                .scan(INITIAL_UI_STATE, { model: M, change -> model.reduce(change) })
                 .doOnNext { model: M -> Timber.v(" $model") }
     }
 

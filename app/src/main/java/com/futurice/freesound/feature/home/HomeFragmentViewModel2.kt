@@ -32,18 +32,16 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
                 is Fragment.UiEvent.NoOp -> Fragment.Change.NoChange
             }
 
-
     override fun fromDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
                 is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
             }
 
-    override fun reduce(model: Fragment.UiModel, change: Fragment.Change): Fragment.UiModel =
+    override fun Fragment.UiModel.reduce(change: Fragment.Change): Fragment.UiModel =
             when (change) {
-                is Fragment.Change.NoChange -> model
-                is Fragment.Change.UserChanged -> model.fromUserChanged(change.user)
+                is Fragment.Change.NoChange -> this
+                is Fragment.Change.UserChanged -> fromUserChanged(change.user)
             }
-
 
     private fun Fragment.UiModel.fromUserChanged(user: User): Fragment.UiModel {
         return this.copy(user = Fragment.UserUiModel(user.username(),
