@@ -73,43 +73,43 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     @NonNull
     private String getThumbnail() {
-        return ofObj(sound.images())
-                .flatMap(it -> ofObj(it.medSizeWaveformUrl()))
+        return ofObj(sound.getImages())
+                .flatMap(it -> ofObj(it.getMedSizeWaveformUrl()))
                 .orDefault(() -> Text.EMPTY);
     }
 
     @NonNull
     Single<String> name() {
-        return Single.just(sound.name());
+        return Single.just(sound.getName());
     }
 
     @NonNull
     Single<String> userAvatar() {
-        return freeSoundApiService.getUser(sound.username())
+        return freeSoundApiService.getUser(sound.getUsername())
                                   .map(user -> user.getAvatar().getMedium())
                                   .cache();
     }
 
     @NonNull
     Single<String> createdDate() {
-        return Single.just(sound.created())
+        return Single.just(sound.getCreated())
                      .map(Date::getTime)
                      .map(d -> DateFormat.getDateInstance().format(d));
     }
 
     @NonNull
     Single<String> username() {
-        return Single.just(sound.username());
+        return Single.just(sound.getUsername());
     }
 
     @NonNull
     Single<String> description() {
-        return Single.just(sound.description());
+        return Single.just(sound.getDescription());
     }
 
     @NonNull
     Single<Integer> duration() {
-        return Single.just(sound.duration())
+        return Single.just(sound.getDuration())
                      .map(duration -> (int) Math.ceil(duration))
                      .map(duration -> Math.max(duration, 1));
     }
@@ -126,8 +126,8 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     void toggleSoundPlayback() {
         audioPlayer.togglePlayback(
-                new PlaybackSource(from(sound.id()),
-                                   sound.previews().lowQualityMp3Url()));
+                new PlaybackSource(from(sound.getId()),
+                                   sound.getPreviews().getLowQualityMp3Url()));
     }
 
     @NonNull
@@ -137,14 +137,14 @@ final class SoundItemViewModel extends SimpleViewModel {
 
     private boolean isThisSound(@NonNull final PlayerState playerState) {
         return playerState.getSource()
-                          .filter(playbackSource -> playbackSource.getId().equals(from(sound.id())))
+                          .filter(playbackSource -> playbackSource.getId().equals(from(sound.getId())))
                           .isSome();
     }
 
     @NonNull
     private Observable<Option<Integer>> getCurrentPercentage() {
         return audioPlayer.getTimePositionMsOnceAndStream()
-                          .map(positionMs -> toPercentage(positionMs, sound.duration()))
+                          .map(positionMs -> toPercentage(positionMs, sound.getDuration()))
                           .map(Option::ofObj);
     }
 

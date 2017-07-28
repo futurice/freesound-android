@@ -159,6 +159,7 @@ dependencies {
     // Moshi
     implementation "com.squareup.moshi:moshi:$dependencyVersions.moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$dependencyVersions.moshi"
+    implementation "com.squareup.moshi:moshi-adapters:$dependencyVersions.moshi"
     implementation "com.squareup.retrofit2:converter-moshi:$dependencyVersions.moshiConverter"
 
     // GSON

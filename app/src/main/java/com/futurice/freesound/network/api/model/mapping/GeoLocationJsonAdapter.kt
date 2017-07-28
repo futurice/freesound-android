@@ -18,6 +18,7 @@ package com.futurice.freesound.network.api.model.mapping
 import com.futurice.freesound.network.api.model.GeoLocation
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
+import java.util.*
 
 class GeoLocationJsonAdapter {
 
@@ -28,4 +29,10 @@ class GeoLocationJsonAdapter {
             .takeIf { it.size == 2 }
             ?.let { GeoLocation(latitude = it[0], longitude = it[1]) }
             ?: throw JsonDataException("Unable to deserialize latitude/long values from: $json")
+}
+
+class DateAA {
+
+    @FromJson fun fromJson(json: String): Date =
+        Date()
 }
