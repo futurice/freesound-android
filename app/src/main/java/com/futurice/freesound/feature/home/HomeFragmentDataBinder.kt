@@ -17,12 +17,14 @@
 package com.futurice.freesound.feature.home
 
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 
 internal class HomeFragmentDataBinder(private val userDataModel: UserDataModel) {
 
     fun data(): Observable<Fragment.DataEvent> {
         return userDataModel.homeUser
+                .delay(5, TimeUnit.SECONDS)
                 .map { Fragment.DataEvent.UserDataEvent(it) as Fragment.DataEvent }
                 .toObservable()
     }

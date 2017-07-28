@@ -49,8 +49,13 @@ public class HomeFragmentModule {
     }
 
     @Provides
+    @FragmentScope
     static HomeFragmentViewModel2 provideHomeFragmentViewModel2(android.support.v4.app.Fragment f,
                                                                 ViewModelProvider.Factory factory) {
+
+        // This can be scoped as @FragmentScope because that allows the component to memoize the
+        // value rather than always querying the ViewModelProviders. The ViewModel's actual scope
+        // always exceeds that of the Fragment, so this should be ok.
         return ViewModelProviders.of(f, factory)
                                  .get(HomeFragmentViewModel2.class);
     }

@@ -14,35 +14,49 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <ProgressBar android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:id="@+id/loading_progressBar"
+                 android:visibility="gone"
+                 style="@style/CircularProgressBarStyle"
+                 android:layout_gravity="center"/>
 
-    <ImageView android:id="@+id/avatar_image"
-               android:layout_width="100dp"
-               android:layout_height="100dp"/>
-    <TextView
-            android:id="@+id/username_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_small"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/avatar_image"
-            android:textAlignment="textStart"
-            tools:text="User Name"/>
-    <TextView
-            android:id="@+id/about_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/spacing_small"
-            android:paddingEnd="@dimen/spacing_small"
-            android:layout_below="@+id/username_textView"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/avatar_image"
-            tools:text="About"/>
-</RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/homeUser_container"
+                    android:layout_gravity="top"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+        <ImageView android:id="@+id/avatar_image"
+                   android:layout_width="100dp"
+                   android:layout_height="100dp"/>
+        <TextView
+                android:id="@+id/username_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingEnd="@dimen/spacing_small"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/avatar_image"
+                android:textAlignment="textStart"
+                tools:text="User Name"/>
+        <TextView
+                android:id="@+id/about_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/spacing_small"
+                android:paddingEnd="@dimen/spacing_small"
+                android:layout_below="@+id/username_textView"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/avatar_image"
+                tools:text="About"/>
+    </RelativeLayout>
+</FrameLayout>

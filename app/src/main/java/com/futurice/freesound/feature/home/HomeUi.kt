@@ -32,14 +32,13 @@ interface Activity {
 
 interface Fragment {
 
-    sealed class UiModel {
-        class HomeUser(val username: String,
-                       val about: String,
-                       val avatarUrl: String) : Fragment.UiModel()
+    data class UserUiModel(val username: String,
+                           val about: String,
+                           val avatarUrl: String)
 
-        object HomeUserLoading : Fragment.UiModel()
-        class HomeUserError(val error: Exception) : Fragment.UiModel()
-    }
+    data class UiModel(val user: UserUiModel?,
+                       val isLoading: Boolean,
+                       val errorMsg: String?)
 
     sealed class UiEvent(val log: String) {
         object NoOp : UiEvent("No-op UIEvent")

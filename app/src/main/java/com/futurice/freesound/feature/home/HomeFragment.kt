@@ -55,7 +55,7 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_home, container, false)
+        return inflater?.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun inject() {
@@ -69,18 +69,31 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
     }
 
     override fun render(model: Fragment.UiModel) {
-        when (model) {
-            is Fragment.UiModel.HomeUser -> showUser(model)
-            is Fragment.UiModel.HomeUserLoading -> showLoading()
-            is Fragment.UiModel.HomeUserError -> showError()
+
+        when (model.user) {
+            null -> hideUser()
+            else -> showUser(model.user)
         }
+
+        showLoading(model.isLoading)
+
+        when (model.errorMsg) {
+            null -> ""
+            else -> ""
+        }
+
+    }
+
+    private fun hideUser() {
+        homeUser_container.visibility = View.GONE
     }
 
     override fun endRender() {
         picasso.cancelRequest(avatar_image)
     }
 
-    private fun showUser(user: Fragment.UiModel.HomeUser) {
+    private fun showUser(user: Fragment.UserUiModel) {
+        homeUser_container.visibility = View.VISIBLE
         picasso.load(user.avatarUrl)
                 .transform(circularTransformation())
                 .into(avatar_image)
@@ -88,12 +101,8 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent>(), Renderer<Fra
         about_textView.text = user.about
     }
 
-    private fun showLoading() {
-
-    }
-
-    private fun showError() {
-
+    private fun showLoading(isLoading: Boolean) {
+        loading_progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

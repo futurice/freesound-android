@@ -79,13 +79,15 @@ internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragmen
             when (event) {
                 Fragment.Change.NoOp -> this
                 is Fragment.Change.UserChanged ->
-                    Fragment.UiModel.HomeUser(username = event.user.username(),
+                    this.copy(user = Fragment.UserUiModel(event.user.username(),
                             about = event.user.about(),
-                            avatarUrl = event.user.avatar().large())
+                            avatarUrl = event.user.avatar().large()),
+                            isLoading = false,
+                            errorMsg = null)
             }
 
     companion object {
-        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel.HomeUserLoading }
+        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel(null, true, null) }
     }
 
 }

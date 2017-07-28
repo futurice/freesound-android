@@ -38,6 +38,11 @@
         <item name="android:indeterminateTint">@color/colorContrastAccent</item>
     </style>
 
+    <style name="CircularProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminate">true</item>
+        <item name="android:indeterminateTint">@color/colorContrastAccent</item>
+    </style>
+
     <style name="PlaybackProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressTint">@color/colorContrastAccent</item>
     </style>
