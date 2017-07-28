@@ -21,7 +21,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 
 /**
- *This is Activity lifecycle bound. Do this on start/stop.
+ *This is View lifecycle bound. Do this on start/stop.
  *
  * The View holds this instance.
  */

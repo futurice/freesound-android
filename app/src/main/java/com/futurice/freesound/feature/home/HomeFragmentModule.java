@@ -38,12 +38,12 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentDataBinder provideHomeFragmentDataBinder(UserDataModel userDataModel) {
-        return new HomeFragmentDataBinder(userDataModel);
+    static HomeFragmentDataEvents provideHomeFragmentDataBinder(UserDataModel userDataModel) {
+        return new HomeFragmentDataEvents(userDataModel);
     }
 
     @Provides
-    static ViewModelProvider.Factory provideViewModelFactory(HomeFragmentDataBinder dataBinder,
+    static ViewModelProvider.Factory provideViewModelFactory(HomeFragmentDataEvents dataBinder,
                                                              SchedulerProvider schedulerProvider) {
         return new HomeFragmentViewModel2Factory(dataBinder, schedulerProvider);
     }

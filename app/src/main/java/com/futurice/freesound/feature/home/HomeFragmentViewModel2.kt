@@ -17,77 +17,40 @@
 package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.mvi.Reducer
-import com.futurice.freesound.mvi.ViewModel
-import com.jakewharton.rx.replayingShare
+import com.futurice.freesound.mvi.BaseViewModel
+import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
-import io.reactivex.disposables.SerialDisposable
-import io.reactivex.processors.PublishProcessor
-import timber.log.Timber
 
-internal class HomeFragmentViewModel2(private val dataEvents: Observable<Fragment.DataEvent>,
-                                      schedulers: SchedulerProvider)
-    : Reducer<Fragment.UiEvent, Fragment.UiModel>, ViewModel<Fragment.UiEvent, Fragment.UiModel>() {
+internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>,
+                                      schedulers: SchedulerProvider) :
+        BaseViewModel<Fragment.UiEvent, Fragment.DataEvent, Fragment.UiModel, Fragment.Change>(dataEvents, schedulers) {
 
-    private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
-    private val uiModel: Observable<Fragment.UiModel>
-    private val disposable: SerialDisposable = SerialDisposable()
+    override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, true, null)
 
-    init {
-        uiModel = reduce(uiEvents.toObservable()).replayingShare()
-        disposable.set(uiModel
-                .subscribeOn(schedulers.computation())
-                .subscribe())
-    }
-
-    override fun uiEvents(uiEvent: Fragment.UiEvent) {
-        uiEvents.offer(uiEvent)
-    }
-
-    override fun uiModel(): Observable<Fragment.UiModel> {
-        return uiModel
-    }
-
-    override fun reduce(input: Observable<Fragment.UiEvent>): Observable<Fragment.UiModel> {
-        return Observable.merge(processUiEvents(input), processDataEvents(dataEvents))
-                .scan(INITIAL_UI_STATE, { model, change -> model.reduce(change) })
-                .doOnNext { model: Fragment.UiModel -> Timber.v(" $model") }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
-    }
-
-    private fun processUiEvents(uiEvents: Observable<Fragment.UiEvent>): Observable<Fragment.Change>
-            = uiEvents.map { toChange(it) }
-
-    private fun processDataEvents(dataEvents: Observable<Fragment.DataEvent>): Observable<Fragment.Change>
-            = dataEvents.map { toChange(it) }
-
-    private fun toChange(uiEvent: Fragment.UiEvent): Fragment.Change =
+    override fun fromUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change =
             when (uiEvent) {
-                is Fragment.UiEvent.NoOp -> Fragment.Change.NoOp
+                is Fragment.UiEvent.NoOp -> Fragment.Change.NoChange
             }
 
-    private fun toChange(dataEvent: Fragment.DataEvent): Fragment.Change =
+
+    override fun fromDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
                 is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
             }
 
-    private fun Fragment.UiModel.reduce(event: Fragment.Change): Fragment.UiModel =
-            when (event) {
-                Fragment.Change.NoOp -> this
-                is Fragment.Change.UserChanged ->
-                    this.copy(user = Fragment.UserUiModel(event.user.username(),
-                            about = event.user.about(),
-                            avatarUrl = event.user.avatar().large()),
-                            isLoading = false,
-                            errorMsg = null)
+    override fun reduce(model: Fragment.UiModel, change: Fragment.Change): Fragment.UiModel =
+            when (change) {
+                is Fragment.Change.NoChange -> model
+                is Fragment.Change.UserChanged -> model.fromUserChanged(change.user)
             }
 
-    companion object {
-        val INITIAL_UI_STATE: Fragment.UiModel by lazy { Fragment.UiModel(null, true, null) }
+
+    private fun Fragment.UiModel.fromUserChanged(user: User): Fragment.UiModel {
+        return this.copy(user = Fragment.UserUiModel(user.username(),
+                about = user.about(),
+                avatarUrl = user.avatar().large()),
+                isLoading = false,
+                errorMsg = null)
     }
 
 }

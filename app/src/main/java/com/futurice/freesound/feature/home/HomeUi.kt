@@ -46,7 +46,7 @@ interface Fragment {
     }
 
     sealed class Change(val log: String) {
-        object NoOp : Change("No-op Change")
+        object NoChange : Change("No-op Change")
         class UserChanged(val user: User) : Change("Home user changed: $user")
     }
 

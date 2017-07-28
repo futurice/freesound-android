@@ -23,19 +23,20 @@ import android.arch.lifecycle.ViewModelProvider;
 
 class HomeFragmentViewModel2Factory implements ViewModelProvider.Factory {
 
-    private final HomeFragmentDataBinder homeFragmentDataBinder;
+    private final HomeFragmentDataEvents homeFragmentDataEvents;
     private final SchedulerProvider schedulerProvider;
 
-    HomeFragmentViewModel2Factory(HomeFragmentDataBinder homeFragmentDataBinder,
+    HomeFragmentViewModel2Factory(HomeFragmentDataEvents homeFragmentDataEvents,
                                   SchedulerProvider schedulerProvider) {
-        this.homeFragmentDataBinder = homeFragmentDataBinder;
+        this.homeFragmentDataEvents = homeFragmentDataEvents;
         this.schedulerProvider = schedulerProvider;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(HomeFragmentViewModel2.class)) {
-            return (T) new HomeFragmentViewModel2(homeFragmentDataBinder.data(), schedulerProvider);
+            return (T) new HomeFragmentViewModel2(homeFragmentDataEvents.dataEvents(),
+                                                  schedulerProvider);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

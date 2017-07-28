@@ -19,12 +19,12 @@ package com.futurice.freesound.feature.home
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
+// This could probably just be a file, it would nice to have symmetric way of doing this
+internal class HomeFragmentDataEvents(private val userDataModel: UserDataModel) {
 
-internal class HomeFragmentDataBinder(private val userDataModel: UserDataModel) {
-
-    fun data(): Observable<Fragment.DataEvent> {
+    fun dataEvents(): Observable<Fragment.DataEvent> {
         return userDataModel.homeUser
-                .delay(5, TimeUnit.SECONDS)
+                .delay(5, TimeUnit.SECONDS) // for testing purposes!!!!
                 .map { Fragment.DataEvent.UserDataEvent(it) as Fragment.DataEvent }
                 .toObservable()
     }
