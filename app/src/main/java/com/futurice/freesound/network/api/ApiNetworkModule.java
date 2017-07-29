@@ -16,12 +16,12 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.network.api.model.mapping.DateAA;
 import com.futurice.freesound.network.api.model.mapping.DateAdapter;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.squareup.moshi.KotlinJsonAdapterFactory;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Rfc3339DateJsonAdapter;
 
 import java.lang.annotation.Retention;
 import java.util.Date;
@@ -69,8 +69,8 @@ public class ApiNetworkModule {
         return new Moshi.Builder()
                 .add(new KotlinJsonAdapterFactory())
                 .add(new GeoLocationJsonAdapter())
-                .add(new DateAA())
-                .add(Date.class, new DateAdapter().nullSafe())
+                .add(new DateAdapter())
+                .add(Date.class, new Rfc3339DateJsonAdapter().nullSafe())
                 .build();
     }
 

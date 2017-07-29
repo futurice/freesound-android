@@ -14,19 +14,13 @@
 
 package com.futurice.freesound.network.api.model.mapping
 
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.JsonReader
-import com.squareup.moshi.JsonWriter
-import java.io.IOException
+import com.squareup.moshi.FromJson
 import java.util.*
 
-internal class DateAdapter : JsonAdapter<Date>() {
-    @Synchronized @Throws(IOException::class)
-    override fun fromJson(reader: JsonReader): Date {
-        return Date()
-    }
+class DateAdapter {
 
-    @Synchronized @Throws(IOException::class)
-    override fun toJson(writer: JsonWriter, value: Date?) {
+    @FromJson fun fromJson(json: String): Date {
+        val parsableDate = if (json.endsWith("Z")) json else json.plus("Z")
+        return Iso8601Utils.parse(parsableDate)
     }
 }
