@@ -29,4 +29,3 @@ class GeoLocationJsonAdapter {
             ?.let { GeoLocation(latitude = it[0], longitude = it[1]) }
             ?: throw JsonDataException("Unable to deserialize latitude/long values from: $json")
 }
-
