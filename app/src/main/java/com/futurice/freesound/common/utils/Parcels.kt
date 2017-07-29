@@ -46,7 +46,7 @@ inline fun <reified T : Enum<T>> Parcel.readEnum() =
 fun <T : Enum<T>> Parcel.writeEnum(value: T?) =
     writeInt(value?.ordinal ?: -1)
 
-inline fun <T> Parcel.readNullable(reader: () -> T) =
+inline fun <T> Parcel.readNullable(reader: Parcel.() -> T) =
     if (readInt() != 0) reader() else null
 
 inline fun <T> Parcel.writeNullable(value: T?, writer: (T) -> Unit) {

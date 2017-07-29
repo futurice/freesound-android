@@ -48,16 +48,16 @@ data class Sound(
     val duration: Float?,
     val created: Date) : KParcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readNullable { parcel.readLong() },
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() },
+        parcel.readNullable { readLong() },
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() },
         parcel.readStringList(),
-        parcel.readNullable { parcel.readString() },
+        parcel.readNullable { readString() },
         parcel.readTypedObjectCompat(GeoLocation.CREATOR),
-        parcel.readNullable { parcel.readString() },
+        parcel.readNullable { readString() },
         parcel.readTypedObjectCompat(Image.CREATOR)!!,
         parcel.readTypedObjectCompat(Preview.CREATOR),
-        parcel.readNullable { parcel.readFloat() },
+        parcel.readNullable { readFloat() },
         parcel.readDate()!!)
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
@@ -94,9 +94,9 @@ data class Image(
     val largeSizeSpectralUrl: String?) : KParcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() })
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() })
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(medSizeWaveformUrl)
@@ -124,10 +124,10 @@ data class Preview(
     @Json(name = "preview-hq-ogg")
     val highQualityOggUrl: String?) : KParcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() },
-        parcel.readNullable { parcel.readString() })
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() },
+        parcel.readNullable { readString() })
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeNullable(lowQualityMp3Url) { writeString(it) }
