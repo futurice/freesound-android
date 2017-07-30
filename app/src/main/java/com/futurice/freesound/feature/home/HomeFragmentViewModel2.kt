@@ -30,17 +30,17 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
 
     override fun mapDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
-                is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
                 Fragment.DataEvent.UserFetchInProgressEvent -> Fragment.Change.UserFetchInProgressChanged
+                is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
                 is Fragment.DataEvent.UserFetchFailedEvent -> Fragment.Change.UserFetchErrorChanged(dataEvent.error.localizedMessage)
             }
 
     override fun Fragment.UiModel.reduce(change: Fragment.Change): Fragment.UiModel =
             when (change) {
                 is Fragment.Change.NoChange -> this
+                Fragment.Change.UserFetchInProgressChanged -> fromUserFetchInProgressChange()
                 is Fragment.Change.UserChanged -> fromUserChanged(change)
                 is Fragment.Change.UserFetchErrorChanged -> fromUserFetchErrorChanged(change)
-                Fragment.Change.UserFetchInProgressChanged -> fromUserFetchInProgressChange()
             }
 
     private fun Fragment.UiModel.fromUserChanged(change: Fragment.Change.UserChanged): Fragment.UiModel
