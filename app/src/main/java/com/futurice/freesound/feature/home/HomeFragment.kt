@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
 import com.futurice.freesound.core.BindingBaseFragment2
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.mvi.Renderer
@@ -35,9 +34,6 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
 
     @Inject
     internal lateinit var picasso: Picasso
-
-    @Inject
-    internal lateinit var schedulerProvider: SchedulerProvider
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,9 +50,7 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
                 BaseFragmentModule(this))
     }
 
-    override fun uiEvents(): Observable<Fragment.UiEvent> {
-        return Observable.never()
-    }
+    override fun uiEvents(): Observable<Fragment.UiEvent> = Observable.never()
 
     override fun render(model: Fragment.UiModel) {
 

@@ -42,7 +42,7 @@ interface Fragment {
     sealed class DataEvent(val log: String) {
         object UserFetchInProgressEvent : DataEvent("UserFetchInProgressEvent")
         class UserDataEvent(val user: User) : DataEvent("UserDataEvent: $user")
-        class UserFetchFailedEvent(val error: Exception) : DataEvent("UserFetchFailedEvent: $error")
+        class UserFetchFailedEvent(val error: Throwable) : DataEvent("UserFetchFailedEvent: $error")
     }
 
     sealed class Change(val log: String) {

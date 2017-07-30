@@ -20,12 +20,17 @@ import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
 // This could probably just be a file, it would nice to have symmetric way of doing this
-internal class HomeFragmentDataEvents(private val userDataModel: UserDataModel) {
+internal class HomeFragmentInteractor(private val userDataModel: UserDataModel) {
 
     fun dataEvents(): Observable<Fragment.DataEvent> {
         return userDataModel.homeUser
                 .delay(5, TimeUnit.SECONDS) // for testing purposes!!!!
-                .map { Fragment.DataEvent.UserDataEvent(it) as Fragment.DataEvent }
+                .map { Fragment.DataEvent.UserDataEvent(it) }
+                .map { it as Fragment.DataEvent }
                 .toObservable()
+                .startWith(Fragment.DataEvent.UserFetchInProgressEvent)
+                .onErrorResumeNext { e: Throwable ->
+                    Observable.just(Fragment.DataEvent.UserFetchFailedEvent(e))
+                }
     }
 }

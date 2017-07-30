@@ -24,7 +24,7 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
                                       schedulers: SchedulerProvider) :
         BaseViewModel<Fragment.UiEvent, Fragment.DataEvent, Fragment.UiModel, Fragment.Change>(dataEvents, schedulers) {
 
-    override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, true, null)
+    override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, false, null)
 
     override fun mapUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change = Fragment.Change.NoChange
 

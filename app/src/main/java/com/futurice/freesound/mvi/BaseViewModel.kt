@@ -23,11 +23,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-abstract class BaseViewModel<in E, in D, M, C>(
-        dataEvents: Observable<D>,
-        schedulers: SchedulerProvider) : ViewModel<E, M>() {
+abstract class BaseViewModel<in UE, in DE, M, C>(
+        dataEvents: Observable<DE>,
+        schedulers: SchedulerProvider) : ViewModel<UE, M>() {
 
-    private val uiEvents: PublishProcessor<E> = PublishProcessor.create()
+    private val uiEvents: PublishProcessor<UE> = PublishProcessor.create()
     private val uiModel: Observable<M>
     private val disposable: Disposable
 
@@ -38,7 +38,7 @@ abstract class BaseViewModel<in E, in D, M, C>(
                 .subscribe({ Timber.d("## $it") }, { e -> Timber.e("## $e") }))
     }
 
-    override final fun uiEvents(uiEvent: E) {
+    override final fun uiEvents(uiEvent: UE) {
         uiEvents.offer(uiEvent)
     }
 
@@ -48,23 +48,23 @@ abstract class BaseViewModel<in E, in D, M, C>(
 
     abstract protected fun M.reduce(change: C): M
 
-    abstract fun mapUiEvent(uiEvent: E): C
+    abstract fun mapUiEvent(uiEvent: UE): C
 
-    abstract fun mapDataEvent(dataEvent: D): C
+    abstract fun mapDataEvent(dataEvent: DE): C
 
     abstract protected val INITIAL_UI_STATE: M
 
-    private fun reduce(uiEvents: Observable<E>,
-                       dataEvents: Observable<D>): Observable<M> {
+    private fun reduce(uiEvents: Observable<UE>,
+                       dataEvents: Observable<DE>): Observable<M> {
         return Observable.merge(processUiEvents(uiEvents), processDataEvents(dataEvents))
                 .scan(INITIAL_UI_STATE, { model: M, change -> model.reduce(change) })
                 .doOnNext { model: M -> Timber.v(" $model") }
     }
 
-    private fun processUiEvents(uiEvents: Observable<E>): Observable<C>
+    private fun processUiEvents(uiEvents: Observable<UE>): Observable<C>
             = uiEvents.map { mapUiEvent(it) }
 
-    private fun processDataEvents(dataEvents: Observable<D>): Observable<C>
+    private fun processDataEvents(dataEvents: Observable<DE>): Observable<C>
             = dataEvents.map { mapDataEvent(it) }
 
     override fun onCleared() {
