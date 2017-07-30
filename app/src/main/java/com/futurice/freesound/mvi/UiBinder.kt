@@ -35,7 +35,7 @@ class UiBinder<M, E>(private val renderer: Renderer<M>,
         disposable.add(uiEvents
                 .subscribeOn(schedulers.computation())
                 .subscribe { viewModel.uiEvents(it) })
-        disposable.add(viewModel.uiModel()
+        disposable.add(viewModel.uiModels()
                 .observeOn(schedulers.ui())
                 .subscribe { renderer.render(it) })
     }

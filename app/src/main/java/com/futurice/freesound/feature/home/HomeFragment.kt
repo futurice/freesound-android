@@ -39,7 +39,6 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
     @Inject
     internal lateinit var schedulerProvider: SchedulerProvider
 
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_home, container, false)

@@ -23,6 +23,6 @@ abstract class ViewModel<in E, M> : ViewModel() {
 
     abstract fun uiEvents(uiEvent: E)
 
-    abstract fun uiModel(): Observable<M>
+    abstract fun uiModels(): Observable<M>
 
 }

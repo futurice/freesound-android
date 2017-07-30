@@ -19,7 +19,7 @@ package com.futurice.freesound.mvi
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
-import io.reactivex.disposables.SerialDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
@@ -29,11 +29,11 @@ abstract class BaseViewModel<in E, in D, M, C>(
 
     private val uiEvents: PublishProcessor<E> = PublishProcessor.create()
     private val uiModel: Observable<M>
-    private val disposable: SerialDisposable = SerialDisposable()
+    private val disposable: Disposable
 
     init {
         uiModel = reduce(uiEvents.toObservable(), dataEvents).replayingShare()
-        disposable.set(uiModel
+        disposable = (uiModel
                 .subscribeOn(schedulers.computation())
                 .subscribe({ Timber.d("## $it") }, { e -> Timber.e("## $e") }))
     }
@@ -42,7 +42,7 @@ abstract class BaseViewModel<in E, in D, M, C>(
         uiEvents.offer(uiEvent)
     }
 
-    override final fun uiModel(): Observable<M> {
+    override final fun uiModels(): Observable<M> {
         return uiModel
     }
 
