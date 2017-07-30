@@ -37,17 +37,19 @@ interface Fragment {
                        val isLoading: Boolean,
                        val errorMsg: String?)
 
-    sealed class UiEvent(val log: String) {
-        object NoOp : UiEvent("No-op UiEvent")
-    }
+    sealed class UiEvent(val log: String)
 
     sealed class DataEvent(val log: String) {
-        class UserDataEvent(val user: User) : DataEvent("Home user: $user")
+        object UserFetchInProgressEvent : DataEvent("UserFetchInProgressEvent")
+        class UserDataEvent(val user: User) : DataEvent("UserDataEvent: $user")
+        class UserFetchFailedEvent(val error: Exception) : DataEvent("UserFetchFailedEvent: $error")
     }
 
     sealed class Change(val log: String) {
         object NoChange : Change("No-op Change")
         class UserChanged(val user: User) : Change("Home user changed: $user")
+        class UserFetchErrorChanged(val errorMsg: String) : Change("User fetch error message changed: $errorMsg")
+        object UserFetchInProgressChanged : Change("User Fetch in progress changed")
     }
 
 }

@@ -48,9 +48,9 @@ abstract class BaseViewModel<in E, in D, M, C>(
 
     abstract protected fun M.reduce(change: C): M
 
-    abstract fun fromUiEvent(uiEvent: E): C
+    abstract fun mapUiEvent(uiEvent: E): C
 
-    abstract fun fromDataEvent(dataEvent: D): C
+    abstract fun mapDataEvent(dataEvent: D): C
 
     abstract protected val INITIAL_UI_STATE: M
 
@@ -62,10 +62,10 @@ abstract class BaseViewModel<in E, in D, M, C>(
     }
 
     private fun processUiEvents(uiEvents: Observable<E>): Observable<C>
-            = uiEvents.map { fromUiEvent(it) }
+            = uiEvents.map { mapUiEvent(it) }
 
     private fun processDataEvents(dataEvents: Observable<D>): Observable<C>
-            = dataEvents.map { fromDataEvent(it) }
+            = dataEvents.map { mapDataEvent(it) }
 
     override fun onCleared() {
         super.onCleared()

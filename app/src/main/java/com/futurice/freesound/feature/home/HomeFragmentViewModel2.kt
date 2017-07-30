@@ -18,7 +18,6 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
-import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
 
 internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>,
@@ -27,25 +26,32 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
 
     override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, true, null)
 
-    override fun fromUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change = Fragment.Change.NoChange
+    override fun mapUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change = Fragment.Change.NoChange
 
-    override fun fromDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
+    override fun mapDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
                 is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
+                Fragment.DataEvent.UserFetchInProgressEvent -> Fragment.Change.UserFetchInProgressChanged
+                is Fragment.DataEvent.UserFetchFailedEvent -> Fragment.Change.UserFetchErrorChanged(dataEvent.error.localizedMessage)
             }
 
     override fun Fragment.UiModel.reduce(change: Fragment.Change): Fragment.UiModel =
             when (change) {
                 is Fragment.Change.NoChange -> this
-                is Fragment.Change.UserChanged -> fromUserChanged(change.user)
+                is Fragment.Change.UserChanged -> fromUserChanged(change)
+                is Fragment.Change.UserFetchErrorChanged -> fromUserFetchErrorChanged(change)
+                Fragment.Change.UserFetchInProgressChanged -> fromUserFetchInProgressChange()
             }
 
-    private fun Fragment.UiModel.fromUserChanged(user: User): Fragment.UiModel {
-        return this.copy(user = Fragment.UserUiModel(user.username(),
-                about = user.about(),
-                avatarUrl = user.avatar().large()),
-                isLoading = false,
-                errorMsg = null)
-    }
+    private fun Fragment.UiModel.fromUserChanged(change: Fragment.Change.UserChanged): Fragment.UiModel
+            = copy(user = Fragment.UserUiModel(change.user.username(),
+            about = change.user.about(),
+            avatarUrl = change.user.avatar().large()),
+            isLoading = false,
+            errorMsg = null)
 
+    private fun Fragment.UiModel.fromUserFetchErrorChanged(change: Fragment.Change.UserFetchErrorChanged)
+            = copy(isLoading = false, errorMsg = change.errorMsg)
+
+    private fun Fragment.UiModel.fromUserFetchInProgressChange() = copy(isLoading = true)
 }
