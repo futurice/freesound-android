@@ -23,7 +23,7 @@ import io.reactivex.disposables.SerialDisposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-abstract class BaseViewModel<E, D, M, C>(
+abstract class BaseViewModel<in E, in D, M, C>(
         dataEvents: Observable<D>,
         schedulers: SchedulerProvider) : ViewModel<E, M>() {
 

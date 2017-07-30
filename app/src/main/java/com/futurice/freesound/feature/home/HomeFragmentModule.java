@@ -22,11 +22,9 @@ import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-
 import dagger.Module;
 import dagger.Provides;
+import kotlin.jvm.functions.Function0;
 
 @Module(includes = BaseFragmentModule.class)
 public class HomeFragmentModule {
@@ -38,26 +36,18 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentDataEvents provideHomeFragmentDataBinder(UserDataModel userDataModel) {
-        return new HomeFragmentDataEvents(userDataModel);
+    static HomeFragmentViewModel2 provideHomeFragmentViewModel2(
+            android.support.v4.app.Fragment fragment,
+            Function0<HomeFragmentViewModel2> provider) {
+        // No explicit scoping: let the Factory determine the scoping.
+        return ViewModelProviderBridgeKt.createHomeFragmentViewModel2(fragment, provider);
     }
 
     @Provides
-    static ViewModelProvider.Factory provideViewModelFactory(HomeFragmentDataEvents dataBinder,
-                                                             SchedulerProvider schedulerProvider) {
-        return new HomeFragmentViewModel2Factory(dataBinder, schedulerProvider);
-    }
-
-    @Provides
-    @FragmentScope
-    static HomeFragmentViewModel2 provideHomeFragmentViewModel2(android.support.v4.app.Fragment f,
-                                                                ViewModelProvider.Factory factory) {
-
-        // This can be scoped as @FragmentScope because that allows the component to memoize the
-        // value rather than always querying the ViewModelProviders. The ViewModel's actual scope
-        // always exceeds that of the Fragment, so this should be ok.
-        return ViewModelProviders.of(f, factory)
-                                 .get(HomeFragmentViewModel2.class);
+    static Function0<HomeFragmentViewModel2> providerHomeFragmentViewModel2Provider(
+            HomeFragmentDataEvents dataEvents,
+            SchedulerProvider schedulerProvider) {
+        return () -> new HomeFragmentViewModel2(dataEvents.dataEvents(), schedulerProvider);
     }
 
     @Provides
@@ -74,4 +64,10 @@ public class HomeFragmentModule {
             SchedulerProvider schedulerProvider) {
         return new UiBinder<>(renderer, viewModel, schedulerProvider);
     }
+
+    @Provides
+    static HomeFragmentDataEvents provideHomeFragmentDataBinder(UserDataModel userDataModel) {
+        return new HomeFragmentDataEvents(userDataModel);
+    }
+
 }
