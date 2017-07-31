@@ -17,6 +17,8 @@
 package com.futurice.freesound.feature.home
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +27,7 @@ import com.futurice.freesound.core.BindingBaseFragment2
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.mvi.Renderer
+import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -35,14 +38,23 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
     @Inject
     internal lateinit var picasso: Picasso
 
+    internal lateinit var errorSnackBar: Snackbar
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_home, container, false)
+                ?.also { errorSnackBar = createSnackbar(it) }
     }
 
-    override fun inject() {
-        component().inject(this)
+    private fun createSnackbar(view: View): Snackbar {
+        return Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_INDEFINITE)
+                .apply {
+                    setAction(android.R.string.ok, { dismiss() })
+                    setActionTextColor(ContextCompat.getColor(view.context, R.color.colorContrastAccent))
+                }
     }
+
+    override fun inject() = component().inject(this)
 
     override fun createComponent(): HomeFragmentComponent {
         return (activity as HomeActivity)
@@ -50,7 +62,7 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
                 BaseFragmentModule(this))
     }
 
-    override fun uiEvents(): Observable<Fragment.UiEvent> = Observable.never()
+    override fun uiEvents(): Observable<Fragment.UiEvent> = errorIndicatorDismissed()
 
     override fun render(model: Fragment.UiModel) {
 
@@ -62,15 +74,17 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
         showLoading(model.isLoading)
 
         when (model.errorMsg) {
-            null -> ""
-            else -> ""
+            null -> errorSnackBar.dismiss()
+            else -> errorSnackBar.setText(model.errorMsg).show()
         }
 
     }
 
-    override fun cancelRender() {
-        picasso.cancelRequest(avatar_image)
-    }
+    override fun cancelRender() = picasso.cancelRequest(avatar_image)
+
+    private fun errorIndicatorDismissed(): Observable<Fragment.UiEvent>
+            = errorSnackBar.dismisses()
+            .map { Fragment.UiEvent.ErrorIndicatorDismissed }
 
     private fun hideUser() {
         homeUser_container.visibility = View.GONE

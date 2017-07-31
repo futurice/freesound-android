@@ -166,9 +166,9 @@ dependencies {
     implementation "com.android.support:design:$dependencyVersions.androidSupport"
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
-    implementation "android.arch.lifecycle:runtime:1.0.0-alpha5"
-    implementation "android.arch.lifecycle:extensions:1.0.0-alpha5"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha5"
+    implementation "android.arch.lifecycle:runtime:$dependencyVersions.androidArchLifecycle"
+    implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
+    annotationProcessor "android.arch.lifecycle:compiler:1$dependencyVersions.androidArchLifecycle"
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
@@ -177,6 +177,10 @@ dependencies {
     // RxJava
     implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
     implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
+
+    // RxBinding
+    compile "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
+    compile "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
 
     // IxJava
     // implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"

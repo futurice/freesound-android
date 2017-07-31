@@ -26,7 +26,10 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
 
     override val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, false, null)
 
-    override fun mapUiEvent(uiEvent: Fragment.UiEvent): Fragment.Change = Fragment.Change.NoChange
+    override fun mapUiEvent(uiEvent: Fragment.UiEvent) =
+            when (uiEvent) {
+                Fragment.UiEvent.ErrorIndicatorDismissed -> Fragment.Change.ErrorIndicatorDismissedChanged
+            }
 
     override fun mapDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
             when (dataEvent) {
@@ -41,6 +44,7 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
                 Fragment.Change.UserFetchInProgressChanged -> fromUserFetchInProgressChange()
                 is Fragment.Change.UserChanged -> fromUserChanged(change)
                 is Fragment.Change.UserFetchErrorChanged -> fromUserFetchErrorChanged(change)
+                Fragment.Change.ErrorIndicatorDismissedChanged -> fromErrorIndicatorDismissedChange()
             }
 
     private fun Fragment.UiModel.fromUserChanged(change: Fragment.Change.UserChanged): Fragment.UiModel
@@ -54,4 +58,8 @@ internal class HomeFragmentViewModel2(dataEvents: Observable<Fragment.DataEvent>
             = copy(isLoading = false, errorMsg = change.errorMsg)
 
     private fun Fragment.UiModel.fromUserFetchInProgressChange() = copy(isLoading = true)
+
+    private fun Fragment.UiModel.fromErrorIndicatorDismissedChange() = copy(errorMsg = null)
+
 }
+

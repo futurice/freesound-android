@@ -37,7 +37,9 @@ interface Fragment {
                        val isLoading: Boolean,
                        val errorMsg: String?)
 
-    sealed class UiEvent(val log: String)
+    sealed class UiEvent(val log: String) {
+        object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
+    }
 
     sealed class DataEvent(val log: String) {
         object UserFetchInProgressEvent : DataEvent("UserFetchInProgressEvent")
@@ -50,6 +52,7 @@ interface Fragment {
         class UserChanged(val user: User) : Change("Home user changed: $user")
         class UserFetchErrorChanged(val errorMsg: String) : Change("User fetch error message changed: $errorMsg")
         object UserFetchInProgressChanged : Change("User Fetch in progress changed")
+        object ErrorIndicatorDismissedChanged :Change("Error Indicator dismissed changed")
     }
 
 }
