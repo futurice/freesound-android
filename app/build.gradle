@@ -94,16 +94,11 @@ ext {
             javaxAnnotation                : '10.0-b28',
             rxJava2                        : '2.1.0',
             rxAndroid                      : '2.0.1',
-            ixJava                         : '1.0.0-RC5',
             okHttp                         : '3.6.0',
             picasso                        : '2.5.2',
             retrofit2                      : '2.2.0',
             retrofit2RxJava2Adapter        : '1.0.0',
             retrofit2GsonConverter         : '2.0.0',
-            gson                           : '2.8.1',
-            autoValue                      : '1.4.1',
-            autoValueGson                  : '0.4.6',
-            autoValueParcelable            : '0.2.5',
             autoFactory                    : '1.0-beta5',
             options                        : '1.2.4',
             exoplayer                      : 'r2.1.1',
@@ -142,9 +137,6 @@ dependencies {
     // RxJava
     implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
     implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
-
-    // IxJava
-    implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
 
     // Networking
     implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
