@@ -154,28 +154,12 @@ dependencies {
     // Networking Retrofit
     implementation "com.squareup.retrofit2:retrofit:$dependencyVersions.retrofit2"
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$dependencyVersions.retrofit2RxJava2Adapter"
-    implementation "com.squareup.retrofit2:converter-gson:$dependencyVersions.retrofit2GsonConverter"
 
     // Moshi
     implementation "com.squareup.moshi:moshi:$dependencyVersions.moshi"
     implementation "com.squareup.moshi:moshi-kotlin:$dependencyVersions.moshi"
     implementation "com.squareup.moshi:moshi-adapters:$dependencyVersions.moshi"
     implementation "com.squareup.retrofit2:converter-moshi:$dependencyVersions.moshiConverter"
-
-    // GSON
-    implementation "com.google.code.gson:gson:$dependencyVersions.gson"
-
-    // Auto-Value
-    compileOnly "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
-    annotationProcessor "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
-
-    // Auto-Value GSON
-    compileOnly "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$dependencyVersions.autoValueGson"
-
-    // Auto-Value Parcelable
-    compileOnly "com.ryanharter.auto.value:auto-value-parcel-adapter:$dependencyVersions.autoValueParcelable"
-    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$dependencyVersions.autoValueParcelable"
 
     // AutoFactory
     compileOnly "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
