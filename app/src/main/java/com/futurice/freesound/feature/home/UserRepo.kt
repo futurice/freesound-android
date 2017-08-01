@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi
+package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.jakewharton.rx.replayingShare
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.processors.PublishProcessor
-import timber.log.Timber
+import com.futurice.freesound.network.api.model.User
 
-abstract class BaseViewModel<in UE, M>(schedulers: SchedulerProvider) : ViewModel<UE, M>()
+sealed class UserAction {
+    object Fetch : UserAction()
+}
+
+sealed class FetchUserResult(log: String) {
+    object UserFetchInProgressEvent : FetchUserResult("UserFetchInProgressEvent")
+    class UserDataEvent(val user: User) : FetchUserResult("UserDataEvent: $user")
+    class UserFetchFailureEvent(val error: Throwable) : FetchUserResult("UserFetchFailureEvent: $error")
+}
+
+

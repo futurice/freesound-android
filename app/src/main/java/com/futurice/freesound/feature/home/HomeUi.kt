@@ -39,20 +39,14 @@ interface Fragment {
 
     sealed class UiEvent(val log: String) {
         object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
+        object ContentRefreshRequested : UiEvent("ContentRefreshRequested")
     }
 
-    sealed class DataEvent(val log: String) {
-        object UserFetchInProgressEvent : DataEvent("UserFetchInProgressEvent")
-        class UserDataEvent(val user: User) : DataEvent("UserDataEvent: $user")
-        class UserFetchFailedEvent(val error: Throwable) : DataEvent("UserFetchFailedEvent: $error")
-    }
 
     sealed class Change(val log: String) {
         object NoChange : Change("No-op Change")
-        class UserChanged(val user: User) : Change("Home user changed: $user")
-        class UserFetchErrorChanged(val errorMsg: String) : Change("User fetch error message changed: $errorMsg")
-        object UserFetchInProgressChanged : Change("User Fetch in progress changed")
         object ErrorIndicatorDismissedChanged :Change("Error Indicator dismissed changed")
+        object ContentRefreshRequestedChanged :Change("ContentRefreshRequestedChanged")
     }
 
 }

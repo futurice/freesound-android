@@ -62,7 +62,15 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
                 BaseFragmentModule(this))
     }
 
-    override fun uiEvents(): Observable<Fragment.UiEvent> = errorIndicatorDismissed()
+    override fun uiEvents(): Observable<Fragment.UiEvent> {
+        return Observable.merge(errorIndicatorDismissed(),
+                refreshRequested())
+    }
+
+    private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
+            .map { Fragment.UiEvent.ErrorIndicatorDismissed }
+
+    private fun refreshRequested() = Observable.never<Fragment.UiEvent.ContentRefreshRequested>()
 
     override fun render(model: Fragment.UiModel) {
 
@@ -81,10 +89,6 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
     }
 
     override fun cancelRender() = picasso.cancelRequest(avatar_image)
-
-    private fun errorIndicatorDismissed(): Observable<Fragment.UiEvent>
-            = errorSnackBar.dismisses()
-            .map { Fragment.UiEvent.ErrorIndicatorDismissed }
 
     private fun hideUser() {
         homeUser_container.visibility = View.GONE
