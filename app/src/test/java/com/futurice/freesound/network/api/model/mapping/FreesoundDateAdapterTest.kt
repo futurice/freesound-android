@@ -73,7 +73,7 @@ class FreesoundDateAdapterTest {
 
 
     @Test
-    fun adapter_roundtrip() {
+    fun adapter_serialization_roundtrip() {
         val adapter = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .add(FreesoundDateAdapter(Rfc3339DateJsonAdapter()))
@@ -87,7 +87,7 @@ class FreesoundDateAdapterTest {
     }
 
     @Test
-    fun adapter_roundtrip_withDataClass() {
+    fun adapter_serialization_roundtrip_withDataClass() {
         data class TestData(val date: Date)
 
         val adapter = Moshi.Builder()
