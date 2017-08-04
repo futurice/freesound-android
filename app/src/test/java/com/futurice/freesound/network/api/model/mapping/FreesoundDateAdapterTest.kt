@@ -74,14 +74,14 @@ class FreesoundDateAdapterTest {
 
     @Test
     fun adapter_serialization_roundtrip() {
-        val adapter = Moshi.Builder()
+        val dateAdapter = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .add(FreesoundDateAdapter(Rfc3339DateJsonAdapter()))
                 .build()
                 .adapter(Date::class.java)
         val date = "2016-03-28T06:48:29.123".toGmtDate()
 
-        val result = adapter.fromJson(adapter.toJson(date))
+        val result = dateAdapter.fromJson(dateAdapter.toJson(date))
 
         assertThat(result).isEqualTo(date)
     }
@@ -90,13 +90,14 @@ class FreesoundDateAdapterTest {
     fun adapter_serialization_roundtrip_withDataClass() {
         data class TestData(val date: Date)
 
-        val adapter = Moshi.Builder()
+        val testDataAdapter = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .add(FreesoundDateAdapter(Rfc3339DateJsonAdapter()))
                 .build()
                 .adapter(TestData::class.java)
         val testData = TestData("2016-03-28T06:48:29.123".toGmtDate())
-        val result = adapter.fromJson(adapter.toJson(testData))
+
+        val result = testDataAdapter.fromJson(testDataAdapter.toJson(testData))
 
         assertThat(result).isEqualTo(testData)
     }
