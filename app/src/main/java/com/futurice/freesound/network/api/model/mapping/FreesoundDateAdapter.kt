@@ -36,7 +36,9 @@ class FreesoundDateAdapter(private val delegate: Rfc3339DateJsonAdapter) {
     }
 
     @ToJson fun toJson(date: Date): String {
-        return delegate.toJson(date).removeSuffix("Z")
+        return delegate.toJson(date)
+                .removePrefix("\"")
+                .removeSuffix("Z\"")
     }
 
 }
