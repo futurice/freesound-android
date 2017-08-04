@@ -47,7 +47,7 @@ data class Sound(
         // Duration in seconds
         val duration: Float?,
         val created: Date) : KParcelable {
-    constructor(parcel: Parcel) : this(
+    private constructor(parcel: Parcel) : this(
             parcel.readNullable { readLong() },
             parcel.readNullable { readString() },
             parcel.readNullable { readString() },
@@ -92,7 +92,7 @@ data class Image(
 
         @Json(name = "spectral_l")
         val largeSizeSpectralUrl: String?) : KParcelable {
-    constructor(parcel: Parcel) : this(
+    private constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readNullable { readString() },
             parcel.readNullable { readString() },
@@ -123,7 +123,7 @@ data class Preview(
 
         @Json(name = "preview-hq-ogg")
         val highQualityOggUrl: String?) : KParcelable {
-    constructor(parcel: Parcel) : this(
+    private constructor(parcel: Parcel) : this(
             parcel.readNullable { readString() },
             parcel.readNullable { readString() },
             parcel.readNullable { readString() },

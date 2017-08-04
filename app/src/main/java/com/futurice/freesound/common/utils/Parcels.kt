@@ -13,7 +13,9 @@ interface KParcelable : Parcelable {
 }
 
 // Creator factory functions
-
+/**
+ * Used to create CREATOR object
+ */
 inline fun <reified T> parcelableCreator(
         crossinline create: (Parcel) -> T) =
         object : Parcelable.Creator<T> {
@@ -84,8 +86,14 @@ fun Parcel.writeBigDecimal(value: BigDecimal?) = writeNullable(value) {
     writeInt(it.scale())
 }
 
+/**
+ * Reads parcelable object
+ */
 fun <T : Parcelable> Parcel.readTypedObjectCompat(c: Parcelable.Creator<T>) =
         readNullable { c.createFromParcel(this) }
 
+/**
+ * Writes parcelable object
+ */
 fun <T : Parcelable> Parcel.writeTypedObjectCompat(value: T?, parcelableFlags: Int) =
         writeNullable(value) { it.writeToParcel(this, parcelableFlags) }

@@ -23,7 +23,7 @@ import com.futurice.freesound.common.utils.parcelableCreator
 data class GeoLocation(
     val latitude: Double,
     val longitude: Double) : KParcelable {
-    constructor(parcel: Parcel) : this(
+    private constructor(parcel: Parcel) : this(
         parcel.readDouble(),
         parcel.readDouble())
 
