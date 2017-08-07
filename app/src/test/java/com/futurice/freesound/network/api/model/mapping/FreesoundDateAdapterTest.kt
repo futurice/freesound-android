@@ -71,7 +71,6 @@ class FreesoundDateAdapterTest {
         assertThat(json).isEqualTo(expected)
     }
 
-
     @Test
     fun adapter_serialization_roundtrip() {
         val dateAdapter = Moshi.Builder()
