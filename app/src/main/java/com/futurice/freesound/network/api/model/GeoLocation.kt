@@ -21,11 +21,11 @@ import com.futurice.freesound.common.utils.KParcelable
 import com.futurice.freesound.common.utils.parcelableCreator
 
 data class GeoLocation(
-    val latitude: Double,
-    val longitude: Double) : KParcelable {
+        val latitude: Double,
+        val longitude: Double) : KParcelable {
     private constructor(parcel: Parcel) : this(
-        parcel.readDouble(),
-        parcel.readDouble())
+            latitude = parcel.readDouble(),
+            longitude = parcel.readDouble())
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeDouble(latitude)

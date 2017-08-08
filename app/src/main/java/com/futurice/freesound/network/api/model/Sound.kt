@@ -48,17 +48,17 @@ data class Sound(
         val duration: Float?,
         val created: Date) : KParcelable {
     private constructor(parcel: Parcel) : this(
-            parcel.readNullable { readLong() },
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() },
-            parcel.readStringList(),
-            parcel.readNullable { readString() },
-            parcel.readTypedObjectCompat(GeoLocation.CREATOR),
-            parcel.readNullable { readString() },
-            parcel.readTypedObjectCompat(Image.CREATOR)!!,
-            parcel.readTypedObjectCompat(Preview.CREATOR),
-            parcel.readNullable { readFloat() },
-            parcel.readDate()!!)
+            id = parcel.readNullable { readLong() },
+            url = parcel.readNullable { readString() },
+            name = parcel.readNullable { readString() },
+            tags = parcel.readStringList(),
+            description = parcel.readNullable { readString() },
+            geotag = parcel.readTypedObjectCompat(GeoLocation.CREATOR),
+            username = parcel.readNullable { readString() },
+            images = parcel.readTypedObjectCompat(Image.CREATOR)!!,
+            previews = parcel.readTypedObjectCompat(Preview.CREATOR),
+            duration = parcel.readNullable { readFloat() },
+            created = parcel.readDate()!!)
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeNullable(id) { writeLong(it) }
@@ -93,10 +93,10 @@ data class Image(
         @Json(name = "spectral_l")
         val largeSizeSpectralUrl: String?) : KParcelable {
     private constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() })
+            medSizeWaveformUrl = parcel.readString(),
+            largeSizeWaveformUrl = parcel.readNullable { readString() },
+            medSizeSpectralUrl = parcel.readNullable { readString() },
+            largeSizeSpectralUrl = parcel.readNullable { readString() })
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(medSizeWaveformUrl)
@@ -124,10 +124,10 @@ data class Preview(
         @Json(name = "preview-hq-ogg")
         val highQualityOggUrl: String?) : KParcelable {
     private constructor(parcel: Parcel) : this(
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() },
-            parcel.readNullable { readString() })
+            lowQualityMp3Url = parcel.readNullable { readString() },
+            highQualityMp3Url = parcel.readNullable { readString() },
+            lowQualityOggUrl = parcel.readNullable { readString() },
+            highQualityOggUrl = parcel.readNullable { readString() })
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeNullable(lowQualityMp3Url) { writeString(it) }
