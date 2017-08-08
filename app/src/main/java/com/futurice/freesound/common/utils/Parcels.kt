@@ -77,8 +77,6 @@ fun Parcel.readStringList() =
             }
         }
 
-fun Parcel.writeStringList(value: List<String>) =
-        writeNullable(value) { writeStringList(it) }
 
 /**
  * Reads parcelable object
