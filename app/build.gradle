@@ -34,6 +34,7 @@ android {
         versionName "1.0"
         signingConfig signingConfigs.debug
         multiDexEnabled true
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
@@ -86,33 +87,34 @@ task checkstyle(type: Checkstyle) {
 
 ext {
     dependencyVersions = [
-            kotlin                         : kotlin_version,
-            androidSupportLibrary          : '25.3.1',
-            androidSupportConstraintLibrary: '1.0.2',
-            javaPoet                       : '1.9.0',
-            dagger2                        : '2.4',
-            javaxAnnotation                : '10.0-b28',
-            rxJava2                        : '2.1.0',
-            rxAndroid                      : '2.0.1',
-            okHttp                         : '3.6.0',
-            picasso                        : '2.5.2',
-            retrofit2                      : '2.2.0',
-            retrofit2RxJava2Adapter        : '1.0.0',
-            retrofit2GsonConverter         : '2.0.0',
-            autoFactory                    : '1.0-beta5',
-            options                        : '1.2.4',
-            exoplayer                      : 'r2.1.1',
-            butterknife                    : '8.6.0',
-            firebase                       : '9.4.0',
-            stetho                         : '1.4.2',
-            chuck                          : '1.0.4',
-            timber                         : '4.5.1',
-            junit                          : '4.12',
-            mockito                        : '2.2.2',
-            assertJ                        : '1.7.1',
-            leakCanary                     : '1.5',
-            moshi                          : '1.5.0',
-            moshiConverter                 : '2.3.0']
+            kotlin                  : kotlin_version,
+            androidSupport          : '25.4.0',
+            androidSupportConstraint: '1.0.2',
+            androidSupportTest      : '1.0.0',
+            javaPoet                : '1.9.0',
+            dagger2                 : '2.4',
+            javaxAnnotation         : '10.0-b28',
+            rxJava2                 : '2.1.0',
+            rxAndroid               : '2.0.1',
+            okHttp                  : '3.6.0',
+            picasso                 : '2.5.2',
+            retrofit2               : '2.2.0',
+            retrofit2RxJava2Adapter : '1.0.0',
+            retrofit2GsonConverter  : '2.0.0',
+            autoFactory             : '1.0-beta5',
+            options                 : '1.2.4',
+            exoplayer               : 'r2.1.1',
+            butterknife             : '8.6.0',
+            firebase                : '9.4.0',
+            stetho                  : '1.4.2',
+            chuck                   : '1.0.4',
+            timber                  : '4.5.1',
+            junit                   : '4.12',
+            mockito                 : '2.2.2',
+            assertJ                 : '1.7.1',
+            leakCanary              : '1.5',
+            moshi                   : '1.5.0',
+            moshiConverter          : '2.3.0']
 }
 
 dependencies {
@@ -120,14 +122,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
 
     // Android Support
-    implementation "com.android.support:support-v4:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:support-annotations:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:appcompat-v7:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:palette-v7:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:recyclerview-v7:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:cardview-v7:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support:design:$dependencyVersions.androidSupportLibrary"
-    implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraintLibrary"
+    implementation "com.android.support:support-v4:$dependencyVersions.androidSupport"
+    implementation "com.android.support:support-annotations:$dependencyVersions.androidSupport"
+    implementation "com.android.support:appcompat-v7:$dependencyVersions.androidSupport"
+    implementation "com.android.support:palette-v7:$dependencyVersions.androidSupport"
+    implementation "com.android.support:recyclerview-v7:$dependencyVersions.androidSupport"
+    implementation "com.android.support:cardview-v7:$dependencyVersions.androidSupport"
+    implementation "com.android.support:design:$dependencyVersions.androidSupport"
+    implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
     // Dagger 2
     annotationProcessor "com.squareup:javapoet:$dependencyVersions.javaPoet"
@@ -184,6 +186,11 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$dependencyVersions.mockito"
     testImplementation "org.assertj:assertj-core:$dependencyVersions.assertJ"
     testImplementation "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
+
+    // Instrumentation Testing
+    androidTestImplementation "com.android.support.test:runner:$dependencyVersions.androidSupportTest"
+    androidTestImplementation "com.android.support.test:rules:$dependencyVersions.androidSupportTest"
+    androidTestImplementation "org.assertj:assertj-core:$dependencyVersions.assertJ"
 
     // Leak Canary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"

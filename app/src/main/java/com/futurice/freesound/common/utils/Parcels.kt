@@ -2,8 +2,6 @@ package com.futurice.freesound.common.utils
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -79,19 +77,8 @@ fun Parcel.readStringList() =
             }
         }
 
-fun Parcel.readBigInteger() =
-        readNullable { BigInteger(createByteArray()) }
-
-fun Parcel.writeBigInteger(value: BigInteger?) =
-        writeNullable(value) { writeByteArray(it.toByteArray()) }
-
-fun Parcel.readBigDecimal() =
-        readNullable { BigDecimal(BigInteger(createByteArray()), readInt()) }
-
-fun Parcel.writeBigDecimal(value: BigDecimal?) = writeNullable(value) {
-    writeByteArray(it.unscaledValue().toByteArray())
-    writeInt(it.scale())
-}
+fun Parcel.writeStringList(value: List<String>) =
+        writeNullable(value) { writeStringList(it) }
 
 /**
  * Reads parcelable object
