@@ -16,8 +16,6 @@
 
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.network.api.model.User
-
 interface Activity {
 
     sealed class UiEvent(val log: String) {
@@ -42,11 +40,12 @@ interface Fragment {
         object ContentRefreshRequested : UiEvent("ContentRefreshRequested")
     }
 
+    sealed class Action
 
     sealed class Change(val log: String) {
         object NoChange : Change("No-op Change")
-        object ErrorIndicatorDismissedChanged :Change("Error Indicator dismissed changed")
-        object ContentRefreshRequestedChanged :Change("ContentRefreshRequestedChanged")
+        object ErrorIndicatorDismissed : Change("Error Indicator dismissed changed")
+        object ContentRefreshRequested : Change("ContentRefreshRequested")
     }
 
 }
