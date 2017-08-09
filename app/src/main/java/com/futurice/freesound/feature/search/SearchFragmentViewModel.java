@@ -27,7 +27,6 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import ix.Ix;
 import polanski.option.Option;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
@@ -76,8 +75,9 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     @NonNull
     private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
             @NonNull final List<Sound> sounds) {
-        return Ix.from(sounds)
-                 .map(sound -> new DisplayableItem<>(sound, SOUND))
-                 .toList();
+        return Observable.fromIterable(sounds)
+                         .map(sound -> new DisplayableItem<>(sound, SOUND))
+                         .toList()
+                         .blockingGet();
     }
 }

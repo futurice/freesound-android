@@ -39,18 +39,18 @@ before_install:
     - echo -e "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
 
 before_script:
-    # Disabling emulator as we have no integration tests and this just makes the build take longer.
-    # - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
-    # - emulator -avd test -no-window &
-    # - android-wait-for-emulator
-    # - adb shell settings put global window_animation_scale 0 &
-    # - adb shell settings put global transition_animation_scale 0 &
-    # - adb shell settings put global animator_duration_scale 0 &
-    # - adb shell input keyevent 82 &
+    - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
+    - emulator -avd test -no-window &
+    - android-wait-for-emulator
+    - adb shell settings put global window_animation_scale 0 &
+    - adb shell settings put global transition_animation_scale 0 &
+    - adb shell settings put global animator_duration_scale 0 &
+    - adb shell input keyevent 82 &
 
 script:
    # Had to disable SonarQube until plugin incompatibility is fixed.
    # https://groups.google.com/forum/#!topic/sonarqube/WN_zMNKfkAU
    # https://issuetracker.google.com/issues/62688864
    # https://jira.sonarsource.com/browse/SONARGRADL-41
-    - "./gradlew check"
+   - "./gradlew check"
+   - "./gradlew connectedCheck"
