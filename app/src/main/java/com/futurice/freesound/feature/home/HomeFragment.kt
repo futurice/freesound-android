@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
+import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.core.BindingBaseFragment
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.images.PicassoTransformations
@@ -47,27 +48,27 @@ class HomeFragment : BindingBaseFragment<HomeFragmentComponent>() {
     private val dataBinder = object : DataBinder {
 
         override fun bind(d: CompositeDisposable) {
-            d.add(homeFragmentViewModel.image
-                      .subscribeOn(schedulerProvider.computation())
-                      .observeOn(schedulerProvider.ui())
-                      .subscribe({
-                                     picasso.load(it)
-                                         .transform(PicassoTransformations.circular())
-                                         .into(avatar_image)
-                                 }
-                      ) { e -> Timber.e(e, "Error setting image") })
+            d += homeFragmentViewModel.image
+                .subscribeOn(schedulerProvider.computation())
+                .observeOn(schedulerProvider.ui())
+                .subscribe({
+                               picasso.load(it)
+                                   .transform(PicassoTransformations.circular())
+                                   .into(avatar_image)
+                           })
+                { e -> Timber.e(e, "Error setting image") }
 
-            d.add(homeFragmentViewModel.userName
-                      .subscribeOn(schedulerProvider.computation())
-                      .observeOn(schedulerProvider.ui())
-                      .subscribe({ username_textView.text = it }
-                      ) { e -> Timber.e(e, "Error setting user") })
+            d += homeFragmentViewModel.userName
+                .subscribeOn(schedulerProvider.computation())
+                .observeOn(schedulerProvider.ui())
+                .subscribe({ username_textView.text = it })
+                { e -> Timber.e(e, "Error setting user") }
 
-            d.add(homeFragmentViewModel.about
-                      .subscribeOn(schedulerProvider.computation())
-                      .observeOn(schedulerProvider.ui())
-                      .subscribe({ about_textView.text = it }
-                      ) { e -> Timber.e(e, "Error setting aboutTextView") })
+            d += homeFragmentViewModel.about
+                .subscribeOn(schedulerProvider.computation())
+                .observeOn(schedulerProvider.ui())
+                .subscribe({ about_textView.text = it })
+                { e -> Timber.e(e, "Error setting aboutTextView") }
         }
 
         override fun unbind() {
