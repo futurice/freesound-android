@@ -64,7 +64,7 @@ public final class SoundFields {
 
     @Override
     public String toString() {
-        return RequestHelper.asCommaSeparated(fields);
+        return RequestsKt.asCommaSeparated(fields);
     }
 
     private static class Builder {
