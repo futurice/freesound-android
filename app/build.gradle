@@ -17,6 +17,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
+apply plugin: 'kotlin-android-extensions'
 
 apply from: 'app-config.gradle'
 
