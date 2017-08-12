@@ -17,28 +17,22 @@
 package com.futurice.freesound.network.api.model
 
 import android.os.Parcel
-import com.google.auto.value.AutoValue
+import com.futurice.freesound.common.utils.KParcelable
+import com.futurice.freesound.common.utils.parcelableCreator
 
-import android.os.Parcelable
-
-// Using https://github.com/nekocode/android-parcelable-intellij-plugin-kotlin for Parcelable
 data class GeoLocation(
         val latitude: Double,
-        val longitude: Double) : Parcelable {
-    constructor(parcel: Parcel) : this(
-            parcel.readDouble(),
-            parcel.readDouble())
+        val longitude: Double) : KParcelable {
+    private constructor(parcel: Parcel) : this(
+            latitude = parcel.readDouble(),
+            longitude = parcel.readDouble())
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeDouble(latitude)
-        parcel.writeDouble(longitude)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeDouble(latitude)
+        writeDouble(longitude)
     }
 
-    override fun describeContents(): Int = 0
-
-    companion object CREATOR : Parcelable.Creator<GeoLocation> {
-        override fun createFromParcel(parcel: Parcel): GeoLocation = GeoLocation(parcel)
-
-        override fun newArray(size: Int): Array<GeoLocation?> = arrayOfNulls(size)
+    companion object {
+        @JvmField val CREATOR = parcelableCreator(::GeoLocation)
     }
 }
