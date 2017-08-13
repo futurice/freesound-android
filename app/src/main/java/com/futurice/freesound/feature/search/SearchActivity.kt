@@ -28,6 +28,7 @@ import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.common.utils.Preconditions.get
+import com.futurice.freesound.common.utils.ifNull
 import com.futurice.freesound.core.BindingBaseActivity
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.inject.activity.BaseActivityModule
@@ -39,7 +40,6 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_search.*
-import polanski.option.Option
 import timber.log.Timber.e
 import javax.inject.Inject
 
@@ -92,8 +92,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        Option.ofObj(savedInstanceState)
-            .ifNone { this.addSearchFragment() }
+        savedInstanceState.ifNull { addSearchFragment() }
 
         findById<Toolbar>(this, R.id.toolbar_search)
             .apply { setSupportActionBar(this) }
@@ -102,7 +101,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         search_view.apply {
             isIconified = false
             setOnCloseListener {
-                search_view.setQuery(SearchActivityViewModel.NO_SEARCH, true)
+                setQuery(SearchActivityViewModel.NO_SEARCH, true)
                 true
             }
         }
