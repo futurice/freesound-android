@@ -21,9 +21,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.SearchView.OnQueryTextListener
-import android.support.v7.widget.Toolbar
 import android.view.View
-import butterknife.ButterKnife.findById
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
@@ -57,24 +55,24 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     private val dataBinder = object : SimpleDataBinder() {
 
         private fun SearchView.getTextChangeStream(uiScheduler: Scheduler): Observable<String> =
-            Observable.create<String> { subscribeToSearchView(it) }
-                .subscribeOn(uiScheduler)
+                Observable.create<String> { subscribeToSearchView(it) }
+                        .subscribeOn(uiScheduler)
 
         override fun bind(d: CompositeDisposable) {
             d += searchViewModel.isClearEnabledOnceAndStream
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ setClearSearchVisible(it) })
-                { e(it, "Error setting query string") }
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe({ setClearSearchVisible(it) })
+                    { e(it, "Error setting query string") }
 
             d += search_view.getTextChangeStream(schedulerProvider.ui())
-                .observeOn(schedulerProvider.computation())
-                .subscribe({ searchViewModel.search(it) })
-                { e(it, "Error getting changed text") }
+                    .observeOn(schedulerProvider.computation())
+                    .subscribe({ searchViewModel.search(it) })
+                    { e(it, "Error getting changed text") }
 
             d += searchViewModel.searchStateOnceAndStream
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ handleErrorState(it) })
-                { e(it, "Error receiving Errors") }
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe({ handleErrorState(it) })
+                    { e(it, "Error receiving Errors") }
         }
 
         private fun SearchView.subscribeToSearchView(emitter: ObservableEmitter<String>) {
@@ -94,8 +92,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         setContentView(R.layout.activity_search)
         savedInstanceState.ifNull { addSearchFragment() }
 
-        findById<Toolbar>(this, R.id.toolbar_search)
-            .apply { setSupportActionBar(this) }
+        toolbar_search.apply { setSupportActionBar(this) }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         search_view.apply {
@@ -116,8 +113,8 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     override fun createComponent(): SearchActivityComponent =
-        (application as FreesoundApplication).component()
-            .plusSearchActivityComponent(BaseActivityModule(this))
+            (application as FreesoundApplication).component()
+                    .plusSearchActivityComponent(BaseActivityModule(this))
 
     override fun onPause() {
         dismissSnackbar()
@@ -126,14 +123,14 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
 
     private fun addSearchFragment() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.container, SearchFragment.create())
-            .commit()
+                .add(R.id.container, SearchFragment.create())
+                .commit()
     }
 
     private fun handleErrorState(searchState: SearchState) {
         searchState.error()
-            .ifSome { showSnackbar(getString(R.string.search_error)) }
-            .ifNone { this.dismissSnackbar() }
+                .ifSome { showSnackbar(getString(R.string.search_error)) }
+                .ifNone { this.dismissSnackbar() }
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
@@ -153,7 +150,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
 
         @JvmStatic fun open(context: Context) {
             Intent(context, SearchActivity::class.java)
-                .apply { context.startActivity(this) }
+                    .apply { context.startActivity(this) }
         }
     }
 }
