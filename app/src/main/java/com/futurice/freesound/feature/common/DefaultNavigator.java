@@ -38,7 +38,7 @@ public final class DefaultNavigator implements Navigator {
     public void openSearch() {
         AndroidPreconditions.assertUiThread();
 
-        SearchActivity.Companion.open(activity);
+        SearchActivity.open(activity);
     }
 
     @Override

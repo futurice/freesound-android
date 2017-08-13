@@ -27,7 +27,6 @@ import butterknife.ButterKnife.findById
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
-import com.futurice.freesound.common.utils.Preconditions.checkNotNull
 import com.futurice.freesound.common.utils.Preconditions.get
 import com.futurice.freesound.core.BindingBaseActivity
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
@@ -64,7 +63,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         override fun bind(d: CompositeDisposable) {
             d += searchViewModel.isClearEnabledOnceAndStream
                 .observeOn(schedulerProvider.ui())
-                .subscribe({ this@SearchActivity.setClearSearchVisible(it) })
+                .subscribe({ setClearSearchVisible(it) })
                 { e(it, "Error setting query string") }
 
             d += search_view.getTextChangeStream(schedulerProvider.ui())
@@ -74,7 +73,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
 
             d += searchViewModel.searchStateOnceAndStream
                 .observeOn(schedulerProvider.ui())
-                .subscribe({ this@SearchActivity.handleErrorState(it) })
+                .subscribe({ handleErrorState(it) })
                 { e(it, "Error receiving Errors") }
         }
 
@@ -94,7 +93,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         Option.ofObj(savedInstanceState)
-            .ifNone({ this.addSearchFragment() })
+            .ifNone { this.addSearchFragment() }
 
         findById<Toolbar>(this, R.id.toolbar_search)
             .apply { setSupportActionBar(this) }
@@ -135,7 +134,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     private fun handleErrorState(searchState: SearchState) {
         searchState.error()
             .ifSome { showSnackbar(getString(R.string.search_error)) }
-            .ifNone({ this.dismissSnackbar() })
+            .ifNone { this.dismissSnackbar() }
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
@@ -144,7 +143,6 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     private fun showSnackbar(charSequence: CharSequence) {
-        checkNotNull(charSequence)
         searchSnackbar.showNewSnackbar(search_coordinatorlayout, charSequence)
     }
 
@@ -154,7 +152,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
 
     companion object {
 
-        fun open(context: Context) {
+        @JvmStatic fun open(context: Context) {
             Intent(context, SearchActivity::class.java)
                 .apply { context.startActivity(this) }
         }
