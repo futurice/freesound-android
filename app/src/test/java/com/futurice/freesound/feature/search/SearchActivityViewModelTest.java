@@ -43,6 +43,8 @@ import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.TestScheduler;
 import io.reactivex.subjects.BehaviorSubject;
 
+import static com.futurice.freesound.feature.search.SearchActivityViewModelKt.SEARCH_DEBOUNCE_TAG;
+import static com.futurice.freesound.feature.search.SearchActivityViewModelKt.SEARCH_DEBOUNCE_TIME_SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -242,7 +244,7 @@ public class SearchActivityViewModelTest {
                 .bind()
                 .search();
 
-        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS,
                                     TimeUnit.SECONDS);
         act.search("");
 
@@ -271,7 +273,7 @@ public class SearchActivityViewModelTest {
     public void search_withNonEmptyQuery_triggersAfterDelay() {
         TestScheduler testScheduler = new TestScheduler();
         Act act = new ArrangeBuilder()
-                .withTimeScheduler(testScheduler, SearchActivityViewModel.SEARCH_DEBOUNCE_TAG)
+                .withTimeScheduler(testScheduler, SEARCH_DEBOUNCE_TAG)
                 .act()
                 .bind();
 
@@ -282,7 +284,7 @@ public class SearchActivityViewModelTest {
 
         assertThat(searchTermCaptor.getValue()).isEqualTo(DUMMY_QUERY);
         TestObserver<Void> testObserver = searchDelayCaptor.getValue().test();
-        testScheduler.advanceTimeBy(SearchActivityViewModel.SEARCH_DEBOUNCE_TIME_SECONDS,
+        testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS,
                                     TimeUnit.SECONDS);
         testObserver.assertComplete();
     }
