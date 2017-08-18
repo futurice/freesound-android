@@ -84,5 +84,5 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
                               TimeUnit.SECONDS,
                               schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
 
-    private fun isCloseEnabled(query: String): Boolean = query.isNullOrEmpty()
+    private fun isCloseEnabled(query: String): Boolean = query.isNotEmpty()
 }
