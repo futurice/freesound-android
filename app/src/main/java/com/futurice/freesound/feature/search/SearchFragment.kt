@@ -52,15 +52,15 @@ class SearchFragment : BindingBaseFragment<SearchFragmentComponent>() {
 
         override fun bind(disposables: CompositeDisposable) {
             disposables += searchFragmentViewModel.soundsOnceAndStream
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ handleResults(it.orDefault { null }) })
-                { Timber.e(it, "Error setting Sound items") }
+                    .subscribeOn(schedulerProvider.computation())
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe({ handleResults(it.orDefault { null }) })
+                    { Timber.e(it, "Error setting Sound items") }
             disposables += searchFragmentViewModel.searchStateOnceAndStream
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ showProgress(it) })
-                { Timber.e(it, "Error receiving search triggered Events") }
+                    .subscribeOn(schedulerProvider.computation())
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe({ showProgress(it) })
+                    { Timber.e(it, "Error receiving search triggered Events") }
         }
 
         override fun unbind() {
@@ -71,7 +71,7 @@ class SearchFragment : BindingBaseFragment<SearchFragmentComponent>() {
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? =
-        inflater?.inflate(R.layout.fragment_search, container, false)
+            inflater?.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,8 +90,8 @@ class SearchFragment : BindingBaseFragment<SearchFragmentComponent>() {
     }
 
     override fun createComponent(): SearchFragmentComponent =
-        (activity as SearchActivity).component()
-            .plusSearchFragmentComponent(BaseFragmentModule(this))
+            (activity as SearchActivity).component()
+                    .plusSearchFragmentComponent(BaseFragmentModule(this))
 
     override fun viewModel(): ViewModel = searchFragmentViewModel
 
