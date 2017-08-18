@@ -19,7 +19,6 @@ package com.futurice.freesound.feature.search
 import android.support.annotation.VisibleForTesting
 import com.futurice.freesound.common.Text
 import com.futurice.freesound.common.rx.plusAssign
-import com.futurice.freesound.common.utils.TextUtils
 import com.futurice.freesound.feature.analytics.Analytics
 import com.futurice.freesound.feature.audio.AudioPlayer
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
@@ -44,8 +43,7 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
                                        private val analytics: Analytics,
                                        private val schedulerProvider: SchedulerProvider) : BaseViewModel() {
 
-    private val searchTermOnceAndStream = BehaviorSubject
-            .createDefault(NO_SEARCH)
+    private val searchTermOnceAndStream = BehaviorSubject.createDefault(NO_SEARCH)
 
     override fun bind(d: CompositeDisposable) {
         audioPlayer.init()
@@ -72,11 +70,11 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
     }
 
     val isClearEnabledOnceAndStream: Observable<Boolean>
-            get() = searchTermOnceAndStream.observeOn(schedulerProvider.computation())
-                    .map { isCloseEnabled(it) }
+        get() = searchTermOnceAndStream.observeOn(schedulerProvider.computation())
+                .map { isCloseEnabled(it) }
 
     val searchStateOnceAndStream: Observable<SearchState>
-            get() = searchDataModel.searchStateOnceAndStream
+        get() = searchDataModel.searchStateOnceAndStream
 
     private fun querySearch(query: String): Completable =
             searchDataModel.querySearch(query, debounceQuery())
@@ -86,5 +84,5 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
                               TimeUnit.SECONDS,
                               schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
 
-    private fun isCloseEnabled(query: String): Boolean = TextUtils.isNotNullOrEmpty(query)
+    private fun isCloseEnabled(query: String): Boolean = query.isNullOrEmpty()
 }
