@@ -54,7 +54,7 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
                     if (query.isNotEmpty())
                         querySearch(query).toObservable<Any>()
                     else
-                        searchDataModel.clear().toObservable<Any>()
+                        clearResults().toObservable<Any>()
                 }
                 .subscribeOn(schedulerProvider.computation())
                 .subscribe({}) { e(it, "Fatal error when setting search term") }
@@ -78,6 +78,8 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
 
     private fun querySearch(query: String): Completable =
             searchDataModel.querySearch(query, debounceQuery())
+
+    private fun clearResults() = searchDataModel.clear()
 
     private fun debounceQuery(): Completable =
             Completable.timer(SEARCH_DEBOUNCE_TIME_SECONDS.toLong(),
