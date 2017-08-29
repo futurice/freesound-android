@@ -98,7 +98,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         search_view.apply {
             isIconified = false
             setOnCloseListener {
-                setQuery(SearchActivityViewModel.NO_SEARCH, true)
+                setQuery(NO_SEARCH, true)
                 true
             }
         }
