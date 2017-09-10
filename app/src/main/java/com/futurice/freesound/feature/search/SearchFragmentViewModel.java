@@ -57,6 +57,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
         return searchDataModel.getSearchStateOnceAndStream()
                               .map(SearchState::results)
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
+                              .delay(1, TimeUnit.SECONDS)
                               .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
@@ -77,7 +78,6 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
-                         .delay(1, TimeUnit.SECONDS)
                          .map(sound -> new DisplayableItem<>(sound, SOUND))
                          .toList()
                          .blockingGet();
