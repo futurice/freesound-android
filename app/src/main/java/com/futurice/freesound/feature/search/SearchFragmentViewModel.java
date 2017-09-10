@@ -25,6 +25,7 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import polanski.option.Option;
@@ -76,6 +77,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
+                         .delay(1, TimeUnit.SECONDS)
                          .map(sound -> new DisplayableItem<>(sound, SOUND))
                          .toList()
                          .blockingGet();
