@@ -25,7 +25,6 @@ import com.futurice.freesound.viewmodel.SimpleViewModel;
 import android.support.annotation.NonNull;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import polanski.option.Option;
