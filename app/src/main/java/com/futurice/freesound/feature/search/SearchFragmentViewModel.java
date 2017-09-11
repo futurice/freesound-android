@@ -57,7 +57,6 @@ final class SearchFragmentViewModel extends SimpleViewModel {
         return searchDataModel.getSearchStateOnceAndStream()
                               .map(SearchState::results)
                               .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
-                              .delay(1, TimeUnit.SECONDS)
                               .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
