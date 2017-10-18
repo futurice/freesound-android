@@ -36,7 +36,7 @@ android:
 
 before_install:
     - mkdir "$ANDROID_HOME/licenses" || true
-    - echo -e "8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+    - echo -e "d56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
 
 before_script:
     - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
