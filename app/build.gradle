@@ -199,7 +199,7 @@ dependencies {
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
     // RxLint
-    implementation "nl.littlerobots.rxlint:rxlint:1.6-SNAPSHOT"
+    implementation "nl.littlerobots.rxlint:rxlint:1.6"
 
 }
 
