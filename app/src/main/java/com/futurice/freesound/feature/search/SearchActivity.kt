@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.SearchView.OnQueryTextListener
 import android.view.View
+import android.widget.Button
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
@@ -134,7 +135,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
-        val closeButton = search_view.findViewById(R.id.search_close_btn)
+        val closeButton : Button = search_view.findViewById(R.id.search_close_btn)
         closeButton.visibility = if (isClearButtonVisible) View.VISIBLE else View.GONE
     }
 
