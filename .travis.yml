@@ -48,9 +48,4 @@ before_script:
     - adb shell input keyevent 82 &
 
 script:
-   # Had to disable SonarQube until plugin incompatibility is fixed.
-   # https://groups.google.com/forum/#!topic/sonarqube/WN_zMNKfkAU
-   # https://issuetracker.google.com/issues/62688864
-   # https://jira.sonarsource.com/browse/SONARGRADL-41
-   - "./gradlew check"
-   - "./gradlew connectedCheck"
+    - "./gradlew check connectedCheck sonarqube"
