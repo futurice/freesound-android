@@ -103,6 +103,8 @@ ext {
             retrofit2               : '2.2.0',
             retrofit2RxJava2Adapter : '1.0.0',
             retrofit2GsonConverter  : '2.0.0',
+            moshi                   : '1.5.0',
+            moshiConverter          : '2.3.0',
             autoFactory             : '1.0-beta5',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
@@ -115,8 +117,7 @@ ext {
             mockito                 : '2.2.2',
             assertJ                 : '1.7.1',
             leakCanary              : '1.5',
-            moshi                   : '1.5.0',
-            moshiConverter          : '2.3.0']
+            rxLint                  : '1.6']
 }
 
 dependencies {
@@ -200,7 +201,7 @@ dependencies {
     testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
     // RxLint
-    implementation "nl.littlerobots.rxlint:rxlint:1.6"
+    implementation "nl.littlerobots.rxlint:rxlint:$dependencyVersions.rxLint"
 
 }
 
