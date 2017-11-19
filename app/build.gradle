@@ -42,9 +42,15 @@ android {
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
 
-        // AutoValue and AutoFactory require this to do this workaround, because they haven't separated their
-        // annotation processor from the compile time dependencies. The result is that
-        // https://github.com/google/auto/issues/268
+        // AutoValue and AutoFactory require this workaround because they haven't separated their
+        // annotation processor from their compile time dependencies.
+        //
+        // Without this, compilation would fail as it requires that annotation processors are only
+        // used by kapt/annnotationProcessor.
+        //
+        // Note: This option has also been targeted for deprecation by the Android Gradle plugin.
+        //
+        // Refer: https://github.com/google/auto/issues/268
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath false
