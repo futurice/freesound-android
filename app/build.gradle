@@ -90,7 +90,8 @@ android {
     sourceSets {
         // Required so Android Studio can find source files for auto-completion.
         // It still compiles without this.
-        main.java.srcDirs += 'build/generated/source/kaptKotlin'
+      //  debug.java.srcDirs += 'build/generated/source/kaptKotlin/debug'
+      //  release.java.srcDirs += 'build/generated/source/kaptKotlin/release'
     }
 
     lintOptions {
@@ -193,8 +194,8 @@ dependencies {
     compileOnly 'javax.annotation:jsr250-api:1.0'
 
     // Jonty
-    compileOnly 'com.github.peter-tackage.jonty:jonty:0.4'
-    kapt 'com.github.peter-tackage.jonty:jonty-processor:0.4'
+    compileOnly 'com.github.peter-tackage.jonty:jonty:0.5'
+    kapt 'com.github.peter-tackage.jonty:jonty-processor:0.5'
 
     // Optionals for Java 6/7
     implementation "com.github.tomaszpolanski:options:$dependencyVersions.options"
