@@ -87,11 +87,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // Required so Android Studio can find source files for auto-completion for Kotlin generated
+    // code, such as Jonty.
+    // It still compiles via Gradle without this, but Android Studio would show the call site as
+    // missing.
     sourceSets {
-        // Required so Android Studio can find source files for auto-completion.
-        // It still compiles without this.
-      //  debug.java.srcDirs += 'build/generated/source/kaptKotlin/debug'
-      //  release.java.srcDirs += 'build/generated/source/kaptKotlin/release'
+        debug.java.srcDirs += 'build/generated/source/kaptKotlin/debug'
+        release.java.srcDirs += 'build/generated/source/kaptKotlin/release'
     }
 
     lintOptions {

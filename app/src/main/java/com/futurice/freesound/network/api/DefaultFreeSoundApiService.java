@@ -17,7 +17,7 @@
 package com.futurice.freesound.network.api;
 
 import com.futurice.freesound.network.api.model.AccessToken;
-import com.futurice.freesound.network.api.model.RequestsKt;
+import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.Sound_JontyFielder;
 import com.futurice.freesound.network.api.model.User;
@@ -72,8 +72,7 @@ final class DefaultFreeSoundApiService implements FreeSoundApiService {
         Sound_JontyFielder.INSTANCE.getFields();
         return freeSoundApi.search(get(query),
                                    null,
-                                   RequestsKt.asCommaSeparated(
-                                           Sound_JontyFielder.INSTANCE.getFields()));
+                                   SoundFields.BASE);
     }
 
 }
