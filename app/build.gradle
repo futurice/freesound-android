@@ -147,7 +147,6 @@ ext {
             rxLint                  : '1.6']
 }
 
-
 dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
