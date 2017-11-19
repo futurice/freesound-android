@@ -42,7 +42,7 @@ interface FreeSoundApi {
     @GET("search/text/")
     Single<SoundSearchResult> search(@Query("query") @NonNull String query,
                                      @Query("filter") @Nullable String filter,
-                                     @Query("fields") @NonNull SoundFields fields);
+                                     @Query("fields") @NonNull String fields);
 
     @NonNull
     @GET("users/{user}/")
