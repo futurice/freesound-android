@@ -88,6 +88,8 @@ android {
     }
 
     sourceSets {
+        // Required so Android Studio can find source files for auto-completion.
+        // It still compiles without this.
         main.java.srcDirs += 'build/generated/source/kaptKotlin'
     }
 
