@@ -119,6 +119,7 @@ ext {
             moshi                   : '1.5.0',
             moshiConverter          : '2.3.0',
             autoFactory             : '1.0-beta5',
+            autoValue               : '1.5.2',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
             butterknife             : '8.6.0',
@@ -129,7 +130,7 @@ ext {
             junit                   : '4.12',
             mockito                 : '2.2.2',
             assertJ                 : '1.7.1',
-            leakCanary              : '1.5',
+            leakCanary              : '1.5.1',
             rxLint                  : '1.6']
 }
 
@@ -175,6 +176,18 @@ dependencies {
     compileOnly "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
     kapt "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
 
+    // Auto-Value
+    compileOnly "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+    kapt "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+
+    // Required because "javax.annotation.Generated" is referenced by AutoValue/Factory
+    // Refer to https://github.com/google/auto/issues/240
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+
+    // Jonty
+    compileOnly 'com.github.peter-tackage.jonty:jonty:0.4'
+    kapt 'com.github.peter-tackage.jonty:jonty-processor:0.4'
+
     // Optionals for Java 6/7
     implementation "com.github.tomaszpolanski:options:$dependencyVersions.options"
 
@@ -215,17 +228,6 @@ dependencies {
 
     // RxLint
     implementation "nl.littlerobots.rxlint:rxlint:$dependencyVersions.rxLint"
-
-    // Jonty
-    compileOnly 'com.github.peter-tackage.jonty:jonty:0.4'
-    kapt 'com.github.peter-tackage.jonty:jonty-processor:0.4'
-
-    // Required because "javax.annotation.Generated" is referenced by AP
-    compileOnly 'javax.annotation:jsr250-api:1.0'
-
-    // Auto-Value
-    compileOnly "com.google.auto.value:auto-value:1.5.2"
-    kapt "com.google.auto.value:auto-value:1.5.2"
 
 }
 
