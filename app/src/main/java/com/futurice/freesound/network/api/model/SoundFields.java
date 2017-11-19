@@ -25,7 +25,8 @@ public enum SoundFields {
         this.fields = fields;
     }
 
-    private double fields() {
-        return fields();
+    @Override
+    public String toString() {
+        return RequestsKt.asCommaSeparated(fields);
     }
 }

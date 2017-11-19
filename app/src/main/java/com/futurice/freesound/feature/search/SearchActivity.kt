@@ -135,7 +135,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
-        val closeButton : Button = search_view.findViewById(R.id.search_close_btn)
+        val closeButton : View = search_view.findViewById(R.id.search_close_btn)
         closeButton.visibility = if (isClearButtonVisible) View.VISIBLE else View.GONE
     }
 
