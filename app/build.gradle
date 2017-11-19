@@ -90,7 +90,6 @@ android {
         abortOnError false
     }
 
-
 }
 
 task checkstyle(type: Checkstyle) {
@@ -109,9 +108,7 @@ ext {
             androidSupport          : '26.1.0',
             androidSupportConstraint: '1.0.2',
             androidSupportTest      : '1.0.0',
-            //   javaPoet                : '1.9.0',
             dagger2                 : '2.4',
-            //   javaxAnnotation         : '10.0-b28',
             rxJava2                 : '2.1.0',
             rxAndroid               : '2.0.1',
             okHttp                  : '3.6.0',
@@ -152,7 +149,6 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
     // Dagger 2
-    // kapt "com.squareup:javapoet:$dependencyVersions.javaPoet"
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
     implementation "com.google.dagger:dagger:$dependencyVersions.dagger2"
 
@@ -220,6 +216,7 @@ dependencies {
     // RxLint
     implementation "nl.littlerobots.rxlint:rxlint:$dependencyVersions.rxLint"
 
+    // Jonty
     compileOnly 'com.github.peter-tackage.jonty:jonty:0.4'
     kapt 'com.github.peter-tackage.jonty:jonty-processor:0.4'
 
@@ -229,7 +226,6 @@ dependencies {
     // Auto-Value
     compileOnly "com.google.auto.value:auto-value:1.5.2"
     kapt "com.google.auto.value:auto-value:1.5.2"
-
 
 }
 
