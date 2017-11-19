@@ -129,6 +129,8 @@ ext {
             moshiConverter          : '2.3.0',
             autoFactory             : '1.0-beta5',
             autoValue               : '1.5.2',
+            jsr250                  : '1.0',
+            jonty                   : '0.5',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
             butterknife             : '8.7.0',
@@ -191,11 +193,11 @@ dependencies {
 
     // Required because "javax.annotation.Generated" is referenced by AutoValue/Factory
     // Refer to https://github.com/google/auto/issues/240
-    compileOnly 'javax.annotation:jsr250-api:1.0'
+    compileOnly "javax.annotation:jsr250-api:$dependencyVersions.jsr250"
 
     // Jonty
-    compileOnly 'com.github.peter-tackage.jonty:jonty:0.5'
-    kapt 'com.github.peter-tackage.jonty:jonty-processor:0.5'
+    compileOnly "com.github.peter-tackage.jonty:jonty:$dependencyVersions.jonty"
+    kapt "com.github.peter-tackage.jonty:jonty-processor:$dependencyVersions.jonty"
 
     // Optionals for Java 6/7
     implementation "com.github.tomaszpolanski:options:$dependencyVersions.options"
