@@ -130,7 +130,7 @@ ext {
             autoValue               : '1.5.2',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
-            butterknife             : '8.6.0',
+            butterknife             : '8.7.0',
             firebase                : '9.4.0',
             stetho                  : '1.4.2',
             chuck                   : '1.0.4',
