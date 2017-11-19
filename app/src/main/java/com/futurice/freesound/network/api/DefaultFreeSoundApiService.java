@@ -16,10 +16,10 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.Sound_JontyFielder;
 import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
+import com.futurice.freesound.network.api.model.Sound_JontyFielder;
 import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
@@ -69,7 +69,7 @@ final class DefaultFreeSoundApiService implements FreeSoundApiService {
     @Override
     @NonNull
     public Single<SoundSearchResult> search(@NonNull final String query) {
-        com.futurice.freesound.network.api.model.Sound_JontyFielder.INSTANCE.getFields();
+        Sound_JontyFielder.INSTANCE.getFields();
         return freeSoundApi.search(get(query), null, SoundFields.BASE);
     }
 

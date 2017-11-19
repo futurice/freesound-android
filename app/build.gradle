@@ -82,9 +82,7 @@ android {
     }
 
     sourceSets {
-        //  main.java.srcDirs += 'build/generated/source/objectbox'
-      //  main.java.srcDirs += 'build/generated/source/kaptKotlin/debug'
-
+        main.java.srcDirs += 'build/generated/source/kaptKotlin'
     }
 
     lintOptions {
