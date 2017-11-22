@@ -56,13 +56,14 @@ android {
                 includeCompileClasspath false
             }
         }
-
     }
+
     signingConfigs {
         debug {
             storeFile file("keystore/debug.keystore")
         }
     }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
