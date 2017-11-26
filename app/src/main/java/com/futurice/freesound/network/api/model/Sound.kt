@@ -18,12 +18,14 @@ package com.futurice.freesound.network.api.model
 
 import android.os.Parcel
 import com.futurice.freesound.common.utils.*
+import com.petertackage.jonty.Fieldable
 import com.squareup.moshi.Json
 import java.util.*
 
 /**
  * Refer to: http://www.freesound.org/docs/api/resources_apiv2.html#sound-resources
  */
+@Fieldable
 data class Sound(
 
         val id: Long?,

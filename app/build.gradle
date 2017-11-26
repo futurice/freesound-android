@@ -18,6 +18,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 apply from: 'app-config.gradle'
 
@@ -40,12 +41,29 @@ android {
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
+
+        // AutoValue and AutoFactory require this workaround because they haven't separated their
+        // annotation processor from their compile time dependencies.
+        //
+        // Without this, compilation would fail as it requires that annotation processors are only
+        // used by kapt/annnotationProcessor.
+        //
+        // Note: This option has also been targeted for deprecation by the Android Gradle plugin.
+        //
+        // Refer: https://github.com/google/auto/issues/268
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
+
     signingConfigs {
         debug {
             storeFile file("keystore/debug.keystore")
         }
     }
+
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
@@ -68,6 +86,14 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // Required so Android Studio can find source files for auto-completion for Kotlin generated
+    // code, such as Jonty. It still compiles via Gradle without this, but Android Studio would
+    // show the call site as missing.
+    buildTypes.all { buildType ->
+        sourceSets.getByName(buildType.name).java.srcDirs +=
+                "build/generated/source/kaptKotlin/${buildType.name}"
     }
 
     lintOptions {
@@ -93,9 +119,7 @@ ext {
             androidSupport          : '26.1.0',
             androidSupportConstraint: '1.0.2',
             androidSupportTest      : '1.0.0',
-            javaPoet                : '1.9.0',
             dagger2                 : '2.4',
-            javaxAnnotation         : '10.0-b28',
             rxJava2                 : '2.1.0',
             rxAndroid               : '2.0.1',
             okHttp                  : '3.6.0',
@@ -106,9 +130,12 @@ ext {
             moshi                   : '1.5.0',
             moshiConverter          : '2.3.0',
             autoFactory             : '1.0-beta5',
+            autoValue               : '1.5.2',
+            jsr250                  : '1.0',
+            jonty                   : '0.6',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
-            butterknife             : '8.6.0',
+            butterknife             : '8.7.0',
             firebase                : '9.4.0',
             stetho                  : '1.4.2',
             chuck                   : '1.0.4',
@@ -116,7 +143,7 @@ ext {
             junit                   : '4.12',
             mockito                 : '2.2.2',
             assertJ                 : '1.7.1',
-            leakCanary              : '1.5',
+            leakCanary              : '1.5.1',
             rxLint                  : '1.6']
 }
 
@@ -135,8 +162,7 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
     // Dagger 2
-    annotationProcessor "com.squareup:javapoet:$dependencyVersions.javaPoet"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
+    kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
     implementation "com.google.dagger:dagger:$dependencyVersions.dagger2"
 
     // RxJava
@@ -160,7 +186,19 @@ dependencies {
 
     // AutoFactory
     compileOnly "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
-    annotationProcessor "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
+    kapt "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
+
+    // Auto-Value
+    compileOnly "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+    kapt "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
+
+    // Required because "javax.annotation.Generated" is referenced by AutoValue/Factory
+    // Refer to https://github.com/google/auto/issues/240
+    compileOnly "javax.annotation:jsr250-api:$dependencyVersions.jsr250"
+
+    // Jonty
+    compileOnly "com.github.peter-tackage.jonty:jonty:$dependencyVersions.jonty"
+    kapt "com.github.peter-tackage.jonty:jonty-processor:$dependencyVersions.jonty"
 
     // Optionals for Java 6/7
     implementation "com.github.tomaszpolanski:options:$dependencyVersions.options"
@@ -170,7 +208,7 @@ dependencies {
 
     // Butter Knife
     implementation "com.jakewharton:butterknife:$dependencyVersions.butterknife"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$dependencyVersions.butterknife"
+    kapt "com.jakewharton:butterknife-compiler:$dependencyVersions.butterknife"
 
     // Timber
     implementation "com.jakewharton.timber:timber:$dependencyVersions.timber"
