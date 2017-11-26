@@ -19,7 +19,6 @@ package com.futurice.freesound.network.api;
 import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
-import com.futurice.freesound.network.api.model.Sound_JontyFielder;
 import com.futurice.freesound.network.api.model.User;
 
 import android.support.annotation.NonNull;
