@@ -39,7 +39,7 @@ data class Sound(
         val description: String,
         // Latitude and longitude of the geotag separated by spaces
         // (e.g. “41.0082325664 28.9731252193”, only for sounds that have been geotagged).
-        val geotag: GeoLocation?,
+        val geotag: String?,
         // The username of the uploader of the sound.
         val username: String,
         // Thumbnail image URLs of the waveform/spectral plot
@@ -55,7 +55,7 @@ data class Sound(
             name = parcel.readString(),
             tags = parcel.readStringList()!!,
             description = parcel.readString(),
-            geotag = parcel.readTypedObjectCompat(GeoLocation.CREATOR),
+            geotag = parcel.readString(),
             username = parcel.readString(),
             images = parcel.readTypedObjectCompat(Image.CREATOR)!!,
             previews = parcel.readTypedObjectCompat(Preview.CREATOR)!!,
@@ -68,7 +68,7 @@ data class Sound(
         writeString(name)
         writeStringList(tags)
         writeString(description)
-        writeTypedObjectCompat(geotag, flags)
+        writeString(geotag)
         writeString(username)
         writeTypedObjectCompat(images, flags)
         writeTypedObjectCompat(previews, flags)
