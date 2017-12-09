@@ -103,6 +103,10 @@ android {
 
 }
 
+androidExtensions {
+    experimental = true
+}
+
 task checkstyle(type: Checkstyle) {
     group 'verification'
     description 'Checks if the code adheres to the coding standards'

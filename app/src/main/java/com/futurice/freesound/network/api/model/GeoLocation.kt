@@ -16,23 +16,14 @@
 
 package com.futurice.freesound.network.api.model
 
-import android.os.Parcel
-import com.futurice.freesound.common.utils.KParcelable
-import com.futurice.freesound.common.utils.parcelableCreator
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class GeoLocation(
         val latitude: Double,
-        val longitude: Double) : KParcelable {
-    private constructor(parcel: Parcel) : this(
-            latitude = parcel.readDouble(),
-            longitude = parcel.readDouble())
+        val longitude: Double) : Parcelable {
 
-    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeDouble(latitude)
-        writeDouble(longitude)
-    }
-
-    companion object {
-        @JvmField val CREATOR = parcelableCreator(::GeoLocation)
-    }
 }
