@@ -87,10 +87,7 @@ class TestData private constructor() {
         }
 
         @JvmStatic
-        fun geotag(index: Long): GeoLocation =
-            GeoLocation(
-                latitude = index.toDouble(),
-                longitude = index.toDouble() + 1)
+        fun geotag(index: Long): String = "${index.toDouble()} ${index.toDouble() + 1}"
 
         @JvmStatic
         fun images(): Image {
