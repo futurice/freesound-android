@@ -14,6 +14,6 @@
 
 package com.futurice.freesound.common.utils
 
-inline fun <T> T?.ifNull(block: () -> Unit): Unit {
+inline fun <T> T?.ifNull(block: () -> Unit) {
     if (this == null) block()
 }
