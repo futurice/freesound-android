@@ -36,7 +36,7 @@ class RecyclerViewAdapter<T>(private val comparator: ItemComparator,
     private val modelItems = ArrayList<DisplayableItem<T>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            factoryMap[viewType]?.createViewHolder(get(parent))
+            factoryMap[viewType]?.createViewHolder(parent)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = modelItems[position]
