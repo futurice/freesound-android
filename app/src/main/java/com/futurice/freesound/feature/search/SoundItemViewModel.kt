@@ -37,8 +37,7 @@ internal class SoundItemViewModel(private val sound: Sound,
                                   private @Provided val audioPlayer: AudioPlayer,
                                   private @Provided val freeSoundApiService: FreeSoundApiService) : SimpleViewModel() {
 
-    private val thumbnail: String
-        get() = sound.images.medSizeWaveformUrl
+    private val thumbnail: String = sound.images.medSizeWaveformUrl
 
     private val currentPercentage: Observable<Option<Int>>
         get() = audioPlayer.timePositionMsOnceAndStream
@@ -51,7 +50,7 @@ internal class SoundItemViewModel(private val sound: Sound,
 
     fun userAvatar(): Single<String> =
             freeSoundApiService.getUser(sound.username)
-                    .map { (_, _, avatar) -> avatar.medium }
+                    .map { user -> user.avatar.medium }
                     .cache()
 
     fun createdDate(): Single<String> =
@@ -91,8 +90,7 @@ internal class SoundItemViewModel(private val sound: Sound,
                     .filter { (id) -> id == from(sound.id) }
                     .isSome
 
-    private fun toPercentage(positionMs: Long,
-                             durationSec: Float): Int =
+    private fun toPercentage(positionMs: Long, durationSec: Float): Int =
             Math.min(100, (positionMs / (durationSec * 1000.0f) * 100L).toInt())
 
 }
