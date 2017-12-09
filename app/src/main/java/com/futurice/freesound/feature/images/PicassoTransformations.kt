@@ -13,24 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:JvmName("PicassoTransformations")
 
-package com.futurice.freesound.feature.images;
+package com.futurice.freesound.feature.images
 
-import com.futurice.freesound.common.InstantiationForbiddenError;
-import com.squareup.picasso.Transformation;
+import com.squareup.picasso.Transformation
 
-import android.support.annotation.NonNull;
+private val CIRCULAR = RoundEdgeTransformation()
 
-public final class PicassoTransformations {
-
-    private static final Transformation CIRCULAR = new RoundEdgeTransformation();
-
-    @NonNull
-    public static Transformation circular() {
-        return CIRCULAR;
-    }
-
-    private PicassoTransformations() {
-        throw new InstantiationForbiddenError();
-    }
+fun circular(): Transformation {
+    return CIRCULAR
 }

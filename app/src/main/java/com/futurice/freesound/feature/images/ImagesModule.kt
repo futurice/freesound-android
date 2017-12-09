@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.images;
+package com.futurice.freesound.feature.images
 
-import com.futurice.freesound.BuildConfig;
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
-
-import android.content.Context;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
+import android.content.Context
+import com.futurice.freesound.BuildConfig
+import com.futurice.freesound.inject.app.ForApplication
+import com.squareup.picasso.Picasso
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-public final class ImagesModule {
+class ImagesModule {
 
     @Provides
     @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return new Picasso.Builder(context)
-                .loggingEnabled(BuildConfig.DEBUG)
-                .build();
-    }
+    internal fun providePicasso(@ForApplication context: Context) =
+            Picasso.Builder(context)
+                    .loggingEnabled(BuildConfig.DEBUG)
+                    .build()
+
 
 }
