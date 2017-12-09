@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
-
-import android.support.annotation.NonNull;
+package com.futurice.freesound.feature.analytics
 
 /**
  * Aggregates and sends events to analytics service.
  */
-public interface Analytics {
+interface Analytics {
 
     /**
      * Sends event to analytics service.
      *
      * @param event Event name
      */
-    void log(@NonNull String event);
+    fun log(event: String)
 }

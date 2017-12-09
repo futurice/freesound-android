@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.analytics;
+package com.futurice.freesound.feature.analytics
 
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-public class AnalyticsModule {
+class AnalyticsModule {
 
     @Provides
     @Singleton
-    static Analytics provideAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        return firebaseAnalytics;
-    }
+    internal fun provideAnalytics(firebaseAnalytics: FirebaseAnalytics): Analytics =
+            firebaseAnalytics
+
 }
