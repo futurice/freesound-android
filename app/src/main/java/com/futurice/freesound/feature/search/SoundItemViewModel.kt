@@ -77,8 +77,7 @@ internal class SoundItemViewModel(private val sound: Sound,
 
     fun toggleSoundPlayback() {
         audioPlayer.togglePlayback(
-                PlaybackSource(from(sound.id),
-                        sound.previews.lowQualityMp3Url))
+                PlaybackSource(from(sound.id), sound.previews.lowQualityMp3Url))
     }
 
     private fun progressOrNothing(playerState: PlayerState): Observable<Option<Int>> {
