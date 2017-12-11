@@ -122,7 +122,7 @@ ext {
             kotlin                  : kotlin_version,
             androidSupport          : '26.1.0',
             androidSupportConstraint: '1.0.2',
-            androidArchLifecycle    : '1.0.0-alpha5',
+            androidArchLifecycle    : '1.0.0',
             androidSupportTest      : '1.0.0',
             dagger2                 : '2.4',
             rxJava2                 : '2.1.0',
@@ -169,6 +169,7 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$dependencyVersions.androidArchLifecycle"
     implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
+    implementation "android.arch.lifecycle:reactivestreams:$dependencyVersions.androidArchLifecycle"
     annotationProcessor "android.arch.lifecycle:compiler:1$dependencyVersions.androidArchLifecycle"
 
     // Dagger 2

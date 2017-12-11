@@ -16,32 +16,24 @@
 
 package com.futurice.freesound.mvi
 
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.Observer
 
 /**
- *This is View lifecycle bound. Do this on start/stop.
- *
- * The View holds this instance.
+ * The MviView holds this instance.
  */
-class UiBinder<M, E>(private val renderer: Renderer<M>,
+class UiBinder<M, E>(private val mviView: MviView<E, M>,
                      private val viewModel: ViewModel<E, M>,
-                     private val schedulers: SchedulerProvider) {
+                     lifecycleOwner: LifecycleOwner) {
 
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    // LiveData thinks the events can be null, be we know better - they come from RxJava 2 sources
 
-    fun bind(uiEvents: Observable<E> = Observable.never()) {
-        disposable.add(uiEvents
-                .subscribeOn(schedulers.ui())
-                .subscribe { viewModel.uiEvents(it) })
-        disposable.add(viewModel.uiModels()
-                .observeOn(schedulers.ui())
-                .subscribe { renderer.render(it) })
+    init {
+        mviView.uiEvents()
+                .observe(lifecycleOwner, Observer { viewModel.uiEvents(it!!) })
+
+        viewModel.uiModels()
+                .observe(lifecycleOwner, Observer { mviView.render(it!!) })
     }
 
-    fun unbind() {
-        disposable.clear()
-        renderer.cancelRender()
-    }
 }

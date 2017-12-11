@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.mvi
 
-import io.reactivex.Observable
+import android.arch.lifecycle.LiveData
 
-interface Producer<E> {
-    fun uiEvents(): Observable<E>
+interface UiEventProducer<E> {
+    fun uiEvents(): LiveData<E>
 }

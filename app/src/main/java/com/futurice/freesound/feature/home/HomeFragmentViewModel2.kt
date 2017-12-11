@@ -16,30 +16,38 @@
 
 package com.futurice.freesound.feature.home
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
-import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
-internal class HomeFragmentViewModel2(private val userDataModel: UserDataModel,
+internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserInteractor,
                                       schedulers: SchedulerProvider) :
-        BaseViewModel<Fragment.UiEvent, Fragment.UiModel>(schedulers) {
+        BaseViewModel<HomeFragmentUiEvent, HomeFragmentUiModel>(schedulers) {
 
-    private val uiEvents: PublishProcessor<Fragment.UiEvent> = PublishProcessor.create()
-    private val uiModel: Observable<Fragment.UiModel>
+    private val uiEvents: PublishProcessor<HomeFragmentUiEvent> = PublishProcessor.create()
+    private val uiModel: MutableLiveData<HomeFragmentUiModel> = MutableLiveData()
     private val disposable: Disposable
 
-    val INITIAL_UI_STATE: Fragment.UiModel get() = Fragment.UiModel(null, false, null)
+    val INITIAL_UI_STATE: HomeFragmentUiModel get() = HomeFragmentUiModel(null, false, null)
 
     init {
-        uiModel = reduce().replayingShare()
-        disposable = (uiModel
+        disposable = (defineUiModel()
                 .subscribeOn(schedulers.computation())
-                .subscribe({ Timber.d("## $it") }, { e -> Timber.e("## $e") }))
+                .subscribe({ uiModel.postValue(it) },
+                        { e -> Timber.e(e, "Fatal error in ${HomeFragmentViewModel2::javaClass}") }))
+    }
+
+    private fun defineUiModel(): Observable<HomeFragmentUiModel> {
+        return uiEvents
+                .compose(transform())
+                .scan(INITIAL_UI_STATE, { model: Fragment.Change, change -> model.reduce(change) })
+                .doOnNext { model: M -> Timber.v(" $model") }
     }
 
     /**
@@ -50,7 +58,7 @@ internal class HomeFragmentViewModel2(private val userDataModel: UserDataModel,
      *
      * Take UIEvents .. [[map that to an Action] .. [map that to a Result]] ... to a Change .. to a Model
      *
-     * uiModel = uiEvents.compose(transform()).merge(dataEvents.compose(tranform())).reduce()
+     * uiModel = uiEvents.compose(transform()).merge(fetchHomeUser.compose(tranform())).defineUiModel()
      * uiModel = uibasedchanges + databasedchanges
      *
      * Is there a way to model dataChanges as a function of ui visibility for the situations where
@@ -58,58 +66,70 @@ internal class HomeFragmentViewModel2(private val userDataModel: UserDataModel,
      *
      * perhaps that could be pulled into the parent class. Always have an event to do with "subscribing".
      */
-    fun transform(): ObservableTransformer<Fragment.UiEvent, Fragment.Change> {
+    fun transform(): ObservableTransformer<HomeFragmentUiEvent, Fragment.Change> {
 
+        // TODO Pull this out into a separate UseCase/Domain
         val fetchUser:
                 ObservableTransformer<UserAction.Fetch, FetchUserResult> =
                 ObservableTransformer {
-                    userDataModel.homeUser
+                    homeUserInteractor.fetchHomeUser()
                             .map { FetchUserResult.UserDataEvent(it) }
                             .map { it as FetchUserResult }
-                            .toObservable()
                             .startWith(FetchUserResult.UserFetchInProgressEvent)
                             .onErrorResumeNext { e: Throwable ->
                                 Observable.just(FetchUserResult.UserFetchFailureEvent(e))
                             }
                 }
 
-        val contentRefreshRequested: ObservableTransformer<Fragment.UiEvent.ContentRefreshRequested,
+        val contentRefreshRequested: ObservableTransformer<HomeFragmentUiEvent.ContentRefreshRequested,
                 Fragment.Change.ContentRefreshRequested>
-                = ObservableTransformer {
-            it.map { UserAction.Fetch }.compose(fetchUser).map { }
+                = ObservableTransformer { it.map { UserAction.Fetch }
+                    .compose(fetchUser)
+                    .map { }
         }
 
         val dismissErrorIndicator:
-                ObservableTransformer<Fragment.UiEvent.ErrorIndicatorDismissed,
+                ObservableTransformer<HomeFragmentUiEvent.ErrorIndicatorDismissed,
                         Fragment.Change.ErrorIndicatorDismissed> =
                 ObservableTransformer {
                     Observable.just(Fragment.Change.ErrorIndicatorDismissed)
                 }
 
-        return ObservableTransformer { when(it) { } }
+        return ObservableTransformer {
+            when (it) {
+                is HomeFragmentUiEvent.ErrorIndicatorDismissed -> dismissErrorIndicator
+                is HomeFragmentUiEvent.ContentRefreshRequested -> contentRefreshRequested
+
+            }
+        }
     }
 
-    private fun reduce(): Observable<Fragment.UiModel> {
-        return uiEvents
-                .compose(transform())
-                .scan(INITIAL_UI_STATE, { model: Fragment.Change, change -> model.reduce(change) })
-                .doOnNext { model: M -> Timber.v(" $model") }
-    }
 
-    override fun uiEvents(uiEvent: Fragment.UiEvent) {
+    override fun uiEvents(uiEvent: HomeFragmentUiEvent) {
         uiEvents.offer(uiEvent)
     }
 
-    override fun uiModels(): Observable<Fragment.UiModel> = uiModel
+    override fun uiModels(): LiveData<HomeFragmentUiModel> = uiModel
 
     override fun onCleared() {
         super.onCleared()
         disposable.dispose()
     }
 
-    private fun mapUiEvent(uiEvent: Fragment.UiEvent) =
+    fun HomeFragmentUiModel.defineUiModel(change: Fragment.Change): HomeFragmentUiModel =
+            when (change) {
+                is Fragment.Change.NoChange -> this
+                Fragment.Change.UserFetchInProgressChanged -> copy(isLoading = true)
+                is Fragment.Change.UserChanged -> fromUserChanged(change)
+                is Fragment.Change.UserFetchErrorChanged -> copy(isLoading = false, errorMsg = change.errorMsg)
+                Fragment.Change.ErrorIndicatorDismissed -> copy(errorMsg = null)
+                Fragment.Change.ContentRefreshRequested -> from
+            }
+
+
+    private fun mapUiEvent(uiEvent: HomeFragmentUiEvent) =
             when (uiEvent) {
-                Fragment.UiEvent.ContentRefreshRequested -> Observable.just(Fragment.Change.ContentRefreshRequested)
+                HomeFragmentUiEvent.ContentRefreshRequested -> Observable.just(Fragment.Change.ContentRefreshRequested)
             }
 
     private fun mapDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
@@ -119,28 +139,12 @@ internal class HomeFragmentViewModel2(private val userDataModel: UserDataModel,
                 is Fragment.DataEvent.UserFetchFailedEvent -> Fragment.Change.UserFetchErrorChanged(dataEvent.error.localizedMessage)
             }
 
-    override fun Fragment.UiModel.reduce(change: Fragment.Change): Fragment.UiModel =
-            when (change) {
-                is Fragment.Change.NoChange -> this
-                Fragment.Change.UserFetchInProgressChanged -> fromUserFetchInProgressChange()
-                is Fragment.Change.UserChanged -> fromUserChanged(change)
-                is Fragment.Change.UserFetchErrorChanged -> fromUserFetchErrorChanged(change)
-                Fragment.Change.ErrorIndicatorDismissed -> fromErrorIndicatorDismissedChange()
-                Fragment.Change.ContentRefreshRequested -> from
-            }
 
-    private fun Fragment.UiModel.fromUserChanged(change: Fragment.Change.UserChanged): Fragment.UiModel
+    private fun HomeFragmentUiModel.fromUserChanged(change: Fragment.Change.UserChanged): HomeFragmentUiModel
             = copy(user = Fragment.UserUiModel(change.user.username(),
             about = change.user.about(),
             avatarUrl = change.user.avatar().large()),
             isLoading = false,
             errorMsg = null)
-
-    private fun Fragment.UiModel.fromUserFetchErrorChanged(change: Fragment.Change.UserFetchErrorChanged)
-            = copy(isLoading = false, errorMsg = change.errorMsg)
-
-    private fun Fragment.UiModel.fromUserFetchInProgressChange() = copy(isLoading = true)
-
-    private fun Fragment.UiModel.fromErrorIndicatorDismissedChange() = copy(errorMsg = null)
 
 }

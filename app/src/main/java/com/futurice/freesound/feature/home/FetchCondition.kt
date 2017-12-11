@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi
+package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
+/**
+ * Created by ptac on 11.12.17.
+ */
 
-abstract class BaseViewModel<in UE, M>(schedulers: SchedulerProvider) : ViewModel<UE, M>()

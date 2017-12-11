@@ -16,6 +16,4 @@
 
 package com.futurice.freesound.mvi
 
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-
-abstract class BaseViewModel<in UE, M>(schedulers: SchedulerProvider) : ViewModel<UE, M>()
+interface MviView<E, in M> : Renderer<M>, UiEventProducer<E>

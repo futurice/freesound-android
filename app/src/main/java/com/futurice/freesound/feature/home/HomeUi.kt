@@ -25,20 +25,20 @@ interface Activity {
 
 }
 
+data class HomeFragmentUiModel(val user: Fragment.UserUiModel?,
+                               val isLoading: Boolean,
+                               val errorMsg: String?)
+
+sealed class HomeFragmentUiEvent(val log: String) {
+    object ErrorIndicatorDismissed : HomeFragmentUiEvent("ErrorIndicatorDismissed")
+    object ContentRefreshRequested : HomeFragmentUiEvent("ContentRefreshRequested")
+}
+
 interface Fragment {
 
     data class UserUiModel(val username: String,
                            val about: String,
                            val avatarUrl: String)
-
-    data class UiModel(val user: UserUiModel?,
-                       val isLoading: Boolean,
-                       val errorMsg: String?)
-
-    sealed class UiEvent(val log: String) {
-        object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
-        object ContentRefreshRequested : UiEvent("ContentRefreshRequested")
-    }
 
     sealed class Action
 

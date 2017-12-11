@@ -16,6 +16,10 @@
 
 package com.futurice.freesound.feature.home
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.LiveDataReactiveStreams
+import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
@@ -23,17 +27,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
-import com.futurice.freesound.core.BindingBaseFragment2
+import com.futurice.freesound.core.BaseFragment
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.mvi.Renderer
+import com.futurice.freesound.mvi.MviView
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.squareup.picasso.Picasso
-import io.reactivex.Observable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiModel, Fragment.UiEvent>(), Renderer<Fragment.UiModel> {
+class HomeFragment : BaseFragment<HomeFragmentComponent>(), MviView<HomeFragmentUiEvent, HomeFragmentUiModel> {
 
     @Inject
     internal lateinit var picasso: Picasso
@@ -42,6 +47,7 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         return inflater?.inflate(R.layout.fragment_home, container, false)
                 ?.also { errorSnackBar = createSnackbar(it) }
     }
@@ -62,17 +68,12 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
                 BaseFragmentModule(this))
     }
 
-    override fun uiEvents(): Observable<Fragment.UiEvent> {
-        return Observable.merge(errorIndicatorDismissed(),
-                refreshRequested())
+    override fun uiEvents(): LiveData<HomeFragmentUiEvent> {
+        return LiveDataReactiveStreams.fromPublisher(
+                Flowable.merge(errorIndicatorDismissed(), refreshRequested()))
     }
 
-    private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
-            .map { Fragment.UiEvent.ErrorIndicatorDismissed }
-
-    private fun refreshRequested() = Observable.never<Fragment.UiEvent.ContentRefreshRequested>()
-
-    override fun render(model: Fragment.UiModel) {
+    override fun render(model: HomeFragmentUiModel) {
 
         when (model.user) {
             null -> hideUser()
@@ -88,6 +89,16 @@ class HomeFragment : BindingBaseFragment2<HomeFragmentComponent, Fragment.UiMode
 
     }
 
+    // TODO Make data and ui flowable extensions.
+
+    private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
+            .map { HomeFragmentUiEvent.ErrorIndicatorDismissed }
+            .toFlowable(BackpressureStrategy.BUFFER)
+
+    private fun refreshRequested() = Flowable.never<HomeFragmentUiEvent.ContentRefreshRequested>()
+
+    // TODO This is currently never called - there's no lifecycle hook.
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     override fun cancelRender() = picasso.cancelRequest(avatar_image)
 
     private fun hideUser() {

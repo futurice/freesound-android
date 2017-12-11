@@ -45,29 +45,26 @@ public class HomeFragmentModule {
 
     @Provides
     static Function0<HomeFragmentViewModel2> providerHomeFragmentViewModel2Provider(
-            HomeFragmentInteractor dataEvents,
+            HomeUserInteractor homeUserInteractor,
             SchedulerProvider schedulerProvider) {
-        return () -> new HomeFragmentViewModel2(dataEvents.dataEvents(), schedulerProvider);
+        return () -> new HomeFragmentViewModel2(homeUserInteractor, schedulerProvider);
     }
 
     @Provides
     @FragmentScope
-    Renderer<Fragment.UiModel> provideRenderer() {
+    Renderer<Fragment.HomeFragmentUiModel> provideRenderer() {
         return homeFragment;
     }
 
     @Provides
     @FragmentScope
-    static UiBinder<Fragment.UiModel, Fragment.UiEvent> provideUiBinder(
-            Renderer<Fragment.UiModel> renderer,
-            HomeFragmentViewModel2 viewModel,
-            SchedulerProvider schedulerProvider) {
-        return new UiBinder<>(renderer, viewModel, schedulerProvider);
+    UiBinder<Fragment.HomeFragmentUiModel, Fragment.HomeFragmentUiEvent> provideUiBinder(HomeFragmentViewModel2 viewModel) {
+        return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 
     @Provides
-    static HomeFragmentInteractor provideHomeFragmentDataBinder(UserDataModel userDataModel) {
-        return new HomeFragmentInteractor(userDataModel);
+    static HomeUserInteractor provideHomeFragmentDataBinder(UserDataModel userDataModel) {
+        return new HomeUserInteractor(userDataModel);
     }
 
 }
