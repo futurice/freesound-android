@@ -46,7 +46,7 @@ android {
         // annotation processor from their compile time dependencies.
         //
         // Without this, compilation would fail as it requires that annotation processors are only
-        // used by kapt/annnotationProcessor.
+        // used by kapt/annotationProcessor.
         //
         // Note: This option has also been targeted for deprecation by the Android Gradle plugin.
         //
