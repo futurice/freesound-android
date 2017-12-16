@@ -19,8 +19,4 @@ package com.futurice.freesound.feature.images
 
 import com.squareup.picasso.Transformation
 
-private val CIRCULAR = RoundEdgeTransformation()
-
-fun circular(): Transformation {
-    return CIRCULAR
-}
+fun circular(): Transformation = RoundEdgeTransformation

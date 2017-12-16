@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.images
 import android.graphics.*
 import com.squareup.picasso.Transformation
 
-internal class RoundEdgeTransformation : Transformation {
+object RoundEdgeTransformation : Transformation {
 
     override fun transform(source: Bitmap): Bitmap {
 
