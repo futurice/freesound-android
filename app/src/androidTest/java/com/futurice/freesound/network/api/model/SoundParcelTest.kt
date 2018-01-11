@@ -16,12 +16,8 @@
 
 package com.futurice.freesound.network.api.model
 
-import android.os.Parcel
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import com.futurice.freesound.helpers.ParcelableTestContainer
-import com.futurice.freesound.helpers.parcelableCreator
-import com.futurice.freesound.helpers.readTypedObjectCompat
 import com.futurice.freesound.helpers.testParcel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -33,7 +29,7 @@ import java.util.*
 class SoundParcelTest {
 
     @Test
-    fun sound_isParcelable() {
+    fun sound_is_parcelable() {
         val images = Image("medWav", "largeWav",
                 "medSpec", "largeSpec")
         val preview = Preview("lowMp3", "highMp3",
@@ -53,19 +49,12 @@ class SoundParcelTest {
                 created = Date(1000)
         )
 
-        sound.testParcel(::TestParcel, TestParcel.CREATOR)
+        sound.testParcel()
                 .apply {
                     assertThat(this).isEqualTo(sound)
                     assertThat(this).isNotSameAs(sound)
                 }
     }
 
-    private class TestParcel(tested: Sound) : ParcelableTestContainer<Sound>(tested) {
-        constructor(parcel: Parcel) : this(parcel.readTypedObjectCompat<Sound>())
-
-        companion object {
-            @JvmField val CREATOR = parcelableCreator(::TestParcel)
-        }
-    }
 
 }
