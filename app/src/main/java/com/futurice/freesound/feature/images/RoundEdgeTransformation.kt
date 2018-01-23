@@ -31,11 +31,10 @@ object RoundEdgeTransformation : Transformation {
             shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         }
 
-        val c = Canvas(roundEdgeBitmap)
-        val shortestAxis = Math.min(source.width, source.height).toFloat()
-        c.drawCircle(source.width / 2f,source.height / 2f,
-                shortestAxis / 2f,
-                paint)
+        Canvas(roundEdgeBitmap).apply {
+            drawCircle(source.width / 2f, source.height / 2f,
+                    source.shortestAxis() / 2f, paint)
+        }
 
         if (roundEdgeBitmap != source) {
             source.recycle()
@@ -44,4 +43,8 @@ object RoundEdgeTransformation : Transformation {
     }
 
     override fun key(): String = "roundEdge"
+
+    private fun Bitmap.shortestAxis(): Float {
+        return Math.min(width, height).toFloat()
+    }
 }
