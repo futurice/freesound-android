@@ -20,15 +20,13 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 
-inline fun <reified R : Parcelable> R.testParcel(): R {
-    val bytes = marshallParcelable(this)
-    return unmarshallParcelable(bytes)
-}
+inline fun <reified R : Parcelable> R.testParcel(): R =
+        marshallParcelable(this)
+                .let { unmarshallParcelable(it) }
 
-inline fun <reified R : Parcelable> marshallParcelable(parcelable: R): ByteArray {
-    val bundle = Bundle().apply { putParcelable(R::class.java.name, parcelable) }
-    return marshall(bundle)
-}
+inline fun <reified R : Parcelable> marshallParcelable(parcelable: R): ByteArray =
+        Bundle().apply { putParcelable(R::class.java.name, parcelable) }
+                .let { marshall(it) }
 
 fun marshall(bundle: Bundle): ByteArray =
         Parcel.obtain().use {
