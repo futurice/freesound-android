@@ -24,10 +24,8 @@ import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
 import com.futurice.freesound.feature.common.waveform.BlackBackgroundWaveformExtractor;
 import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
-
 import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.network.api.model.Sound;
-
 import com.futurice.freesound.viewmodel.DataBinder;
 import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
@@ -38,9 +36,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import android.widget.ImageView;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -94,7 +91,8 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
                               .subscribeOn(schedulerProvider.computation())
                               .observeOn(schedulerProvider.ui())
                               .subscribe(url -> picasso.load(url)
-                                                       .transform(PicassoTransformations.circular())
+                                                       .transform(PicassoTransformations
+                                                                          .circularTransformation())
                                                        .into(avatarImageView),
                                          e -> Timber.e(e, "Unable to set SoundItem avatar")));
 

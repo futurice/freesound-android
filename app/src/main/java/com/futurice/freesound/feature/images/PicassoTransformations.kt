@@ -19,4 +19,4 @@ package com.futurice.freesound.feature.images
 
 import com.squareup.picasso.Transformation
 
-fun circular(): Transformation = RoundEdgeTransformation
+fun circularTransformation(): Transformation = RoundEdgeTransformation

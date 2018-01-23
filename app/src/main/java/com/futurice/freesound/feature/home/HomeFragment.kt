@@ -24,7 +24,7 @@ import com.futurice.freesound.R
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.core.BindingBaseFragment
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.feature.images.circular
+import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.viewmodel.DataBinder
 import com.futurice.freesound.viewmodel.ViewModel
@@ -53,7 +53,7 @@ class HomeFragment : BindingBaseFragment<HomeFragmentComponent>() {
                 .observeOn(schedulerProvider.ui())
                 .subscribe({
                                picasso.load(it)
-                                   .transform(circular())
+                                   .transform(circularTransformation())
                                    .into(avatar_image)
                            })
                 { e -> Timber.e(e, "Error setting image") }
