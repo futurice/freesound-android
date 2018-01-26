@@ -30,27 +30,26 @@ import java.util.*
 @Parcelize
 @Fieldable
 data class Sound(
-
-        val id: Long?,
+        val id: Long,
         // The URI for this sound on the Freesound website.
-        val url: String?,
+        val url: String,
         // The name user gave to the sound.
-        val name: String?,
+        val name: String,
         // An array of tags the user gave to the sound.
-        val tags: List<String>?,
+        val tags: List<String>,
         // The description the user gave to the sound.
-        val description: String?,
+        val description: String,
         // Latitude and longitude of the geotag separated by spaces
         // (e.g. “41.0082325664 28.9731252193”, only for sounds that have been geotagged).
-        val geotag: GeoLocation?,
+        val geotag: String?,
         // The username of the uploader of the sound.
-        val username: String?,
+        val username: String,
         // Thumbnail image URLs of the waveform/spectral plot
         val images: Image,
         // Preview sounds URLs
-        val previews: Preview?,
+        val previews: Preview,
         // Duration in seconds
-        val duration: Float?,
+        val duration: Float,
         val created: Date) : Parcelable
 
 @SuppressLint("ParcelCreator")
@@ -61,26 +60,26 @@ data class Image(
         val medSizeWaveformUrl: String,
 
         @Json(name = "waveform_l")
-        val largeSizeWaveformUrl: String?,
+        val largeSizeWaveformUrl: String,
 
         @Json(name = "spectral_m")
-        val medSizeSpectralUrl: String?,
+        val medSizeSpectralUrl: String,
 
         @Json(name = "spectral_l")
-        val largeSizeSpectralUrl: String?) : Parcelable
+        val largeSizeSpectralUrl: String) : Parcelable
 
 @SuppressLint("ParcelCreator")
 @Parcelize
 data class Preview(
 
         @Json(name = "preview-lq-mp3")
-        val lowQualityMp3Url: String?,
+        val lowQualityMp3Url: String,
 
         @Json(name = "preview-hq-mp3")
-        val highQualityMp3Url: String?,
+        val highQualityMp3Url: String,
 
         @Json(name = "preview-lq-ogg")
-        val lowQualityOggUrl: String?,
+        val lowQualityOggUrl: String,
 
         @Json(name = "preview-hq-ogg")
-        val highQualityOggUrl: String?) : Parcelable
+        val highQualityOggUrl: String) : Parcelable

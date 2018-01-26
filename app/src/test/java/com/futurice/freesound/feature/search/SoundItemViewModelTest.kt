@@ -107,18 +107,6 @@ class SoundItemViewModelTest {
     }
 
     @Test
-    fun thumbnailImageUrl_ifNoWaveFormat_returnEmptyString() {
-        val sound = TEST_SOUND.copy(images = Image("", null, null, null))
-
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
-
-        vm.thumbnailImageUrl()
-                .test()
-                .assertValue("")
-    }
-
-    @Test
     fun thumbnailImageUrl_emitsSoundMediumWaveformUrl() {
         val soundItemViewModel = SoundItemViewModel(TEST_SOUND,
                 navigator,
@@ -369,8 +357,8 @@ class SoundItemViewModelTest {
                                          sound: Sound): PlayerState {
             return PlayerState(state,
                     Option.ofObj(
-                            PlaybackSource(from(sound.id!!),
-                                    sound.url!!)))
+                            PlaybackSource(from(sound.id),
+                                    sound.url)))
         }
     }
 

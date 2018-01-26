@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Single;
+import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -70,7 +71,8 @@ final class DefaultFreeSoundApiService implements FreeSoundApiService {
     public Single<SoundSearchResult> search(@NonNull final String query) {
         return freeSoundApi.search(get(query),
                                    null,
-                                   SoundFields.BASE);
+                                   SoundFields.BASE)
+                           .doOnError(Timber::e);
     }
 
 }
