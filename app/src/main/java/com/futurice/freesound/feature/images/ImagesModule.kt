@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.images;
+package com.futurice.freesound.feature.images
 
-import com.futurice.freesound.common.InstantiationForbiddenError;
-import com.squareup.picasso.Transformation;
+import android.content.Context
+import com.futurice.freesound.BuildConfig
+import com.futurice.freesound.inject.app.ForApplication
+import com.squareup.picasso.Picasso
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
-import android.support.annotation.NonNull;
+@Module
+class ImagesModule {
 
-public final class PicassoTransformations {
+    @Provides
+    @Singleton
+    internal fun providePicasso(@ForApplication context: Context) =
+            Picasso.Builder(context)
+                    .loggingEnabled(BuildConfig.DEBUG)
+                    .build()
 
-    private static final Transformation CIRCULAR = new RoundEdgeTransformation();
-
-    @NonNull
-    public static Transformation circular() {
-        return CIRCULAR;
-    }
-
-    private PicassoTransformations() {
-        throw new InstantiationForbiddenError();
-    }
 }

@@ -13,29 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@file:JvmName("PicassoTransformations")
 
-package com.futurice.freesound.feature.images;
+package com.futurice.freesound.feature.images
 
-import com.futurice.freesound.BuildConfig;
-import com.futurice.freesound.inject.app.ForApplication;
-import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation
 
-import android.content.Context;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-
-@Module
-public final class ImagesModule {
-
-    @Provides
-    @Singleton
-    static Picasso providePicasso(@ForApplication Context context) {
-        return new Picasso.Builder(context)
-                .loggingEnabled(BuildConfig.DEBUG)
-                .build();
-    }
-
-}
+fun circularTransformation(): Transformation = RoundEdgeTransformation
