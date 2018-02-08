@@ -31,9 +31,9 @@ class TestData private constructor() {
         @JvmStatic
         fun accessToken(): AccessToken {
             return AccessToken("accessToken",
-                               "scope",
-                               2000L,
-                               "refreshToken")
+                    "scope",
+                    2000L,
+                    "refreshToken")
         }
 
         @JvmStatic
@@ -44,67 +44,67 @@ class TestData private constructor() {
         @JvmStatic
         fun avatar(): Avatar {
             return Avatar("http://futurice.com/small.png",
-                          "http://futurice.com/medium.png",
-                          "http://futurice.com/large.png")
+                    "http://futurice.com/medium.png",
+                    "http://futurice.com/large.png")
         }
 
         @JvmStatic
         fun searchResult(count: Int): SoundSearchResult =
-            SoundSearchResult(
-                count = count * 2,
-                next = "nextUrl",
-                previous = "prevUrl",
-                results = sounds(count))
+                SoundSearchResult(
+                        count = count * 2,
+                        next = "nextUrl",
+                        previous = "prevUrl",
+                        results = sounds(count))
 
         @JvmStatic
         fun sounds(count: Int): List<Sound> {
             return (0L..count)
-                .map { sound(it) }
-                .toList()
+                    .map { sound(it) }
+                    .toList()
         }
 
         @JvmStatic
         fun sound(index: Long): Sound {
             return Sound(
-                id = index,
-                url = "url $index",
-                name = "name $index",
-                description = "description $index",
-                username = "username $index",
-                tags = tags(index, (index % 5).toInt()),
-                geotag = geotag(index),
-                images = images(),
-                previews = previews(),
-                duration = index.toFloat(),
-                created = Date(index))
+                    id = index,
+                    url = "url $index",
+                    name = "name $index",
+                    description = "description $index",
+                    username = "username $index",
+                    tags = tags(index, (index % 5).toInt()),
+                    geotag = geotag(index),
+                    images = images(),
+                    previews = previews(),
+                    duration = index.toFloat(),
+                    created = Date(index))
         }
 
         @JvmStatic
         fun tags(index: Long, count: Int): List<String> {
             return (0L..count)
-                .map { "tag $index" }
-                .toList()
+                    .map { "tag $index" }
+                    .toList()
         }
 
         @JvmStatic
-        fun geotag(index: Long): String = "${index.toDouble()} ${index.toDouble() + 1}"
+        fun geotag(index: Long): GeoLocation = GeoLocation(index.toDouble(), index.toDouble() + 1)
 
         @JvmStatic
         fun images(): Image {
             return Image(
-                medSizeWaveformUrl = "https://url.com/mw",
-                largeSizeWaveformUrl = "https://url.com/lw",
-                medSizeSpectralUrl = "https://url.com/ms",
-                largeSizeSpectralUrl = "https://url.com/ls")
+                    medSizeWaveformUrl = "https://url.com/mw",
+                    largeSizeWaveformUrl = "https://url.com/lw",
+                    medSizeSpectralUrl = "https://url.com/ms",
+                    largeSizeSpectralUrl = "https://url.com/ls")
         }
 
         @JvmStatic
         fun previews(): Preview {
             return Preview(
-                lowQualityMp3Url = "https://url.com/lqmp3",
-                highQualityMp3Url = "https://url.com/hqmp3",
-                lowQualityOggUrl = "https://url.com/lqogg",
-                highQualityOggUrl = "https://url.com/hgogg")
+                    lowQualityMp3Url = "https://url.com/lqmp3",
+                    highQualityMp3Url = "https://url.com/hqmp3",
+                    lowQualityOggUrl = "https://url.com/lqogg",
+                    highQualityOggUrl = "https://url.com/hgogg")
         }
     }
 
