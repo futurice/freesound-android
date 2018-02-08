@@ -41,7 +41,7 @@ data class Sound(
         val description: String,
         // Latitude and longitude of the geotag separated by spaces
         // (e.g. “41.0082325664 28.9731252193”, only for sounds that have been geotagged).
-        val geotag: String?,
+        val geotag: GeoLocation?,
         // The username of the uploader of the sound.
         val username: String,
         // Thumbnail image URLs of the waveform/spectral plot
