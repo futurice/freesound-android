@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi
+package com.futurice.freesound.feature.home
 
-import android.arch.lifecycle.ViewModel
-import io.reactivex.Flowable
+import io.reactivex.Maybe
 
-abstract class ViewModel<in E, M> : ViewModel() {
+interface Store<K, V> {
 
-    abstract fun uiEvents(uiEvent: E)
+    fun put(key: K, value: V)
 
-    abstract fun uiModels(): Flowable<M>
+    fun putAll(valueList: List<V>)
+
+    fun clear()
+
+    fun get(key: K): Maybe<V>
+
+    fun getAll(): Maybe<List<V>>
 
 }

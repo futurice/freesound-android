@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.core;
+package com.futurice.freesound.mvi;
 
-import com.futurice.freesound.mvi.UiBinder;
-import com.futurice.freesound.mvi.UiEventProducer;
+import com.futurice.freesound.core.BaseFragment;
 
 import javax.inject.Inject;
 
 /**
  * A base Fragment which provides the binding mechanism hooks to a MviView Model.
  *
- * @param <T> The DI component class.
+ * @param <C> The DI component class.
  */
-public abstract class BindingBaseFragment2<T, M, E> extends BaseFragment<T>
-        implements UiEventProducer<E> {
+public abstract class BaseMviFragment<C, M, E> extends BaseFragment<C> implements MviView<E, M> {
 
     @Inject
     UiBinder<M, E> uiBinder;

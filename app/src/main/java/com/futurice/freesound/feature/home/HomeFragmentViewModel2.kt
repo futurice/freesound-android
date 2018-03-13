@@ -16,38 +16,30 @@
 
 package com.futurice.freesound.feature.home
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.disposables.Disposable
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
 internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserInteractor,
-                                      schedulers: SchedulerProvider) :
+                                      val schedulers: SchedulerProvider) :
         BaseViewModel<HomeFragmentUiEvent, HomeFragmentUiModel>(schedulers) {
 
     private val uiEvents: PublishProcessor<HomeFragmentUiEvent> = PublishProcessor.create()
-    private val uiModel: MutableLiveData<HomeFragmentUiModel> = MutableLiveData()
-    private val disposable: Disposable
+    //private val uiModel: MutableLiveData<HomeFragmentUiModel> = MutableLiveData()
+    //  private val disposable: Disposable
 
     val INITIAL_UI_STATE: HomeFragmentUiModel get() = HomeFragmentUiModel(null, false, null)
 
-    init {
-        disposable = (defineUiModel()
-                .subscribeOn(schedulers.computation())
-                .subscribe({ uiModel.postValue(it) },
-                        { e -> Timber.e(e, "Fatal error in ${HomeFragmentViewModel2::javaClass}") }))
-    }
-
-    private fun defineUiModel(): Observable<HomeFragmentUiModel> {
+    // TODO Wrap this with cache and make reduce abstract in parent
+    override fun uiModels(): Flowable<HomeFragmentUiModel> {
         return uiEvents
                 .compose(transform())
                 .scan(INITIAL_UI_STATE, { model: Fragment.Change, change -> model.reduce(change) })
-                .doOnNext { model: M -> Timber.v(" $model") }
+                .doOnNext { model: HomeFragmentUiModel -> Timber.v(" $model") }
     }
 
     /**
@@ -83,7 +75,8 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
 
         val contentRefreshRequested: ObservableTransformer<HomeFragmentUiEvent.ContentRefreshRequested,
                 Fragment.Change.ContentRefreshRequested>
-                = ObservableTransformer { it.map { UserAction.Fetch }
+                = ObservableTransformer {
+            it.map { UserAction.Fetch }
                     .compose(fetchUser)
                     .map { }
         }
@@ -104,19 +97,12 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
         }
     }
 
-
     override fun uiEvents(uiEvent: HomeFragmentUiEvent) {
         uiEvents.offer(uiEvent)
     }
 
-    override fun uiModels(): LiveData<HomeFragmentUiModel> = uiModel
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
-    }
-
-    fun HomeFragmentUiModel.defineUiModel(change: Fragment.Change): HomeFragmentUiModel =
+    fun HomeFragmentUiModel.reduce(change: Fragment.Change): HomeFragmentUiModel =
             when (change) {
                 is Fragment.Change.NoChange -> this
                 Fragment.Change.UserFetchInProgressChanged -> copy(isLoading = true)

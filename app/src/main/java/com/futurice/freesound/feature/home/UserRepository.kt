@@ -23,7 +23,7 @@ import io.reactivex.Observable
 import polanski.option.Option
 
 class UserRepository(private val freeSoundApi: FreeSoundApiService,
-                     private val userStore: Store) {
+                     private val userStore: Store<String, User>) {
 
     fun fetchUser(username: String): Completable {
         return freeSoundApi.getUser(username)
@@ -32,6 +32,6 @@ class UserRepository(private val freeSoundApi: FreeSoundApiService,
     }
 
     fun user(username: String): Observable<Option<User>> {
-        return store.get(username)
+        return userStore.get(username)
     }
 }

@@ -27,10 +27,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
-import com.futurice.freesound.core.BaseFragment
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.mvi.MviView
+import com.futurice.freesound.mvi.BaseMviFragment
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.squareup.picasso.Picasso
 import io.reactivex.BackpressureStrategy
@@ -38,7 +37,7 @@ import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment<HomeFragmentComponent>(), MviView<HomeFragmentUiEvent, HomeFragmentUiModel> {
+class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeFragmentUiModel, HomeFragmentUiEvent>() {
 
     @Inject
     internal lateinit var picasso: Picasso
@@ -99,7 +98,7 @@ class HomeFragment : BaseFragment<HomeFragmentComponent>(), MviView<HomeFragment
 
     // TODO This is currently never called - there's no lifecycle hook.
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    override fun cancelRender() = picasso.cancelRequest(avatar_image)
+    override fun cancel() = picasso.cancelRequest(avatar_image)
 
     private fun hideUser() {
         homeUser_container.visibility = View.GONE
