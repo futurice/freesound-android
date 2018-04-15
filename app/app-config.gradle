@@ -18,6 +18,7 @@ ext {
     // Freesound API
     freesound_api_client_id = getFreesoundApiClientId()
     freesound_api_client_secret = getFreesoundApiClientSecret()
+    google_maps_api_key= getGoogleMapsApiKey()
     freesound_api_url = "\"https://www.freesound.org/apiv2/\""
 }
 
@@ -27,6 +28,10 @@ String getFreesoundApiClientId() {
 
 String getFreesoundApiClientSecret() {
     return getProperty("freesound.api.clientSecret", "FREESOUND_API_CLIENT_SECRET")
+}
+
+String getGoogleMapsApiKey() {
+    return getProperty("google.maps.api.key", "GOOGLE_MAPS_API_KEY")
 }
 
 String getProperty(String property, String envVariable) {

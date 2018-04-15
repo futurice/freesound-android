@@ -66,8 +66,8 @@ public class ApiNetworkModule {
     @ForFreeSoundApi
     static Moshi provideMoshi() {
         return new Moshi.Builder()
-                .add(new KotlinJsonAdapterFactory())
                 .add(new GeoLocationJsonAdapter())
+                .add(new KotlinJsonAdapterFactory())
                 .add(new FreesoundDateAdapter(new Rfc3339DateJsonAdapter()))
                 .build();
     }

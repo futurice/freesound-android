@@ -26,7 +26,7 @@ def STRING = "String"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.futurice.freesound"
@@ -41,6 +41,7 @@ android {
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
+        resValue("string", "GOOGLE_MAPS_API_KEY", google_maps_api_key)
 
         // AutoValue and AutoFactory require this workaround because they haven't separated their
         // annotation processor from their compile time dependencies.
@@ -121,11 +122,12 @@ ext {
     dependencyVersions = [
             kotlin                  : kotlin_version,
             androidSupport          : '26.1.0',
-            androidSupportConstraint: '1.0.2',
+            androidSupportConstraint: '1.1.0',
             androidSupportTest      : '1.0.0',
+            googleMaps              : '15.0.0',
             dagger2                 : '2.4',
             rxJava2                 : '2.1.0',
-            rxAndroid               : '2.0.1',
+            rxAndroid               : '2.0.2',
             okHttp                  : '3.6.0',
             picasso                 : '2.5.2',
             retrofit2               : '2.2.0',
@@ -140,10 +142,10 @@ ext {
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
             butterknife             : '8.7.0',
-            firebase                : '9.4.0',
-            stetho                  : '1.4.2',
+            firebase                : '15.0.0',
+            stetho                  : '1.5.0',
             chuck                   : '1.0.4',
-            timber                  : '4.5.1',
+            timber                  : '4.6.1',
             junit                   : '4.12',
             mockito                 : '2.2.2',
             assertJ                 : '1.7.1',
@@ -164,6 +166,9 @@ dependencies {
     implementation "com.android.support:cardview-v7:$dependencyVersions.androidSupport"
     implementation "com.android.support:design:$dependencyVersions.androidSupport"
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
+
+    // Google maps
+    implementation "com.google.android.gms:play-services-maps:$dependencyVersions.googleMaps"
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"

@@ -33,9 +33,10 @@ import java.text.DateFormat
 
 @AutoFactory
 internal class SoundItemViewModel(private val sound: Sound,
-                                  private @Provided val navigator: Navigator,
-                                  private @Provided val audioPlayer: AudioPlayer,
-                                  private @Provided val freeSoundApiService: FreeSoundApiService) : SimpleViewModel() {
+                                  @Provided private val navigator: Navigator,
+                                  @Provided private val audioPlayer: AudioPlayer,
+                                  @Provided private val freeSoundApiService: FreeSoundApiService,
+                                  @Provided private val tabController: TabController) : SimpleViewModel() {
 
     private val thumbnail: String = sound.images.medSizeWaveformUrl
 
@@ -79,6 +80,12 @@ internal class SoundItemViewModel(private val sound: Sound,
         audioPlayer.togglePlayback(
                 PlaybackSource(from(sound.id), sound.previews.lowQualityMp3Url))
     }
+
+    fun requestTab() {
+        tabController.requestTab(SoundInfo(TabType.MAP, Option.ofObj(sound)))
+    }
+
+    fun hasGeoTag(): Boolean = sound.geotag != null
 
     private fun progressOrNothing(playerState: PlayerState): Observable<Option<Int>> {
         return if (isThisSound(playerState)) currentPercentage else Observable.just(Option.none())

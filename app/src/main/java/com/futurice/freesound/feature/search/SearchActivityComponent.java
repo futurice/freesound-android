@@ -37,4 +37,6 @@ public interface SearchActivityComponent extends BaseActivityComponent {
     void inject(final SearchActivity activity);
 
     SearchFragmentComponent plusSearchFragmentComponent(BaseFragmentModule baseFragmentModule);
+
+    MapFragmentComponent plusMapFragmentComponent(BaseFragmentModule baseFragmentModule);
 }

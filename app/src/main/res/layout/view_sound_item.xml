@@ -33,11 +33,13 @@
             android:padding="8dp">
 
         <ImageView
-                android:id="@+id/imageView_avatar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/avatar_placeholder"
-                app:layout_constraintStart_toStartOf="parent"/>
+            android:id="@+id/imageView_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/avatar_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
                 android:id="@+id/textView_username"
@@ -96,6 +98,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/mapButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:src="@android:drawable/ic_menu_mapmode"
+            app:layout_constraintStart_toEndOf="@+id/textView_username"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

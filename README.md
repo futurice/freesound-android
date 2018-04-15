@@ -24,6 +24,7 @@ To build the app, you will need a Freesound API client id and secret stored in t
 ```
 freesound.api.clientId=yourapiclientidvaluegoeshere
 freesound.api.clientSecret=yourapiclientsecretvaluegoeshere
+google.maps.api.key=yourgooglemapsapikeygoeshere
 ```
 
 If you don't have a key and you're not in the Futurice organization, then you will have to [generate your own from the Freesound website.](https://www.freesound.org/docs/api/overview.html)
