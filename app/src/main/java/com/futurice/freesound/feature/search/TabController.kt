@@ -17,13 +17,9 @@ data class SoundInfo(val tabType: TabType, val sound: Option<Sound>)
 internal class TabController {
     private val currentTab: BehaviorSubject<SoundInfo> = BehaviorSubject.createDefault(SoundInfo(TabType.RESULTS, Option.none()))
 
-
-    val tabRequestStream : Observable<SoundInfo>
+    val tabRequestStream: Observable<SoundInfo>
         get() = currentTab.observeOn(Schedulers.computation())
 
-    @Synchronized
     fun requestTab(soundInfo: SoundInfo) = currentTab.onNext(soundInfo)
 
-
 }
-

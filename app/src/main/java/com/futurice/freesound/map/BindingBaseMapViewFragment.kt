@@ -9,7 +9,7 @@ import com.futurice.freesound.core.BindingBaseFragment
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 
-abstract class BindginBaseMapViewFragment<T> : BindingBaseFragment<T>() {
+abstract class BindingBaseMapViewFragment<T> : BindingBaseFragment<T>() {
 
     private var map: MapView? = null
 

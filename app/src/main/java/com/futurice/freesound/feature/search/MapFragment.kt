@@ -2,28 +2,18 @@ package com.futurice.freesound.feature.search
 
 import android.os.Bundle
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.map.BindginBaseMapViewFragment
+import com.futurice.freesound.map.BindingBaseMapViewFragment
 import com.futurice.freesound.viewmodel.DataBinder
+import com.futurice.freesound.viewmodel.SimpleDataBinder
 import com.futurice.freesound.viewmodel.ViewModel
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-
-class MapFragment : BindginBaseMapViewFragment<MapFragmentComponent>() {
+class MapFragment : BindingBaseMapViewFragment<MapFragmentComponent>() {
 
     @Inject
     internal lateinit var simpleMapViewViewModel: MapViewModel
 
-    private val dataBinder = object : DataBinder {
-
-        override fun bind(disposables: CompositeDisposable) {
-            //nothing to do
-        }
-
-        override fun unbind() {
-            //nothing to do
-        }
-    }
+    private val dataBinder = SimpleDataBinder()
 
     override fun inject() {
         component().inject(this)
