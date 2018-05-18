@@ -19,6 +19,7 @@ package com.futurice.freesound.feature.home
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
 import com.futurice.freesound.network.api.model.User
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -48,13 +49,15 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
 
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
+                .toObservable() // TODO Check if should use Flowable or Observable
                 .map(::toAction)
-                .compose(::toResult)
-                .scan(INITIAL_UI_STATE, { result: Result -> result.reduce(change) })
+                .compose(toResult())
+                .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
                 .distinctUntilChanged() // TODO Memory cost?
                 .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
                 .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
-                .onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
+                .toFlowable(BackpressureStrategy.LATEST)
+                //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
     }
 
     private fun toAction(uiEvent: UiEvent) =
@@ -63,25 +66,42 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
                 UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
             }
 
-    private fun toResult(): ObservableTransformer<Action, Result> {
+    private fun toResult(): ObservableTransformer<Action, out Result> {
 
-        val refresh: ObservableTransformer<Action.ContentRefreshAction, Result.UserResult> = ObservableTransformer {
-            it.flatMap { homeUserInteractor.homeUserStream() }.map { Result.UserResult(it) }
-        }
+        val refresh:
+                ObservableTransformer<Action.ContentRefreshAction, Result.UserResult> =
+                ObservableTransformer {
+                    it.flatMap { homeUserInteractor.homeUserStream() }.map { Result.UserResult(it) }
+                }
 
         val dismissErrorIndicator:
                 ObservableTransformer<Action.ErrorClearAction, Result.ErrorClearedResult> =
-                ObservableTransformer {
-                    it.map { Result.ErrorClearedResult }
-                }
+                ObservableTransformer { it.map { Result.ErrorClearedResult } }
 
-        return ObservableTransformer {
-            it.publish { shared: Observable<Action> ->
-                Observable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
-                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
+        // Compiles, but ugly
+//        return ObservableTransformer {
+//            it.publish { shared: Observable<Action> ->
+//                Observable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
+//                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
+//            }
+//        }
+
+        return ObservableTransformer { actions ->
+            actions.flatMap {
+                when (it) {
+                    is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
+                //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
+                    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
+                //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
+                }
             }
         }
 
+    }
+
+    // @Suppress("UNCHECKED_CAST")
+    private fun <A, A2 : A, R> Observable<A>.composeAs(transformer: ObservableTransformer<A2, R>): Observable<R> {
+        return this.map { it as A2 }.compose(transformer)
     }
 
     override fun uiEvents(uiEvent: UiEvent) {
@@ -102,7 +122,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
                 is Fetch.Failure<User> -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
             }
 
-    // TODO Perhaps this could return an @ResId instead of a string
+    // TODO Perhaps this could return an @ResId instead of a string. Issues with config changes e.g. language?
     private fun toFetchFailureMsg(throwable: Throwable) = throwable.localizedMessage
 
     private fun toUserUiModel(user: User): UserUiModel =

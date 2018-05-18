@@ -133,8 +133,8 @@ ext {
             retrofit2               : '2.2.0',
             retrofit2RxJava2Adapter : '1.0.0',
             retrofit2GsonConverter  : '2.0.0',
-            moshi                   : '1.5.0',
-            moshiConverter          : '2.3.0',
+            moshi                   : '1.6.0',
+            moshiConverter          : '2.4.0',
             autoFactory             : '1.0-beta5',
             autoValue               : '1.5.2',
             jsr250                  : '1.0',
@@ -145,12 +145,12 @@ ext {
             firebase                : '9.4.0',
             stetho                  : '1.4.2',
             chuck                   : '1.0.4',
-            timber                  : '4.5.1',
+            timber                  : '4.7.0',
             junit                   : '4.12',
             mockito                 : '2.2.2',
             assertJ                 : '1.7.1',
             leakCanary              : '1.5.1',
-            rxLint                  : '1.6']
+            rxLint                  : '1.6.1']
 }
 
 dependencies {
@@ -183,9 +183,6 @@ dependencies {
     // RxBinding
     implementation "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
     implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
-
-    // IxJava
-    // implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"
 
     implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
 
