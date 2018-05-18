@@ -21,51 +21,29 @@ import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
 import polanski.option.Option
 
-
 /**
  * Ideally this component could be reused elsewhere.
- *
- * TODO What's the scoping of this?
- * TODO Distinct until changed?
- * TODO FetchCondition- this should be a plugin to interactor
- *  - fetchAlways
- *  - fetchIfNone
- *  - fetchIfError
- *  - fetchTime
- * Repo will just use HTTP cache, so there's no harm in re-requesting each time.
- * Does it even make sense to have a None then?
- *
  */
 internal class HomeUserInteractor(private val userRepository: UserRepository) {
 
     companion object {
-        @VisibleForTesting
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val HOME_USERNAME = "SpiceProgram"
     }
 
-    fun getHomeUser(): Observable<FetchResult> {
-        return userRepository.user(HOME_USERNAME)
+    fun homeUserStream(): Observable<Fetch<User>> {
+        return homeUser()
                 .switchMap { fetchIfNone(it) }
-                .startWith(FetchResult.InProgress)
-                .onErrorResumeNext { e: Throwable -> Observable.just(FetchResult.Failure(e)) }
+                .startWith(Fetch.InProgress())
+                .onErrorReturn { Fetch.Failure(it) }
     }
 
-    private fun fetchIfNone(value: Option<User>) = fetchIf(value, { it.isNone })
-
-    private fun <T> fetchIf(value: T, predicate: (T) -> Boolean): Observable<FetchResult> {
-        return if (predicate(value)) userRepository.fetchUser(HOME_USERNAME).toObservable()
-        else value
-    }
+    private fun fetchIfNone(value: Option<User>): Observable<out Fetch<User>> =
+            value.match({ Observable.just(Fetch.Success<User>(it)) },
+                    { userRepository.fetchUser(HOME_USERNAME).toObservable() })
 
     private fun homeUser(): Observable<Option<User>> {
         return userRepository.user(HOME_USERNAME)
     }
-
-    sealed class FetchResult {
-        object InProgress : FetchResult()
-        class Success<T>(value: T) : FetchResult()
-        class Failure(val error: Throwable) : FetchResult()
-    }
-
 
 }

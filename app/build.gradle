@@ -25,13 +25,13 @@ apply from: 'app-config.gradle'
 def STRING = "String"
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.0'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.debug
@@ -120,13 +120,13 @@ task checkstyle(type: Checkstyle) {
 ext {
     dependencyVersions = [
             kotlin                  : kotlin_version,
-            androidSupport          : '26.1.0',
-            androidSupportConstraint: '1.0.2',
-            androidArchLifecycle    : '1.0.0',
+            androidSupport          : '27.1.1',
+            androidSupportConstraint: '1.1.0',
+            androidArchLifecycle    : '1.1.1',
             androidSupportTest      : '1.0.0',
             dagger2                 : '2.4',
             rxJava2                 : '2.1.0',
-            rxAndroid               : '2.0.1',
+            rxAndroid               : '2.0.2',
             rxBinding               : '2.0.0',
             okHttp                  : '3.6.0',
             picasso                 : '2.5.2',
@@ -155,7 +155,7 @@ ext {
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$dependencyVersions.kotlin"
 
     // Android Support
     implementation "com.android.support:support-v4:$dependencyVersions.androidSupport"
@@ -181,8 +181,8 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
 
     // RxBinding
-    compile "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
-    compile "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
 
     // IxJava
     // implementation "com.github.akarnokd:ixjava:$dependencyVersions.ixJava"

@@ -33,5 +33,8 @@ class UserRepository(private val freeSoundApi: FreeSoundApiService,
 
     fun user(username: String): Observable<Option<User>> {
         return userStore.get(username)
+                .map { Option.ofObj(it) }
+                .defaultIfEmpty(Option.none()).toObservable()
     }
+
 }

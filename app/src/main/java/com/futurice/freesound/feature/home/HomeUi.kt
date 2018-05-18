@@ -16,36 +16,35 @@
 
 package com.futurice.freesound.feature.home
 
-interface Activity {
+//interface Activity {
+//
+//    sealed class UiEvent(val log: String) {
+//        object NoOp : UiEvent("No-op")
+//        object OpenSearchEvent : UiEvent("Open Search")
+//    }
+//
+//}
 
-    sealed class UiEvent(val log: String) {
-        object NoOp : UiEvent("No-op")
-        object OpenSearchEvent : UiEvent("Open Search")
-    }
 
+// Event from the UI to VM
+
+sealed class UiEvent(val log: String) {
+    object ErrorIndicatorDismissed : UiEvent("ErrorClearedResult")
+    object RefreshRequested : UiEvent("RefreshRequested")
 }
 
-data class HomeFragmentUiModel(val user: Fragment.UserUiModel?,
-                               val isLoading: Boolean,
-                               val errorMsg: String?)
 
-sealed class HomeFragmentUiEvent(val log: String) {
-    object ErrorIndicatorDismissed : HomeFragmentUiEvent("ErrorIndicatorDismissed")
-    object ContentRefreshRequested : HomeFragmentUiEvent("ContentRefreshRequested")
-}
+// Events from VM to UI
 
-interface Fragment {
+//sealed class UiModel {
+//    class Data<T>(value: T) : UiModel()
+//    class Error(val throwable: Throwable, val msg: String) : UiModel()
+//}
 
-    data class UserUiModel(val username: String,
-                           val about: String,
-                           val avatarUrl: String)
+data class HomeUiModel(val user: UserUiModel?,
+                       val isLoading: Boolean,
+                       val errorMsg: String?)
 
-    sealed class Action
-
-    sealed class Change(val log: String) {
-        object NoChange : Change("No-op Change")
-        object ErrorIndicatorDismissed : Change("Error Indicator dismissed changed")
-        object ContentRefreshRequested : Change("ContentRefreshRequested")
-    }
-
-}
+data class UserUiModel(val username: String,
+                       val about: String,
+                       val avatarUrl: String)

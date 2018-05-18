@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,8 @@
 
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.network.api.model.User
-
-sealed class UserAction {
-    object Fetch : UserAction()
+sealed class Fetch<T> {
+    class InProgress<T> : Fetch<T>()
+    data class Success<T>(val value: T) : Fetch<T>()
+    class Failure<T>(val error: Throwable) : Fetch<T>()
 }
-
-sealed class FetchUserResult(log: String) {
-    object UserFetchInProgressEvent : FetchUserResult("UserFetchInProgressEvent")
-    class UserDataEvent(val user: User) : FetchUserResult("UserDataEvent: $user")
-    class UserFetchFailureEvent(val error: Throwable) : FetchUserResult("UserFetchFailureEvent: $error")
-}
-
-

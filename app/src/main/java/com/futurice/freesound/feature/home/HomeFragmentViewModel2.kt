@@ -18,119 +18,94 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
+import com.futurice.freesound.network.api.model.User
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.processors.PublishProcessor
 import timber.log.Timber
 
+sealed class Result(val log: String) {
+    object NoChange : Result("No-op change")
+    object ErrorClearedResult : Result("Error dismissed change")
+    class UserResult(val fetch: Fetch<User>) : Result("User Fetch state change")
+}
+
+sealed class Action(val log: String) {
+    object ErrorClearAction : Action("Error cleared action")
+    object ContentRefreshAction : Action("Content refresh action")
+}
+
 internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserInteractor,
                                       val schedulers: SchedulerProvider) :
-        BaseViewModel<HomeFragmentUiEvent, HomeFragmentUiModel>(schedulers) {
+        BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
 
-    private val uiEvents: PublishProcessor<HomeFragmentUiEvent> = PublishProcessor.create()
-    //private val uiModel: MutableLiveData<HomeFragmentUiModel> = MutableLiveData()
-    //  private val disposable: Disposable
+    private val uiEvents: PublishProcessor<UiEvent> = PublishProcessor.create()
 
-    val INITIAL_UI_STATE: HomeFragmentUiModel get() = HomeFragmentUiModel(null, false, null)
+    // TODO This initial state doesn't make sense - it should be driven by an input configuration (e.g. an id, which be serialized),
+    // not a result. Think about what will happen with a list restored from onSaveInstanceState
+    val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
 
-    // TODO Wrap this with cache and make reduce abstract in parent
-    override fun uiModels(): Flowable<HomeFragmentUiModel> {
+    override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
-                .compose(transform())
-                .scan(INITIAL_UI_STATE, { model: Fragment.Change, change -> model.reduce(change) })
-                .doOnNext { model: HomeFragmentUiModel -> Timber.v(" $model") }
+                .map(::toAction)
+                .compose(::toResult)
+                .scan(INITIAL_UI_STATE, { result: Result -> result.reduce(change) })
+                .distinctUntilChanged() // TODO Memory cost?
+                .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
+                .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
+                .onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
     }
 
-    /**
-     * The transform takes the event from the ui.
-     *
-     * They will be split depending on their type (when) ... and the observable transformed to
-     * a change observable.
-     *
-     * Take UIEvents .. [[map that to an Action] .. [map that to a Result]] ... to a Change .. to a Model
-     *
-     * uiModel = uiEvents.compose(transform()).merge(fetchHomeUser.compose(tranform())).defineUiModel()
-     * uiModel = uibasedchanges + databasedchanges
-     *
-     * Is there a way to model dataChanges as a function of ui visibility for the situations where
-     * there are changes that aren't driven by obvious user events from the ui.
-     *
-     * perhaps that could be pulled into the parent class. Always have an event to do with "subscribing".
-     */
-    fun transform(): ObservableTransformer<HomeFragmentUiEvent, Fragment.Change> {
+    private fun toAction(uiEvent: UiEvent) =
+            when (uiEvent) {
+                UiEvent.RefreshRequested -> Action.ContentRefreshAction
+                UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
+            }
 
-        // TODO Pull this out into a separate UseCase/Domain
-        val fetchUser:
-                ObservableTransformer<UserAction.Fetch, FetchUserResult> =
-                ObservableTransformer {
-                    homeUserInteractor.fetchHomeUser()
-                            .map { FetchUserResult.UserDataEvent(it) }
-                            .map { it as FetchUserResult }
-                            .startWith(FetchUserResult.UserFetchInProgressEvent)
-                            .onErrorResumeNext { e: Throwable ->
-                                Observable.just(FetchUserResult.UserFetchFailureEvent(e))
-                            }
-                }
+    private fun toResult(): ObservableTransformer<Action, Result> {
 
-        val contentRefreshRequested: ObservableTransformer<HomeFragmentUiEvent.ContentRefreshRequested,
-                Fragment.Change.ContentRefreshRequested>
-                = ObservableTransformer {
-            it.map { UserAction.Fetch }
-                    .compose(fetchUser)
-                    .map { }
+        val refresh: ObservableTransformer<Action.ContentRefreshAction, Result.UserResult> = ObservableTransformer {
+            it.flatMap { homeUserInteractor.homeUserStream() }.map { Result.UserResult(it) }
         }
 
         val dismissErrorIndicator:
-                ObservableTransformer<HomeFragmentUiEvent.ErrorIndicatorDismissed,
-                        Fragment.Change.ErrorIndicatorDismissed> =
+                ObservableTransformer<Action.ErrorClearAction, Result.ErrorClearedResult> =
                 ObservableTransformer {
-                    Observable.just(Fragment.Change.ErrorIndicatorDismissed)
+                    it.map { Result.ErrorClearedResult }
                 }
 
         return ObservableTransformer {
-            when (it) {
-                is HomeFragmentUiEvent.ErrorIndicatorDismissed -> dismissErrorIndicator
-                is HomeFragmentUiEvent.ContentRefreshRequested -> contentRefreshRequested
-
+            it.publish { shared: Observable<Action> ->
+                Observable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
+                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
             }
         }
+
     }
 
-    override fun uiEvents(uiEvent: HomeFragmentUiEvent) {
+    override fun uiEvents(uiEvent: UiEvent) {
         uiEvents.offer(uiEvent)
     }
 
-
-    fun HomeFragmentUiModel.reduce(change: Fragment.Change): HomeFragmentUiModel =
-            when (change) {
-                is Fragment.Change.NoChange -> this
-                Fragment.Change.UserFetchInProgressChanged -> copy(isLoading = true)
-                is Fragment.Change.UserChanged -> fromUserChanged(change)
-                is Fragment.Change.UserFetchErrorChanged -> copy(isLoading = false, errorMsg = change.errorMsg)
-                Fragment.Change.ErrorIndicatorDismissed -> copy(errorMsg = null)
-                Fragment.Change.ContentRefreshRequested -> from
+    private fun HomeUiModel.reduce(result: Result): HomeUiModel =
+            when (result) {
+                is Result.NoChange -> this
+                is Result.UserResult -> reduceUserChange(result.fetch)
+                Result.ErrorClearedResult -> copy(errorMsg = null)
             }
 
-
-    private fun mapUiEvent(uiEvent: HomeFragmentUiEvent) =
-            when (uiEvent) {
-                HomeFragmentUiEvent.ContentRefreshRequested -> Observable.just(Fragment.Change.ContentRefreshRequested)
+    private fun HomeUiModel.reduceUserChange(fetch: Fetch<User>): HomeUiModel =
+            when (fetch) {
+                is Fetch.InProgress<User> -> copy(isLoading = true, user = null, errorMsg = null)
+                is Fetch.Success<User> -> copy(user = toUserUiModel(fetch.value), isLoading = false, errorMsg = null)
+                is Fetch.Failure<User> -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
             }
 
-    private fun mapDataEvent(dataEvent: Fragment.DataEvent): Fragment.Change =
-            when (dataEvent) {
-                Fragment.DataEvent.UserFetchInProgressEvent -> Fragment.Change.UserFetchInProgressChanged
-                is Fragment.DataEvent.UserDataEvent -> Fragment.Change.UserChanged(dataEvent.user)
-                is Fragment.DataEvent.UserFetchFailedEvent -> Fragment.Change.UserFetchErrorChanged(dataEvent.error.localizedMessage)
-            }
+    // TODO Perhaps this could return an @ResId instead of a string
+    private fun toFetchFailureMsg(throwable: Throwable) = throwable.localizedMessage
 
-
-    private fun HomeFragmentUiModel.fromUserChanged(change: Fragment.Change.UserChanged): HomeFragmentUiModel
-            = copy(user = Fragment.UserUiModel(change.user.username(),
-            about = change.user.about(),
-            avatarUrl = change.user.avatar().large()),
-            isLoading = false,
-            errorMsg = null)
+    private fun toUserUiModel(user: User): UserUiModel =
+            UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
 
 }
