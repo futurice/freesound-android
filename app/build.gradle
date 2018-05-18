@@ -170,7 +170,7 @@ dependencies {
     implementation "android.arch.lifecycle:runtime:$dependencyVersions.androidArchLifecycle"
     implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
     implementation "android.arch.lifecycle:reactivestreams:$dependencyVersions.androidArchLifecycle"
-    annotationProcessor "android.arch.lifecycle:compiler:1$dependencyVersions.androidArchLifecycle"
+    kapt "android.arch.lifecycle:compiler:$dependencyVersions.androidArchLifecycle"
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
