@@ -21,9 +21,8 @@ import com.futurice.freesound.mvi.BaseViewModel
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
-import io.reactivex.processors.PublishProcessor
+import io.reactivex.FlowableTransformer
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 sealed class Result(val log: String) {
@@ -41,23 +40,24 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
                                       val schedulers: SchedulerProvider) :
         BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
 
-    private val uiEvents: PublishProcessor<UiEvent> = PublishProcessor.create()
+    // Events from the UI are modelled as a buffering Observable.
+    private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
 
     // TODO This initial state doesn't make sense - it should be driven by an input configuration (e.g. an id, which be serialized),
     // not a result. Think about what will happen with a list restored from onSaveInstanceState
-    val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
+    private val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
 
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
-                .toObservable() // TODO Check if should use Flowable or Observable
+                .toFlowable(BackpressureStrategy.BUFFER)
                 .map(::toAction)
                 .compose(toResult())
                 .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
-                .distinctUntilChanged() // TODO Memory cost?
                 .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
                 .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
-                .toFlowable(BackpressureStrategy.LATEST)
-                //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
+                .subscribeOn(schedulers.computation())
+                .onBackpressureLatest()
+        //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
     }
 
     private fun toAction(uiEvent: UiEvent) =
@@ -66,46 +66,50 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
                 UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
             }
 
-    private fun toResult(): ObservableTransformer<Action, out Result> {
+    private fun toResult(): FlowableTransformer<Action, out Result> {
 
         val refresh:
-                ObservableTransformer<Action.ContentRefreshAction, Result.UserResult> =
-                ObservableTransformer {
-                    it.flatMap { homeUserInteractor.homeUserStream() }.map { Result.UserResult(it) }
+                FlowableTransformer<Action.ContentRefreshAction, Result.UserResult> =
+                FlowableTransformer {
+                    it.flatMap { homeUserInteractor.homeUser() }.map { Result.UserResult(it) }
                 }
 
         val dismissErrorIndicator:
-                ObservableTransformer<Action.ErrorClearAction, Result.ErrorClearedResult> =
-                ObservableTransformer { it.map { Result.ErrorClearedResult } }
+                FlowableTransformer<Action.ErrorClearAction, Result.ErrorClearedResult> =
+                FlowableTransformer { it.map { Result.ErrorClearedResult } }
 
-        // Compiles, but ugly
-//        return ObservableTransformer {
+        // Compiles, but ugly. This is the JW suggested approach.
+//        return FlowableTransformer {
 //            it.publish { shared: Observable<Action> ->
 //                Observable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
 //                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
 //            }
 //        }
 
-        return ObservableTransformer { actions ->
+        return FlowableTransformer { actions ->
+            // TODO This definitely needs testing to verify that we have a merged signal and that
+            // changes in the input action don't cancel previous events.
             actions.flatMap {
                 when (it) {
-                    is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
+                //      is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
+                //    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
                 //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
-                    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
                 //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
+                    is Action.ContentRefreshAction -> Flowable.just(it).compose(refresh)
+                    is Action.ErrorClearAction -> Flowable.just(it).compose(dismissErrorIndicator)
                 }
             }
         }
 
     }
 
-    // @Suppress("UNCHECKED_CAST")
-    private fun <A, A2 : A, R> Observable<A>.composeAs(transformer: ObservableTransformer<A2, R>): Observable<R> {
-        return this.map { it as A2 }.compose(transformer)
-    }
+//     @Suppress("UNCHECKED_CAST")
+//    private fun <A, A2 : A, R> Observable<A>.composeAs(transformer: FlowableTransformer<A2, R>): Observable<R> {
+//        return this.map { it as A2 }.compose(transformer)
+//    }
 
     override fun uiEvents(uiEvent: UiEvent) {
-        uiEvents.offer(uiEvent)
+        uiEvents.onNext(uiEvent)
     }
 
     private fun HomeUiModel.reduce(result: Result): HomeUiModel =

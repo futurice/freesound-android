@@ -21,7 +21,6 @@ import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityModule;
-import com.futurice.freesound.network.api.FreeSoundApiService;
 
 import dagger.Module;
 import dagger.Provides;
@@ -34,12 +33,6 @@ class HomeActivityModule {
     static HomeViewModel provideHomeViewModel(Navigator navigator,
                                               SchedulerProvider schedulerProvider) {
         return new HomeViewModel(navigator, schedulerProvider);
-    }
-
-    @Provides
-    @ActivityScope
-    static UserDataModel provideUserDataModel(FreeSoundApiService freeSoundApiService) {
-        return new DefaultUserDataModel(freeSoundApiService);
     }
 
     private HomeActivityModule() {

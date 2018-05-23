@@ -38,8 +38,8 @@ class UiBinder<M, E>(private val mviView: MviView<E, M>,
 
         viewModel.uiModels()
                 .doOnError {
-                    Timber.e(it, "Fatal unhandled error dispatching UI model. " +
-                            " You should have caught this in the ViewModel.")
+                    Timber.e(it, """Fatal unhandled error dispatching UI model.
+                        | You should have caught this in the ViewModel.""".trimMargin())
                 }
                 .observe(lifecycleOwner, Observer { mviView.render(it!!) })
 

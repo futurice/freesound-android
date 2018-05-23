@@ -17,8 +17,10 @@
 package com.futurice.freesound.feature.home
 
 import android.support.annotation.VisibleForTesting
+import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
-import io.reactivex.Observable
+import io.reactivex.Flowable
+import io.reactivex.Single
 import polanski.option.Option
 
 /**
@@ -31,19 +33,30 @@ internal class HomeUserInteractor(private val userRepository: UserRepository) {
         val HOME_USERNAME = "SpiceProgram"
     }
 
-    fun homeUserStream(): Observable<Fetch<User>> {
-        return homeUser()
-                .switchMap { fetchIfNone(it) }
+    fun homeUser(): Flowable<Fetch<User>> {
+        return currentHomeUser()
+                .toFlowable()
+                .flatMap { fetchIfNone(it) }
                 .startWith(Fetch.InProgress())
                 .onErrorReturn { Fetch.Failure(it) }
+
+        // The problem here is the possible lack of atomic interaction with the value in the
+        // store - what if there was Some and then we didn't pass that value through before
+        // streaming future changes, then the value could be deleted before and we would never
+        // get updates.... although I suppose that would be accurate.
+        // The value should always come from the store, though.
     }
 
-    private fun fetchIfNone(value: Option<User>): Observable<out Fetch<User>> =
-            value.match({ Observable.just(Fetch.Success<User>(it)) },
-                    { userRepository.fetchUser(HOME_USERNAME).toObservable() })
+    // Get the Optional value from the repo, if it's None, then fetch and then concat with the
+    // stream value. Otherwise, return the value and concat with the stream
+    private fun fetchIfNone(value: Option<User>): Flowable<out Fetch<User>> =
+            value.match({ Flowable.just(Fetch.Success<User>(it)) },
+                    {
+                        userRepository.fetchUser(HOME_USERNAME)
+                                .andThen { userRepository.user(HOME_USERNAME) }
+                                .toFlowable()
+                    })
 
-    private fun homeUser(): Observable<Option<User>> {
-        return userRepository.user(HOME_USERNAME)
-    }
+    private fun currentHomeUser(): Single<Option<User>> = userRepository.user(HOME_USERNAME)
 
 }

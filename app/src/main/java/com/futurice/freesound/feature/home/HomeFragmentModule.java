@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.mvi.Renderer;
@@ -51,20 +52,26 @@ public class HomeFragmentModule {
     }
 
     @Provides
+    static HomeUserInteractor provideHomeUserInteractor(UserRepository userRepository) {
+        return new HomeUserInteractor(userRepository);
+    }
+
+    @Provides
     @FragmentScope
-    Renderer<Fragment.HomeFragmentUiModel> provideRenderer() {
+    Renderer<HomeUiModel> provideRenderer() {
         return homeFragment;
     }
 
     @Provides
     @FragmentScope
-    UiBinder<Fragment.HomeFragmentUiModel, Fragment.HomeFragmentUiEvent> provideUiBinder(HomeFragmentViewModel2 viewModel) {
+    UiBinder<HomeUiModel, UiEvent> provideUiBinder(HomeFragmentViewModel2 viewModel) {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 
     @Provides
-    static HomeUserInteractor provideHomeFragmentDataBinder(UserDataModel userDataModel) {
-        return new HomeUserInteractor(userDataModel);
+    @FragmentScope
+    RefreshOnResume provideRefreshOnResume() {
+        return new RefreshOnResume(homeFragment.getLifecycle());
     }
 
 }

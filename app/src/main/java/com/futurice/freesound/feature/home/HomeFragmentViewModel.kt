@@ -20,6 +20,7 @@ import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.viewmodel.SimpleViewModel
 import io.reactivex.Single
 
+@Deprecated("Use MVI instead")
 internal class HomeFragmentViewModel(userDataModel: UserDataModel) : SimpleViewModel() {
 
     private val homeUser: Single<User> = userDataModel.homeUser.cache()

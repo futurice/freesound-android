@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.store
 
-/**
- * Created by ptac on 11.12.17.
- */
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
 
+interface Store<K, V> {
+
+    fun put(key: K, value: V): Completable
+
+    //  fun putAll(valueList: List<V>)
+
+    //   fun clear()
+
+    fun get(key: K): Maybe<V>
+
+    fun getStream(key: K): Observable<V>
+
+    //   fun getAll(): Maybe<List<V>>
+
+}

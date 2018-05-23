@@ -22,6 +22,7 @@ import android.arch.lifecycle.OnLifecycleEvent
 import io.reactivex.Flowable
 import io.reactivex.processors.PublishProcessor
 
+@Deprecated("This should be replaced by a parameterized component")
 class RefreshOnResume(lifecycle: Lifecycle) : LifecycleObserver {
 
     init {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.user
 
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.User
+import com.futurice.freesound.store.Store
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import polanski.option.Option
 
 class UserRepository(private val freeSoundApi: FreeSoundApiService,
@@ -27,14 +29,18 @@ class UserRepository(private val freeSoundApi: FreeSoundApiService,
 
     fun fetchUser(username: String): Completable {
         return freeSoundApi.getUser(username)
-                .doOnSuccess { userStore.put(username, it) }
-                .toCompletable()
+                .flatMapCompletable { userStore.put(username, it) }
     }
 
-    fun user(username: String): Observable<Option<User>> {
+    fun user(username: String): Single<Option<User>> {
         return userStore.get(username)
                 .map { Option.ofObj(it) }
-                .defaultIfEmpty(Option.none()).toObservable()
+                .toSingle(Option.none())
+    }
+
+    fun userStream(username: String): Observable<Option<User>> {
+        return userStore.getStream(username)
+                .map { Option.ofObj(it) }
     }
 
 }

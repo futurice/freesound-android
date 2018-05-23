@@ -20,6 +20,7 @@ import com.futurice.freesound.network.api.model.User
 
 import io.reactivex.Single
 
+@Deprecated("Use the UserRepository instead")
 interface UserDataModel {
     val homeUser: Single<User>
 }
