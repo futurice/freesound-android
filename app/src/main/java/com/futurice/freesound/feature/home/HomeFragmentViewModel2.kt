@@ -37,7 +37,7 @@ sealed class Action(val log: String) {
 }
 
 internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserInteractor,
-                                      val schedulers: SchedulerProvider) :
+                                      schedulers: SchedulerProvider) :
         BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
 
     // Events from the UI are modelled as a buffering Observable.

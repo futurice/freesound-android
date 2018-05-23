@@ -18,4 +18,4 @@ package com.futurice.freesound.mvi
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 
-abstract class BaseViewModel<in UE, M>(schedulers: SchedulerProvider) : ViewModel<UE, M>()
+abstract class BaseViewModel<in UE, M>(protected val schedulers: SchedulerProvider) : ViewModel<UE, M>()
