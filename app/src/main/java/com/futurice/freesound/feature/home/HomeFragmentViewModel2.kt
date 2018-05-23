@@ -47,6 +47,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
     // not a result. Think about what will happen with a list restored from onSaveInstanceState
     private val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
 
+    // TODO No caching currently
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
                 .toFlowable(BackpressureStrategy.BUFFER)
