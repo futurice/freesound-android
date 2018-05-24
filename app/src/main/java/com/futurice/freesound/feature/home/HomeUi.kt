@@ -29,7 +29,8 @@ package com.futurice.freesound.feature.home
 // Event from the UI to VM
 
 sealed class UiEvent(val log: String) {
-    object ErrorIndicatorDismissed : UiEvent("ErrorClearedResult")
+    object InitialEvent : UiEvent("InitialEvent")
+    object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
     object RefreshRequested : UiEvent("RefreshRequested")
 }
 

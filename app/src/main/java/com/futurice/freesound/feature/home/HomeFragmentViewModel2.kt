@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
 import com.futurice.freesound.network.api.model.User
@@ -28,15 +29,17 @@ import timber.log.Timber
 sealed class Result(val log: String) {
     object NoChange : Result("No-op change")
     object ErrorClearedResult : Result("Error dismissed change")
-    class UserResult(val fetch: Fetch<User>) : Result("User Fetch state change")
+    data class FetchResult(val fetch: Operation) : Result("User Fetch state change")
+    data class UserResult(val user: User) : Result("User state change")
 }
 
 sealed class Action(val log: String) {
+    object InitialAction : Action("Initial action")
     object ErrorClearAction : Action("Error cleared action")
     object ContentRefreshAction : Action("Content refresh action")
 }
 
-internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserInteractor,
+internal class HomeFragmentViewModel2(private val homeUserInteractor: UserInteractor,
                                       schedulers: SchedulerProvider) :
         BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
 
@@ -50,6 +53,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
     // TODO No caching currently
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
+                .startWith(UiEvent.InitialEvent)
                 .toFlowable(BackpressureStrategy.BUFFER)
                 .map(::toAction)
                 .compose(toResult())
@@ -63,16 +67,29 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
 
     private fun toAction(uiEvent: UiEvent) =
             when (uiEvent) {
+                UiEvent.InitialEvent -> Action.InitialAction
                 UiEvent.RefreshRequested -> Action.ContentRefreshAction
                 UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
             }
 
     private fun toResult(): FlowableTransformer<Action, out Result> {
 
-        val refresh:
-                FlowableTransformer<Action.ContentRefreshAction, Result.UserResult> =
+        val initial:
+                FlowableTransformer<Action.InitialAction, Result.UserResult> =
                 FlowableTransformer {
-                    it.flatMap { homeUserInteractor.homeUser() }.map { Result.UserResult(it) }
+                    it.flatMap {
+                        homeUserInteractor.homeUserStream()
+                                .toFlowable(BackpressureStrategy.LATEST)
+                    }.map { Result.UserResult(it) }
+                }
+
+        val refresh:
+                FlowableTransformer<Action.ContentRefreshAction, Result.FetchResult> =
+                FlowableTransformer {
+                    it.flatMap {
+                        homeUserInteractor.fetchHomeUser()
+                                .toFlowable(BackpressureStrategy.LATEST)
+                    }.map { Result.FetchResult(it) }
                 }
 
         val dismissErrorIndicator:
@@ -96,6 +113,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
                 //    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
                 //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
                 //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
+                    is Action.InitialAction -> Flowable.just(it).compose(initial)
                     is Action.ContentRefreshAction -> Flowable.just(it).compose(refresh)
                     is Action.ErrorClearAction -> Flowable.just(it).compose(dismissErrorIndicator)
                 }
@@ -116,15 +134,16 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: HomeUserIn
     private fun HomeUiModel.reduce(result: Result): HomeUiModel =
             when (result) {
                 is Result.NoChange -> this
-                is Result.UserResult -> reduceUserChange(result.fetch)
+                is Result.FetchResult -> reduceFetchChange(result.fetch)
+                is Result.UserResult -> copy(user = toUserUiModel(result.user), isLoading = false)
                 Result.ErrorClearedResult -> copy(errorMsg = null)
             }
 
-    private fun HomeUiModel.reduceUserChange(fetch: Fetch<User>): HomeUiModel =
+    private fun HomeUiModel.reduceFetchChange(fetch: Operation): HomeUiModel =
             when (fetch) {
-                is Fetch.InProgress<User> -> copy(isLoading = true, user = null, errorMsg = null)
-                is Fetch.Success<User> -> copy(user = toUserUiModel(fetch.value), isLoading = false, errorMsg = null)
-                is Fetch.Failure<User> -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
+                is Operation.InProgress -> copy(isLoading = true, user = null, errorMsg = null)
+                is Operation.Complete -> copy(isLoading = false, errorMsg = null)
+                is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
             }
 
     // TODO Perhaps this could return an @ResId instead of a string. Issues with config changes e.g. language?

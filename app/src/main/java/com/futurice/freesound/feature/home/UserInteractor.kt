@@ -17,44 +17,43 @@
 package com.futurice.freesound.feature.home
 
 import android.support.annotation.VisibleForTesting
+import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import polanski.option.Option
+import polanski.option.OptionUnsafe
 
 /**
  * Ideally this component could be reused elsewhere.
  */
-internal class HomeUserInteractor(private val userRepository: UserRepository) {
+class UserInteractor(private val userRepository: UserRepository) {
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val HOME_USERNAME = "SpiceProgram"
     }
 
-    fun homeUser(): Flowable<Fetch<User>> {
+    fun fetchHomeUser(): Observable<Operation> {
         return currentHomeUser()
-                .toFlowable()
+                .toObservable()
                 .flatMap { fetchIfNone(it) }
-                .startWith(Fetch.InProgress())
-                .onErrorReturn { Fetch.Failure(it) }
-
-        // The problem here is the possible lack of atomic interaction with the value in the
-        // store - what if there was Some and then we didn't pass that value through before
-        // streaming future changes, then the value could be deleted before and we would never
-        // get updates.... although I suppose that would be accurate.
-        // The value should always come from the store, though.
+                .startWith(Operation.InProgress)
+                .onErrorReturn { Operation.Failure(it) }
     }
 
-    // Get the Optional value from the repo, if it's None, then fetch and then concat with the
-    // stream value. Otherwise, return the value and concat with the stream
-    private fun fetchIfNone(value: Option<User>): Flowable<out Fetch<User>> =
-            value.match({ Flowable.just(Fetch.Success<User>(it)) },
+    fun homeUserStream(): Observable<User> {
+        return userRepository.userStream(HOME_USERNAME)
+                .filter { it.isSome }
+                .map { OptionUnsafe.getUnsafe(it) }
+    }
+
+    private fun fetchIfNone(value: Option<User>): Observable<out Operation> =
+            value.match({ Observable.just(Operation.Complete) },
                     {
                         userRepository.fetchUser(HOME_USERNAME)
-                                .andThen { userRepository.user(HOME_USERNAME) }
-                                .toFlowable()
+                                .andThen(Observable.just(Operation.Complete))
                     })
 
     private fun currentHomeUser(): Single<Option<User>> = userRepository.user(HOME_USERNAME)
