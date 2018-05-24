@@ -65,7 +65,7 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
     }
 
     fun search(query: String) {
-        analytics.log("SearchPressedEvent")
+       // analytics.log("SearchPressedEvent")
         searchTermOnceAndStream.onNext(query.trim())
     }
 
