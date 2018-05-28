@@ -38,15 +38,13 @@ internal class UserStore : CacheStore<String, User> {
     private val usersStream: BehaviorSubject<Set<Map.Entry<String, User>>> = BehaviorSubject.create()
 
     // Emits the current value, if it exists, else empty
-    @Synchronized
     override fun get(key: String): Maybe<User> {
         return users[key]?.let { Maybe.just(it) } ?: Maybe.empty()
     }
 
     // Emits the current value if it exists, then all future values (does not complete)
-    @Synchronized
     override fun getStream(key: String): Observable<User> {
-        // If the value is removed from the cache, then this should not complete, it just
+        // If the value is removed from the cache, then this will not complete, it just
         // won't get any more values. That's why using take(1), not firstOrError().
         return usersStream
                 .concatMap {
