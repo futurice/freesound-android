@@ -21,41 +21,37 @@ import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
-import io.reactivex.Single
-import polanski.option.Option
-import polanski.option.OptionUnsafe
+import timber.log.Timber
 
 /**
  * Ideally this component could be reused elsewhere.
  */
-class UserInteractor(private val userRepository: UserRepository) {
+class HomeUserInteractor(private val userRepository: UserRepository) {
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val HOME_USERNAME = "SpiceProgram"
     }
 
-    fun fetchHomeUser(): Observable<Operation> {
-        return currentHomeUser()
-                .toObservable()
-                .flatMap { fetchIfNone(it) }
-                .startWith(Operation.InProgress)
+    fun refresh(): Observable<Operation> {
+        // Ignore the returned value, let homeUserStream emit the change.
+        return fetchHomeUser()
+                .toCompletable()
+                .toObservable<Operation>()
+                .startWith { Operation.InProgress }
+                .concatWith { Observable.just(Operation.Complete) }
                 .onErrorReturn { Operation.Failure(it) }
     }
 
-    fun homeUserStream(): Observable<User> {
-        return userRepository.userStream(HOME_USERNAME)
-                .filter { it.isSome }
-                .map { OptionUnsafe.getUnsafe(it) }
-    }
+    /*
+     * Emits the any current cached home user, triggers a fetch from the API and then streams
+     * further updates.
+     */
+    fun homeUserStream(): Observable<User> = currentHomeUser()
 
-    private fun fetchIfNone(value: Option<User>): Observable<out Operation> =
-            value.match({ Observable.just(Operation.Complete) },
-                    {
-                        userRepository.fetchUser(HOME_USERNAME)
-                                .andThen(Observable.just(Operation.Complete))
-                    })
+    private fun fetchHomeUser() = userRepository.refreshUser(HOME_USERNAME)
 
-    private fun currentHomeUser(): Single<Option<User>> = userRepository.user(HOME_USERNAME)
+    private fun currentHomeUser() = userRepository.userStream(HOME_USERNAME)
+            .doOnNext { Timber.d(("Current user was: $it")) }
 
 }

@@ -19,28 +19,39 @@ package com.futurice.freesound.feature.user
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.store.Store
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import polanski.option.Option
 
+/*
+ * refresh: Active, Single: Always fetches, stores and emits once.
+ * get: Active, Single: Returns cache if it exists, otherwise it fetches, stores and emits once.
+ * getStream: Active, Observable: Returns cache if it exists, fetches, stores and emits value and future values.
+ * await: Passive, Single TODO
+ * awaitStream Passive, Observable TODO
+ *
+ * Question: Should we just return the fetched value or always use the value in the store?
+ * By emitting the fetched value, we are assuming that the store does not alter that.
+ */
 class UserRepository(private val freeSoundApi: FreeSoundApiService,
                      private val userStore: Store<String, User>) {
 
-    fun fetchUser(username: String): Completable {
+    // refresh
+    fun refreshUser(username: String): Single<User> {
         return freeSoundApi.getUser(username)
-                .flatMapCompletable { userStore.put(username, it) }
+                .flatMap { user -> userStore.put(username, user).toSingle { user } } // emits fetched/stored.
     }
 
-    fun user(username: String): Single<Option<User>> {
+    // get
+    fun user(username: String): Single<User> {
         return userStore.get(username)
-                .map { Option.ofObj(it) }
-                .toSingle(Option.none())
+                .switchIfEmpty(refreshUser(username)) // emits fetched/stored
     }
 
-    fun userStream(username: String): Observable<Option<User>> {
-        return userStore.getStream(username)
-                .map { Option.ofObj(it) }
+    // getStream
+    fun userStream(username: String): Observable<User> {
+        return user(username) // emits fetched/stored
+                .toObservable()
+                .concatWith { userStore.getStream(username).skip(1) }
     }
 
 }

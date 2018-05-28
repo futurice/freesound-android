@@ -16,30 +16,59 @@
 
 package com.futurice.freesound.feature.user
 
+import android.support.v4.util.LruCache
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.store.Store
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import java.util.*
+import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 
-// This is a placeholder implementation
+/**
+ * This implementation makes the assumption that the contents of LruCache can only be
+ * changed by its external API.
+ *
+ * TODO Check the synchronization
+ */
 internal class UserStore : Store<String, User> {
 
-    private val users: MutableMap<String, User> = TreeMap()
+    // This is the source of truth.
+    private val users: LruCache<String, User> = LruCache(100)
 
-    // Emits the current value, if it exists, then Completes
+    private val usersStream: BehaviorSubject<Set<Map.Entry<String, User>>> = BehaviorSubject.create()
+
+    // Emits the current value, if it exists, else empty
+    @Synchronized
     override fun get(key: String): Maybe<User> {
         return users[key]?.let { Maybe.just(it) } ?: Maybe.empty()
     }
 
     // Emits the current value if it exists, then all future values (does not complete)
+    @Synchronized
     override fun getStream(key: String): Observable<User> {
-        return users[key]?.let { Observable.never<User>().startWith(it) } ?: Observable.never()
+        // If the value is removed from the cache, then this should not complete, it just
+        // won't get any more values. That's why using take(1), not firstOrError().
+        return usersStream
+                .concatMap {
+                    Observable.fromIterable(it)
+                            .filter { it.key == key }
+                            .map { it.value }
+                            .take(1)
+                }
     }
 
     // Store the provided value for the given key. Completes when the operation has finished.
     override fun put(key: String, value: User): Completable {
-        return Completable.fromAction { users[key] = value }
+        return Completable.fromAction { storeAndFlush(key, value) }
+    }
+
+    @Synchronized
+    private fun storeAndFlush(key: String, value: User) {
+        Timber.d("Storing $key $value")
+        // Put a value into the cache
+        // Flush the cache values through the stream
+        users.put(key, value)
+        usersStream.onNext(users.snapshot().entries)
     }
 }

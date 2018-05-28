@@ -23,6 +23,7 @@ import com.futurice.freesound.network.api.model.User
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
@@ -39,20 +40,22 @@ sealed class Action(val log: String) {
     object ContentRefreshAction : Action("Content refresh action")
 }
 
-internal class HomeFragmentViewModel2(private val homeUserInteractor: UserInteractor,
+internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUserInteractor,
                                       schedulers: SchedulerProvider) :
         BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
 
     // Events from the UI are modelled as a buffering Observable.
     private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
 
-    // TODO This initial state doesn't make sense - it should be driven by an input configuration (e.g. an id, which be serialized),
-    // not a result. Think about what will happen with a list restored from onSaveInstanceState
+    // TODO Use InitialEvent to hold saveInstanceState data.
     private val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
 
-    // TODO No caching currently
+    //  No caching currently in the ViewModel, uses data sources to hold results.
+    // Could change this to output to a ViewModel scoped LiveData object.
+    // Or we could just rely on caching of the source objects in the Repository.
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
+                .observeOn(schedulers.computation()) // because subscribeOn doesn't work for Subjects
                 .startWith(UiEvent.InitialEvent)
                 .toFlowable(BackpressureStrategy.BUFFER)
                 .map(::toAction)
@@ -60,8 +63,8 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
                 .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
                 .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
                 .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
-                .subscribeOn(schedulers.computation())
                 .onBackpressureLatest()
+                .subscribeOn(schedulers.computation())
         //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
     }
 
@@ -70,7 +73,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
                 UiEvent.InitialEvent -> Action.InitialAction
                 UiEvent.RefreshRequested -> Action.ContentRefreshAction
                 UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
-            }
+            }.also { Timber.d("Action is: $it") }
 
     private fun toResult(): FlowableTransformer<Action, out Result> {
 
@@ -78,8 +81,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
                 FlowableTransformer<Action.InitialAction, Result.UserResult> =
                 FlowableTransformer {
                     it.flatMap {
-                        homeUserInteractor.homeUserStream()
-                                .toFlowable(BackpressureStrategy.LATEST)
+                        homeHomeUserInteractor.homeUserStream().toUiModelFlowable()
                     }.map { Result.UserResult(it) }
                 }
 
@@ -87,8 +89,7 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
                 FlowableTransformer<Action.ContentRefreshAction, Result.FetchResult> =
                 FlowableTransformer {
                     it.flatMap {
-                        homeUserInteractor.fetchHomeUser()
-                                .toFlowable(BackpressureStrategy.LATEST)
+                        homeHomeUserInteractor.refresh().toUiModelFlowable()
                     }.map { Result.FetchResult(it) }
                 }
 
@@ -104,21 +105,29 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
 //            }
 //        }
 
-        return FlowableTransformer { actions ->
-            // TODO This definitely needs testing to verify that we have a merged signal and that
-            // changes in the input action don't cancel previous events.
-            actions.flatMap {
-                when (it) {
-                //      is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
-                //    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
-                //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
-                //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
-                    is Action.InitialAction -> Flowable.just(it).compose(initial)
-                    is Action.ContentRefreshAction -> Flowable.just(it).compose(refresh)
-                    is Action.ErrorClearAction -> Flowable.just(it).compose(dismissErrorIndicator)
-                }
+        return FlowableTransformer {
+            it.publish { shared: Flowable<Action> ->
+                Flowable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
+                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator),
+                        shared.ofType(Action.InitialAction::class.java).compose(initial))
             }
         }
+
+//        return FlowableTransformer { actions ->
+//            // TODO This definitely needs testing to verify that we have a merged signal and that
+//            // changes in the input action don't cancel previous events.
+//            actions.flatMap {
+//                when (it) {
+//                //      is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
+//                //    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
+//                //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
+//                //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
+//                    is Action.InitialAction -> Flowable.just(it).compose(initial)
+//                    is Action.ContentRefreshAction -> Flowable.just(it).compose(refresh)
+//                    is Action.ErrorClearAction -> Flowable.just(it).compose(dismissErrorIndicator)
+//                }
+//            }
+//        }
 
     }
 
@@ -134,14 +143,14 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
     private fun HomeUiModel.reduce(result: Result): HomeUiModel =
             when (result) {
                 is Result.NoChange -> this
-                is Result.FetchResult -> reduceFetchChange(result.fetch)
+                is Result.FetchResult -> reduce(result.fetch)
                 is Result.UserResult -> copy(user = toUserUiModel(result.user), isLoading = false)
                 Result.ErrorClearedResult -> copy(errorMsg = null)
-            }
+            }.also { Timber.d("Result was: $result") }
 
-    private fun HomeUiModel.reduceFetchChange(fetch: Operation): HomeUiModel =
+    private fun HomeUiModel.reduce(fetch: Operation): HomeUiModel =
             when (fetch) {
-                is Operation.InProgress -> copy(isLoading = true, user = null, errorMsg = null)
+                is Operation.InProgress -> copy(isLoading = this.user == null, user = null, errorMsg = null)
                 is Operation.Complete -> copy(isLoading = false, errorMsg = null)
                 is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
             }
@@ -152,4 +161,9 @@ internal class HomeFragmentViewModel2(private val homeUserInteractor: UserIntera
     private fun toUserUiModel(user: User): UserUiModel =
             UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
 
+}
+
+// For consumable values, we just take the latest if backpressure.
+private fun <T> Observable<T>.toUiModelFlowable() : Flowable<T> {
+    return toFlowable(BackpressureStrategy.LATEST)
 }

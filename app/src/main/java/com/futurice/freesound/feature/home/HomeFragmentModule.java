@@ -46,14 +46,14 @@ public class HomeFragmentModule {
 
     @Provides
     static Function0<HomeFragmentViewModel2> providerHomeFragmentViewModel2Provider(
-            UserInteractor userInteractor,
+            HomeUserInteractor homeUserInteractor,
             SchedulerProvider schedulerProvider) {
-        return () -> new HomeFragmentViewModel2(userInteractor, schedulerProvider);
+        return () -> new HomeFragmentViewModel2(homeUserInteractor, schedulerProvider);
     }
 
     @Provides
-    static UserInteractor provideHomeUserInteractor(UserRepository userRepository) {
-        return new UserInteractor(userRepository);
+    static HomeUserInteractor provideHomeUserInteractor(UserRepository userRepository) {
+        return new HomeUserInteractor(userRepository);
     }
 
     @Provides
