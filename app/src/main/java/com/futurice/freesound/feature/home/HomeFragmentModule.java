@@ -68,10 +68,4 @@ public class HomeFragmentModule {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 
-    @Provides
-    @FragmentScope
-    RefreshOnResume provideRefreshOnResume() {
-        return new RefreshOnResume(homeFragment.getLifecycle());
-    }
-
 }

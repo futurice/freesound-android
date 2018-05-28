@@ -32,7 +32,6 @@ import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.squareup.picasso.Picasso
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
@@ -40,9 +39,6 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
 
     @Inject
     internal lateinit var picasso: Picasso
-
-    @Inject
-    internal lateinit var refreshStrategy: RefreshOnResume
 
     internal lateinit var errorSnackBar: Snackbar
 
@@ -91,9 +87,6 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
     private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
             .map { UiEvent.ErrorIndicatorDismissed }
             .toFlowable(BackpressureStrategy.BUFFER)
-
-//    private fun refreshRequested() = refreshStrategy.refreshRequests()
-//            .map { UiEvent.RefreshRequested }
 
     private fun refreshRequested() = Flowable.never<UiEvent>()
 

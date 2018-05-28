@@ -40,7 +40,7 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
                 .toObservable<Operation>()
                 .startWith(Operation.InProgress)
                 .concatWith { Observable.just(Operation.Complete) }
-                .onErrorReturn { Operation.Failure(it) }
+                .onErrorResumeNext { t: Throwable -> Observable.just(Operation.Failure(t)) }
     }
 
     /*
@@ -51,7 +51,7 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
         return userStream()
                 .map { Fetch.Success(it) as Fetch<User> }
                 .startWith(Fetch.InProgress())
-                .onErrorReturn { Fetch.Failure(it) }
+                .onErrorResumeNext { t: Throwable -> Observable.just(Fetch.Failure(t)) }
     }
 
 
