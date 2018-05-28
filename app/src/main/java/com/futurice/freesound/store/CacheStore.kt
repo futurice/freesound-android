@@ -20,18 +20,12 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 
-interface Store<K, V> {
+interface CacheStore<K, V> {
 
     fun put(key: K, value: V): Completable
-
-    //  fun putAll(valueList: List<V>)
-
-    //   fun clear()
 
     fun get(key: K): Maybe<V>
 
     fun getStream(key: K): Observable<V>
-
-    //   fun getAll(): Maybe<List<V>>
 
 }

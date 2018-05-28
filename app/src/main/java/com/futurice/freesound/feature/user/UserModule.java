@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.user;
 
 import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.User;
-import com.futurice.freesound.store.Store;
+import com.futurice.freesound.store.CacheStore;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -34,13 +34,13 @@ public class UserModule {
     @Provides
     @Singleton
     UserRepository provideUserRepository(FreeSoundApiService freesoundApiService,
-                                         @Named(USER_STORE) Store<String, User> userStore) {
+                                         @Named(USER_STORE) CacheStore<String, User> userStore) {
         return new UserRepository(freesoundApiService, userStore);
     }
 
     @Provides
     @Named("userstore")
-    Store<String, User> provideUserStore() {
+    CacheStore<String, User> provideUserCacheStore() {
         return new UserStore();
     }
 }

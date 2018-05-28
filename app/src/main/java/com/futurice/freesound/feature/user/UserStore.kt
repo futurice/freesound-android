@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.user
 
 import android.support.v4.util.LruCache
 import com.futurice.freesound.network.api.model.User
-import com.futurice.freesound.store.Store
+import com.futurice.freesound.store.CacheStore
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -29,9 +29,8 @@ import timber.log.Timber
  * This implementation makes the assumption that the contents of LruCache can only be
  * changed by its external API.
  *
- * TODO Check the synchronization
  */
-internal class UserStore : Store<String, User> {
+internal class UserStore : CacheStore<String, User> {
 
     // This is the source of truth.
     private val users: LruCache<String, User> = LruCache(100)
@@ -63,12 +62,13 @@ internal class UserStore : Store<String, User> {
         return Completable.fromAction { storeAndFlush(key, value) }
     }
 
-    @Synchronized
     private fun storeAndFlush(key: String, value: User) {
-        Timber.d("Storing $key $value")
         // Put a value into the cache
         // Flush the cache values through the stream
-        users.put(key, value)
-        usersStream.onNext(users.snapshot().entries)
+        synchronized(users) {
+            Timber.d("Storing $key $value")
+            users.put(key, value)
+            usersStream.onNext(users.snapshot().entries)
+        }
     }
 }

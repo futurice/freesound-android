@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.user
 
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.User
-import com.futurice.freesound.store.Store
+import com.futurice.freesound.store.CacheStore
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -33,7 +33,7 @@ import io.reactivex.Single
  * By emitting the fetched value, we are assuming that the store does not alter that.
  */
 class UserRepository(private val freeSoundApi: FreeSoundApiService,
-                     private val userStore: Store<String, User>) {
+                     private val userStore: CacheStore<String, User>) {
 
     // refresh
     fun refreshUser(username: String): Single<User> {

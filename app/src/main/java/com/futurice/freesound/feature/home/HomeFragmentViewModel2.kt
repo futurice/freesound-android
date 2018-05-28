@@ -51,20 +51,17 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
     // TODO Use InitialEvent to hold saveInstanceState data.
     private val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
 
-    //  No caching currently in the ViewModel, uses data sources to hold results.
-    // Could change this to output to a ViewModel scoped LiveData object.
-    // Or we could just rely on caching of the source objects in the Repository.
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
                 .observeOn(schedulers.computation()) // because subscribeOn doesn't work for Subjects
                 .startWith(UiEvent.InitialEvent)
-                .toFlowable(BackpressureStrategy.BUFFER)
+                .asUiEventFlowable()
                 .map(::toAction)
-                .compose(toResult())
+                .compose(transformToResult())
                 .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
                 .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
                 .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
-                .onBackpressureLatest()
+                .asUiModelFlowable()
                 .subscribeOn(schedulers.computation())
         //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
     }
@@ -74,26 +71,23 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
                 UiEvent.InitialEvent -> Action.InitialAction
                 UiEvent.RefreshRequested -> Action.ContentRefreshAction
                 UiEvent.ErrorIndicatorDismissed -> Action.ErrorClearAction
-            }.also { Timber.d("Action is: $it") }
+            }.also { Timber.d("From UiEvent: $uiEvent, Action is: $it") }
 
-    private fun toResult(): FlowableTransformer<Action, out Result> {
+    private fun transformToResult(): FlowableTransformer<Action, out Result> {
 
         val initial:
                 FlowableTransformer<Action.InitialAction, Result.UserResult> =
                 FlowableTransformer {
-                    it.doOnNext { Timber.d("Processing action: $it") }
-                            .flatMap {
-                                homeHomeUserInteractor.homeUserStream()
-                                        .doOnEach { Timber.d("Homeuserstream has event: $it") }
-                                        .toUiModelFlowable()
-                            }.map { Result.UserResult(it) }
+                    it.flatMap {
+                        homeHomeUserInteractor.homeUserStream().asUiModelFlowable()
+                    }.map { Result.UserResult(it) }
                 }
 
         val refresh:
                 FlowableTransformer<Action.ContentRefreshAction, Result.RefreshResult> =
                 FlowableTransformer {
                     it.flatMap {
-                        homeHomeUserInteractor.refresh().toUiModelFlowable()
+                        homeHomeUserInteractor.refresh().asUiModelFlowable()
                     }.map { Result.RefreshResult(it) }
                 }
 
@@ -150,24 +144,25 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
                 is Result.UserResult -> reduce(result.userFetch)
                 is Result.RefreshResult -> reduce(result.refresh)
                 Result.ErrorClearedResult -> copy(errorMsg = null)
-            }.also { Timber.d("Result was: $result") }
+            }.also { Timber.d("Result: $result was reduced to: $it") }
 
-    private fun HomeUiModel.reduce(fetch: Operation): HomeUiModel =
-            when (fetch) {
+    private fun HomeUiModel.reduce(refresh: Operation): HomeUiModel =
+            when (refresh) {
                 Operation.InProgress -> copy(isLoading = this.user == null, user = null, errorMsg = null)
                 Operation.Complete -> copy(isLoading = false, errorMsg = null)
-                is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
-            }
-
-    // TODO Perhaps this could return an @ResId instead of a string. Issues with config changes e.g. language?
-    private fun toFetchFailureMsg(throwable: Throwable) = throwable.localizedMessage
+                is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(refresh.error))
+            }.also { Timber.d("Operation: $refresh was reduced to: $it") }
 
     private fun HomeUiModel.reduce(fetch: Fetch<User>): HomeUiModel =
             when (fetch) {
                 is Fetch.InProgress -> copy(isLoading = user == null)
                 is Fetch.Success<User> -> copy(user = toUserUiModel(fetch.value), isLoading = false)
                 is Fetch.Failure -> copy(errorMsg = toFetchFailureMsg(fetch.error), isLoading = false)
-            }
+            }.also { Timber.d("Fetch: $fetch was reduced to: $it") }
+
+
+    // TODO This could return an @ResId instead of a string. Issues with config changes e.g. language?
+    private fun toFetchFailureMsg(throwable: Throwable) = throwable.localizedMessage
 
     private fun toUserUiModel(user: User) =
             UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
@@ -175,6 +170,15 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
 }
 
 // For consumable values, we just take the latest if backpressure.
-private fun <T> Observable<T>.toUiModelFlowable(): Flowable<T> {
+private fun <T> Observable<T>.asUiModelFlowable(): Flowable<T> {
     return toFlowable(BackpressureStrategy.LATEST)
+}
+
+// For consumable values, we just take the latest if backpressure.
+private fun <T> Flowable<T>.asUiModelFlowable(): Flowable<T> {
+    return onBackpressureLatest()
+}
+
+private fun <T> Observable<T>.asUiEventFlowable(): Flowable<T> {
+    return toFlowable(BackpressureStrategy.BUFFER)
 }
