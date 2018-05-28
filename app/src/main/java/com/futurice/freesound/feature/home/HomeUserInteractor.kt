@@ -17,11 +17,11 @@
 package com.futurice.freesound.feature.home
 
 import android.support.annotation.VisibleForTesting
+import com.futurice.freesound.feature.common.Fetch
 import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
-import timber.log.Timber
 
 /**
  * Ideally this component could be reused elsewhere.
@@ -35,10 +35,10 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
 
     fun refresh(): Observable<Operation> {
         // Ignore the returned value, let homeUserStream emit the change.
-        return fetchHomeUser()
+        return refreshUser()
                 .toCompletable()
                 .toObservable<Operation>()
-                .startWith { Operation.InProgress }
+                .startWith(Operation.InProgress)
                 .concatWith { Observable.just(Operation.Complete) }
                 .onErrorReturn { Operation.Failure(it) }
     }
@@ -47,11 +47,16 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
      * Emits the any current cached home user, triggers a fetch from the API and then streams
      * further updates.
      */
-    fun homeUserStream(): Observable<User> = currentHomeUser()
+    fun homeUserStream(): Observable<Fetch<User>> {
+        return userStream()
+                .map { Fetch.Success(it) as Fetch<User> }
+                .startWith(Fetch.InProgress())
+                .onErrorReturn { Fetch.Failure(it) }
+    }
 
-    private fun fetchHomeUser() = userRepository.refreshUser(HOME_USERNAME)
 
-    private fun currentHomeUser() = userRepository.userStream(HOME_USERNAME)
-            .doOnNext { Timber.d(("Current user was: $it")) }
+    private fun refreshUser() = userRepository.refreshUser(HOME_USERNAME)
+
+    private fun userStream() = userRepository.userStream(HOME_USERNAME)
 
 }

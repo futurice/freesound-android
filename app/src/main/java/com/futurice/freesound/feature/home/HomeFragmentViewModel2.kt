@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.feature.common.Fetch
 import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.mvi.BaseViewModel
@@ -30,8 +31,8 @@ import timber.log.Timber
 sealed class Result(val log: String) {
     object NoChange : Result("No-op change")
     object ErrorClearedResult : Result("Error dismissed change")
-    data class FetchResult(val fetch: Operation) : Result("User Fetch state change")
-    data class UserResult(val user: User) : Result("User state change")
+    data class RefreshResult(val refresh: Operation) : Result("User Fetch state change: $refresh")
+    data class UserResult(val userFetch: Fetch<User>) : Result("User state change: $userFetch")
 }
 
 sealed class Action(val log: String) {
@@ -80,17 +81,20 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
         val initial:
                 FlowableTransformer<Action.InitialAction, Result.UserResult> =
                 FlowableTransformer {
-                    it.flatMap {
-                        homeHomeUserInteractor.homeUserStream().toUiModelFlowable()
-                    }.map { Result.UserResult(it) }
+                    it.doOnNext { Timber.d("Processing action: $it") }
+                            .flatMap {
+                                homeHomeUserInteractor.homeUserStream()
+                                        .doOnEach { Timber.d("Homeuserstream has event: $it") }
+                                        .toUiModelFlowable()
+                            }.map { Result.UserResult(it) }
                 }
 
         val refresh:
-                FlowableTransformer<Action.ContentRefreshAction, Result.FetchResult> =
+                FlowableTransformer<Action.ContentRefreshAction, Result.RefreshResult> =
                 FlowableTransformer {
                     it.flatMap {
                         homeHomeUserInteractor.refresh().toUiModelFlowable()
-                    }.map { Result.FetchResult(it) }
+                    }.map { Result.RefreshResult(it) }
                 }
 
         val dismissErrorIndicator:
@@ -143,27 +147,34 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
     private fun HomeUiModel.reduce(result: Result): HomeUiModel =
             when (result) {
                 is Result.NoChange -> this
-                is Result.FetchResult -> reduce(result.fetch)
-                is Result.UserResult -> copy(user = toUserUiModel(result.user), isLoading = false)
+                is Result.UserResult -> reduce(result.userFetch)
+                is Result.RefreshResult -> reduce(result.refresh)
                 Result.ErrorClearedResult -> copy(errorMsg = null)
             }.also { Timber.d("Result was: $result") }
 
     private fun HomeUiModel.reduce(fetch: Operation): HomeUiModel =
             when (fetch) {
-                is Operation.InProgress -> copy(isLoading = this.user == null, user = null, errorMsg = null)
-                is Operation.Complete -> copy(isLoading = false, errorMsg = null)
+                Operation.InProgress -> copy(isLoading = this.user == null, user = null, errorMsg = null)
+                Operation.Complete -> copy(isLoading = false, errorMsg = null)
                 is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(fetch.error))
             }
 
     // TODO Perhaps this could return an @ResId instead of a string. Issues with config changes e.g. language?
     private fun toFetchFailureMsg(throwable: Throwable) = throwable.localizedMessage
 
-    private fun toUserUiModel(user: User): UserUiModel =
+    private fun HomeUiModel.reduce(fetch: Fetch<User>): HomeUiModel =
+            when (fetch) {
+                is Fetch.InProgress -> copy(isLoading = user == null)
+                is Fetch.Success<User> -> copy(user = toUserUiModel(fetch.value), isLoading = false)
+                is Fetch.Failure -> copy(errorMsg = toFetchFailureMsg(fetch.error), isLoading = false)
+            }
+
+    private fun toUserUiModel(user: User) =
             UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
 
 }
 
 // For consumable values, we just take the latest if backpressure.
-private fun <T> Observable<T>.toUiModelFlowable() : Flowable<T> {
+private fun <T> Observable<T>.toUiModelFlowable(): Flowable<T> {
     return toFlowable(BackpressureStrategy.LATEST)
 }

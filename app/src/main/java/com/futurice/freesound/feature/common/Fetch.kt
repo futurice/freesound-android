@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.common
 
-sealed class Fetch {
-    class InProgress : Fetch()
-    data class Success<T>(val value: T) : Fetch()
-    class Failure(val error: Throwable) : Fetch()
+sealed class Fetch<T> {
+    class InProgress<T> : Fetch<T>()
+    data class Success<T>(val value: T) : Fetch<T>()
+    class Failure<T>(val error: Throwable) : Fetch<T>()
 }
