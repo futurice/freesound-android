@@ -26,7 +26,7 @@ import io.reactivex.Observable
 /**
  * Ideally this component could be reused elsewhere.
  */
-open class HomeUserInteractor(private val userRepository: UserRepository) {
+class HomeUserInteractor(private val userRepository: UserRepository) {
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
