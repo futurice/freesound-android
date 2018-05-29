@@ -1,107 +1,123 @@
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.feature.common.Fetch
+import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.test.data.TestData
-import io.reactivex.Single
-import org.assertj.core.api.Assertions.assertThat
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider
+import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import java.util.concurrent.atomic.AtomicBoolean
 
 class HomeFragmentViewModelTest {
 
     @Mock
-    private lateinit var userDataModel: UserDataModel
+    private lateinit var homeUserIteractor: HomeUserInteractor
+
+    private lateinit var schedulers: TrampolineSchedulerProvider
 
     private val testUser: User get() = TestData.user()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        schedulers = TrampolineSchedulerProvider()
     }
 
     @Test
-    fun getImage_returnsLargeImage() {
+    fun uiModel_onInitial() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { emptyList() }
+            refresh { emptyList() }
         }
+
+        val homeUiModel = HomeUiModel(
+                isLoading = false,
+                errorMsg = null,
+                user = null)
 
         with(createVm()) {
-            image.test()
-                    .assertValue(testUser.avatar.large)
+            uiModels().test().assertValue(homeUiModel)
         }
     }
 
     @Test
-    fun getUserName_returnsName() {
+    fun uiModel_onInitialSuccess() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.Success(testUser)) }
+            refresh { emptyList() }
         }
+
+        val userUiModel = UserUiModel(
+                username = testUser.username,
+                about = testUser.about,
+                avatarUrl = testUser.avatar.large)
+        val homeUiModel = HomeUiModel(
+                isLoading = false,
+                errorMsg = null,
+                user = userUiModel)
 
         with(createVm()) {
-            userName.test()
-                    .assertValue(testUser.username)
+            uiModels().skip(1).test().assertValue(homeUiModel)
         }
     }
 
     @Test
-    fun getAbout_returnsAbout() {
+    fun uiModel_onInitialLoading() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.InProgress()) }
+            refresh { emptyList() }
         }
+
+        val homeUiModel = HomeUiModel(
+                isLoading = true,
+                errorMsg = null,
+                user = null)
 
         with(createVm()) {
-            about.test()
-                    .assertValue(testUser.about)
+            uiModels().skip(1).test().assertValue(homeUiModel)
         }
     }
 
     @Test
-    fun getHomeUser_doesNotSubscribeInCtor() {
-        val isSubscribed = AtomicBoolean()
-        `when`(userDataModel.homeUser)
-                .thenReturn(Single.never<User>()
-                        .doOnSubscribe { isSubscribed.set(true) })
-
-        ignore {
-            createVm()
-        }
-
-        assertThat(isSubscribed.get()).isFalse()
-    }
-
-    @Test
-    fun getProperties_subscribesOnlyOnce() {
+    fun uiModel_onInitialFailure_usesLocalizedExceptionMessage() {
+        val t = Throwable("Failure message")
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.Failure(t)) }
+            refresh { emptyList() }
         }
+
+        val homeUiModel = HomeUiModel(
+                isLoading = false,
+                errorMsg = t.localizedMessage,
+                user = null)
 
         with(createVm()) {
-            image.test()
-            userName.test()
+            uiModels().skip(1).test().assertValue(homeUiModel)
         }
-
-        verify(userDataModel).homeUser
     }
 
-    private fun createVm(): HomeFragmentViewModel =
-            HomeFragmentViewModel(userDataModel)
-
-    fun ignore(ignoreReturnValue: () -> Unit) {
-        ignoreReturnValue()
-    }
+    private fun createVm(): HomeFragmentViewModel2 =
+            HomeFragmentViewModel2(homeUserIteractor, schedulers)
 
     fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
 
     inner class Arrangement {
 
-        fun homeUser(init: () -> User) {
-            `when`(userDataModel.homeUser).thenReturn(Single.just(init()))
+        fun homeUserStream(init: () -> List<Fetch<User>>) {
+            `when`(homeUserIteractor.homeUserStream()).thenReturn(init().asStream())
         }
 
+        fun refresh(init: () -> List<Operation>) {
+            `when`(homeUserIteractor.refresh()).thenReturn(init().asStream())
+        }
     }
+}
+
+
+fun <T> List<T>.asStream(): Observable<T> {
+    return Observable.fromIterable(this).concatWith(Observable.never<T>())
 }

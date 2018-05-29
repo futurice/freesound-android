@@ -16,71 +16,68 @@
 
 package com.futurice.freesound.feature.user
 
-import com.futurice.freesound.network.api.model.User
-import com.futurice.freesound.test.data.TestData
+import com.futurice.freesound.store.Cache
 import org.junit.Before
 import org.junit.Test
 
-class UserStoreTest {
+class CacheTest {
 
-    private lateinit var userStore: UserStore
-
-    private val testUser: User get() = TestData.user()
+    private lateinit var cache: Cache<Int, String>
 
     @Before
     fun setUp() {
-        userStore = UserStore()
+        cache = Cache()
     }
 
     @Test
-    fun `store completes on put`() {
-        userStore.put(key = "username", value = testUser).test().assertComplete()
+    fun `put completes`() {
+        cache.put(key = 1, value = "testUser").test().assertComplete()
     }
 
     @Test
-    fun `store get retrieves put value for key and completes`() {
+    fun `get retrieves put value for key and completes`() {
 
         arrange {
             stored {
-                key = "abc"
-                value = testUser
+                key = 1
+                value = "testUser"
             }
         }
 
-        userStore.get("abc")
+        cache.get(1)
                 .test()
-                .assertValue(testUser)
+                .assertValue("testUser")
                 .assertComplete()
     }
 
     @Test
-    fun `store does not emit and then completes when no value`() {
+    fun `get does not emit and then completes when no value`() {
 
-        userStore.get("abc")
+        cache.get(1)
                 .test()
                 .assertNoValues()
                 .assertComplete()
     }
 
     @Test
-    fun `store getStream retrieves put value for key and does not complete`() {
+    fun `getStream retrieves put value for key and does not complete`() {
 
         arrange {
             stored {
-                key = "abc"
-                value = testUser
+                key = 1
+                value = "testUser"
             }
         }
 
-        userStore.getStream("abc")
+        cache.getStream(1)
                 .test()
-                .assertValue(testUser)
+                .assertValue("testUser")
                 .assertNotComplete()
     }
 
     @Test
-    fun `store getStream does not complete when no value`() {
-        userStore.getStream("abc")
+    fun `getStream does not complete when no value`() {
+        cache.getStream(1)
                 .test()
                 .assertNoValues()
                 .assertNotComplete()
@@ -92,7 +89,7 @@ class UserStoreTest {
 
         fun stored(block: StoredParams.() -> Unit) {
             StoredParams().apply(block)
-                    .let { userStore.put(it.key, it.value) }
+                    .let { cache.put(it.key, it.value) }
                     .subscribe()
         }
 
@@ -100,8 +97,8 @@ class UserStoreTest {
 
     // TODO Could potentially use delegate to make DSL error messages more meaningful for required props
     private class StoredParams {
-        lateinit var key: String
-        lateinit var value: User
+        var key: Int = 0
+        lateinit var value: String
     }
 
 }

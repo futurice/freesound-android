@@ -20,7 +20,7 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 
-interface CacheStore<K, V> {
+interface Store<K, V> {
 
     fun put(key: K, value: V): Completable
 

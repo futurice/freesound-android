@@ -42,10 +42,9 @@ sealed class Action(val log: String) {
 }
 
 internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUserInteractor,
-                                      schedulers: SchedulerProvider) :
-        BaseViewModel<UiEvent, HomeUiModel>(schedulers) {
+                                      private val schedulers: SchedulerProvider) :
+        BaseViewModel<UiEvent, HomeUiModel>() {
 
-    // Events from the UI are modelled as a buffering Observable.
     private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
 
     // TODO Use InitialEvent to hold saveInstanceState data.
@@ -94,14 +93,6 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
         val dismissErrorIndicator:
                 FlowableTransformer<Action.ErrorClearAction, Result.ErrorClearedResult> =
                 FlowableTransformer { it.map { Result.ErrorClearedResult } }
-
-        // Compiles, but ugly. This is the JW suggested approach.
-//        return FlowableTransformer {
-//            it.publish { shared: Observable<Action> ->
-//                Observable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
-//                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
-//            }
-//        }
 
         return FlowableTransformer {
             it.publish { shared: Flowable<Action> ->
@@ -179,6 +170,7 @@ private fun <T> Flowable<T>.asUiModelFlowable(): Flowable<T> {
     return onBackpressureLatest()
 }
 
+// Events from the UI are modelled as a buffering Observable.
 private fun <T> Observable<T>.asUiEventFlowable(): Flowable<T> {
     return toFlowable(BackpressureStrategy.BUFFER)
 }
