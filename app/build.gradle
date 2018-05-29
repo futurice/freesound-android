@@ -147,7 +147,7 @@ ext {
             chuck                   : '1.0.4',
             timber                  : '4.7.0',
             junit                   : '4.12',
-            mockito                 : '2.2.2',
+            mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
             leakCanary              : '1.5.1',
             rxLint                  : '1.6.1']

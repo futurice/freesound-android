@@ -16,12 +16,12 @@
 
 package com.futurice.freesound.network.api;
 
-import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.futurice.freesound.network.api.model.mapping.FreesoundDateAdapter;
+import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.squareup.moshi.KotlinJsonAdapterFactory;
 import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Rfc3339DateJsonAdapter;
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter;
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory;
 
 import java.lang.annotation.Retention;
 import java.util.List;

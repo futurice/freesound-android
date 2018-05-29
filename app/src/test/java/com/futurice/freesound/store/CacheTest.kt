@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.user
+package com.futurice.freesound.store
 
-import com.futurice.freesound.store.Cache
 import org.junit.Before
 import org.junit.Test
 
@@ -31,7 +30,7 @@ class CacheTest {
 
     @Test
     fun `put completes`() {
-        cache.put(key = 1, value = "testUser").test().assertComplete()
+        cache.put(key = 1, value = "ignored").test().assertComplete()
     }
 
     @Test

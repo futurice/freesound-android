@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.network.api.model.mapping
 
-import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Rfc3339DateJsonAdapter
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -87,7 +87,6 @@ class FreesoundDateAdapterTest {
 
     @Test
     fun adapter_serialization_roundtrip_withDataClass() {
-        data class TestData(val date: Date)
 
         val testDataAdapter = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
@@ -100,5 +99,7 @@ class FreesoundDateAdapterTest {
 
         assertThat(result).isEqualTo(testData)
     }
+
+    data class TestData(val date: Date)
 
 }

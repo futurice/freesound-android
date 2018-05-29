@@ -28,7 +28,7 @@ class HomeFragmentViewModelTest {
     }
 
     @Test
-    fun uiModel_onInitial() {
+    fun `uiModel onInitial`() {
         arrange {
             homeUserStream { emptyList() }
             refresh { emptyList() }
@@ -45,7 +45,7 @@ class HomeFragmentViewModelTest {
     }
 
     @Test
-    fun uiModel_onInitialSuccess() {
+    fun `uiModel onInitialSuccess`() {
         arrange {
             homeUserStream { listOf(Fetch.Success(testUser)) }
             refresh { emptyList() }
@@ -66,7 +66,7 @@ class HomeFragmentViewModelTest {
     }
 
     @Test
-    fun uiModel_onInitialLoading() {
+    fun `uiModel onInitiaInProgress`() {
         arrange {
             homeUserStream { listOf(Fetch.InProgress()) }
             refresh { emptyList() }
@@ -83,7 +83,7 @@ class HomeFragmentViewModelTest {
     }
 
     @Test
-    fun uiModel_onInitialFailure_usesLocalizedExceptionMessage() {
+    fun `uiModel usesLocalizedExceptionMessage onInitialFailure`() {
         val t = Throwable("Failure message")
         arrange {
             homeUserStream { listOf(Fetch.Failure(t)) }

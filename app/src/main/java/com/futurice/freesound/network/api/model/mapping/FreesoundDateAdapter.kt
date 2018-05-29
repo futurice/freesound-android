@@ -18,8 +18,8 @@ package com.futurice.freesound.network.api.model.mapping
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
-import com.squareup.moshi.Rfc3339DateJsonAdapter
 import com.squareup.moshi.ToJson
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import java.util.*
 
 /**
@@ -29,13 +29,15 @@ import java.util.*
  */
 class FreesoundDateAdapter(private val delegate: Rfc3339DateJsonAdapter) {
 
-    @FromJson fun fromJson(json: String): Date {
+    @FromJson
+    fun fromJson(json: String): Date {
         val parsableDate = if (json.endsWith("Z")) json else json.plus("Z")
         return delegate.fromJson("\"$parsableDate\"")
                 ?: throw JsonDataException("Unable to deserialize Date from: $json")
     }
 
-    @ToJson fun toJson(date: Date): String {
+    @ToJson
+    fun toJson(date: Date): String {
         return delegate.toJson(date)
                 .removePrefix("\"")
                 .removeSuffix("Z\"")
