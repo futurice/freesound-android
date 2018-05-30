@@ -102,9 +102,10 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
 
         return FlowableTransformer {
             it.publish { shared: Flowable<Action> ->
-                Flowable.merge(shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
-                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator),
-                        shared.ofType(Action.InitialAction::class.java).compose(initial))
+                Flowable.merge(
+                        shared.ofType(Action.InitialAction::class.java).compose(initial),
+                        shared.ofType(Action.ContentRefreshAction::class.java).compose(refresh),
+                        shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
             }
         }
 

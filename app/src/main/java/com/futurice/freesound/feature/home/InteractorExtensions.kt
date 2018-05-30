@@ -34,3 +34,7 @@ fun <T> Observable<T>.asFetch(): Observable<Fetch<T>> {
             .startWith(Fetch.InProgress())
             .onErrorResumeNext { t: Throwable -> Observable.just(Fetch.Failure(t)) }
 }
+
+fun <T> Observable<T>.asFetchStream(stream: Observable<T>): Observable<Fetch<T>> {
+    return asFetch().concatWith(stream.map { Fetch.Success(it) })
+}

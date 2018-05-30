@@ -23,19 +23,19 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 /*
- * refresh: Active, Single: Always fetches, stores and emits once.
- * get: Active, Single: Returns cache if it exists, otherwise it fetches, stores and emits once.
- * getStream: Active, Observable: Returns cache if it exists, fetches, stores and emits value and future values.
+ * refresh: Active, Single: Always fetches, stores and emits once. Can error.
+ * get: Active, Single: Returns cache if it exists, otherwise it fetches, stores and emits once. Can error.
  * await: Passive, Single TODO
- * awaitStream Passive, Observable TODO
+ * awaitStream Passive, Observable, Stream. Doesn't fetch. Just Observes. Never errors.
  *
+ *  WONTDO getStream: Active, Observable: Returns cache if it exists, fetches, stores and emits value and future values.
  * Question: Should we just return the fetched value or always use the value in the store?
  * By emitting the fetched value, we are assuming that the store does not alter that.
  */
 class UserRepository(private val freeSoundApi: FreeSoundApiService,
                      private val userStore: Store<String, User>) {
 
-    // refresh
+    // refresh.
     fun refreshUser(username: String): Single<User> {
         return freeSoundApi.getUser(username)
                 .flatMap { user -> userStore.put(username, user).toSingle { user } } // emits fetched/stored.
@@ -47,11 +47,9 @@ class UserRepository(private val freeSoundApi: FreeSoundApiService,
                 .switchIfEmpty(refreshUser(username)) // emits fetched/stored
     }
 
-    // getStream
-    fun userStream(username: String): Observable<User> {
-        return user(username) // emits fetched/stored
-                .toObservable()
-                .concatWith { userStore.getStream(username).skip(1) }
+    // awaitUserStream
+    fun awaitUserStream(username: String): Observable<User> {
+        return userStore.getStream(username)
     }
 
 }

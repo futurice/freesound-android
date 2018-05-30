@@ -34,9 +34,9 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
      * further updates.
      */
     fun homeUserStream(): Observable<Fetch<User>> {
-        return userStream().asFetch()
+        return userRepository.user(HOME_USERNAME)
+                .toObservable()
+                .asFetchStream(userRepository.awaitUserStream(HOME_USERNAME))
     }
-
-    private fun userStream() = userRepository.userStream(HOME_USERNAME)
 
 }

@@ -36,6 +36,11 @@ import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
+/**
+ * The Snackbar is particularly annoying because when the Layout changes, the Snackbar is automatically
+ * dismissed, which occurs AFTER the repeated error has been applied; so the information is lost.
+ * I've worked around this by not using INDEFINITE.
+ */
 class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent>() {
 
     @Inject
@@ -44,13 +49,12 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
     internal lateinit var errorSnackBar: Snackbar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_home, container, false)
                 ?.also { errorSnackBar = createSnackbar(it) }
     }
 
     private fun createSnackbar(view: View): Snackbar {
-        return Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_INDEFINITE)
+        return Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_LONG)
                 .apply {
                     setAction(android.R.string.ok, { dismiss() })
                     setActionTextColor(ContextCompat.getColor(view.context, R.color.colorContrastAccent))
