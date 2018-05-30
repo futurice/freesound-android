@@ -138,7 +138,7 @@ ext {
             autoFactory             : '1.0-beta5',
             autoValue               : '1.5.2',
             jsr250                  : '1.0',
-            jonty                   : '0.6',
+            jonty                   : '0.7',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
             butterknife             : '8.7.0',
