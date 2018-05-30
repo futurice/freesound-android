@@ -166,18 +166,3 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
             UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
 
 }
-
-// For consumable values, we just take the latest if backpressure.
-private fun <T> Observable<T>.asUiModelFlowable(): Flowable<T> {
-    return toFlowable(BackpressureStrategy.LATEST)
-}
-
-// For consumable values, we just take the latest if backpressure.
-private fun <T> Flowable<T>.asUiModelFlowable(): Flowable<T> {
-    return onBackpressureLatest()
-}
-
-// Events from the UI are modelled as a buffering Observable.
-private fun <T> Observable<T>.asUiEventFlowable(): Flowable<T> {
-    return toFlowable(BackpressureStrategy.BUFFER)
-}
