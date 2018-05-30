@@ -41,8 +41,9 @@ sealed class Action(val log: String) {
     object ContentRefreshAction : Action("Content refresh action")
 }
 
-internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUserInteractor,
-                                      private val schedulers: SchedulerProvider) :
+internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUserInteractor,
+                                     private val refreshInteractor: RefreshInteractor,
+                                     private val schedulers: SchedulerProvider) :
         BaseViewModel<UiEvent, HomeUiModel>() {
 
     private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
@@ -86,7 +87,7 @@ internal class HomeFragmentViewModel2(private val homeHomeUserInteractor: HomeUs
                 FlowableTransformer<Action.ContentRefreshAction, Result.RefreshResult> =
                 FlowableTransformer {
                     it.flatMap {
-                        homeHomeUserInteractor.refresh().asUiModelFlowable()
+                        refreshInteractor.refresh().asUiModelFlowable()
                     }.map { Result.RefreshResult(it) }
                 }
 

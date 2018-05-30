@@ -37,23 +37,31 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentViewModel2 provideHomeFragmentViewModel2(
+    static HomeFragmentViewModel provideHomeFragmentViewModel(
             android.support.v4.app.Fragment fragment,
-            Function0<HomeFragmentViewModel2> provider) {
+            Function0<HomeFragmentViewModel> provider) {
         // No explicit scoping: let the Factory determine the scoping.
-        return UglyViewModelProviderBridgeKt.createHomeFragmentViewModel2(fragment, provider);
+        return UglyViewModelProviderBridgeKt.createHomeFragmentViewModel(fragment, provider);
     }
 
     @Provides
-    static Function0<HomeFragmentViewModel2> providerHomeFragmentViewModel2Provider(
+    static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
             HomeUserInteractor homeUserInteractor,
+            RefreshInteractor refreshInteractor,
             SchedulerProvider schedulerProvider) {
-        return () -> new HomeFragmentViewModel2(homeUserInteractor, schedulerProvider);
+        return () -> new HomeFragmentViewModel(homeUserInteractor,
+                                               refreshInteractor,
+                                               schedulerProvider);
     }
 
     @Provides
     static HomeUserInteractor provideHomeUserInteractor(UserRepository userRepository) {
         return new HomeUserInteractor(userRepository);
+    }
+
+    @Provides
+    static RefreshInteractor provideRefreshInteractor(UserRepository userRepository) {
+        return new RefreshInteractor(userRepository);
     }
 
     @Provides
@@ -64,7 +72,7 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    UiBinder<HomeUiModel, UiEvent> provideUiBinder(HomeFragmentViewModel2 viewModel) {
+    UiBinder<HomeUiModel, UiEvent> provideUiBinder(HomeFragmentViewModel viewModel) {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 

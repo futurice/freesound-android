@@ -17,6 +17,9 @@ class HomeFragmentViewModelTest {
     @Mock
     private lateinit var homeUserIteractor: HomeUserInteractor
 
+    @Mock
+    private lateinit var refreshInteractor: RefreshInteractor
+
     private lateinit var schedulers: TrampolineSchedulerProvider
 
     private val testUser: User get() = TestData.user()
@@ -100,8 +103,8 @@ class HomeFragmentViewModelTest {
         }
     }
 
-    private fun createVm(): HomeFragmentViewModel2 =
-            HomeFragmentViewModel2(homeUserIteractor, schedulers)
+    private fun createVm(): HomeFragmentViewModel =
+            HomeFragmentViewModel(homeUserIteractor, refreshInteractor, schedulers)
 
     fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
 
@@ -112,7 +115,7 @@ class HomeFragmentViewModelTest {
         }
 
         fun refresh(init: () -> List<Operation>) {
-            `when`(homeUserIteractor.refresh()).thenReturn(init().asStream())
+            `when`(refreshInteractor.refresh()).thenReturn(init().asStream())
         }
     }
 }
