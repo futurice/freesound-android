@@ -125,13 +125,6 @@ public class SearchActivityViewModelTest {
     }
 
     @Test
-    public void search_emitsAnalyticsEvent() {
-        viewModel.search(DUMMY_QUERY);
-
-        verify(analytics).log("SearchPressedEvent");
-    }
-
-    @Test
     public void search_queriesSearchDataModelWithTerm() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
                             .act()
