@@ -22,10 +22,8 @@ import com.futurice.freesound.feature.common.Operation
 import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
+import io.reactivex.Single
 
-/**
- * Ideally this component could be reused elsewhere.
- */
 class HomeUserInteractor(private val userRepository: UserRepository) {
 
     companion object {
@@ -33,30 +31,38 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
         val HOME_USERNAME = "SpiceProgram"
     }
 
+    /**
+     * Refreshes the contents of the home user stream
+     */
     fun refresh(): Observable<Operation> {
         // Ignore the returned value, let homeUserStream emit the change.
-        return refreshUser()
-                .toCompletable()
-                .toObservable<Operation>()
-                .startWith(Operation.InProgress)
-                .concatWith { Observable.just(Operation.Complete) }
-                .onErrorResumeNext { t: Throwable -> Observable.just(Operation.Failure(t)) }
+        return refreshUser().asOperation()
     }
 
-    /*
+    /**
      * Emits the any current cached home user, triggers a fetch from the API and then streams
      * further updates.
      */
     fun homeUserStream(): Observable<Fetch<User>> {
-        return userStream()
-                .map { Fetch.Success(it) as Fetch<User> }
-                .startWith(Fetch.InProgress())
-                .onErrorResumeNext { t: Throwable -> Observable.just(Fetch.Failure(t)) }
+        return userStream().asFetch()
     }
-
 
     private fun refreshUser() = userRepository.refreshUser(HOME_USERNAME)
 
     private fun userStream() = userRepository.userStream(HOME_USERNAME)
 
+}
+
+fun <T> Single<T>.asOperation(): Observable<Operation> {
+    return toCompletable()
+            .toObservable<Operation>()
+            .startWith(Operation.InProgress)
+            .concatWith { Observable.just(Operation.Complete) }
+            .onErrorResumeNext { t: Throwable -> Observable.just(Operation.Failure(t)) }
+}
+
+fun <T> Observable<T>.asFetch(): Observable<Fetch<T>> {
+    return map { Fetch.Success(it) as Fetch<T> }
+            .startWith(Fetch.InProgress())
+            .onErrorResumeNext { t: Throwable -> Observable.just(Fetch.Failure(t)) }
 }
