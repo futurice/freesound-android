@@ -49,7 +49,12 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
     private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
 
     // TODO Use InitialEvent to hold saveInstanceState data.
-    private val INITIAL_UI_STATE: HomeUiModel get() = HomeUiModel(null, false, null)
+    private val INITIAL_UI_STATE: HomeUiModel
+        get() = HomeUiModel(
+                user = null,
+                isLoading = false,
+                isRefreshing = false,
+                errorMsg = null)
 
     override fun uiModels(): Flowable<HomeUiModel> {
         return uiEvents
@@ -140,14 +145,14 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
 
     private fun HomeUiModel.reduce(refresh: Operation): HomeUiModel =
             when (refresh) {
-                Operation.InProgress -> copy(isLoading = this.user == null, user = null, errorMsg = null)
-                Operation.Complete -> copy(isLoading = false, errorMsg = null)
-                is Operation.Failure -> copy(isLoading = false, errorMsg = toFetchFailureMsg(refresh.error))
+                Operation.InProgress -> copy(isRefreshing = true, errorMsg = null)
+                Operation.Complete -> copy(isRefreshing = false, errorMsg = null)
+                is Operation.Failure -> copy(isRefreshing = false, errorMsg = toFetchFailureMsg(refresh.error))
             }.also { Timber.d("Operation: $refresh was reduced to: $it") }
 
     private fun HomeUiModel.reduce(fetch: Fetch<User>): HomeUiModel =
             when (fetch) {
-                is Fetch.InProgress -> copy(isLoading = user == null)
+                is Fetch.InProgress -> copy(isLoading = user == null, errorMsg = null)
                 is Fetch.Success<User> -> copy(user = toUserUiModel(fetch.value), isLoading = false)
                 is Fetch.Failure -> copy(errorMsg = toFetchFailureMsg(fetch.error), isLoading = false)
             }.also { Timber.d("Fetch: $fetch was reduced to: $it") }

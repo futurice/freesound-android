@@ -29,6 +29,7 @@ import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.mvi.BaseMviFragment
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.squareup.picasso.Picasso
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -43,6 +44,7 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
     internal lateinit var errorSnackBar: Snackbar
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(R.layout.fragment_home, container, false)
                 ?.also { errorSnackBar = createSnackbar(it) }
     }
@@ -76,6 +78,7 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
         }
 
         showLoading(model.isLoading)
+        showRefreshing(model.isRefreshing)
 
         when (model.errorMsg) {
             null -> errorSnackBar.dismiss()
@@ -88,7 +91,9 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
             .map { UiEvent.ErrorIndicatorDismissed }
             .toFlowable(BackpressureStrategy.BUFFER)
 
-    private fun refreshRequested() = Flowable.never<UiEvent>()
+    private fun refreshRequested() = feed_swipeToRefresh.refreshes()
+            .map { UiEvent.RefreshRequested }
+            .toFlowable(BackpressureStrategy.BUFFER)
 
     override fun cancel() = picasso.cancelRequest(avatar_image)
 
@@ -108,6 +113,10 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
 
     private fun showLoading(isLoading: Boolean) {
         loading_progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showRefreshing(isRefreshing: Boolean) {
+        feed_swipeToRefresh.isRefreshing = isRefreshing
     }
 
     companion object {

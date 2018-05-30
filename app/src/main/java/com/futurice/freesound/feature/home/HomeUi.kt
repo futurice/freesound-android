@@ -16,15 +16,6 @@
 
 package com.futurice.freesound.feature.home
 
-//interface Activity {
-//
-//    sealed class UiEvent(val log: String) {
-//        object NoOp : UiEvent("No-op")
-//        object OpenSearchEvent : UiEvent("Open Search")
-//    }
-//
-//}
-
 
 // Event from the UI to VM
 
@@ -37,13 +28,9 @@ sealed class UiEvent(val log: String) {
 
 // Events from VM to UI
 
-//sealed class UiModel {
-//    class Data<T>(value: T) : UiModel()
-//    class Error(val throwable: Throwable, val msg: String) : UiModel()
-//}
-
 data class HomeUiModel(val user: UserUiModel?,
                        val isLoading: Boolean,
+                       val isRefreshing: Boolean,
                        val errorMsg: String?)
 
 data class UserUiModel(val username: String,

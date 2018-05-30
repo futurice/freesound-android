@@ -183,6 +183,7 @@ dependencies {
     // RxBinding
     implementation "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
     implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$dependencyVersions.rxBinding"
 
     implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
 

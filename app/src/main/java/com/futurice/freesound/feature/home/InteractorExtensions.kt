@@ -25,7 +25,7 @@ fun <T> Single<T>.asOperation(): Observable<Operation> {
     return toCompletable()
             .toObservable<Operation>()
             .startWith(Operation.InProgress)
-            .concatWith { Observable.just(Operation.Complete) }
+            .concatWith(Observable.just(Operation.Complete))
             .onErrorResumeNext { t: Throwable -> Observable.just(Operation.Failure(t)) }
 }
 

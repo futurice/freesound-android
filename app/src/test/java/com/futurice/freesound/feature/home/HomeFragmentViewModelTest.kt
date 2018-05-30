@@ -38,9 +38,10 @@ class HomeFragmentViewModelTest {
         }
 
         val homeUiModel = HomeUiModel(
+                user = null,
                 isLoading = false,
-                errorMsg = null,
-                user = null)
+                isRefreshing = false,
+                errorMsg = null)
 
         with(createVm()) {
             uiModels().test().assertValue(homeUiModel)
@@ -59,9 +60,10 @@ class HomeFragmentViewModelTest {
                 about = testUser.about,
                 avatarUrl = testUser.avatar.large)
         val homeUiModel = HomeUiModel(
+                user = userUiModel,
                 isLoading = false,
-                errorMsg = null,
-                user = userUiModel)
+                isRefreshing = false,
+                errorMsg = null)
 
         with(createVm()) {
             uiModels().skip(1).test().assertValue(homeUiModel)
@@ -76,9 +78,10 @@ class HomeFragmentViewModelTest {
         }
 
         val homeUiModel = HomeUiModel(
+                user = null,
                 isLoading = true,
-                errorMsg = null,
-                user = null)
+                isRefreshing = false,
+                errorMsg = null)
 
         with(createVm()) {
             uiModels().skip(1).test().assertValue(homeUiModel)
@@ -94,9 +97,10 @@ class HomeFragmentViewModelTest {
         }
 
         val homeUiModel = HomeUiModel(
+                user = null,
                 isLoading = false,
-                errorMsg = t.localizedMessage,
-                user = null)
+                isRefreshing = false,
+                errorMsg = t.localizedMessage)
 
         with(createVm()) {
             uiModels().skip(1).test().assertValue(homeUiModel)
