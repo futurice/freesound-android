@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common
+package com.futurice.freesound.feature.common.streams
+
+sealed class Fetch<T> {
+    class InProgress<T> : Fetch<T>()
+    data class Success<T>(val value: T) : Fetch<T>()
+    class Failure<T>(val error: Throwable) : Fetch<T>()
+}
 
 sealed class Operation {
     object InProgress : Operation()

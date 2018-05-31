@@ -20,7 +20,6 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
-import com.futurice.freesound.mvi.Renderer;
 import com.futurice.freesound.mvi.UiBinder;
 
 import dagger.Module;
@@ -62,12 +61,6 @@ public class HomeFragmentModule {
     @Provides
     static RefreshInteractor provideRefreshInteractor(UserRepository userRepository) {
         return new RefreshInteractor(userRepository);
-    }
-
-    @Provides
-    @FragmentScope
-    Renderer<HomeUiModel> provideRenderer() {
-        return homeFragment;
     }
 
     @Provides

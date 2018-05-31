@@ -1,7 +1,7 @@
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.feature.common.Fetch
-import com.futurice.freesound.feature.common.Operation
+import com.futurice.freesound.feature.common.streams.Fetch
+import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.test.data.TestData
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider

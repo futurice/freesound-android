@@ -16,4 +16,4 @@
 
 package com.futurice.freesound.mvi
 
-abstract class BaseViewModel<in UE, M> : ViewModel<UE, M>()
+abstract class BaseViewModel<in E, M> : ViewModel<E, M>()

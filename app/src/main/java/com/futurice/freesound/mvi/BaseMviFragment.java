@@ -18,9 +18,6 @@ package com.futurice.freesound.mvi;
 
 import com.futurice.freesound.core.BaseFragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-
 import javax.inject.Inject;
 
 /**
@@ -33,9 +30,4 @@ public abstract class BaseMviFragment<C, M, E> extends BaseFragment<C> implement
     @Inject
     UiBinder<M, E> uiBinder;
 
-    @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        uiBinder.bind();
-    }
 }

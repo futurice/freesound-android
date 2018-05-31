@@ -17,7 +17,8 @@
 package com.futurice.freesound.feature.home
 
 import android.support.annotation.VisibleForTesting
-import com.futurice.freesound.feature.common.Fetch
+import com.futurice.freesound.feature.common.streams.Fetch
+import com.futurice.freesound.feature.common.streams.asFetchStream
 import com.futurice.freesound.feature.user.UserRepository
 import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable

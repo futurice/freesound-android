@@ -21,7 +21,6 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 
 /**
  * A reactive cache.
@@ -58,10 +57,8 @@ internal class Cache<K, V>(initialSize: Int = 100) : Store<K, V> {
     }
 
     private fun storeAndFlush(key: K, value: V) {
-        // Put a value into the cache
-        // Flush the cache values through the stream
+        // Put a value into the cache and flush the cache values through the stream.
         synchronized(cache) {
-            Timber.d("Storing: key: $key, value: $value")
             cache.put(key, value)
             cacheStream.onNext(cache.snapshot().entries)
         }

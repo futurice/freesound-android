@@ -16,39 +16,43 @@
 
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.feature.common.Fetch
-import com.futurice.freesound.feature.common.Operation
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
+import com.futurice.freesound.feature.common.streams.Fetch
+import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.mvi.BaseViewModel
+import com.futurice.freesound.mvi.asUiEventFlowable
+import com.futurice.freesound.mvi.asUiModelFlowable
 import com.futurice.freesound.network.api.model.User
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
-import io.reactivex.Observable
+import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-sealed class Result(val log: String) {
-    object NoChange : Result("No-op change")
-    object ErrorClearedResult : Result("Error dismissed change")
-    data class RefreshResult(val refresh: Operation) : Result("User Fetch state change: $refresh")
-    data class UserResult(val userFetch: Fetch<User>) : Result("User state change: $userFetch")
-}
-
-sealed class Action(val log: String) {
-    object InitialAction : Action("Initial action")
-    object ErrorClearAction : Action("Error cleared action")
-    object ContentRefreshAction : Action("Content refresh action")
-}
-
 internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUserInteractor,
                                      private val refreshInteractor: RefreshInteractor,
-                                     private val schedulers: SchedulerProvider) :
-        BaseViewModel<UiEvent, HomeUiModel>() {
+                                     schedulers: SchedulerProvider) : BaseViewModel<UiEvent, HomeUiModel>() {
+
+    private val disposable = SerialDisposable()
 
     private val uiEvents: PublishSubject<UiEvent> = PublishSubject.create()
 
-    // TODO Use InitialEvent to hold saveInstanceState data.
+    private val uiModel = MutableLiveData<HomeUiModel>()
+
+    private val uiModelsStream: Flowable<HomeUiModel> = uiEvents
+            .observeOn(schedulers.computation()) // because subscribeOn doesn't work for Subjects
+            .startWith(UiEvent.InitialEvent)
+            .asUiEventFlowable()
+            .map(::toAction)
+            .compose(transformToResult())
+            .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
+            .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
+            .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
+            .asUiModelFlowable()
+            .subscribeOn(schedulers.computation())
+
     private val INITIAL_UI_STATE: HomeUiModel
         get() = HomeUiModel(
                 user = null,
@@ -56,19 +60,24 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
                 isRefreshing = false,
                 errorMsg = null)
 
-    override fun uiModels(): Flowable<HomeUiModel> {
-        return uiEvents
-                .observeOn(schedulers.computation()) // because subscribeOn doesn't work for Subjects
-                .startWith(UiEvent.InitialEvent)
-                .asUiEventFlowable()
-                .map(::toAction)
-                .compose(transformToResult())
-                .scan(INITIAL_UI_STATE, { model, result -> model.reduce(result) })
-                .doOnNext { homeUiModel: HomeUiModel -> Timber.v(" $homeUiModel") }
-                .doOnError { e: Throwable -> Timber.e(e, "An unexpected fatal error occurred in $javaClass") }
-                .asUiModelFlowable()
-                .subscribeOn(schedulers.computation())
-        //.onErrorResume { e: Throwable -> Flowable.just(HomeUiModel.Error(e)) }
+    init {
+        disposable.set(uiModelsStream
+                .observeOn(schedulers.ui())
+                .subscribe(
+                        { uiModel.value = it },
+                        { Timber.e(it, "Disaster has occurred.") }))
+    }
+
+    override fun uiEvents(uiEvent: UiEvent) {
+        uiEvents.onNext(uiEvent)
+    }
+
+    override fun uiModels(): LiveData<HomeUiModel> {
+        return uiModel
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
     }
 
     private fun toAction(uiEvent: UiEvent) =
@@ -127,15 +136,6 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
 
     }
 
-//     @Suppress("UNCHECKED_CAST")
-//    private fun <A, A2 : A, R> Observable<A>.composeAs(transformer: FlowableTransformer<A2, R>): Observable<R> {
-//        return this.map { it as A2 }.compose(transformer)
-//    }
-
-    override fun uiEvents(uiEvent: UiEvent) {
-        uiEvents.onNext(uiEvent)
-    }
-
     private fun HomeUiModel.reduce(result: Result): HomeUiModel =
             when (result) {
                 is Result.NoChange -> this
@@ -165,4 +165,17 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
     private fun toUserUiModel(user: User) =
             UserUiModel(user.username, about = user.about, avatarUrl = user.avatar.large)
 
+}
+
+sealed class Result(val log: String) {
+    object NoChange : Result("No-op change")
+    object ErrorClearedResult : Result("Error dismissed change")
+    data class RefreshResult(val refresh: Operation) : Result("User Fetch state change: $refresh")
+    data class UserResult(val userFetch: Fetch<User>) : Result("User state change: $userFetch")
+}
+
+sealed class Action(val log: String) {
+    object InitialAction : Action("Initial action")
+    object ErrorClearAction : Action("Error cleared action")
+    object ContentRefreshAction : Action("Content refresh action")
 }

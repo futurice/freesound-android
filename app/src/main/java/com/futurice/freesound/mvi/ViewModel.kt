@@ -16,13 +16,13 @@
 
 package com.futurice.freesound.mvi
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import io.reactivex.Flowable
 
 abstract class ViewModel<in E, M> : ViewModel() {
 
     abstract fun uiEvents(uiEvent: E)
 
-    abstract fun uiModels(): Flowable<M>
+    abstract fun uiModels(): LiveData<M>
 
 }

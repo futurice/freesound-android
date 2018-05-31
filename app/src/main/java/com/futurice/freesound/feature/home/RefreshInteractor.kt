@@ -17,7 +17,8 @@
 package com.futurice.freesound.feature.home
 
 import android.support.annotation.VisibleForTesting
-import com.futurice.freesound.feature.common.Operation
+import com.futurice.freesound.feature.common.streams.Operation
+import com.futurice.freesound.feature.common.streams.asOperation
 import com.futurice.freesound.feature.user.UserRepository
 import io.reactivex.Observable
 
@@ -29,7 +30,7 @@ class RefreshInteractor(private val userRepository: UserRepository) {
     }
 
     /**
-     * Refreshes the contents of the home user stream
+     * Refreshes the contents of the home user
      */
     fun refresh(): Observable<Operation> {
         // Ignore the returned value, let homeUserStream emit the change.
