@@ -71,10 +71,12 @@ public class SearchFragmentModule {
     @Provides
     ViewHolderFactory provideSoundViewHolderFactory(@ForActivity Context context,
                                                     Picasso picasso,
-                                                    SchedulerProvider schedulerProvider) {
+                                                    SchedulerProvider schedulerProvider,
+                                                    TabController tabController) {
         return new SoundItemViewHolder.SoundItemViewHolderFactory(context,
                                                                   picasso,
-                                                                  schedulerProvider);
+                                                                  schedulerProvider,
+                                                                  tabController);
     }
 
     @IntoMap

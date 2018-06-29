@@ -37,6 +37,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,9 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
 
     @BindView(R.id.imageView_avatar)
     ImageView avatarImageView;
+
+    @BindView(R.id.mapButton)
+    ImageButton mapButton;
 
     @BindView(R.id.textView_username)
     TextView usernameTextView;
@@ -86,7 +90,7 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
 
             // Synchronously clear the waveform, it might be recycled.
             playbackWaveformView.clearWaveform();
-
+            mapButton.setVisibility(vm.hasGeoTag() ? View.VISIBLE : View.GONE);
             disposables.add(vm.userAvatar()
                               .subscribeOn(schedulerProvider.computation())
                               .observeOn(schedulerProvider.ui())
@@ -131,6 +135,7 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
                                          e -> Timber.e(e, "Unable to set SoundItem progress")));
 
             playbackWaveformView.setOnClickListener(__ -> vm.toggleSoundPlayback());
+            mapButton.setOnClickListener(__ -> vm.requestTab());
         }
 
         @Override
@@ -168,12 +173,17 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
         @NonNull
         private final SchedulerProvider schedulerProvider;
 
+        @NonNull
+        private final TabController tabController;
+
         SoundItemViewHolderFactory(@NonNull final Context context,
                                    @NonNull final Picasso picasso,
-                                   @NonNull final SchedulerProvider schedulerProvider) {
+                                   @NonNull final SchedulerProvider schedulerProvider,
+                                   @NonNull final TabController tabController) {
             super(context);
             this.picasso = picasso;
             this.schedulerProvider = schedulerProvider;
+            this.tabController = tabController;
         }
 
         @NonNull

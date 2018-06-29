@@ -19,10 +19,12 @@ package com.futurice.freesound.feature.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.SearchView.OnQueryTextListener
 import android.view.View
-import android.widget.Button
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
@@ -53,6 +55,11 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     @Inject
     internal lateinit var schedulerProvider: SchedulerProvider
 
+    @Inject
+    internal lateinit var tabController: TabController
+
+    private lateinit var searchPagerAdapter: SearchPagerAdapter
+
     private val dataBinder = object : SimpleDataBinder() {
 
         private fun SearchView.getTextChangeStream(uiScheduler: Scheduler): Observable<String> =
@@ -74,6 +81,12 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
                     .observeOn(schedulerProvider.ui())
                     .subscribe({ handleErrorState(it) })
                     { e(it, "Error receiving Errors") }
+
+            d += tabController.tabRequestStream
+                    .observeOn(schedulerProvider.ui())
+                    .subscribe({ switchTab(it) })
+                    { e(it, "Error receiving Errors") }
+
         }
 
         private fun SearchView.subscribeToSearchView(emitter: ObservableEmitter<String>) {
@@ -88,11 +101,14 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
         }
     }
 
+    private fun switchTab(soundInfo: SoundInfo) {
+        container.currentItem = if (soundInfo.tabType == TabType.RESULTS) 0 else 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         savedInstanceState.ifNull { addSearchFragment() }
-
         toolbar_search.apply { setSupportActionBar(this) }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -123,9 +139,8 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     private fun addSearchFragment() {
-        supportFragmentManager.beginTransaction()
-                .add(R.id.container, SearchFragment.create())
-                .commit()
+        searchPagerAdapter = SearchPagerAdapter(supportFragmentManager)
+        container.adapter = searchPagerAdapter
     }
 
     private fun handleErrorState(searchState: SearchState) {
@@ -135,7 +150,7 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
-        val closeButton : View = search_view.findViewById(R.id.search_close_btn)
+        val closeButton: View = search_view.findViewById(R.id.search_close_btn)
         closeButton.visibility = if (isClearButtonVisible) View.VISIBLE else View.GONE
     }
 
@@ -149,9 +164,24 @@ class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
 
     companion object {
 
-        @JvmStatic fun open(context: Context) {
+        @JvmStatic
+        fun open(context: Context) {
             Intent(context, SearchActivity::class.java)
                     .apply { context.startActivity(this) }
         }
+    }
+
+    private inner class SearchPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm) {
+        override fun getItem(position: Int): Fragment = if (position == 0) SearchFragment.create() else MapFragment.create()
+
+        override fun getCount(): Int = 2
+
+        override fun getPageTitle(position: Int): CharSequence =
+                when (position) {
+                    0 -> getString(R.string.search_tab_results)
+                    1 -> getString(R.string.search_tab_map)
+                    else -> ""
+                }
+
     }
 }

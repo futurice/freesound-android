@@ -38,9 +38,9 @@ public class SearchActivityModule {
                                                           Analytics analytics,
                                                           SchedulerProvider schedulerProvider) {
         return new SearchActivityViewModel(searchDataModel,
-                                           audioPlayer,
-                                           analytics,
-                                           schedulerProvider);
+                audioPlayer,
+                analytics,
+                schedulerProvider);
     }
 
     @Provides
@@ -60,4 +60,9 @@ public class SearchActivityModule {
         throw new InstantiationForbiddenError();
     }
 
+    @Provides
+    @ActivityScope
+    static TabController provideTabController() {
+        return new TabController();
+    }
 }
