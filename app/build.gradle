@@ -171,6 +171,7 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
     implementation "android.arch.lifecycle:reactivestreams:$dependencyVersions.androidArchLifecycle"
     kapt "android.arch.lifecycle:compiler:$dependencyVersions.androidArchLifecycle"
+    testImplementation "android.arch.core:core-testing:$dependencyVersions.androidArchLifecycle"
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"

@@ -1,18 +1,26 @@
 package com.futurice.freesound.feature.home
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
+import com.futurice.freesound.test.assertion.test
 import com.futurice.freesound.test.data.TestData
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider
 import io.reactivex.Observable
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
 class HomeFragmentViewModelTest {
+
+    @Rule
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var homeUserIteractor: HomeUserInteractor
@@ -31,7 +39,7 @@ class HomeFragmentViewModelTest {
     }
 
     @Test
-    fun `uiModel onInitial`() {
+    fun `homeFragment uiModel is idle initially`() {
         arrange {
             homeUserStream { emptyList() }
             refresh { emptyList() }
@@ -43,13 +51,13 @@ class HomeFragmentViewModelTest {
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVm()) {
+        with(createVmToTest()) {
             uiModels().test().assertValue(homeUiModel)
         }
     }
 
     @Test
-    fun `uiModel onInitialSuccess`() {
+    fun `homeFragment uiModel has user when user cached`() {
         arrange {
             homeUserStream { listOf(Fetch.Success(testUser)) }
             refresh { emptyList() }
@@ -59,32 +67,37 @@ class HomeFragmentViewModelTest {
                 username = testUser.username,
                 about = testUser.about,
                 avatarUrl = testUser.avatar.large)
-        val homeUiModel = HomeUiModel(
+
+        val expected = HomeUiModel(
                 user = userUiModel,
                 isLoading = false,
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVm()) {
-            uiModels().skip(1).test().assertValue(homeUiModel)
+        with(createVmToTest()) {
+            uiModels().test()
+                    .skip()
+                    .assertOnlyValue(expected)
         }
     }
 
     @Test
-    fun `uiModel onInitiaInProgress`() {
+    fun `homeFragment uiModel in progress when initially fetching`() {
         arrange {
             homeUserStream { listOf(Fetch.InProgress()) }
             refresh { emptyList() }
         }
 
-        val homeUiModel = HomeUiModel(
+        val expected = HomeUiModel(
                 user = null,
                 isLoading = true,
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVm()) {
-            uiModels().skip(1).test().assertValue(homeUiModel)
+        with(createVmToTest()) {
+            uiModels().test()
+                    .skip()
+                    .assertOnlyValue(expected)
         }
     }
 
@@ -96,18 +109,21 @@ class HomeFragmentViewModelTest {
             refresh { emptyList() }
         }
 
-        val homeUiModel = HomeUiModel(
+        val expected = HomeUiModel(
                 user = null,
                 isLoading = false,
                 isRefreshing = false,
                 errorMsg = t.localizedMessage)
 
-        with(createVm()) {
-            uiModels().skip(1).test().assertValue(homeUiModel)
+        with(createVmToTest()) {
+            uiModels()
+                    .test()
+                    .skip()
+                    .assertOnlyValue(expected)
         }
     }
 
-    private fun createVm(): HomeFragmentViewModel =
+    private fun createVmToTest(): HomeFragmentViewModel =
             HomeFragmentViewModel(homeUserIteractor, refreshInteractor, schedulers)
 
     fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
@@ -122,9 +138,10 @@ class HomeFragmentViewModelTest {
             `when`(refreshInteractor.refresh()).thenReturn(init().asStream())
         }
     }
-}
 
+}
 
 fun <T> List<T>.asStream(): Observable<T> {
     return Observable.fromIterable(this).concatWith(Observable.never<T>())
 }
+

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.test.assertion;
+package com.futurice.freesound.test.assertion
 
-import org.assertj.core.api.Condition;
+import android.arch.lifecycle.LiveData
 
-import java.util.List;
-
-public class IsEmptyListCondition<T> extends Condition<List<T>> {
-
-    public static <T> IsEmptyListCondition<T> empty() {
-        return new IsEmptyListCondition<>();
-    }
-
-    @Override
-    public boolean matches(final List<T> value) {
-        return value.isEmpty();
-    }
-
+fun <T> LiveData<T>.test(): TestObserver<T> {
+    return TestObserver<T>()
+            .apply {
+                observeForever(this)
+            }
 }
