@@ -25,7 +25,6 @@ sealed class UiEvent(val log: String) {
     object RefreshRequested : UiEvent("RefreshRequested")
 }
 
-
 // Events from VM to UI
 
 data class HomeUiModel(val user: UserUiModel?,

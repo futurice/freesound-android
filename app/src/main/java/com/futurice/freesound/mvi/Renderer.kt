@@ -17,7 +17,9 @@
 package com.futurice.freesound.mvi
 
 /**
- * Implementation have Activity lifecycle and Android dependencies
+ * Implementation have Activity lifecycle and Android dependencies.
+ *
+ * Currently unused.
  */
 interface Renderer<in M> {
 

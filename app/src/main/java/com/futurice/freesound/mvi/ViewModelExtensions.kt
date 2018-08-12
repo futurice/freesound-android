@@ -30,6 +30,7 @@ fun <T> Flowable<T>.asUiModelFlowable(): Flowable<T> {
     return onBackpressureLatest()
 }
 
+
 // Events from the UI are modelled as a buffering Observable.
 fun <T> Observable<T>.asUiEventFlowable(): Flowable<T> {
     return toFlowable(BackpressureStrategy.BUFFER)
