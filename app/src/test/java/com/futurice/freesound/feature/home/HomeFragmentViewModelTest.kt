@@ -8,6 +8,7 @@ import com.futurice.freesound.test.assertion.livedata.test
 import com.futurice.freesound.test.data.TestData
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider
 import io.reactivex.Observable
+import junit.framework.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -76,7 +77,6 @@ class HomeFragmentViewModelTest {
 
         with(createVmToTest()) {
             uiModels().test()
-                    .skip()
                     .assertOnlyValue(expected)
         }
     }
@@ -96,7 +96,6 @@ class HomeFragmentViewModelTest {
 
         with(createVmToTest()) {
             uiModels().test()
-                    .skip()
                     .assertOnlyValue(expected)
         }
     }
@@ -118,7 +117,6 @@ class HomeFragmentViewModelTest {
         with(createVmToTest()) {
             uiModels()
                     .test()
-                    .skip()
                     .assertOnlyValue(expected)
         }
     }

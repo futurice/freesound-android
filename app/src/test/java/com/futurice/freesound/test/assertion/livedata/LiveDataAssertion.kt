@@ -22,6 +22,8 @@ import junit.framework.TestCase.assertEquals
 
 class TestObserver<T> : Observer<T>, LiveDataAssertion<T> {
 
+    private val mutableValues: MutableList<T?>
+
     constructor() {
         mutableValues = ArrayList()
     }
@@ -30,8 +32,6 @@ class TestObserver<T> : Observer<T>, LiveDataAssertion<T> {
         TestObserver<T>()
         this.mutableValues = values
     }
-
-    private val mutableValues: MutableList<T?>
 
     val values
         get() = mutableValues.toList()
@@ -48,7 +48,7 @@ class TestObserver<T> : Observer<T>, LiveDataAssertion<T> {
         if (count < 0) {
             throw IllegalArgumentException("Skip count parameter must be non-negative")
         }
-        assertValueCountAtLeast("Cannot skip: $count values, when only: ${mutableValues.size} values", count + 1)
+        assertValueCountAtLeast("Cannot skip: $count value(s), when only: ${mutableValues.size} values", count + 1)
 
         return TestObserver(mutableValues.subList(count, mutableValues.lastIndex))
     }
