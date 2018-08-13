@@ -31,7 +31,7 @@ import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
-internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUserInteractor,
+internal class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
                                      private val refreshInteractor: RefreshInteractor,
                                      schedulers: SchedulerProvider) : BaseViewModel<UiEvent, HomeUiModel>() {
 
@@ -93,7 +93,7 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
                 FlowableTransformer<Action.InitialAction, Result.UserResult> =
                 FlowableTransformer {
                     it.flatMap {
-                        homeHomeUserInteractor.homeUserStream().asUiModelFlowable()
+                        homeUserInteractor.homeUserStream().asUiModelFlowable()
                     }.map { Result.UserResult(it) }
                 }
 
@@ -117,22 +117,6 @@ internal class HomeFragmentViewModel(private val homeHomeUserInteractor: HomeUse
                         shared.ofType(Action.ErrorClearAction::class.java).compose(dismissErrorIndicator))
             }
         }
-
-//        return FlowableTransformer { actions ->
-//            // TODO This definitely needs testing to verify that we have a merged signal and that
-//            // changes in the input action don't cancel previous events.
-//            actions.flatMap {
-//                when (it) {
-//                //      is Action.ContentRefreshAction -> actions.map { it as Action.ContentRefreshAction }.compose(refresh)
-//                //    is Action.ErrorClearAction -> actions.map { it as Action.ErrorClearAction }.compose(dismissErrorIndicator)
-//                //   is Action.ContentRefreshAction -> actions.composeAs(refresh)
-//                //   is Action.ErrorClearAction -> actions.composeAs(dismissErrorIndicator)
-//                    is Action.InitialAction -> Flowable.just(it).compose(initial)
-//                    is Action.ContentRefreshAction -> Flowable.just(it).compose(refresh)
-//                    is Action.ErrorClearAction -> Flowable.just(it).compose(dismissErrorIndicator)
-//                }
-//            }
-//        }
 
     }
 
