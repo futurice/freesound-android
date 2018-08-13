@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.test.assertion.livedata
 
-import android.support.annotation.VisibleForTesting
-import com.futurice.freesound.network.api.FreeSoundApiService
-import com.futurice.freesound.network.api.model.User
-import io.reactivex.Single
+import android.arch.lifecycle.LiveData
 
-internal class DefaultUserDataModel(private val freeSoundApi: FreeSoundApiService) : UserDataModel {
-    override val homeUser: Single<User>
-        get() = freeSoundApi.getUser(USER_NAME)
-
-    companion object {
-        @VisibleForTesting
-        val USER_NAME = "SpiceProgram"
-    }
+fun <T> LiveData<T>.test(): TestObserver<T> {
+    return TestObserver<T>()
+            .apply {
+                observeForever(this)
+            }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.common.streams
 
-import com.futurice.freesound.network.api.model.User
+sealed class Fetch<T> {
+    class InProgress<T> : Fetch<T>()
+    data class Success<T>(val value: T) : Fetch<T>()
+    class Failure<T>(val error: Throwable) : Fetch<T>()
+}
 
-import io.reactivex.Single
-
-interface UserDataModel {
-    val homeUser: Single<User>
+sealed class Operation {
+    object InProgress : Operation()
+    object Complete : Operation()
+    class Failure(val error: Throwable) : Operation()
 }

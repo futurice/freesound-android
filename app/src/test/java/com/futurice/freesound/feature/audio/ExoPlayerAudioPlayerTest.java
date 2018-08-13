@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
-import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isNone;
-import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isSome;
+import static com.futurice.freesound.test.assertion.rx.RxJava2OptionAssertions.isNone;
+import static com.futurice.freesound.test.assertion.rx.RxJava2OptionAssertions.isSome;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.inOrder;

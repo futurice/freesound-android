@@ -16,22 +16,22 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'checkstyle'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'checkstyle'
 
 apply from: 'app-config.gradle'
 
 def STRING = "String"
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.0'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.debug
@@ -120,40 +120,42 @@ task checkstyle(type: Checkstyle) {
 ext {
     dependencyVersions = [
             kotlin                  : kotlin_version,
-            androidSupport          : '26.1.0',
-            androidSupportConstraint: '1.0.2',
+            androidSupport          : '27.1.1',
+            androidSupportConstraint: '1.1.0',
+            androidArchLifecycle    : '1.1.1',
             androidSupportTest      : '1.0.0',
             dagger2                 : '2.4',
             rxJava2                 : '2.1.0',
-            rxAndroid               : '2.0.1',
+            rxAndroid               : '2.0.2',
+            rxBinding               : '2.0.0',
             okHttp                  : '3.6.0',
             picasso                 : '2.5.2',
             retrofit2               : '2.2.0',
             retrofit2RxJava2Adapter : '1.0.0',
             retrofit2GsonConverter  : '2.0.0',
-            moshi                   : '1.5.0',
-            moshiConverter          : '2.3.0',
+            moshi                   : '1.6.0',
+            moshiConverter          : '2.4.0',
             autoFactory             : '1.0-beta5',
             autoValue               : '1.5.2',
             jsr250                  : '1.0',
-            jonty                   : '0.6',
+            jonty                   : '0.7',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
             butterknife             : '8.7.0',
             firebase                : '9.4.0',
             stetho                  : '1.4.2',
             chuck                   : '1.0.4',
-            timber                  : '4.5.1',
+            timber                  : '4.7.0',
             junit                   : '4.12',
-            mockito                 : '2.2.2',
+            mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
             leakCanary              : '1.5.1',
-            rxLint                  : '1.6']
+            rxLint                  : '1.6.1']
 }
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$dependencyVersions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$dependencyVersions.kotlin"
 
     // Android Support
     implementation "com.android.support:support-v4:$dependencyVersions.androidSupport"
@@ -165,6 +167,12 @@ dependencies {
     implementation "com.android.support:design:$dependencyVersions.androidSupport"
     implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
 
+    implementation "android.arch.lifecycle:runtime:$dependencyVersions.androidArchLifecycle"
+    implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
+    implementation "android.arch.lifecycle:reactivestreams:$dependencyVersions.androidArchLifecycle"
+    kapt "android.arch.lifecycle:compiler:$dependencyVersions.androidArchLifecycle"
+    testImplementation "android.arch.core:core-testing:$dependencyVersions.androidArchLifecycle"
+
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
     implementation "com.google.dagger:dagger:$dependencyVersions.dagger2"
@@ -172,6 +180,13 @@ dependencies {
     // RxJava
     implementation "io.reactivex.rxjava2:rxandroid:$dependencyVersions.rxAndroid"
     implementation "io.reactivex.rxjava2:rxjava:$dependencyVersions.rxJava2"
+
+    // RxBinding
+    implementation "com.jakewharton.rxbinding2:rxbinding:$dependencyVersions.rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$dependencyVersions.rxBinding"
+    implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$dependencyVersions.rxBinding"
+
+    implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
 
     // Networking
     implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"

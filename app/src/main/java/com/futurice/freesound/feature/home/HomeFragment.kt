@@ -16,90 +16,116 @@
 
 package com.futurice.freesound.feature.home
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.LiveDataReactiveStreams
 import android.os.Bundle
+import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
-import com.futurice.freesound.common.rx.plusAssign
-import com.futurice.freesound.core.BindingBaseFragment
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.viewmodel.DataBinder
-import com.futurice.freesound.viewmodel.ViewModel
+import com.futurice.freesound.mvi.BaseMviFragment
+import com.jakewharton.rxbinding2.support.design.widget.dismisses
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.squareup.picasso.Picasso
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_home.*
-import timber.log.Timber
 import javax.inject.Inject
 
-class HomeFragment : BindingBaseFragment<HomeFragmentComponent>() {
-
-    @Inject
-    internal lateinit var homeFragmentViewModel: HomeFragmentViewModel
+/**
+ * The Snackbar is particularly annoying because when the Layout changes, the Snackbar is automatically
+ * dismissed, which occurs AFTER the repeated error has been applied; so the information is lost.
+ * I've worked around this by not using INDEFINITE.
+ */
+class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent>() {
 
     @Inject
     internal lateinit var picasso: Picasso
 
-    @Inject
-    internal lateinit var schedulerProvider: SchedulerProvider
+    internal lateinit var errorSnackBar: Snackbar
 
-    private val dataBinder = object : DataBinder {
-
-        override fun bind(d: CompositeDisposable) {
-            d += homeFragmentViewModel.image
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .subscribe({
-                               picasso.load(it)
-                                   .transform(circularTransformation())
-                                   .into(avatar_image)
-                           })
-                { e -> Timber.e(e, "Error setting image") }
-
-            d += homeFragmentViewModel.userName
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ username_textView.text = it })
-                { e -> Timber.e(e, "Error setting user") }
-
-            d += homeFragmentViewModel.about
-                .subscribeOn(schedulerProvider.computation())
-                .observeOn(schedulerProvider.ui())
-                .subscribe({ about_textView.text = it })
-                { e -> Timber.e(e, "Error setting aboutTextView") }
-        }
-
-        override fun unbind() {
-            picasso.cancelRequest(avatar_image)
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_home, container, false)
+                ?.also { errorSnackBar = createSnackbar(it) }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
-        inflater?.inflate(R.layout.fragment_home, container, false)
-
-    override fun inject() {
-        component().inject(this)
+    private fun createSnackbar(view: View): Snackbar {
+        return Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_LONG)
+                .apply {
+                    setAction(android.R.string.ok, { dismiss() })
+                    setActionTextColor(ContextCompat.getColor(view.context, R.color.colorContrastAccent))
+                }
     }
 
-    override fun createComponent(): HomeFragmentComponent =
-        (activity as HomeActivity).component()
-            .plus(BaseFragmentModule(this))
+    override fun inject() = component().inject(this)
 
-    override fun viewModel(): ViewModel =
-        homeFragmentViewModel
+    override fun createComponent(): HomeFragmentComponent {
+        return (activity as HomeActivity)
+                .component().plus(HomeFragmentModule(this),
+                        BaseFragmentModule(this))
+    }
 
-    override fun dataBinder(): DataBinder =
-        dataBinder
+    override fun uiEvents(): LiveData<UiEvent> {
+        return LiveDataReactiveStreams.fromPublisher(
+                Flowable.merge(errorIndicatorDismissed(), refreshRequested()))
+    }
+
+    override fun render(model: HomeUiModel) {
+
+        when (model.user) {
+            null -> hideUser()
+            else -> showUser(model.user)
+        }
+
+        showLoading(model.isLoading)
+        showRefreshing(model.isRefreshing)
+
+        when (model.errorMsg) {
+            null -> errorSnackBar.dismiss()
+            else -> errorSnackBar.setText(model.errorMsg).show()
+        }
+
+    }
+
+    private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
+            .map { UiEvent.ErrorIndicatorDismissed }
+            .toFlowable(BackpressureStrategy.BUFFER)
+
+    private fun refreshRequested() = feed_swipeToRefresh.refreshes()
+            .map { UiEvent.RefreshRequested }
+            .toFlowable(BackpressureStrategy.BUFFER)
+
+    override fun cancel() = picasso.cancelRequest(avatar_image)
+
+    private fun hideUser() {
+        homeUser_container.visibility = View.GONE
+    }
+
+    private fun showUser(user: UserUiModel) {
+        homeUser_container.visibility = View.VISIBLE
+        picasso.load(user.avatarUrl)
+                .transform(circularTransformation())
+                .into(avatar_image)
+
+        username_textView.text = user.username
+        about_textView.text = user.about
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        loading_progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showRefreshing(isRefreshing: Boolean) {
+        feed_swipeToRefresh.isRefreshing = isRefreshing
+    }
 
     companion object {
-
-        internal fun create(): HomeFragment {
+        fun create(): HomeFragment {
             return HomeFragment()
         }
     }
-
 }

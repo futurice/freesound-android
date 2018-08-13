@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.test.assertion;
+package com.futurice.freesound.store
 
-import org.assertj.core.api.Condition;
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
 
-import java.util.List;
+interface Store<K, V> {
 
-public class IsEmptyListCondition<T> extends Condition<List<T>> {
+    fun put(key: K, value: V): Completable
 
-    public static <T> IsEmptyListCondition<T> empty() {
-        return new IsEmptyListCondition<>();
-    }
+    fun get(key: K): Maybe<V>
 
-    @Override
-    public boolean matches(final List<T> value) {
-        return value.isEmpty();
-    }
+    fun getStream(key: K): Observable<V>
 
 }

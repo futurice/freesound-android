@@ -1,107 +1,145 @@
 package com.futurice.freesound.feature.home
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.futurice.freesound.feature.common.streams.Fetch
+import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
+import com.futurice.freesound.test.assertion.livedata.test
 import com.futurice.freesound.test.data.TestData
-import io.reactivex.Single
-import org.assertj.core.api.Assertions.assertThat
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider
+import io.reactivex.Observable
+import junit.framework.Assert.fail
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import java.util.concurrent.atomic.AtomicBoolean
 
 class HomeFragmentViewModelTest {
 
+    @Rule
+    @JvmField
+    var rule: TestRule = InstantTaskExecutorRule()
+
     @Mock
-    private lateinit var userDataModel: UserDataModel
+    private lateinit var homeUserIteractor: HomeUserInteractor
+
+    @Mock
+    private lateinit var refreshInteractor: RefreshInteractor
+
+    private lateinit var schedulers: TrampolineSchedulerProvider
 
     private val testUser: User get() = TestData.user()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        schedulers = TrampolineSchedulerProvider()
     }
 
     @Test
-    fun getImage_returnsLargeImage() {
+    fun `homeFragment uiModel is idle initially`() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { emptyList() }
+            refresh { emptyList() }
         }
 
-        with(createVm()) {
-            image.test()
-                    .assertValue(testUser.avatar.large)
+        val homeUiModel = HomeUiModel(
+                user = null,
+                isLoading = false,
+                isRefreshing = false,
+                errorMsg = null)
+
+        with(createVmToTest()) {
+            uiModels().test().assertValue(homeUiModel)
         }
     }
 
     @Test
-    fun getUserName_returnsName() {
+    fun `homeFragment uiModel has user when user cached`() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.Success(testUser)) }
+            refresh { emptyList() }
         }
 
-        with(createVm()) {
-            userName.test()
-                    .assertValue(testUser.username)
+        val userUiModel = UserUiModel(
+                username = testUser.username,
+                about = testUser.about,
+                avatarUrl = testUser.avatar.large)
+
+        val expected = HomeUiModel(
+                user = userUiModel,
+                isLoading = false,
+                isRefreshing = false,
+                errorMsg = null)
+
+        with(createVmToTest()) {
+            uiModels().test()
+                    .assertOnlyValue(expected)
         }
     }
 
     @Test
-    fun getAbout_returnsAbout() {
+    fun `homeFragment uiModel in progress when initially fetching`() {
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.InProgress()) }
+            refresh { emptyList() }
         }
 
-        with(createVm()) {
-            about.test()
-                    .assertValue(testUser.about)
+        val expected = HomeUiModel(
+                user = null,
+                isLoading = true,
+                isRefreshing = false,
+                errorMsg = null)
+
+        with(createVmToTest()) {
+            uiModels().test()
+                    .assertOnlyValue(expected)
         }
     }
 
     @Test
-    fun getHomeUser_doesNotSubscribeInCtor() {
-        val isSubscribed = AtomicBoolean()
-        `when`(userDataModel.homeUser)
-                .thenReturn(Single.never<User>()
-                        .doOnSubscribe { isSubscribed.set(true) })
-
-        ignore {
-            createVm()
-        }
-
-        assertThat(isSubscribed.get()).isFalse()
-    }
-
-    @Test
-    fun getProperties_subscribesOnlyOnce() {
+    fun `uiModel usesLocalizedExceptionMessage onInitialFailure`() {
+        val t = Throwable("Failure message")
         arrange {
-            homeUser { testUser }
+            homeUserStream { listOf(Fetch.Failure(t)) }
+            refresh { emptyList() }
         }
 
-        with(createVm()) {
-            image.test()
-            userName.test()
+        val expected = HomeUiModel(
+                user = null,
+                isLoading = false,
+                isRefreshing = false,
+                errorMsg = t.localizedMessage)
+
+        with(createVmToTest()) {
+            uiModels()
+                    .test()
+                    .assertOnlyValue(expected)
         }
-
-        verify(userDataModel).homeUser
     }
 
-    private fun createVm(): HomeFragmentViewModel =
-            HomeFragmentViewModel(userDataModel)
-
-    fun ignore(ignoreReturnValue: () -> Unit) {
-        ignoreReturnValue()
-    }
+    private fun createVmToTest(): HomeFragmentViewModel =
+            HomeFragmentViewModel(homeUserIteractor, refreshInteractor, schedulers)
 
     fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
 
     inner class Arrangement {
 
-        fun homeUser(init: () -> User) {
-            `when`(userDataModel.homeUser).thenReturn(Single.just(init()))
+        fun homeUserStream(init: () -> List<Fetch<User>>) {
+            `when`(homeUserIteractor.homeUserStream()).thenReturn(init().asStream())
         }
 
+        fun refresh(init: () -> List<Operation>) {
+            `when`(refreshInteractor.refresh()).thenReturn(init().asStream())
+        }
     }
+
 }
+
+fun <T> List<T>.asStream(): Observable<T> {
+    return Observable.fromIterable(this).concatWith(Observable.never<T>())
+}
+

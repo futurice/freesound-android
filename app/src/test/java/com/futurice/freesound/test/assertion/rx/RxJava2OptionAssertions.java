@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.test.assertion;
+package com.futurice.freesound.test.assertion.rx;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 

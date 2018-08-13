@@ -29,11 +29,10 @@ public interface HomeActivityComponent extends BaseActivityComponent {
 
     Navigator getNavigator();
 
-    UserDataModel getUserDataModel();
-
     void inject(final HomeActivity activity);
 
-    HomeFragmentComponent plus(BaseFragmentModule baseFragmentModule);
+    HomeFragmentComponent plus(HomeFragmentModule homeFragmentModule,
+                               BaseFragmentModule baseFragmentModule);
 }
 
 

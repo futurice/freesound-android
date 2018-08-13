@@ -36,8 +36,8 @@ import io.reactivex.subjects.BehaviorSubject;
 import polanski.option.Option;
 
 import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
-import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.hasOptionValue;
-import static com.futurice.freesound.test.assertion.RxJava2OptionAssertions.isNone;
+import static com.futurice.freesound.test.assertion.rx.RxJava2OptionAssertions.hasOptionValue;
+import static com.futurice.freesound.test.assertion.rx.RxJava2OptionAssertions.isNone;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
