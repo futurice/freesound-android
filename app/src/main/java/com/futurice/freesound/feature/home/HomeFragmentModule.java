@@ -54,7 +54,7 @@ public class HomeFragmentModule {
     static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
             Store<HomeUiAction, HomeUiResult, HomeUiModel> store,
             Logger logger) {
-        return () -> new HomeFragmentViewModel("HomeFragmentViewModel", logger, HomeUiEvent.Initial.INSTANCE, store);
+        return () -> new HomeFragmentViewModel(HomeFragmentViewModel.Companion.getLOG_TAG(), logger, HomeUiEvent.Initial.INSTANCE, store);
     }
 
     @Provides
@@ -66,7 +66,7 @@ public class HomeFragmentModule {
     static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(ActionTransformer<HomeUiAction, HomeUiResult> actionTransformer,
                                                                                    HomeFragmentReducer reducer,
                                                                                    Logger logger) {
-        return new Store<>("HomeFragmentViewModel",
+        return new Store<>(HomeFragmentViewModel.Companion.getLOG_TAG(),
                 logger,
                 HomeFragmentViewModel.Companion.getINITIAL_UI_STATE(),
                 actionTransformer,

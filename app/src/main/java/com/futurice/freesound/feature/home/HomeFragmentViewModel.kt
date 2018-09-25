@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.mvi.*
 
-internal class HomeFragmentViewModel(tag: String = "HomeFragmentViewModel",
+internal class HomeFragmentViewModel(tag: String = LOG_TAG,
                                      logger: Logger,
                                      initialEvent: HomeUiEvent = HomeUiEvent.Initial,
                                      store: Store<HomeUiAction, HomeUiResult, HomeUiModel>)
@@ -28,6 +28,7 @@ internal class HomeFragmentViewModel(tag: String = "HomeFragmentViewModel",
         store = store) {
 
     companion object {
+        val LOG_TAG = "HomeFragmentViewModel"
         val INITIAL_UI_STATE: HomeUiModel
             get() = HomeUiModel(
                     user = null,
