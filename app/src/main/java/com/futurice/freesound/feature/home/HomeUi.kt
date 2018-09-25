@@ -24,23 +24,23 @@ import com.futurice.freesound.mvi.Result
 import com.futurice.freesound.mvi.State
 import com.futurice.freesound.network.api.model.User
 
-sealed class HomeUiEvent(val log: String) : Event {
-    object Initial : HomeUiEvent("Initial")
-    object ErrorIndicatorDismissed : HomeUiEvent("ErrorIndicatorDismissed")
-    object RefreshRequested : HomeUiEvent("RefreshRequested")
+sealed class HomeUiEvent : Event {
+    object Initial : HomeUiEvent()
+    object ErrorIndicatorDismissed : HomeUiEvent()
+    object RefreshRequested : HomeUiEvent()
 }
 
-sealed class HomeUiResult(val log: String) : Result {
-    object NoChange : HomeUiResult("No-op change")
-    object ErrorCleared : HomeUiResult("Error cleared change")
-    data class Refreshed(val refresh: Operation) : HomeUiResult("Content refreshed: $refresh")
-    data class UserUpdated(val userFetch: Fetch<User>) : HomeUiResult("User updated: $userFetch")
+sealed class HomeUiResult : Result {
+    object NoChange : HomeUiResult()
+    object ErrorCleared : HomeUiResult()
+    data class Refreshed(val refresh: Operation) : HomeUiResult()
+    data class UserUpdated(val userFetch: Fetch<User>) : HomeUiResult()
 }
 
-sealed class HomeUiAction(val log: String) : Action {
-    object Initial : HomeUiAction("Initial action")
-    object ClearError : HomeUiAction("Error cleared action")
-    object RefreshContent : HomeUiAction("Content refresh action")
+sealed class HomeUiAction : Action {
+    object Initial : HomeUiAction()
+    object ClearError : HomeUiAction()
+    object RefreshContent : HomeUiAction()
 }
 
 data class UserUiModel(val username: String,
