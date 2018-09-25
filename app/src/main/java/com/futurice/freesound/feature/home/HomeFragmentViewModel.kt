@@ -17,12 +17,13 @@
 package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.mvi.*
-import timber.log.Timber
 
 internal class HomeFragmentViewModel(tag: String = "HomeFragmentViewModel",
-                                     initialEvent: UiEvent = UiEvent.Initial,
-                                     store: Store<HomeUiModel, Action, Result>)
-    : BaseViewModel<UiEvent, Action, Result, HomeUiModel>(tag = tag,
+                                     logger: Logger,
+                                     initialEvent: HomeUiEvent = HomeUiEvent.Initial,
+                                     store: Store<HomeUiAction, HomeUiResult, HomeUiModel>)
+    : BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>(tag = tag,
+        logger = logger,
         initialEvent = initialEvent,
         store = store) {
 
@@ -35,12 +36,12 @@ internal class HomeFragmentViewModel(tag: String = "HomeFragmentViewModel",
                     errorMsg = null)
     }
 
-    override fun eventToAction(uiEvent: UiEvent): Action {
+    override fun eventToAction(uiEvent: HomeUiEvent): HomeUiAction {
         return when (uiEvent) {
-            UiEvent.Initial -> Action.Initial
-            UiEvent.RefreshRequested -> Action.RefreshContent
-            UiEvent.ErrorIndicatorDismissed -> Action.ClearError
-        }.also { Timber.d("From UiEvent: $uiEvent, Action is: $it") }
+            HomeUiEvent.Initial -> HomeUiAction.Initial
+            HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
+            HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
+        }
     }
 
 }

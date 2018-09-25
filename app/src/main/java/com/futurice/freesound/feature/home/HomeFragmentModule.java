@@ -16,11 +16,11 @@
 
 package com.futurice.freesound.feature.home;
 
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.mvi.ActionTransformer;
+import com.futurice.freesound.mvi.Logger;
 import com.futurice.freesound.mvi.Store;
 import com.futurice.freesound.mvi.UiBinder;
 
@@ -38,6 +38,11 @@ public class HomeFragmentModule {
     }
 
     @Provides
+    static Logger provideLogger() {
+        return new Logger();
+    }
+
+    @Provides
     static HomeFragmentViewModel provideHomeFragmentViewModel(
             android.support.v4.app.Fragment fragment,
             Function0<HomeFragmentViewModel> provider) {
@@ -47,8 +52,9 @@ public class HomeFragmentModule {
 
     @Provides
     static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
-            Store<HomeUiModel, Action, Result> store) {
-        return () -> new HomeFragmentViewModel("HomeFragmentViewModel", UiEvent.Initial.INSTANCE, store);
+            Store<HomeUiAction, HomeUiResult, HomeUiModel> store,
+            Logger logger) {
+        return () -> new HomeFragmentViewModel("HomeFragmentViewModel", logger, HomeUiEvent.Initial.INSTANCE, store);
     }
 
     @Provides
@@ -57,17 +63,19 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static Store<HomeUiModel, Action, Result> provideHomeFragmentStore(ActionTransformer<Action, Result> actionTransformer,
-                                                                       HomeFragmentReducer reducer) {
+    static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(ActionTransformer<HomeUiAction, HomeUiResult> actionTransformer,
+                                                                                   HomeFragmentReducer reducer,
+                                                                                   Logger logger) {
         return new Store<>("HomeFragmentViewModel",
+                logger,
                 HomeFragmentViewModel.Companion.getINITIAL_UI_STATE(),
                 actionTransformer,
                 reducer);
     }
 
     @Provides
-    static ActionTransformer<Action, Result> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor,
-                                                                                           RefreshInteractor refreshInteractor) {
+    static ActionTransformer<HomeUiAction, HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor,
+                                                                                                       RefreshInteractor refreshInteractor) {
         return new HomeFragmentActionTransformer(homeUserInteractor, refreshInteractor);
     }
 
@@ -83,7 +91,7 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    UiBinder<HomeUiModel, UiEvent> provideUiBinder(HomeFragmentViewModel viewModel) {
+    UiBinder<HomeUiModel, HomeUiEvent> provideUiBinder(HomeFragmentViewModel viewModel) {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 

@@ -41,7 +41,7 @@ import javax.inject.Inject
  * dismissed, which occurs AFTER the repeated error has been applied; so the information is lost.
  * I've worked around this by not using INDEFINITE.
  */
-class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent>() {
+class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, HomeUiEvent>() {
 
     @Inject
     internal lateinit var picasso: Picasso
@@ -69,7 +69,7 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
                         BaseFragmentModule(this))
     }
 
-    override fun uiEvents(): LiveData<UiEvent> {
+    override fun uiEvents(): LiveData<HomeUiEvent> {
         return LiveDataReactiveStreams.fromPublisher(
                 Flowable.merge(errorIndicatorDismissed(), refreshRequested()))
     }
@@ -92,11 +92,11 @@ class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, UiEvent
     }
 
     private fun errorIndicatorDismissed() = errorSnackBar.dismisses()
-            .map { UiEvent.ErrorIndicatorDismissed }
+            .map { HomeUiEvent.ErrorIndicatorDismissed }
             .toFlowable(BackpressureStrategy.BUFFER)
 
     private fun refreshRequested() = feed_swipeToRefresh.refreshes()
-            .map { UiEvent.RefreshRequested }
+            .map { HomeUiEvent.RefreshRequested }
             .toFlowable(BackpressureStrategy.BUFFER)
 
     override fun cancel() = picasso.cancelRequest(avatar_image)

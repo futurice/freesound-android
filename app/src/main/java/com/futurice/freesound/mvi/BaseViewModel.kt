@@ -20,12 +20,12 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 
-abstract class BaseViewModel<in E, A, R, S>(
+abstract class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
         private val tag: String,
+        private val logger: Logger,
         initialEvent: E,
-        store: Store<S, A, R>,
+        store: Store<A, R, S>,
         private val disposable: SerialDisposable = SerialDisposable(),
         private val uiEvents: PublishSubject<E> = PublishSubject.create(),
         private val uiModel: MutableLiveData<S> = MutableLiveData<S>()) : ViewModel<E, S>() {
@@ -33,12 +33,14 @@ abstract class BaseViewModel<in E, A, R, S>(
     init {
         disposable.set(
                 uiEvents.startWith(initialEvent)
+                        .doOnNext { logger.log(tag, LogEvent.Event(it)) }
                         .asUiEventFlowable()
                         .map(::eventToAction)
+                        .doOnNext { logger.log(tag, LogEvent.Action(it)) }
                         .compose(store.dispatchAction())
                         .subscribe(
                                 { uiModel.postValue(it) },
-                                { Timber.e(it, "Disaster has occurred in $tag.") }))
+                                { logger.log(tag, LogEvent.Error(it)) }))
     }
 
     override fun uiEvents(uiEvent: E) {

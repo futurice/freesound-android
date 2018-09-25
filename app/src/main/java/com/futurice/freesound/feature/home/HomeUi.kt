@@ -18,37 +18,37 @@ package com.futurice.freesound.feature.home
 
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
+import com.futurice.freesound.mvi.Action
+import com.futurice.freesound.mvi.Event
+import com.futurice.freesound.mvi.Result
+import com.futurice.freesound.mvi.State
 import com.futurice.freesound.network.api.model.User
 
-
-// Event from the UI to VM
-
-sealed class UiEvent(val log: String) {
-    object Initial : UiEvent("Initial")
-    object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
-    object RefreshRequested : UiEvent("RefreshRequested")
+sealed class HomeUiEvent(val log: String) : Event {
+    object Initial : HomeUiEvent("Initial")
+    object ErrorIndicatorDismissed : HomeUiEvent("ErrorIndicatorDismissed")
+    object RefreshRequested : HomeUiEvent("RefreshRequested")
 }
 
-// Events from VM to UI
+sealed class HomeUiResult(val log: String) : Result {
+    object NoChange : HomeUiResult("No-op change")
+    object ErrorCleared : HomeUiResult("Error cleared change")
+    data class Refreshed(val refresh: Operation) : HomeUiResult("Content refreshed: $refresh")
+    data class UserUpdated(val userFetch: Fetch<User>) : HomeUiResult("User updated: $userFetch")
+}
 
-data class HomeUiModel(val user: UserUiModel?,
-                       val isLoading: Boolean,
-                       val isRefreshing: Boolean,
-                       val errorMsg: String?)
+sealed class HomeUiAction(val log: String) : Action {
+    object Initial : HomeUiAction("Initial action")
+    object ClearError : HomeUiAction("Error cleared action")
+    object RefreshContent : HomeUiAction("Content refresh action")
+}
 
 data class UserUiModel(val username: String,
                        val about: String,
                        val avatarUrl: String)
 
-sealed class Result(val log: String) {
-    object NoChange : Result("No-op change")
-    object ErrorCleared : Result("Error cleared change")
-    data class Refreshed(val refresh: Operation) : Result("Content refreshed: $refresh")
-    data class UserUpdated(val userFetch: Fetch<User>) : Result("User updated: $userFetch")
-}
+data class HomeUiModel(val user: UserUiModel?,
+                       val isLoading: Boolean,
+                       val isRefreshing: Boolean,
+                       val errorMsg: String?) : State
 
-sealed class Action(val log: String) {
-    object Initial : Action("Initial action")
-    object ClearError : Action("Error cleared action")
-    object RefreshContent : Action("Content refresh action")
-}

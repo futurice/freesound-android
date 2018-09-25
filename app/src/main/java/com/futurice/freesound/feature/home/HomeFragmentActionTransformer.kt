@@ -5,25 +5,25 @@ import com.futurice.freesound.mvi.asUiModelFlowable
 import io.reactivex.FlowableTransformer
 
 class HomeFragmentActionTransformer(private val homeUserInteractor: HomeUserInteractor,
-                                    private val refreshInteractor: RefreshInteractor) : ActionTransformer<Action, Result>() {
+                                    private val refreshInteractor: RefreshInteractor) : ActionTransformer<HomeUiAction, HomeUiResult>() {
 
-    override fun transform(): FlowableTransformer<in Action, out Result> {
+    override fun transform(): FlowableTransformer<in HomeUiAction, out HomeUiResult> {
 
-        val initialEpic = FlowableTransformer<Action, Result> {
-            it.ofType(Action.Initial::class.java)
+        val initialEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+            it.ofType(HomeUiAction.Initial::class.java)
                     .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
-                    .map { Result.UserUpdated(it) }
+                    .map { HomeUiResult.UserUpdated(it) }
         }
 
-        val refreshEpic = FlowableTransformer<Action, Result> {
-            it.ofType(Action.RefreshContent::class.java)
+        val refreshEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+            it.ofType(HomeUiAction.RefreshContent::class.java)
                     .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
-                    .map { Result.Refreshed(it) }
+                    .map { HomeUiResult.Refreshed(it) }
         }
 
-        val dismissErrorIndicatorEpic = FlowableTransformer<Action, Result> {
-            it.ofType(Action.ClearError::class.java)
-                    .map { Result.ErrorCleared }
+        val dismissErrorIndicatorEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+            it.ofType(HomeUiAction.ClearError::class.java)
+                    .map { HomeUiResult.ErrorCleared }
         }
 
         return merge(initialEpic, refreshEpic, dismissErrorIndicatorEpic)

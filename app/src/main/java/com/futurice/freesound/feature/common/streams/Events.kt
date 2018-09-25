@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.common.streams
 sealed class Fetch<T> {
     class InProgress<T> : Fetch<T>()
     data class Success<T>(val value: T) : Fetch<T>()
-    class Failure<T>(val error: Throwable) : Fetch<T>()
+    data class Failure<T>(val error: Throwable) : Fetch<T>()
 }
 
 sealed class Operation {

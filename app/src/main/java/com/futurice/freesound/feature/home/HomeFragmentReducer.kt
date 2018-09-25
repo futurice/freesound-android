@@ -6,18 +6,18 @@ import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.network.api.model.User
 import timber.log.Timber
 
-class HomeFragmentReducer : Reducer<Result, HomeUiModel> {
+class HomeFragmentReducer : Reducer<HomeUiResult, HomeUiModel> {
 
-    override fun reduce(current: HomeUiModel, result: Result) : HomeUiModel {
-       return current.reduceModel(result)
+    override fun reduce(current: HomeUiModel, result: HomeUiResult): HomeUiModel {
+        return current.reduceModel(result)
     }
 
-    private fun HomeUiModel.reduceModel(result: Result): HomeUiModel =
+    private fun HomeUiModel.reduceModel(result: HomeUiResult): HomeUiModel =
             when (result) {
-                is Result.NoChange -> this
-                is Result.UserUpdated -> reduce(result.userFetch)
-                is Result.Refreshed -> reduce(result.refresh)
-                Result.ErrorCleared -> copy(errorMsg = null)
+                is HomeUiResult.NoChange -> this
+                is HomeUiResult.UserUpdated -> reduce(result.userFetch)
+                is HomeUiResult.Refreshed -> reduce(result.refresh)
+                HomeUiResult.ErrorCleared -> copy(errorMsg = null)
             }.also { Timber.d("Result: $result was reduced to: $it") }
 
     private fun HomeUiModel.reduce(refresh: Operation): HomeUiModel =

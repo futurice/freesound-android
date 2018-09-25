@@ -36,9 +36,9 @@ internal class HomeViewModel(val navigator: Navigator,
 
     override fun bind(disposables: CompositeDisposable) {
         disposables +=
-            openSearchStream.observeOn(schedulerProvider.ui())
-                .subscribe({ navigator.openSearch() },
-                        { Timber.e(it, "Error clearing search") })
+                openSearchStream.observeOn(schedulerProvider.ui())
+                        .subscribe({ navigator.openSearch() },
+                                { Timber.e(it, "Error opening search") })
 
     }
 }
