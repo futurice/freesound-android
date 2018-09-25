@@ -16,4 +16,43 @@
 
 package com.futurice.freesound.mvi
 
-abstract class BaseViewModel<in E, M> : ViewModel<E, M>()
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import io.reactivex.disposables.SerialDisposable
+import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
+
+abstract class BaseViewModel<in E, A, R, S>(
+        private val tag: String,
+        initialEvent: E,
+        store: Store<S, A, R>,
+        private val disposable: SerialDisposable = SerialDisposable(),
+        private val uiEvents: PublishSubject<E> = PublishSubject.create(),
+        private val uiModel: MutableLiveData<S> = MutableLiveData<S>()) : ViewModel<E, S>() {
+
+    init {
+        disposable.set(
+                uiEvents.startWith(initialEvent)
+                        .asUiEventFlowable()
+                        .map(::eventToAction)
+                        .compose(store.dispatchAction())
+                        .subscribe(
+                                { uiModel.value = it },
+                                { Timber.e(it, "Disaster has occurred in $tag.") }))
+    }
+
+    override fun uiEvents(uiEvent: E) {
+        uiEvents.onNext(uiEvent)
+    }
+
+    override fun uiModels(): LiveData<S> {
+        return uiModel
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
+    }
+
+    abstract fun eventToAction(uiEvent: E): A
+
+}

@@ -20,6 +20,8 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.mvi.ActionTransformer;
+import com.futurice.freesound.mvi.Store;
 import com.futurice.freesound.mvi.UiBinder;
 
 import dagger.Module;
@@ -45,12 +47,31 @@ public class HomeFragmentModule {
 
     @Provides
     static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
-            HomeUserInteractor homeUserInteractor,
-            RefreshInteractor refreshInteractor,
-            SchedulerProvider schedulerProvider) {
-        return () -> new HomeFragmentViewModel(homeUserInteractor,
-                                               refreshInteractor,
-                                               schedulerProvider);
+            Store<HomeUiModel, Action, Result> store) {
+        return () -> new HomeFragmentViewModel("HFVM",
+                store);
+    }
+
+    @Provides
+    static HomeFragmentReducer provideHomeFragmentReducer() {
+        return new HomeFragmentReducer();
+    }
+
+    @Provides
+    static Store<HomeUiModel, Action, Result> provideHomeFragmentStore(ActionTransformer<Action, Result> actionTransformer,
+                                                                       HomeFragmentReducer reducer,
+                                                                       SchedulerProvider schedulerProvider) {
+        return new Store<>("HFVM",
+                HomeFragmentViewModel.Companion.getINITIAL_UI_STATE(),
+                actionTransformer,
+                reducer,
+                schedulerProvider);
+    }
+
+    @Provides
+    static ActionTransformer<Action, Result> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor,
+                                                                                           RefreshInteractor refreshInteractor) {
+        return new HomeFragmentActionTransformer(homeUserInteractor, refreshInteractor);
     }
 
     @Provides
