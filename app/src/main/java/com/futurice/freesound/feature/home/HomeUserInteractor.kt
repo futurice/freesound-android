@@ -38,6 +38,7 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
         return userRepository.user(HOME_USERNAME)
                 .toObservable()
                 .asFetchStream(userRepository.awaitUserStream(HOME_USERNAME))
+                .distinctUntilChanged()
     }
 
 }
