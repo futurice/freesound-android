@@ -37,7 +37,7 @@ abstract class BaseViewModel<in E, A, R, S>(
                         .map(::eventToAction)
                         .compose(store.dispatchAction())
                         .subscribe(
-                                { uiModel.value = it },
+                                { uiModel.postValue(it) },
                                 { Timber.e(it, "Disaster has occurred in $tag.") }))
     }
 

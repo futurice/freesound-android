@@ -16,11 +16,15 @@
 
 package com.futurice.freesound.feature.home
 
+import com.futurice.freesound.feature.common.streams.Fetch
+import com.futurice.freesound.feature.common.streams.Operation
+import com.futurice.freesound.network.api.model.User
+
 
 // Event from the UI to VM
 
 sealed class UiEvent(val log: String) {
-    object InitialEvent : UiEvent("InitialEvent")
+    object Initial : UiEvent("Initial")
     object ErrorIndicatorDismissed : UiEvent("ErrorIndicatorDismissed")
     object RefreshRequested : UiEvent("RefreshRequested")
 }
@@ -35,3 +39,16 @@ data class HomeUiModel(val user: UserUiModel?,
 data class UserUiModel(val username: String,
                        val about: String,
                        val avatarUrl: String)
+
+sealed class Result(val log: String) {
+    object NoChange : Result("No-op change")
+    object ErrorCleared : Result("Error cleared change")
+    data class Refreshed(val refresh: Operation) : Result("Content refreshed: $refresh")
+    data class UserUpdated(val userFetch: Fetch<User>) : Result("User updated: $userFetch")
+}
+
+sealed class Action(val log: String) {
+    object Initial : Action("Initial action")
+    object ClearError : Action("Error cleared action")
+    object RefreshContent : Action("Content refresh action")
+}

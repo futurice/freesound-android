@@ -48,8 +48,7 @@ public class HomeFragmentModule {
     @Provides
     static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
             Store<HomeUiModel, Action, Result> store) {
-        return () -> new HomeFragmentViewModel("HFVM",
-                store);
+        return () -> new HomeFragmentViewModel("HomeFragmentViewModel", UiEvent.Initial.INSTANCE, store);
     }
 
     @Provides
@@ -59,13 +58,11 @@ public class HomeFragmentModule {
 
     @Provides
     static Store<HomeUiModel, Action, Result> provideHomeFragmentStore(ActionTransformer<Action, Result> actionTransformer,
-                                                                       HomeFragmentReducer reducer,
-                                                                       SchedulerProvider schedulerProvider) {
-        return new Store<>("HFVM",
+                                                                       HomeFragmentReducer reducer) {
+        return new Store<>("HomeFragmentViewModel",
                 HomeFragmentViewModel.Companion.getINITIAL_UI_STATE(),
                 actionTransformer,
-                reducer,
-                schedulerProvider);
+                reducer);
     }
 
     @Provides

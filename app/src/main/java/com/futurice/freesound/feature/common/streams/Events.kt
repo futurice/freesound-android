@@ -25,5 +25,5 @@ sealed class Fetch<T> {
 sealed class Operation {
     object InProgress : Operation()
     object Complete : Operation()
-    class Failure(val error: Throwable) : Operation()
+    data class Failure(val error: Throwable) : Operation()
 }

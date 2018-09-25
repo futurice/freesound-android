@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.network.api;
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.model.mapping.FreesoundDateAdapter;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -32,6 +33,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
@@ -49,9 +51,10 @@ public class ApiNetworkModule {
     @Singleton
     static FreeSoundApi provideFreeSoundApi(@Named(API_URL_CONFIG) String url,
                                             @ForFreeSoundApi Moshi moshi,
-                                            @ForFreeSoundApi OkHttpClient client) {
+                                            @ForFreeSoundApi OkHttpClient client,
+                                            SchedulerProvider schedulerProvider) {
         return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(schedulerProvider.io()))
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .client(client)
                 .baseUrl(url)
