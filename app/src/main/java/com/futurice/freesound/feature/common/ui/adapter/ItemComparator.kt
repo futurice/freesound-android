@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.ui.adapter;
+package com.futurice.freesound.feature.common.ui.adapter
 
-import com.futurice.freesound.feature.common.DisplayableItem;
+import com.futurice.freesound.feature.common.DisplayableItem
 
-public interface ItemComparator {
+interface ItemComparator {
 
     /**
-     * Decides whether two {@link DisplayableItem} represent the same Item.
+     * Decides whether two [DisplayableItem] represent the same Item.
      * For example, if your items have unique ids, this method should check their id equality.
      *
      * @return True if the two items represent the same object or false if they are different.
      */
-    boolean areItemsTheSame(final DisplayableItem item1, final DisplayableItem item2);
+    fun <T> areItemsTheSame(item1: DisplayableItem<T>, item2: DisplayableItem<T>): Boolean
 
     /**
-     * Checks whether the visual representation of two {@link DisplayableItem}s are the same.
+     * Checks whether the visual representation of two [DisplayableItem]s are the same.
      *
-     * This method is called only if {@link #areItemsTheSame(DisplayableItem, DisplayableItem)}
-     * returns {@code true} for these items. For instance, when the item is the same with different
+     * This method is called only if [.areItemsTheSame]
+     * returns `true` for these items. For instance, when the item is the same with different
      * state, like selected.
      *
-     * @return True if the visual representation for the {@link DisplayableItem}s are the same or
+     * @return True if the visual representation for the [DisplayableItem]s are the same or
      * false if they are different.
      */
-    boolean areContentsTheSame(final DisplayableItem item1, final DisplayableItem item2);
+    fun <T> areContentsTheSame(item1: DisplayableItem<T>, item2: DisplayableItem<T>): Boolean
 }

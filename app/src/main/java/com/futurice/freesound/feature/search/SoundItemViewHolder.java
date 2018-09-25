@@ -31,6 +31,8 @@ import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.jetbrains.annotations.NotNull;
+
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -196,7 +198,7 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
 
         @Override
         public void bind(@NonNull final RecyclerView.ViewHolder viewHolder,
-                         @NonNull final DisplayableItem<Sound> item) {
+                         @NonNull final DisplayableItem<? extends Sound> item) {
             SoundItemViewHolder soundItemViewHolder = SoundItemViewHolder.class.cast(viewHolder);
             Sound sound = Sound.class.cast(item.getModel());
             soundItemViewHolder.bind(viewModelFactory.create(sound));
