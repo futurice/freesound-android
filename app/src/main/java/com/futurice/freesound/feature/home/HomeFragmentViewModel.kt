@@ -16,7 +16,9 @@
 
 package com.futurice.freesound.feature.home
 
-import com.futurice.freesound.mvi.*
+import com.futurice.freesound.mvi.BaseViewModel
+import com.futurice.freesound.mvi.Logger
+import com.futurice.freesound.mvi.Store
 
 internal class HomeFragmentViewModel(tag: String = LOG_TAG,
                                      logger: Logger,
@@ -27,15 +29,6 @@ internal class HomeFragmentViewModel(tag: String = LOG_TAG,
         initialEvent = initialEvent,
         store = store) {
 
-    companion object {
-        val LOG_TAG = "HomeFragmentViewModel"
-        val INITIAL_UI_STATE: HomeUiModel
-            get() = HomeUiModel(
-                    user = null,
-                    isLoading = false,
-                    isRefreshing = false,
-                    errorMsg = null)
-    }
 
     override fun eventToAction(uiEvent: HomeUiEvent): HomeUiAction {
         return when (uiEvent) {

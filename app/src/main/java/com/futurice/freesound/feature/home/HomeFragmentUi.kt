@@ -24,6 +24,17 @@ import com.futurice.freesound.mvi.Result
 import com.futurice.freesound.mvi.State
 import com.futurice.freesound.network.api.model.User
 
+val LOG_TAG = "HomeFragmentViewModel"
+
+val INITIAL_UI_EVENT = HomeUiEvent.Initial
+
+val INITIAL_UI_STATE: HomeUiModel
+    get() = HomeUiModel(
+            user = null,
+            isLoading = false,
+            isRefreshing = false,
+            errorMsg = null)
+
 sealed class HomeUiEvent : Event {
     object Initial : HomeUiEvent()
     object ErrorIndicatorDismissed : HomeUiEvent()
