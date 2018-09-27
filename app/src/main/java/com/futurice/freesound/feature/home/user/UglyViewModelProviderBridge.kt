@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.feature.home.user
 
-import com.futurice.freesound.mvi.viewModelProvider
+import com.futurice.freesound.mvi.*
 
 // Need this bridge for now because you can't call reified functions from Java.
-internal fun android.support.v4.app.Fragment.createHomeFragmentViewModel(provider: () -> HomeFragmentViewModel): HomeFragmentViewModel {
+internal fun <E : Event, A : Action, R : Result, S : State> android.support.v4.app.Fragment.createHomeFragmentViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
     return viewModelProvider(provider)
 }

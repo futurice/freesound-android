@@ -21,56 +21,13 @@ import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.mvi.*
 import com.futurice.freesound.network.api.model.User
 
-val LOG_TAG = "HomeUserUi"
-
-val INITIAL_UI_EVENT = HomeUiEvent.Initial
-
-val INITIAL_UI_STATE: HomeUiModel
-    get() = HomeUiModel(
-            user = null,
-            isLoading = false,
-            isRefreshing = false,
-            errorMsg = null)
+//typealias HomeUserFragmentViewModel = BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>
 
 sealed class HomeUiEvent : Event {
     object Initial : HomeUiEvent()
     object ErrorIndicatorDismissed : HomeUiEvent()
     object RefreshRequested : HomeUiEvent()
 }
-
-val homeUserUiEventMapper: EventMapper<HomeUiEvent, HomeUiAction> =
-        { uiEvent: HomeUiEvent ->
-            when (uiEvent) {
-                HomeUiEvent.Initial -> HomeUiAction.Initial
-                HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
-                HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
-            }
-        }
-
-
-fun homeUserUiActionTransformer(homeUserInteractor: HomeUserInteractor,
-                                refreshInteractor: RefreshInteractor): ActionTransformer<HomeUiAction, HomeUiResult> {
-
-    val initial = ActionTransformer<HomeUiAction, HomeUiResult> {
-        it.ofType(HomeUiAction.Initial::class.java)
-                .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
-                .map { HomeUiResult.UserUpdated(it) }
-    }
-
-    val refresh = ActionTransformer<HomeUiAction, HomeUiResult> {
-        it.ofType(HomeUiAction.RefreshContent::class.java)
-                .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
-                .map { HomeUiResult.Refreshed(it) }
-    }
-
-    val dismissErrorIndicator = ActionTransformer<HomeUiAction, HomeUiResult> {
-        it.ofType(HomeUiAction.ClearError::class.java)
-                .map { HomeUiResult.ErrorCleared }
-    }
-
-    return combineTransformers(initial, refresh, dismissErrorIndicator)
-}
-
 
 sealed class HomeUiResult : Result {
     object NoChange : HomeUiResult()
@@ -94,3 +51,45 @@ data class HomeUiModel(val user: UserUiModel?,
                        val isRefreshing: Boolean,
                        val errorMsg: String?) : State
 
+const val LOG_TAG = "HomeUserUi"
+
+val INITIAL_UI_EVENT = HomeUiEvent.Initial
+
+val INITIAL_UI_STATE: HomeUiModel
+    get() = HomeUiModel(
+            user = null,
+            isLoading = false,
+            isRefreshing = false,
+            errorMsg = null)
+
+val eventMapper: EventMapper<HomeUiEvent, HomeUiAction> =
+        { uiEvent: HomeUiEvent ->
+            when (uiEvent) {
+                HomeUiEvent.Initial -> HomeUiAction.Initial
+                HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
+                HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
+            }
+        }
+
+fun actionTransformer(homeUserInteractor: HomeUserInteractor,
+                      refreshInteractor: RefreshInteractor): ActionTransformer<HomeUiAction, HomeUiResult> {
+
+    val initial = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.Initial::class.java)
+                .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
+                .map { HomeUiResult.UserUpdated(it) }
+    }
+
+    val refresh = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.RefreshContent::class.java)
+                .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
+                .map { HomeUiResult.Refreshed(it) }
+    }
+
+    val dismissErrorIndicator = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.ClearError::class.java)
+                .map { HomeUiResult.ErrorCleared }
+    }
+
+    return combine(initial, refresh, dismissErrorIndicator)
+}

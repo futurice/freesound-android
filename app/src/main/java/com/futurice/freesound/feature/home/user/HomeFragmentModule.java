@@ -20,6 +20,7 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.mvi.BaseViewModel;
 import com.futurice.freesound.mvi.Logger;
 import com.futurice.freesound.mvi.Store;
 import com.futurice.freesound.mvi.UiBinder;
@@ -45,29 +46,29 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentViewModel provideHomeFragmentViewModel(
+    static BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentViewModel(
             android.support.v4.app.Fragment fragment,
-            Function0<HomeFragmentViewModel> provider) {
+            Function0<BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>> provider) {
         // No explicit scoping: let the Factory determine the scoping.
         return UglyViewModelProviderBridgeKt.createHomeFragmentViewModel(fragment, provider);
     }
 
     @Provides
-    static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
+    static Function0<BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>> providerHomeFragmentViewModelProvider(
             Store<HomeUiAction, HomeUiResult, HomeUiModel> store,
             SchedulerProvider schedulerProvider,
             Logger logger) {
-        return () -> new HomeFragmentViewModel(HomeUserUiKt.getINITIAL_UI_EVENT(),
-                HomeUserUiKt.getHomeUserUiEventMapper(),
+        return () -> new BaseViewModel<>(HomeUserUiKt.getINITIAL_UI_EVENT(),
+                HomeUserUiKt.getEventMapper(),
                 store,
                 schedulerProvider,
-                HomeUserUiKt.getLOG_TAG(),
+                HomeUserUiKt.LOG_TAG,
                 logger);
     }
 
     @Provides
     static Function2<HomeUiModel, HomeUiResult, HomeUiModel> provideHomeFragmentReducer() {
-        return HomeFragmentReducerKt.getHomeUserReducer();
+        return HomeFragmentReducerKt.getReducer();
     }
 
     @Provides
@@ -78,13 +79,13 @@ public class HomeFragmentModule {
                 HomeUserUiKt.getINITIAL_UI_STATE(),
                 actionTransformer,
                 reducer,
-                HomeUserUiKt.getLOG_TAG(),
+                HomeUserUiKt.LOG_TAG,
                 logger);
     }
 
     @Provides
     static FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor, RefreshInteractor refreshInteractor) {
-        return HomeUserUiKt.homeUserUiActionTransformer(homeUserInteractor, refreshInteractor);
+        return HomeUserUiKt.actionTransformer(homeUserInteractor, refreshInteractor);
     }
 
     @Provides
@@ -99,7 +100,7 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    UiBinder<HomeUiModel, HomeUiEvent> provideUiBinder(HomeFragmentViewModel viewModel) {
+    UiBinder<HomeUiModel, HomeUiEvent> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 

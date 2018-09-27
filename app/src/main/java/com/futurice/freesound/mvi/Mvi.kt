@@ -14,7 +14,7 @@ typealias Reducer<R, S> = (S, R) -> S
 
 typealias ActionTransformer<A, R> = FlowableTransformer<in A, out R>
 
-fun <A, R> combineTransformers(vararg transformers: ActionTransformer<A, R>): ActionTransformer<A, R> {
+fun <A, R> combine(vararg transformers: ActionTransformer<A, R>): ActionTransformer<A, R> {
     return ActionTransformer {
         it.publish { actions: Flowable<A> ->
             Flowable.merge(transformers.map { it -> actions.compose(it) })

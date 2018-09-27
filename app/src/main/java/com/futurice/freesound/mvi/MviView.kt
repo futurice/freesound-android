@@ -23,3 +23,9 @@ interface MviView<E, in M> {
     fun render(model: M)
     fun cancel()
 }
+
+interface Renderer<in M> {
+    fun render(model: M)
+    fun cancel()
+}
+

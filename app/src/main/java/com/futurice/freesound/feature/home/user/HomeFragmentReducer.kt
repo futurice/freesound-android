@@ -6,7 +6,7 @@ import com.futurice.freesound.mvi.Reducer
 import com.futurice.freesound.network.api.model.User
 import timber.log.Timber
 
-val homeUserReducer: Reducer<HomeUiResult, HomeUiModel> =
+val reducer: Reducer<HomeUiResult, HomeUiModel> =
         { current: HomeUiModel, result: HomeUiResult -> current.reduceModel(result) }
 
 private fun HomeUiModel.reduceModel(result: HomeUiResult): HomeUiModel =

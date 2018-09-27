@@ -22,16 +22,17 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 
-abstract class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
+class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
         initialEvent: E,
         eventMapper: EventMapper<E, A>,
         store: Store<A, R, S>,
         schedulerProvider: SchedulerProvider,
-        private val uiEvents: PublishSubject<E> = PublishSubject.create(),
-        private val uiModel: MutableLiveData<S> = MutableLiveData<S>(),
-        private val disposable: SerialDisposable = SerialDisposable(),
         private val logTag: String,
         private val logger: Logger) : ViewModel<E, S>() {
+
+    private val uiEvents: PublishSubject<E> = PublishSubject.create()
+    private val uiModel: MutableLiveData<S> = MutableLiveData()
+    private val disposable: SerialDisposable = SerialDisposable()
 
     init {
         disposable.set(
@@ -39,7 +40,7 @@ abstract class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
                         .observeOn(schedulerProvider.computation())
                         .doOnNext { logger.log(logTag, LogEvent.Event(it)) }
                         .asUiEventFlowable()
-                        .map(eventMapper)
+                        .map { eventMapper(it) }
                         .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
                         .compose(store.dispatchAction())
                         .subscribe(
