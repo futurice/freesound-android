@@ -11,7 +11,7 @@ class Store<A : Action, R : Result, S : State>(
 
     fun dispatchAction(): FlowableTransformer<A, S> {
         return FlowableTransformer { it ->
-            it.compose(actionTransformer.transform())
+            it.compose(actionTransformer)
                     .doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
                     .scan(initialState) { model: S, result: R -> reduce(model, result) }
                     .doOnNext { model: S -> logger.log(tag, LogEvent.State(model)) }
@@ -21,7 +21,7 @@ class Store<A : Action, R : Result, S : State>(
 
     private fun reduce(current: S, result: R): S {
         logger.log(tag, LogEvent.Reduce(result, current))
-        return reducer.reduce(current, result)
+        return reducer(current, result)
     }
 
 }

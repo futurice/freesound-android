@@ -48,6 +48,30 @@ val homeUserUiEventMapper: EventMapper<HomeUiEvent, HomeUiAction> =
         }
 
 
+fun homeUserUiActionTransformer(homeUserInteractor: HomeUserInteractor,
+                                refreshInteractor: RefreshInteractor): ActionTransformer<HomeUiAction, HomeUiResult> {
+
+    val initial = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.Initial::class.java)
+                .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
+                .map { HomeUiResult.UserUpdated(it) }
+    }
+
+    val refresh = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.RefreshContent::class.java)
+                .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
+                .map { HomeUiResult.Refreshed(it) }
+    }
+
+    val dismissErrorIndicator = ActionTransformer<HomeUiAction, HomeUiResult> {
+        it.ofType(HomeUiAction.ClearError::class.java)
+                .map { HomeUiResult.ErrorCleared }
+    }
+
+    return combineTransformers(initial, refresh, dismissErrorIndicator)
+}
+
+
 sealed class HomeUiResult : Result {
     object NoChange : HomeUiResult()
     object ErrorCleared : HomeUiResult()

@@ -20,14 +20,15 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
-import com.futurice.freesound.mvi.ActionTransformer;
 import com.futurice.freesound.mvi.Logger;
 import com.futurice.freesound.mvi.Store;
 import com.futurice.freesound.mvi.UiBinder;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.FlowableTransformer;
 import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function2;
 
 @Module(includes = BaseFragmentModule.class)
 public class HomeFragmentModule {
@@ -65,13 +66,13 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static HomeFragmentReducer provideHomeFragmentReducer() {
-        return new HomeFragmentReducer();
+    static Function2<HomeUiModel, HomeUiResult, HomeUiModel> provideHomeFragmentReducer() {
+        return HomeFragmentReducerKt.getHomeUserReducer();
     }
 
     @Provides
-    static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(ActionTransformer<HomeUiAction, HomeUiResult> actionTransformer,
-                                                                                   HomeFragmentReducer reducer,
+    static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> actionTransformer,
+                                                                                   Function2<HomeUiModel, HomeUiResult, HomeUiModel> reducer,
                                                                                    Logger logger) {
         return new Store<>(
                 HomeUserUiKt.getINITIAL_UI_STATE(),
@@ -82,9 +83,8 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static ActionTransformer<HomeUiAction, HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor,
-                                                                                                       RefreshInteractor refreshInteractor) {
-        return new HomeFragmentActionTransformer(homeUserInteractor, refreshInteractor);
+    static FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor, RefreshInteractor refreshInteractor) {
+        return HomeUserUiKt.homeUserUiActionTransformer(homeUserInteractor, refreshInteractor);
     }
 
     @Provides
