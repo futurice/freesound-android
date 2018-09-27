@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import android.support.annotation.VisibleForTesting
-import com.futurice.freesound.feature.common.streams.Fetch
-import com.futurice.freesound.feature.common.streams.asFetchStream
+import com.futurice.freesound.feature.common.streams.Operation
+import com.futurice.freesound.feature.common.streams.asOperation
 import com.futurice.freesound.feature.user.UserRepository
-import com.futurice.freesound.network.api.model.User
 import io.reactivex.Observable
 
-class HomeUserInteractor(private val userRepository: UserRepository) {
+class RefreshInteractor(private val userRepository: UserRepository) {
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -31,14 +30,13 @@ class HomeUserInteractor(private val userRepository: UserRepository) {
     }
 
     /**
-     * Emits the any current cached home user, triggers a fetch from the API and then streams
-     * further updates.
+     * Refreshes the contents of the home user
      */
-    fun homeUserStream(): Observable<Fetch<User>> {
-        return userRepository.user(HOME_USERNAME)
-                .toObservable()
-                .asFetchStream(userRepository.awaitUserStream(HOME_USERNAME))
-                .distinctUntilChanged()
+    fun refresh(): Observable<Operation> {
+        // Ignore the returned value, let homeUserStream emit the change.
+        return refreshUser().asOperation()
     }
+
+    private fun refreshUser() = userRepository.refreshUser(HOME_USERNAME)
 
 }

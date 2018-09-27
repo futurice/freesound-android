@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home;
+package com.futurice.freesound.feature.home.user;
 
 import com.futurice.freesound.inject.fragment.BaseFragmentComponent;
 import com.futurice.freesound.inject.fragment.FragmentScope;
@@ -28,4 +28,3 @@ public interface HomeFragmentComponent extends BaseFragmentComponent {
     void inject(final HomeFragment homeFragment);
 
 }
-

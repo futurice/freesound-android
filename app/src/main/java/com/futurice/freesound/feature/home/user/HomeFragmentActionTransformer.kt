@@ -1,4 +1,4 @@
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.mvi.ActionTransformer
 import com.futurice.freesound.mvi.asUiModelFlowable
@@ -9,23 +9,23 @@ class HomeFragmentActionTransformer(private val homeUserInteractor: HomeUserInte
 
     override fun transform(): FlowableTransformer<in HomeUiAction, out HomeUiResult> {
 
-        val initialEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+        val initial = FlowableTransformer<HomeUiAction, HomeUiResult> {
             it.ofType(HomeUiAction.Initial::class.java)
                     .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
                     .map { HomeUiResult.UserUpdated(it) }
         }
 
-        val refreshEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+        val refresh = FlowableTransformer<HomeUiAction, HomeUiResult> {
             it.ofType(HomeUiAction.RefreshContent::class.java)
                     .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
                     .map { HomeUiResult.Refreshed(it) }
         }
 
-        val dismissErrorIndicatorEpic = FlowableTransformer<HomeUiAction, HomeUiResult> {
+        val dismissErrorIndicator = FlowableTransformer<HomeUiAction, HomeUiResult> {
             it.ofType(HomeUiAction.ClearError::class.java)
                     .map { HomeUiResult.ErrorCleared }
         }
 
-        return merge(initialEpic, refreshEpic, dismissErrorIndicatorEpic)
+        return merge(initial, refresh, dismissErrorIndicator)
     }
 }

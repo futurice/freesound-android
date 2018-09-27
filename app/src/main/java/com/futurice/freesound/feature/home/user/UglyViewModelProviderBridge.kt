@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.mvi.viewModelProvider
 

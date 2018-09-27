@@ -3,12 +3,12 @@ package com.futurice.freesound.feature.home
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
+import com.futurice.freesound.feature.home.user.*
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.test.assertion.livedata.test
 import com.futurice.freesound.test.data.TestData
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider
 import io.reactivex.Observable
-import junit.framework.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
-import com.futurice.freesound.mvi.Action
-import com.futurice.freesound.mvi.Event
-import com.futurice.freesound.mvi.Result
-import com.futurice.freesound.mvi.State
+import com.futurice.freesound.mvi.*
 import com.futurice.freesound.network.api.model.User
 
-val LOG_TAG = "HomeFragmentViewModel"
+val LOG_TAG = "HomeUserUi"
 
 val INITIAL_UI_EVENT = HomeUiEvent.Initial
 
@@ -40,6 +37,16 @@ sealed class HomeUiEvent : Event {
     object ErrorIndicatorDismissed : HomeUiEvent()
     object RefreshRequested : HomeUiEvent()
 }
+
+val homeUserUiEventMapper: EventMapper<HomeUiEvent, HomeUiAction> =
+        { uiEvent: HomeUiEvent ->
+            when (uiEvent) {
+                HomeUiEvent.Initial -> HomeUiAction.Initial
+                HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
+                HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
+            }
+        }
+
 
 sealed class HomeUiResult : Result {
     object NoChange : HomeUiResult()

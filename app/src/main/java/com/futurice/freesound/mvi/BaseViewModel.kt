@@ -18,29 +18,33 @@ package com.futurice.freesound.mvi
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 
 abstract class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
-        private val tag: String,
-        private val logger: Logger,
         initialEvent: E,
+        eventMapper: EventMapper<E, A>,
         store: Store<A, R, S>,
-        private val disposable: SerialDisposable = SerialDisposable(),
+        schedulerProvider: SchedulerProvider,
         private val uiEvents: PublishSubject<E> = PublishSubject.create(),
-        private val uiModel: MutableLiveData<S> = MutableLiveData<S>()) : ViewModel<E, S>() {
+        private val uiModel: MutableLiveData<S> = MutableLiveData<S>(),
+        private val disposable: SerialDisposable = SerialDisposable(),
+        private val logTag: String,
+        private val logger: Logger) : ViewModel<E, S>() {
 
     init {
         disposable.set(
                 uiEvents.startWith(initialEvent)
-                        .doOnNext { logger.log(tag, LogEvent.Event(it)) }
+                        .observeOn(schedulerProvider.computation())
+                        .doOnNext { logger.log(logTag, LogEvent.Event(it)) }
                         .asUiEventFlowable()
-                        .map(::eventToAction)
-                        .doOnNext { logger.log(tag, LogEvent.Action(it)) }
+                        .map(eventMapper)
+                        .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
                         .compose(store.dispatchAction())
                         .subscribe(
                                 { uiModel.postValue(it) },
-                                { logger.log(tag, LogEvent.Error(it)) }))
+                                { logger.log(logTag, LogEvent.Error(it)) }))
     }
 
     override fun uiEvents(uiEvent: E) {
@@ -54,7 +58,5 @@ abstract class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
     override fun onCleared() {
         disposable.dispose()
     }
-
-    abstract fun eventToAction(uiEvent: E): A
 
 }

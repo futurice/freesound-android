@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.LiveDataReactiveStreams
@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
+import com.futurice.freesound.feature.home.HomeActivity
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.mvi.BaseMviFragment

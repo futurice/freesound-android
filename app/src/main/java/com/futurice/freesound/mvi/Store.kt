@@ -3,11 +3,11 @@ package com.futurice.freesound.mvi
 import io.reactivex.FlowableTransformer
 
 class Store<A : Action, R : Result, S : State>(
-        private val tag: String,
-        private val logger: Logger,
         private val initialState: S,
         private val actionTransformer: ActionTransformer<A, R>,
-        private val reducer: Reducer<R, S>) {
+        private val reducer: Reducer<R, S>,
+        private val tag: String,
+        private val logger: Logger) {
 
     fun dispatchAction(): FlowableTransformer<A, S> {
         return FlowableTransformer { it ->

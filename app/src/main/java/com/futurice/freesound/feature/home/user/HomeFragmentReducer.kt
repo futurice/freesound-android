@@ -1,4 +1,4 @@
-package com.futurice.freesound.feature.home
+package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation

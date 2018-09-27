@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.home;
+package com.futurice.freesound.feature.home.user;
 
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
@@ -53,8 +54,14 @@ public class HomeFragmentModule {
     @Provides
     static Function0<HomeFragmentViewModel> providerHomeFragmentViewModelProvider(
             Store<HomeUiAction, HomeUiResult, HomeUiModel> store,
+            SchedulerProvider schedulerProvider,
             Logger logger) {
-        return () -> new HomeFragmentViewModel(HomeFragmentUiKt.getLOG_TAG(), logger, HomeFragmentUiKt.getINITIAL_UI_EVENT(), store);
+        return () -> new HomeFragmentViewModel(HomeUserUiKt.getINITIAL_UI_EVENT(),
+                HomeUserUiKt.getHomeUserUiEventMapper(),
+                store,
+                schedulerProvider,
+                HomeUserUiKt.getLOG_TAG(),
+                logger);
     }
 
     @Provides
@@ -66,11 +73,12 @@ public class HomeFragmentModule {
     static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(ActionTransformer<HomeUiAction, HomeUiResult> actionTransformer,
                                                                                    HomeFragmentReducer reducer,
                                                                                    Logger logger) {
-        return new Store<>(HomeFragmentUiKt.getLOG_TAG(),
-                logger,
-                HomeFragmentUiKt.getINITIAL_UI_STATE(),
+        return new Store<>(
+                HomeUserUiKt.getINITIAL_UI_STATE(),
                 actionTransformer,
-                reducer);
+                reducer,
+                HomeUserUiKt.getLOG_TAG(),
+                logger);
     }
 
     @Provides
