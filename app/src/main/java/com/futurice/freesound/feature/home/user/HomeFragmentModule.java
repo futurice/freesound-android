@@ -23,6 +23,7 @@ import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.mvi.BaseViewModel;
 import com.futurice.freesound.mvi.Logger;
 import com.futurice.freesound.mvi.Store;
+import com.futurice.freesound.mvi.UglyViewModelProviderBridgeKt;
 import com.futurice.freesound.mvi.UiBinder;
 
 import dagger.Module;
@@ -68,7 +69,7 @@ public class HomeFragmentModule {
 
     @Provides
     static Function2<HomeUiModel, HomeUiResult, HomeUiModel> provideHomeFragmentReducer() {
-        return HomeFragmentReducerKt.getReducer();
+        return HomeUserUiReducerKt.getReducer();
     }
 
     @Provides
