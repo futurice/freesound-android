@@ -21,6 +21,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.FragmentActivity
 
+// Fragment
 inline fun <reified VM : ViewModel> android.support.v4.app.Fragment.viewModelProvider(
         crossinline provider: () -> VM): VM {
     return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
@@ -28,6 +29,7 @@ inline fun <reified VM : ViewModel> android.support.v4.app.Fragment.viewModelPro
     }).get(VM::class.java)
 }
 
+// Activity
 inline fun <reified VM : ViewModel> FragmentActivity.viewModelProvider(
         crossinline provider: () -> VM): VM {
     return ViewModelProviders.of(this, object : ViewModelProvider.Factory {

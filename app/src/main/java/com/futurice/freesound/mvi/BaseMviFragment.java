@@ -25,7 +25,7 @@ import javax.inject.Inject;
  *
  * @param <C> The DI component class.
  */
-public abstract class BaseMviFragment<C, M, E> extends BaseFragment<C> implements MviView<E, M> {
+public abstract class BaseMviFragment<C, M extends State, E extends Event> extends BaseFragment<C> implements MviView<E, M> {
 
     @Inject
     UiBinder<M, E> uiBinder;

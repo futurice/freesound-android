@@ -16,7 +16,11 @@
 
 package com.futurice.freesound.mvi
 
+import android.support.v4.app.Fragment
+
 // Need this bridge for now because you can't call reified functions from Java.
-internal fun <E : Event, A : Action, R : Result, S : State> android.support.v4.app.Fragment.createHomeFragmentViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
+internal fun
+        <E : Event, A : Action, R : Result, S : State>
+        Fragment.createViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
     return viewModelProvider(provider)
 }

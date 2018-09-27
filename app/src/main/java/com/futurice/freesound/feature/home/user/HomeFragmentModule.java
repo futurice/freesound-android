@@ -51,7 +51,7 @@ public class HomeFragmentModule {
             android.support.v4.app.Fragment fragment,
             Function0<BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>> provider) {
         // No explicit scoping: let the Factory determine the scoping.
-        return UglyViewModelProviderBridgeKt.createHomeFragmentViewModel(fragment, provider);
+        return UglyViewModelProviderBridgeKt.createViewModel(fragment, provider);
     }
 
     @Provides
