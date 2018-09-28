@@ -143,7 +143,7 @@ ext {
             exoplayer               : 'r2.1.1',
             butterknife             : '8.7.0',
             firebase                : '9.4.0',
-            stetho                  : '1.4.2',
+            stetho                  : '1.5.0',
             chuck                   : '1.0.4',
             timber                  : '4.7.0',
             junit                   : '4.12',
@@ -235,7 +235,7 @@ dependencies {
     // Instrumentation
     implementation "com.facebook.stetho:stetho:$dependencyVersions.stetho"
     implementation "com.facebook.stetho:stetho-okhttp3:$dependencyVersions.stetho"
-    debugImplementation "com.readystatesoftware.chuck:library:$dependencyVersions.chuck"
+    //  debugImplementation "com.readystatesoftware.chuck:library:$dependencyVersions.chuck"
 
     // Firebase
     implementation "com.google.firebase:firebase-core:$dependencyVersions.firebase"

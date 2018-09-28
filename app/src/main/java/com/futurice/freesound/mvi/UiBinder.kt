@@ -21,9 +21,9 @@ import android.arch.lifecycle.*
 /**
  * The MviView holds this instance.
  */
-class UiBinder<M, E>(private val mviView: MviView<E, M>,
-                     private val viewModel: ViewModel<E, M>,
-                     val lifecycleOwner: LifecycleOwner) {
+class UiBinder<E : Event, M : State>(private val mviView: MviView<E, M>,
+                                     private val viewModel: ViewModel<E, M>,
+                                     val lifecycleOwner: LifecycleOwner) {
 
     init {
         lifecycleOwner.lifecycle.observeOnCreate { bind() }

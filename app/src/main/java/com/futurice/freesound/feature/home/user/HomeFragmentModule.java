@@ -101,7 +101,7 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    UiBinder<HomeUiModel, HomeUiEvent> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
+    UiBinder<HomeUiEvent, HomeUiModel> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
         return new UiBinder<>(homeFragment, viewModel, homeFragment);
     }
 
