@@ -4,17 +4,15 @@ import com.futurice.freesound.arch.mvi.*
 import com.futurice.freesound.arch.mvi.viewmodel.asUiModelFlowable
 import io.reactivex.FlowableTransformer
 
-class Store<A : Action, R : Result, S : State>(
+class Store<R : Result, S : State>(
         private val initialState: S,
-        private val dispatcher: Dispatcher<A, R>,
         private val reducer: Reducer<R, S>,
         private val tag: String,
         private val logger: Logger) {
 
-    fun dispatchAction(): FlowableTransformer<A, S> {
+    fun reduceResult(): FlowableTransformer<R, S> {
         return FlowableTransformer { it ->
-            it.compose(dispatcher)
-                    .doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
+            it.doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
                     .scan(initialState) { model: S, result: R -> reduce(model, result) }
                     .doOnNext { model: S -> logger.log(tag, LogEvent.State(model)) }
                     .asUiModelFlowable()

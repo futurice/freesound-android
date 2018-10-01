@@ -27,7 +27,8 @@ import io.reactivex.subjects.PublishSubject
 class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
         initialEvent: E,
         eventMapper: EventMapper<E, A>,
-        store: Store<A, R, S>,
+        dispatcher: Dispatcher<A, R>,
+        store: Store<R, S>,
         schedulerProvider: SchedulerProvider,
         private val logTag: String,
         private val logger: Logger) : ViewModel<E, S>() {
@@ -44,7 +45,8 @@ class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
                         .asUiEventFlowable()
                         .map { eventMapper(it) }
                         .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
-                        .compose(store.dispatchAction())
+                        .compose(dispatcher)
+                        .compose(store.reduceResult())
                         .subscribe(
                                 { uiModel.postValue(it) },
                                 { logger.log(logTag, LogEvent.Error(it)) }))
