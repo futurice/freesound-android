@@ -12,10 +12,10 @@ typealias EventMapper<E, A> = (E) -> A
 
 typealias Reducer<R, S> = (S, R) -> S
 
-typealias ActionTransformer<A, R> = FlowableTransformer<in A, out R>
+typealias Dispatcher<A, R> = FlowableTransformer<in A, out R>
 
-fun <A, R> combine(vararg transformers: ActionTransformer<A, R>): ActionTransformer<A, R> {
-    return ActionTransformer {
+fun <A, R> combine(vararg transformers: Dispatcher<A, R>): Dispatcher<A, R> {
+    return Dispatcher {
         it.publish { actions: Flowable<A> ->
             Flowable.merge(transformers.map { it -> actions.compose(it) })
         }
