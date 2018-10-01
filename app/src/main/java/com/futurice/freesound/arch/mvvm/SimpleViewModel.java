@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.viewmodel;
+package com.futurice.freesound.arch.mvvm;
 
-public interface ViewModel {
+import android.support.annotation.NonNull;
 
-    /**
-     * Bind the ViewModel to its data model (typically modelled Observable View data).
-     */
-    void bindToDataModel();
+import io.reactivex.disposables.CompositeDisposable;
 
-    /**
-     * Unbind the ViewModel from its data model.
-     */
-    void unbindDataModel();
+/**
+ * ViewModel that doesn't have a data connection.
+ */
+public class SimpleViewModel extends BaseViewModel {
 
-    /**
-     * Permanently dispose of any resources held.
-     *
-     * The instance cannot be reused after this operation.
-     */
-    void dispose();
+    @Override
+    protected void bind(@NonNull final CompositeDisposable disposables) {
+        // Nothing - has no data source to bind to.
+    }
+
+    @Override
+    protected void unbind() {
+        // Nothing - has no data source to unbind from.
+    }
 }

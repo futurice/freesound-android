@@ -28,7 +28,7 @@ import com.futurice.freesound.R
 import com.futurice.freesound.feature.home.HomeActivity
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.arch.mvi.BaseMviFragment
+import com.futurice.freesound.arch.mvi.view.MviBaseFragment
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.squareup.picasso.Picasso
@@ -42,7 +42,7 @@ import javax.inject.Inject
  * dismissed, which occurs AFTER the repeated error has been applied; so the information is lost.
  * I've worked around this by not using INDEFINITE.
  */
-class HomeFragment : BaseMviFragment<HomeFragmentComponent, HomeUiModel, HomeUiEvent>() {
+class HomeFragment : MviBaseFragment<HomeFragmentComponent, HomeUiModel, HomeUiEvent>() {
 
     @Inject
     internal lateinit var picasso: Picasso

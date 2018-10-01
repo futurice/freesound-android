@@ -22,15 +22,15 @@ import android.view.MenuItem
 import butterknife.ButterKnife.findById
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
-import com.futurice.freesound.core.BindingBaseActivity
+import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
 import com.futurice.freesound.feature.home.user.HomeFragment
 import com.futurice.freesound.inject.activity.BaseActivityModule
-import com.futurice.freesound.arch.viewmodel.DataBinder
-import com.futurice.freesound.arch.viewmodel.SimpleDataBinder
-import com.futurice.freesound.arch.viewmodel.ViewModel
+import com.futurice.freesound.arch.mvvm.DataBinder
+import com.futurice.freesound.arch.mvvm.SimpleDataBinder
+import com.futurice.freesound.arch.mvvm.ViewModel
 import javax.inject.Inject
 
-class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
+class HomeActivity : MvvmBaseActivity<HomeActivityComponent>() {
 
     @Inject
     internal lateinit var homeViewModel: HomeViewModel

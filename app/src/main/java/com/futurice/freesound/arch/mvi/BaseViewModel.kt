@@ -18,6 +18,7 @@ package com.futurice.freesound.arch.mvi
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.futurice.freesound.arch.mvi.store.Store
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject

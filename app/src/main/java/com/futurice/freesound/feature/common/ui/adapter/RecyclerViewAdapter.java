@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.common.ui.adapter;
 import com.futurice.freesound.common.utils.Preconditions;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
-import com.futurice.freesound.arch.viewmodel.viewholder.BaseBindingViewHolder;
+import com.futurice.freesound.arch.mvvm.viewholder.BaseBindingViewHolder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;

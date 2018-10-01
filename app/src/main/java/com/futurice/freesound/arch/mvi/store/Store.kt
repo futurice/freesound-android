@@ -1,5 +1,6 @@
-package com.futurice.freesound.arch.mvi
+package com.futurice.freesound.arch.mvi.store
 
+import com.futurice.freesound.arch.mvi.*
 import io.reactivex.FlowableTransformer
 
 class Store<A : Action, R : Result, S : State>(

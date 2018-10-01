@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.viewmodel.viewholder;
+package com.futurice.freesound.arch.mvvm.viewholder;
 
-import com.futurice.freesound.arch.viewmodel.DataBinder;
-import com.futurice.freesound.arch.viewmodel.ViewModel;
+import com.futurice.freesound.arch.mvvm.DataBinder;
+import com.futurice.freesound.arch.mvvm.ViewModel;
 
 import android.support.annotation.NonNull;
 import android.view.View;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.viewmodel;
+package com.futurice.freesound.arch.mvi.view
 
-import android.support.annotation.NonNull;
+import android.arch.lifecycle.LiveData
+import com.futurice.freesound.arch.mvi.Event
+import com.futurice.freesound.arch.mvi.State
 
-import io.reactivex.disposables.CompositeDisposable;
-
-/**
- * Implements methods so that child classes don't need to declare empty implementations.
- */
-public class SimpleDataBinder implements DataBinder {
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-        // Override this when required.
-    }
-
-    @Override
-    public void unbind() {
-        // Override this when required.
-    }
+interface MviView<E : Event, in M : State> {
+    fun uiEvents(): LiveData<E> = EmptyLiveData()
+    fun render(model: M)
+    fun cancel() {}
 }
+
+interface Renderer<in M : State> {
+    fun render(model: M)
+    fun cancel() {}
+}
+
+private class EmptyLiveData<T> : LiveData<T>()

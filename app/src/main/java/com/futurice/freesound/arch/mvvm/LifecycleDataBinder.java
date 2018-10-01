@@ -14,28 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.viewmodel;
+package com.futurice.freesound.arch.mvvm;
 
-import android.support.annotation.NonNull;
+interface LifecycleDataBinder extends DataBinder {
 
-import io.reactivex.disposables.CompositeDisposable;
+    void onCreate();
 
-/**
- * Provides the facility to bind/unbind to arbitrary data sources.
- */
-public interface DataBinder {
+    void onResume();
 
-    /**
-     * Bind to the data source.
-     *
-     * @param disposables a {@link CompositeDisposable} to hold the bindings.
-     */
-    void bind(@NonNull CompositeDisposable disposables);
+    void onPause();
 
-    /**
-     * Unbind from the data source.
-     */
-    void unbind();
+    void onDestroyView();
+
+    void onDestroy();
 
 }
-

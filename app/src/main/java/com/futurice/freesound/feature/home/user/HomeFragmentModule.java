@@ -22,9 +22,9 @@ import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
 import com.futurice.freesound.arch.mvi.BaseViewModel;
 import com.futurice.freesound.arch.mvi.Logger;
-import com.futurice.freesound.arch.mvi.Store;
+import com.futurice.freesound.arch.mvi.store.Store;
 import com.futurice.freesound.arch.mvi.UglyViewModelProviderBridgeKt;
-import com.futurice.freesound.arch.mvi.UiBinder;
+import com.futurice.freesound.arch.mvi.view.UiBinder;
 
 import dagger.Module;
 import dagger.Provides;

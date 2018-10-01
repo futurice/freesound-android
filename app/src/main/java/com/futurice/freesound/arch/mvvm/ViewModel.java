@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.mvi
+package com.futurice.freesound.arch.mvvm;
 
-import android.arch.lifecycle.LiveData
+public interface ViewModel {
 
-interface MviView<E : Event, in M : State> {
-    fun uiEvents(): LiveData<E> = EmptyLiveData()
-    fun render(model: M)
-    fun cancel() {}
+    /**
+     * Bind the ViewModel to its data model (typically modelled Observable View data).
+     */
+    void bindToDataModel();
+
+    /**
+     * Unbind the ViewModel from its data model.
+     */
+    void unbindDataModel();
+
+    /**
+     * Permanently dispose of any resources held.
+     *
+     * The instance cannot be reused after this operation.
+     */
+    void dispose();
 }
-
-interface Renderer<in M : State> {
-    fun render(model: M)
-    fun cancel() {}
-}
-
-private class EmptyLiveData<T> : LiveData<T>()

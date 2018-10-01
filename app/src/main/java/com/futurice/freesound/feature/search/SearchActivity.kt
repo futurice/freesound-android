@@ -27,12 +27,12 @@ import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.common.utils.Preconditions.get
 import com.futurice.freesound.common.utils.ifNull
-import com.futurice.freesound.core.BindingBaseActivity
+import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.inject.activity.BaseActivityModule
-import com.futurice.freesound.arch.viewmodel.DataBinder
-import com.futurice.freesound.arch.viewmodel.SimpleDataBinder
-import com.futurice.freesound.arch.viewmodel.ViewModel
+import com.futurice.freesound.arch.mvvm.DataBinder
+import com.futurice.freesound.arch.mvvm.SimpleDataBinder
+import com.futurice.freesound.arch.mvvm.ViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.Scheduler
@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 import timber.log.Timber.e
 import javax.inject.Inject
 
-class SearchActivity : BindingBaseActivity<SearchActivityComponent>() {
+class SearchActivity : MvvmBaseActivity<SearchActivityComponent>() {
 
     @Inject
     internal lateinit var searchViewModel: SearchActivityViewModel

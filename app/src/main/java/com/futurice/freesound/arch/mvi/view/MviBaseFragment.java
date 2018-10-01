@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.mvi;
+package com.futurice.freesound.arch.mvi.view;
 
+import com.futurice.freesound.arch.mvi.Event;
+import com.futurice.freesound.arch.mvi.State;
 import com.futurice.freesound.core.BaseFragment;
 
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ import javax.inject.Inject;
  *
  * @param <C> The DI component class.
  */
-public abstract class BaseMviFragment<C, M extends State, E extends Event> extends BaseFragment<C> implements MviView<E, M> {
+public abstract class MviBaseFragment<C, M extends State, E extends Event> extends BaseFragment<C> implements MviView<E, M> {
 
     @Inject
     UiBinder<E, M> uiBinder;

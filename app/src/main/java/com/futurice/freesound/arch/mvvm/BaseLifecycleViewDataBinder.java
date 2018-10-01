@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.viewmodel;
+package com.futurice.freesound.arch.mvvm;
 
 import android.support.annotation.NonNull;
 

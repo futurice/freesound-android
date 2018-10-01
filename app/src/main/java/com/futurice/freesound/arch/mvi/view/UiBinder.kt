@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.mvi
+package com.futurice.freesound.arch.mvi.view
 
 import android.arch.lifecycle.*
+import com.futurice.freesound.arch.mvi.Event
+import com.futurice.freesound.arch.mvi.State
+import com.futurice.freesound.arch.mvi.ViewModel
 
 /**
  * The MviView holds this instance.
  */
 class UiBinder<E : Event, M : State>(private val mviView: MviView<E, M>,
-                                     private val viewModel: ViewModel<E, M>,
-                                     val lifecycleOwner: LifecycleOwner) {
+                                                                                                     private val viewModel: ViewModel<E, M>,
+                                                                                                     val lifecycleOwner: LifecycleOwner) {
 
     init {
         lifecycleOwner.lifecycle.observeOnCreate { bind() }
