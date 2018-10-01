@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.home.user;
 
 import com.futurice.freesound.arch.mvi.Logger;
 import com.futurice.freesound.arch.mvi.store.Store;
-import com.futurice.freesound.arch.mvi.view.UiBinder;
+import com.futurice.freesound.arch.mvi.view.Flow;
 import com.futurice.freesound.arch.mvi.viewmodel.BaseViewModel;
 import com.futurice.freesound.arch.mvi.viewmodel.UglyViewModelProviderBridgeKt;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
@@ -101,8 +101,8 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    UiBinder<HomeUiEvent, HomeUiModel> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
-        return new UiBinder<>(homeFragment, viewModel, homeFragment);
+    Flow<HomeUiEvent, HomeUiModel> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
+        return new Flow<>(homeFragment, viewModel, homeFragment);
     }
 
 }

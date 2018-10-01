@@ -17,12 +17,13 @@
 package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.arch.mvi.*
+import com.futurice.freesound.arch.mvi.viewmodel.BaseViewModel
 import com.futurice.freesound.arch.mvi.viewmodel.asUiModelFlowable
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
 
-//typealias HomeUserFragmentViewModel = BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>
+typealias HomeUserFragmentViewModel = BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>
 
 sealed class HomeUiEvent : Event {
     object Initial : HomeUiEvent()

@@ -24,15 +24,15 @@ import com.futurice.freesound.arch.mvi.viewmodel.ViewModel
 /**
  * The MviView holds this instance.
  */
-class UiBinder<E : Event, M : State>(private val mviView: MviView<E, M>,
-                                     private val viewModel: ViewModel<E, M>,
-                                     val lifecycleOwner: LifecycleOwner) {
+class Flow<E : Event, M : State, VM : ViewModel<E, M>>(private val mviView: MviView<E, M>,
+                                                       private val viewModel: VM,
+                                                       val lifecycleOwner: LifecycleOwner) {
 
     init {
-        lifecycleOwner.lifecycle.observeOnCreate { bind() }
+        lifecycleOwner.lifecycle.observeOnCreate { connect() }
     }
 
-    private fun bind() {
+    private fun connect() {
         // Send UiEvents to the ViewModel
         mviView.uiEvents()
                 .observe(lifecycleOwner, Observer { viewModel.uiEvents(it!!) })

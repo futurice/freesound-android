@@ -19,17 +19,15 @@ package com.futurice.freesound.arch.mvi.view
 import com.futurice.freesound.arch.core.BaseFragment
 import com.futurice.freesound.arch.mvi.Event
 import com.futurice.freesound.arch.mvi.State
-
-import javax.inject.Inject
+import com.futurice.freesound.arch.mvi.viewmodel.ViewModel
 
 /**
  * A base Fragment which provides the binding mechanism hooks to a MviView Model.
  *
  * @param <C> The DI component class.
  */
-abstract class MviBaseFragment<C, M : State, E : Event> : BaseFragment<C>(), MviView<E, M> {
+abstract class MviBaseFragment<C, M : State, E : Event, VM : ViewModel<E, M>> : BaseFragment<C>(), MviView<E, M> {
 
-    @Inject
-    internal lateinit var uiBinder: UiBinder<E, M>
+    internal lateinit var flow: Flow<E, M, VM>
 
 }
