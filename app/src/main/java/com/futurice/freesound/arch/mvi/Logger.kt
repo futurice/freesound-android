@@ -11,7 +11,7 @@ class Logger {
             is LogEvent.Result -> Timber.d("MVI|$tag| Result => $logEvent")
             is LogEvent.Reduce -> Timber.d("MVI|$tag| Reduce => $logEvent")
             is LogEvent.State -> Timber.d("MVI|$tag| State => $logEvent")
-            is LogEvent.Error -> Timber.d("MVI|$tag| Fatal Error => $logEvent")
+            is LogEvent.Error -> Timber.e(logEvent.throwable, "MVI|$tag| Fatal Error => $logEvent")
         }
     }
 }
@@ -22,5 +22,5 @@ sealed class LogEvent {
     data class Result(val result: com.futurice.freesound.arch.mvi.Result) : LogEvent()
     data class Reduce(val result: com.futurice.freesound.arch.mvi.Result, val prevState: com.futurice.freesound.arch.mvi.State) : LogEvent()
     data class State(val state: com.futurice.freesound.arch.mvi.State) : LogEvent()
-    data class Error(val t: Throwable) : LogEvent()
+    data class Error(val throwable: Throwable) : LogEvent()
 }
