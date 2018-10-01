@@ -19,7 +19,7 @@ package com.futurice.freesound.arch.mvvm.view;
 import com.futurice.freesound.arch.mvvm.BaseLifecycleViewDataBinder;
 import com.futurice.freesound.arch.mvvm.DataBinder;
 import com.futurice.freesound.arch.mvvm.ViewModel;
-import com.futurice.freesound.core.BaseActivity;
+import com.futurice.freesound.arch.core.BaseActivity;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

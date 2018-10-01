@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.core;
+package com.futurice.freesound.arch.core;
 
 import com.futurice.freesound.inject.Injector;
 
@@ -22,21 +22,21 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 /**
- * A base Fragment which provides a dependency injection mechanism.
+ * A base Activity which provides a dependency injection mechanism.
  *
  * @param <T> The DI component class
  */
-public abstract class BaseFragment<T> extends Fragment implements Injector<T> {
+public abstract class BaseActivity<T> extends AppCompatActivity implements Injector<T> {
 
     private T component;
 
     @CallSuper
     @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         inject();
     }
 
@@ -51,5 +51,4 @@ public abstract class BaseFragment<T> extends Fragment implements Injector<T> {
 
     @NonNull
     protected abstract T createComponent();
-
 }
