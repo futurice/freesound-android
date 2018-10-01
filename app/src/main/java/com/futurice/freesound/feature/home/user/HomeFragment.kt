@@ -25,10 +25,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.futurice.freesound.R
+import com.futurice.freesound.arch.mvi.view.MviBaseFragment
 import com.futurice.freesound.feature.home.HomeActivity
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.arch.mvi.view.MviBaseFragment
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.squareup.picasso.Picasso
@@ -77,17 +77,19 @@ class HomeFragment : MviBaseFragment<HomeFragmentComponent, HomeUiModel, HomeUiE
 
     override fun render(model: HomeUiModel) {
 
-        when (model.user) {
+        val (user, isLoading, isRefreshing, errorMsg) = model
+
+        when (user) {
             null -> hideUser()
-            else -> showUser(model.user)
+            else -> showUser(user)
         }
 
-        showLoading(model.isLoading)
-        showRefreshing(model.isRefreshing)
+        showLoading(isLoading)
+        showRefreshing(isRefreshing)
 
-        when (model.errorMsg) {
+        when (errorMsg) {
             null -> errorSnackBar.dismiss()
-            else -> errorSnackBar.setText(model.errorMsg).show()
+            else -> errorSnackBar.setText(errorMsg).show()
         }
 
     }
