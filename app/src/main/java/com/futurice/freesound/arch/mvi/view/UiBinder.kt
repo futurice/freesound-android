@@ -25,8 +25,8 @@ import com.futurice.freesound.arch.mvi.ViewModel
  * The MviView holds this instance.
  */
 class UiBinder<E : Event, M : State>(private val mviView: MviView<E, M>,
-                                                                                                     private val viewModel: ViewModel<E, M>,
-                                                                                                     val lifecycleOwner: LifecycleOwner) {
+                                     private val viewModel: ViewModel<E, M>,
+                                     val lifecycleOwner: LifecycleOwner) {
 
     init {
         lifecycleOwner.lifecycle.observeOnCreate { bind() }

@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.arch.mvi.view;
 
+import com.futurice.freesound.arch.core.BaseFragment;
 import com.futurice.freesound.arch.mvi.Event;
 import com.futurice.freesound.arch.mvi.State;
-import com.futurice.freesound.arch.core.BaseFragment;
 
 import javax.inject.Inject;
 
