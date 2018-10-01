@@ -26,9 +26,4 @@ interface MviView<E : Event, in M : State> {
     fun cancel() {}
 }
 
-interface Renderer<in M : State> {
-    fun render(model: M)
-    fun cancel() {}
-}
-
 private class EmptyLiveData<T> : LiveData<T>()
