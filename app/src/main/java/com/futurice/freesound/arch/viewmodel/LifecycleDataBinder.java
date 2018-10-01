@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi;
+package com.futurice.freesound.arch.viewmodel;
 
-import com.futurice.freesound.core.BaseFragment;
+interface LifecycleDataBinder extends DataBinder {
 
-import javax.inject.Inject;
+    void onCreate();
 
-/**
- * A base Fragment which provides the binding mechanism hooks to a MviView Model.
- *
- * @param <C> The DI component class.
- */
-public abstract class BaseMviFragment<C, M extends State, E extends Event> extends BaseFragment<C> implements MviView<E, M> {
+    void onResume();
 
-    @Inject
-    UiBinder<M, E> uiBinder;
+    void onPause();
+
+    void onDestroyView();
+
+    void onDestroy();
 
 }

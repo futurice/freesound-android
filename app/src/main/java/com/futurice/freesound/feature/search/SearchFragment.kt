@@ -31,8 +31,8 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.common.ui.adapter.RecyclerViewAdapter
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.network.api.model.Sound
-import com.futurice.freesound.viewmodel.DataBinder
-import com.futurice.freesound.viewmodel.ViewModel
+import com.futurice.freesound.arch.viewmodel.DataBinder
+import com.futurice.freesound.arch.viewmodel.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_search.*
 import timber.log.Timber

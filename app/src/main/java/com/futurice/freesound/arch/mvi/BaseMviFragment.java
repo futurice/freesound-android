@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2018 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.arch.mvi;
 
-public interface ViewModel {
+import com.futurice.freesound.core.BaseFragment;
 
-    /**
-     * Bind the ViewModel to its data model (typically modelled Observable View data).
-     */
-    void bindToDataModel();
+import javax.inject.Inject;
 
-    /**
-     * Unbind the ViewModel from its data model.
-     */
-    void unbindDataModel();
+/**
+ * A base Fragment which provides the binding mechanism hooks to a MviView Model.
+ *
+ * @param <C> The DI component class.
+ */
+public abstract class BaseMviFragment<C, M extends State, E extends Event> extends BaseFragment<C> implements MviView<E, M> {
 
-    /**
-     * Permanently dispose of any resources held.
-     *
-     * The instance cannot be reused after this operation.
-     */
-    void dispose();
+    @Inject
+    UiBinder<E, M> uiBinder;
+
 }

@@ -22,7 +22,7 @@ import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.feature.analytics.Analytics
 import com.futurice.freesound.feature.audio.AudioPlayer
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.viewmodel.BaseViewModel
+import com.futurice.freesound.arch.viewmodel.BaseViewModel
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable

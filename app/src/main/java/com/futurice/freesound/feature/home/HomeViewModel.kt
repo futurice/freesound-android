@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.home
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.feature.common.Navigator
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.viewmodel.SimpleViewModel
+import com.futurice.freesound.arch.viewmodel.SimpleViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import polanski.option.Unit

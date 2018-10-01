@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.core;
 
-import com.futurice.freesound.viewmodel.BaseLifecycleViewDataBinder;
-import com.futurice.freesound.viewmodel.DataBinder;
-import com.futurice.freesound.viewmodel.ViewModel;
+import com.futurice.freesound.arch.viewmodel.BaseLifecycleViewDataBinder;
+import com.futurice.freesound.arch.viewmodel.DataBinder;
+import com.futurice.freesound.arch.viewmodel.ViewModel;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

@@ -20,11 +20,11 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
-import com.futurice.freesound.mvi.BaseViewModel;
-import com.futurice.freesound.mvi.Logger;
-import com.futurice.freesound.mvi.Store;
-import com.futurice.freesound.mvi.UglyViewModelProviderBridgeKt;
-import com.futurice.freesound.mvi.UiBinder;
+import com.futurice.freesound.arch.mvi.BaseViewModel;
+import com.futurice.freesound.arch.mvi.Logger;
+import com.futurice.freesound.arch.mvi.Store;
+import com.futurice.freesound.arch.mvi.UglyViewModelProviderBridgeKt;
+import com.futurice.freesound.arch.mvi.UiBinder;
 
 import dagger.Module;
 import dagger.Provides;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi
+package com.futurice.freesound.arch.mvi
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

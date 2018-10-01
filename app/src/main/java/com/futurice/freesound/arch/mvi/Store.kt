@@ -1,4 +1,4 @@
-package com.futurice.freesound.mvi
+package com.futurice.freesound.arch.mvi
 
 import io.reactivex.FlowableTransformer
 

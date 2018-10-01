@@ -26,8 +26,8 @@ import com.futurice.freesound.feature.common.waveform.PlaybackWaveformView;
 import com.futurice.freesound.feature.common.waveform.WaveformViewTarget;
 import com.futurice.freesound.feature.images.PicassoTransformations;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.DataBinder;
-import com.futurice.freesound.viewmodel.viewholder.BaseBindingViewHolder;
+import com.futurice.freesound.arch.viewmodel.DataBinder;
+import com.futurice.freesound.arch.viewmodel.viewholder.BaseBindingViewHolder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

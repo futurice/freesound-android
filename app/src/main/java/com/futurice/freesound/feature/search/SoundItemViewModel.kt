@@ -23,7 +23,7 @@ import com.futurice.freesound.feature.audio.from
 import com.futurice.freesound.feature.common.Navigator
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.Sound
-import com.futurice.freesound.viewmodel.SimpleViewModel
+import com.futurice.freesound.arch.viewmodel.SimpleViewModel
 import com.google.auto.factory.AutoFactory
 import com.google.auto.factory.Provided
 import io.reactivex.Observable

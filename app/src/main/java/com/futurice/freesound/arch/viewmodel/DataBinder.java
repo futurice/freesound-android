@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.mvi
+package com.futurice.freesound.arch.viewmodel;
 
-import android.support.v4.app.Fragment
+import android.support.annotation.NonNull;
 
-// Need this bridge for now because you can't call reified functions from Java.
-internal fun
-        <E : Event, A : Action, R : Result, S : State>
-        Fragment.createViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
-    return viewModelProvider(provider)
+import io.reactivex.disposables.CompositeDisposable;
+
+/**
+ * Provides the facility to bind/unbind to arbitrary data sources.
+ */
+public interface DataBinder {
+
+    /**
+     * Bind to the data source.
+     *
+     * @param disposables a {@link CompositeDisposable} to hold the bindings.
+     */
+    void bind(@NonNull CompositeDisposable disposables);
+
+    /**
+     * Unbind from the data source.
+     */
+    void unbind();
+
 }
+

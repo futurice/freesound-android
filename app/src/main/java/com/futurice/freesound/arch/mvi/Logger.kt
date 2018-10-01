@@ -1,4 +1,4 @@
-package com.futurice.freesound.mvi
+package com.futurice.freesound.arch.mvi
 
 import timber.log.Timber
 
@@ -17,10 +17,10 @@ class Logger {
 }
 
 sealed class LogEvent {
-    data class Event(val event: com.futurice.freesound.mvi.Event) : LogEvent()
-    data class Action(val action: com.futurice.freesound.mvi.Action) : LogEvent()
-    data class Result(val result: com.futurice.freesound.mvi.Result) : LogEvent()
-    data class Reduce(val result: com.futurice.freesound.mvi.Result, val prevState: com.futurice.freesound.mvi.State) : LogEvent()
-    data class State(val state: com.futurice.freesound.mvi.State) : LogEvent()
+    data class Event(val event: com.futurice.freesound.arch.mvi.Event) : LogEvent()
+    data class Action(val action: com.futurice.freesound.arch.mvi.Action) : LogEvent()
+    data class Result(val result: com.futurice.freesound.arch.mvi.Result) : LogEvent()
+    data class Reduce(val result: com.futurice.freesound.arch.mvi.Result, val prevState: com.futurice.freesound.arch.mvi.State) : LogEvent()
+    data class State(val state: com.futurice.freesound.arch.mvi.State) : LogEvent()
     data class Error(val t: Throwable) : LogEvent()
 }

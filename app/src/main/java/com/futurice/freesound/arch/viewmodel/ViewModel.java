@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.arch.viewmodel;
 
-import android.support.annotation.NonNull;
-
-import io.reactivex.disposables.CompositeDisposable;
-
-/**
- * Provides the facility to bind/unbind to arbitrary data sources.
- */
-public interface DataBinder {
+public interface ViewModel {
 
     /**
-     * Bind to the data source.
+     * Bind the ViewModel to its data model (typically modelled Observable View data).
+     */
+    void bindToDataModel();
+
+    /**
+     * Unbind the ViewModel from its data model.
+     */
+    void unbindDataModel();
+
+    /**
+     * Permanently dispose of any resources held.
      *
-     * @param disposables a {@link CompositeDisposable} to hold the bindings.
+     * The instance cannot be reused after this operation.
      */
-    void bind(@NonNull CompositeDisposable disposables);
-
-    /**
-     * Unbind from the data source.
-     */
-    void unbind();
-
+    void dispose();
 }
-

@@ -16,13 +16,13 @@
 
 package com.futurice.freesound.network.api;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.User;
-
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
@@ -33,7 +33,7 @@ import retrofit2.http.Query;
 
 /**
  * Retrofit2 annotated interface to the Freesound API.
- *
+ * <p>
  * Refer to {@see https://www.freesound.org/docs/api/}.
  */
 interface FreeSoundApi {
@@ -45,8 +45,13 @@ interface FreeSoundApi {
                                      @Query("fields") @NonNull SoundFields fields);
 
     @NonNull
-    @GET("users/{user}/")
-    Single<User> user(@Path("user") @NonNull final String user);
+    @GET("users/{username}/")
+    Single<User> user(@Path("username") @NonNull final String username);
+
+    @NonNull
+    @GET("users/{username}/sounds/")
+    Single<SoundSearchResult> sounds(@Path("username") @NonNull final String username,
+                                     @Query("fields") @NonNull SoundFields fields);
 
     @NonNull
     @POST("oauth2/access_token/")

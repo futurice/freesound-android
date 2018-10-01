@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.arch.mvi
 
-interface LifecycleDataBinder extends DataBinder {
+import android.arch.lifecycle.LiveData
 
-    void onCreate();
-
-    void onResume();
-
-    void onPause();
-
-    void onDestroyView();
-
-    void onDestroy();
-
+interface MviView<E : Event, in M : State> {
+    fun uiEvents(): LiveData<E> = EmptyLiveData()
+    fun render(model: M)
+    fun cancel() {}
 }
+
+interface Renderer<in M : State> {
+    fun render(model: M)
+    fun cancel() {}
+}
+
+private class EmptyLiveData<T> : LiveData<T>()

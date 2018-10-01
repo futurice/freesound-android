@@ -28,7 +28,7 @@ import com.futurice.freesound.R
 import com.futurice.freesound.feature.home.HomeActivity
 import com.futurice.freesound.feature.images.circularTransformation
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
-import com.futurice.freesound.mvi.BaseMviFragment
+import com.futurice.freesound.arch.mvi.BaseMviFragment
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.squareup.picasso.Picasso

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.arch.mvi
 
-import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment
 
-import io.reactivex.disposables.CompositeDisposable;
-
-/**
- * Implements methods so that child classes don't need to declare empty implementations.
- */
-public class SimpleDataBinder implements DataBinder {
-
-    @Override
-    public void bind(@NonNull final CompositeDisposable disposables) {
-        // Override this when required.
-    }
-
-    @Override
-    public void unbind() {
-        // Override this when required.
-    }
+// Need this bridge for now because you can't call reified functions from Java.
+internal fun
+        <E : Event, A : Action, R : Result, S : State>
+        Fragment.createViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
+    return viewModelProvider(provider)
 }

@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel.viewholder;
-
-import com.futurice.freesound.viewmodel.ViewModel;
+package com.futurice.freesound.arch.viewmodel;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
- * A {@link android.support.v7.widget.RecyclerView.ViewHolder} which supports binding and unbinding
- * to a {@link ViewModel}.
- *
- * @param <T> {@link ViewModel} type
+ * ViewModel that doesn't have a data connection.
  */
-abstract class AbstractBindingViewHolder<T extends ViewModel> extends RecyclerView.ViewHolder {
+public class SimpleViewModel extends BaseViewModel {
 
-    AbstractBindingViewHolder(final View itemView) {
-        super(itemView);
+    @Override
+    protected void bind(@NonNull final CompositeDisposable disposables) {
+        // Nothing - has no data source to bind to.
     }
 
-    public abstract void bind(@NonNull final T viewModel);
-
-    public abstract void unbind();
+    @Override
+    protected void unbind() {
+        // Nothing - has no data source to unbind from.
+    }
 }

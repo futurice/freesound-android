@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.viewmodel;
+package com.futurice.freesound.arch.viewmodel;
 
 import android.support.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * ViewModel that doesn't have a data connection.
- */
-public class SimpleViewModel extends BaseViewModel {
+public abstract class BaseViewModel implements ViewModel {
+
+    private final CompositeDisposable dataDisposable = new CompositeDisposable();
 
     @Override
-    protected void bind(@NonNull final CompositeDisposable disposables) {
-        // Nothing - has no data source to bind to.
+    public final void bindToDataModel() {
+        bind(dataDisposable);
     }
 
     @Override
-    protected void unbind() {
-        // Nothing - has no data source to unbind from.
+    public final void unbindDataModel() {
+        dataDisposable.clear();
+        unbind();
+    }
+
+    protected abstract void bind(@NonNull final CompositeDisposable disposables);
+
+    protected abstract void unbind();
+
+    @Override
+    public final void dispose() {
+        dataDisposable.dispose();
     }
 }

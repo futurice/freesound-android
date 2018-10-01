@@ -2,7 +2,7 @@ package com.futurice.freesound.feature.home.user
 
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
-import com.futurice.freesound.mvi.Reducer
+import com.futurice.freesound.arch.mvi.Reducer
 import com.futurice.freesound.network.api.model.User
 import timber.log.Timber
 

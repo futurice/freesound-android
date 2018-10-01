@@ -25,9 +25,9 @@ import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.core.BindingBaseActivity
 import com.futurice.freesound.feature.home.user.HomeFragment
 import com.futurice.freesound.inject.activity.BaseActivityModule
-import com.futurice.freesound.viewmodel.DataBinder
-import com.futurice.freesound.viewmodel.SimpleDataBinder
-import com.futurice.freesound.viewmodel.ViewModel
+import com.futurice.freesound.arch.viewmodel.DataBinder
+import com.futurice.freesound.arch.viewmodel.SimpleDataBinder
+import com.futurice.freesound.arch.viewmodel.ViewModel
 import javax.inject.Inject
 
 class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
