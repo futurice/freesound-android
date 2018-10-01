@@ -86,7 +86,7 @@ public class HomeFragmentModule {
 
     @Provides
     static FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor, RefreshInteractor refreshInteractor) {
-        return HomeUserUiKt.actionTransformer(homeUserInteractor, refreshInteractor);
+        return HomeUserUiKt.dispatcher(homeUserInteractor, refreshInteractor);
     }
 
     @Provides

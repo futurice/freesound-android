@@ -6,14 +6,14 @@ import io.reactivex.FlowableTransformer
 
 class Store<A : Action, R : Result, S : State>(
         private val initialState: S,
-        private val actionTransformer: ActionTransformer<A, R>,
+        private val dispatcher: Dispatcher<A, R>,
         private val reducer: Reducer<R, S>,
         private val tag: String,
         private val logger: Logger) {
 
     fun dispatchAction(): FlowableTransformer<A, S> {
         return FlowableTransformer { it ->
-            it.compose(actionTransformer)
+            it.compose(dispatcher)
                     .doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
                     .scan(initialState) { model: S, result: R -> reduce(model, result) }
                     .doOnNext { model: S -> logger.log(tag, LogEvent.State(model)) }
