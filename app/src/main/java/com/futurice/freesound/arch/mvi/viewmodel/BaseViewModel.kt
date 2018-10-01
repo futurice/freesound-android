@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.mvi
+package com.futurice.freesound.arch.mvi.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.futurice.freesound.arch.mvi.*
 import com.futurice.freesound.arch.mvi.store.Store
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.disposables.SerialDisposable

@@ -19,7 +19,7 @@ package com.futurice.freesound.arch.mvi.view
 import android.arch.lifecycle.*
 import com.futurice.freesound.arch.mvi.Event
 import com.futurice.freesound.arch.mvi.State
-import com.futurice.freesound.arch.mvi.ViewModel
+import com.futurice.freesound.arch.mvi.viewmodel.ViewModel
 
 /**
  * The MviView holds this instance.

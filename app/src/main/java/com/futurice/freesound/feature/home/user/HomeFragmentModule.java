@@ -16,15 +16,15 @@
 
 package com.futurice.freesound.feature.home.user;
 
+import com.futurice.freesound.arch.mvi.Logger;
+import com.futurice.freesound.arch.mvi.store.Store;
+import com.futurice.freesound.arch.mvi.view.UiBinder;
+import com.futurice.freesound.arch.mvi.viewmodel.BaseViewModel;
+import com.futurice.freesound.arch.mvi.viewmodel.UglyViewModelProviderBridgeKt;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
-import com.futurice.freesound.arch.mvi.BaseViewModel;
-import com.futurice.freesound.arch.mvi.Logger;
-import com.futurice.freesound.arch.mvi.store.Store;
-import com.futurice.freesound.arch.mvi.UglyViewModelProviderBridgeKt;
-import com.futurice.freesound.arch.mvi.view.UiBinder;
 
 import dagger.Module;
 import dagger.Provides;

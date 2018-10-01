@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.arch.mvi;
+package com.futurice.freesound.arch.mvi.viewmodel;
 
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
