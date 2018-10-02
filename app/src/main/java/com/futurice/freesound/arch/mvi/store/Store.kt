@@ -10,7 +10,7 @@ class Store<R : Result, S : State>(
         private val tag: String,
         private val logger: Logger) {
 
-    fun reduceResult(): FlowableTransformer<R, S> {
+    fun reduce(): FlowableTransformer<R, S> {
         return FlowableTransformer { it ->
             it.doOnNext { result -> logger.log(tag, LogEvent.Result(result)) }
                     .scan(initialState) { model: S, result: R -> reduce(model, result) }

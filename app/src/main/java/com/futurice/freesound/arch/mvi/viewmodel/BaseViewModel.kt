@@ -46,7 +46,7 @@ class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
                         .map { eventMapper(it) }
                         .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
                         .compose(dispatcher)
-                        .compose(store.reduceResult())
+                        .compose(store.reduce())
                         .subscribe(
                                 { uiModel.postValue(it) },
                                 { logger.log(logTag, LogEvent.Error(it)) }))
