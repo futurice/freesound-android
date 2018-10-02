@@ -26,7 +26,7 @@ import com.futurice.freesound.arch.mvi.viewmodel.ViewModel
  */
 class Flow<E : Event, M : State, VM : ViewModel<E, M>>(private val mviView: MviView<E, M>,
                                                        private val viewModel: VM,
-                                                       val lifecycleOwner: LifecycleOwner) {
+                                                       private val lifecycleOwner: LifecycleOwner) {
 
     init {
         lifecycleOwner.lifecycle.observeOnCreate { connect() }
