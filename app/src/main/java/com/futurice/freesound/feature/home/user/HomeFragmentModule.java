@@ -21,6 +21,7 @@ import com.futurice.freesound.arch.mvi.store.Store;
 import com.futurice.freesound.arch.mvi.view.Flow;
 import com.futurice.freesound.arch.mvi.viewmodel.BaseViewModel;
 import com.futurice.freesound.arch.mvi.viewmodel.UglyViewModelProviderBridgeKt;
+import com.futurice.freesound.arch.mvi.viewmodel.MviViewModel;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
@@ -47,24 +48,26 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentViewModel(
+    static HomeFragmentViewModel provideHomeFragmentViewModel(
             android.support.v4.app.Fragment fragment,
-            Function0<BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>> provider) {
+            Function0<MviViewModel<HomeUiEvent, HomeUiModel>> provider) {
         // No explicit scoping: let the Factory determine the scoping.
         return UglyViewModelProviderBridgeKt.createViewModel(fragment, provider);
     }
 
     @Provides
-    static Function0<BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>> providerHomeFragmentViewModelProvider(
-            Store<HomeUiAction, HomeUiResult, HomeUiModel> store,
+    static Function0<MviViewModel<HomeUiEvent, HomeUiModel>> providerHomeFragmentViewModelProvider(
+            FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> dispatcher,
+            Store<HomeUiResult, HomeUiModel> store,
             SchedulerProvider schedulerProvider,
             Logger logger) {
-        return () -> new BaseViewModel<>(HomeUserUiKt.getINITIAL_UI_EVENT(),
-                HomeUserUiKt.getEventMapper(),
+        return () -> new HomeFragmentViewModel(new BaseViewModel<>(HomeFragmentViewModelKt.getINITIAL_UI_EVENT(),
+                HomeFragmentViewModelKt.getEventMapper(),
+                dispatcher,
                 store,
                 schedulerProvider,
-                HomeUserUiKt.LOG_TAG,
-                logger);
+                HomeFragmentViewModelKt.LOG_TAG,
+                logger));
     }
 
     @Provides
@@ -73,20 +76,18 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static Store<HomeUiAction, HomeUiResult, HomeUiModel> provideHomeFragmentStore(FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> actionTransformer,
-                                                                                   Function2<HomeUiModel, HomeUiResult, HomeUiModel> reducer,
-                                                                                   Logger logger) {
+    static Store<HomeUiResult, HomeUiModel> provideHomeFragmentStore(Function2<HomeUiModel, HomeUiResult, HomeUiModel> reducer,
+                                                                     Logger logger) {
         return new Store<>(
-                HomeUserUiKt.getINITIAL_UI_STATE(),
-                actionTransformer,
+                HomeFragmentViewModelKt.getINITIAL_UI_STATE(),
                 reducer,
-                HomeUserUiKt.LOG_TAG,
+                HomeFragmentViewModelKt.LOG_TAG,
                 logger);
     }
 
     @Provides
-    static FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> provideHomeFragmentViewModelActionTransformer(HomeUserInteractor homeUserInteractor, RefreshInteractor refreshInteractor) {
-        return HomeUserUiKt.dispatcher(homeUserInteractor, refreshInteractor);
+    static FlowableTransformer<? super HomeUiAction, ? extends HomeUiResult> provideHomeFragmentViewModelDispatcher(HomeUserInteractor homeUserInteractor, RefreshInteractor refreshInteractor) {
+        return HomeFragmentViewModelKt.dispatcher(homeUserInteractor, refreshInteractor);
     }
 
     @Provides
@@ -101,7 +102,7 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    Flow<HomeUiEvent, HomeUiModel> provideUiBinder(BaseViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel> viewModel) {
+    Flow<HomeUiEvent, HomeUiModel, MviViewModel<HomeUiEvent, HomeUiModel>> provideFlow(HomeFragmentViewModel viewModel) {
         return new Flow<>(homeFragment, viewModel, homeFragment);
     }
 

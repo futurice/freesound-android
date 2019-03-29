@@ -17,12 +17,11 @@
 package com.futurice.freesound.arch.mvi.viewmodel
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
 
-abstract class ViewModel<in E, M> : ViewModel() {
+interface MviViewModel<in E, M> {
 
-    abstract fun uiEvents(uiEvent: E)
+    fun uiEvents(uiEvent: E)
 
-    abstract fun uiModels(): LiveData<M>
+    fun uiModels(): LiveData<M>
 
 }

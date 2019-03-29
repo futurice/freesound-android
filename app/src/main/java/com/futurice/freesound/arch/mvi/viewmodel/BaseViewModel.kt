@@ -18,20 +18,21 @@ package com.futurice.freesound.arch.mvi.viewmodel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import com.futurice.freesound.arch.mvi.*
 import com.futurice.freesound.arch.mvi.store.Store
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 
-class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
+class  BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
         initialEvent: E,
         eventMapper: EventMapper<E, A>,
         dispatcher: Dispatcher<A, R>,
         store: Store<R, S>,
         schedulerProvider: SchedulerProvider,
         private val logTag: String,
-        private val logger: Logger) : ViewModel<E, S>() {
+        private val logger: Logger) : ViewModel(), MviViewModel<E, S> {
 
     private val uiEvents: PublishSubject<E> = PublishSubject.create()
     private val uiModel: MutableLiveData<S> = MutableLiveData()
@@ -46,7 +47,10 @@ class BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
                         .map { eventMapper(it) }
                         .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
                         .compose(dispatcher)
+                        .doOnNext { logger.log(logTag, LogEvent.Result(it)) }
                         .compose(store.reduce())
+                        .doOnNext { logger.log(logTag, LogEvent.State(it)) }
+                        .asUiModelFlowable()
                         .subscribe(
                                 { uiModel.postValue(it) },
                                 { logger.log(logTag, LogEvent.Error(it)) }))

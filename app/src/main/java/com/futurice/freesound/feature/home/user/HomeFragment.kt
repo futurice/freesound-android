@@ -42,7 +42,7 @@ import javax.inject.Inject
  * dismissed, which occurs AFTER the repeated error has been applied; so the information is lost.
  * I've worked around this by not using INDEFINITE.
  */
-class HomeFragment : MviBaseFragment<HomeFragmentComponent, HomeUiModel, HomeUiEvent, HomeUserFragmentViewModel>() {
+class HomeFragment : MviBaseFragment<HomeFragmentComponent, HomeUiEvent, HomeUiModel, HomeFragmentViewModel>() {
 
     @Inject
     internal lateinit var picasso: Picasso
