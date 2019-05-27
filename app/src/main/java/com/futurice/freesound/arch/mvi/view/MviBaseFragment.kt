@@ -16,44 +16,49 @@
 
 package com.futurice.freesound.arch.mvi.view
 
-import android.support.v4.app.Fragment
 import com.futurice.freesound.arch.core.BaseFragment
-import com.futurice.freesound.arch.mvi.Event
-import com.futurice.freesound.arch.mvi.State
 import com.futurice.freesound.arch.mvi.viewmodel.MviViewModel
+import javax.inject.Inject
 
 /**
  * A base Fragment which provides the binding mechanism hooks to a MviView Model.
  *
  * @param <C> The DI component class.
  */
-abstract class MviBaseFragment<C, E : Event, M : State, VM : MviViewModel<E, M>> : BaseFragment<C>(), MviView<E, M> {
+abstract class MviBaseFragment<C, E, M, VM : MviViewModel<E, M>> : BaseFragment<C>(), MviView<E, M> {
 
-    private val vm: VM by flowFinder()
+    //private val vm: VM by flowFinder()
 
-}
-
-// What about requireActivity()
-
-inline fun <T : Fragment, E : Event, M : State, reified VM : MviViewModel<E, M>> T.flowFinder()
-       : VM  {
-             // Need something to define the initial value when recreating
-    return makeVM(VM::class.java)
-            .apply {  }
-             //return Flow<E, M, VM>(this, vm, this)
+    @Inject
+    internal lateinit var flow: Flow<E, M, VM>
 
 }
 
-//    @Suppress("UNCHECKED_CAST")
-fun <E : Event, M : State, VM : MviViewModel<E, M>> makeVM(viewModelClass: Class<VM>): VM {
-        val method = try {
-            viewModelClass.getMethod("create")
-        } catch (exception: NoSuchMethodException) {
-            null
-        }
-        return method?.invoke(null) as? VM
-    }
-}
+
+/// Not doing this for now.
+//// What about requireActivity()
+//
+//inline fun <T : Fragment, E , M, reified VM : MviViewModel<E, M>> T.flowFinder()
+//       : VM  {
+//             // Need something to define the initial value when recreating
+//    return makeVM(VM::class.java)
+//            .apply {  }
+//
+//    return Flow<E, M, VM>(this, vm, this)
+//
+//}
+//
+//
+//@Suppress("UNCHECKED_CAST")
+//fun <E, M, VM : MviViewModel<E, M>> makeVM(viewModelClass: Class<VM>): VM {
+//        val method = try {
+//            viewModelClass.getMethod("create")
+//        } catch (exception: NoSuchMethodException) {
+//            null
+//        }
+//        return method?.invoke(null) as VM
+//    }
+//}
 
 
 

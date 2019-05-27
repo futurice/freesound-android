@@ -19,53 +19,50 @@ package com.futurice.freesound.arch.mvi.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.futurice.freesound.arch.mvi.*
-import com.futurice.freesound.arch.mvi.store.Store
+import com.futurice.freesound.arch.mvi.TransitionEvent
+import com.futurice.freesound.arch.mvi.TransitionObserver
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
+import io.reactivex.Flowable
 import io.reactivex.disposables.SerialDisposable
 import io.reactivex.subjects.PublishSubject
 
-class  BaseViewModel<in E : Event, A : Action, R : Result, S : State>(
+abstract class BaseViewModel<E, S>(
         initialEvent: E,
-        eventMapper: EventMapper<E, A>,
-        dispatcher: Dispatcher<A, R>,
-        store: Store<R, S>,
         schedulerProvider: SchedulerProvider,
-        private val logTag: String,
-        private val logger: Logger) : ViewModel(), MviViewModel<E, S> {
+        private val transitionObserver: TransitionObserver,
+        private val tag: String) : ViewModel(), MviViewModel<E, S> {
 
-    private val uiEvents: PublishSubject<E> = PublishSubject.create()
-    private val uiModel: MutableLiveData<S> = MutableLiveData()
+    private val events: PublishSubject<E> = PublishSubject.create()
+    private val state: MutableLiveData<S> = MutableLiveData()
     private val disposable: SerialDisposable = SerialDisposable()
 
     init {
         disposable.set(
-                uiEvents.startWith(initialEvent)
+                events.startWith(initialEvent)
                         .observeOn(schedulerProvider.computation())
-                        .doOnNext { logger.log(logTag, LogEvent.Event(it)) }
                         .asUiEventFlowable()
-                        .map { eventMapper(it) }
-                        .doOnNext { logger.log(logTag, LogEvent.Action(it)) }
-                        .compose(dispatcher)
-                        .doOnNext { logger.log(logTag, LogEvent.Result(it)) }
-                        .compose(store.reduce())
-                        .doOnNext { logger.log(logTag, LogEvent.State(it)) }
-                        .asUiModelFlowable()
+                        .compose { upstream -> mapEventToStateStream(upstream).asUiModelFlowable() }
                         .subscribe(
-                                { uiModel.postValue(it) },
-                                { logger.log(logTag, LogEvent.Error(it)) }))
+                                { state.postValue(it) },
+                                { onTransition(TransitionEvent.Error(it)) }))
     }
 
     override fun uiEvents(uiEvent: E) {
-        uiEvents.onNext(uiEvent)
+        events.onNext(uiEvent)
     }
 
     override fun uiModels(): LiveData<S> {
-        return uiModel
+        return state
     }
 
     override fun onCleared() {
         disposable.dispose()
     }
+
+    fun onTransition(transitionEvent: TransitionEvent) {
+        transitionObserver.onTransition(tag, transitionEvent)
+    }
+
+    abstract fun mapEventToStateStream(event: Flowable<E>): Flowable<S>
 
 }

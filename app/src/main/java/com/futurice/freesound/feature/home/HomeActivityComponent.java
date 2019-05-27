@@ -36,5 +36,3 @@ public interface HomeActivityComponent extends BaseActivityComponent {
     HomeFragmentComponent plus(HomeFragmentModule homeFragmentModule,
                                BaseFragmentModule baseFragmentModule);
 }
-
-

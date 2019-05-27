@@ -17,16 +17,14 @@
 package com.futurice.freesound.arch.mvi.view
 
 import android.arch.lifecycle.*
-import com.futurice.freesound.arch.mvi.Event
-import com.futurice.freesound.arch.mvi.State
 import com.futurice.freesound.arch.mvi.viewmodel.MviViewModel
 
 /**
  * The MviView holds this instance.
  */
-class Flow<E : Event, M : State, VM : MviViewModel<E, M>>(private val mviView: MviView<E, M>,
-                                                          private val viewModel: VM,
-                                                          private val lifecycleOwner: LifecycleOwner) {
+class Flow<E, M, VM : MviViewModel<E, M>>(private val mviView: MviView<E, M>,
+                                          private val viewModel: VM,
+                                          private val lifecycleOwner: LifecycleOwner) {
 
     init {
         lifecycleOwner.lifecycle.observeOnCreate { connect() }

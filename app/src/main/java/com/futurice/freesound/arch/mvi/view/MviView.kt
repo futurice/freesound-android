@@ -17,13 +17,11 @@
 package com.futurice.freesound.arch.mvi.view
 
 import android.arch.lifecycle.LiveData
-import com.futurice.freesound.arch.mvi.Event
-import com.futurice.freesound.arch.mvi.State
 
-interface MviView<E : Event, in M : State> {
+interface MviView<E, in M> {
     fun uiEvents(): LiveData<E> = EmptyLiveData()
     fun render(model: M)
-    fun cancel() {}
+    fun cancel() {} // nothing by default
 }
 
 private class EmptyLiveData<T> : LiveData<T>()

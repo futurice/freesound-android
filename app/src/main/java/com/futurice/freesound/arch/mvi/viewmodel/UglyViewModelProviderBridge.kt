@@ -17,14 +17,11 @@
 package com.futurice.freesound.arch.mvi.viewmodel
 
 import android.support.v4.app.Fragment
-import com.futurice.freesound.arch.mvi.Action
-import com.futurice.freesound.arch.mvi.Event
-import com.futurice.freesound.arch.mvi.Result
-import com.futurice.freesound.arch.mvi.State
 
+// FIXME Not using this for now because it's too ugly in Java
 // Need this bridge for now because you can't call reified functions from Java.
 internal fun
-        <E : Event, A : Action, R : Result, S : State>
-        Fragment.createViewModel(provider: () -> BaseViewModel<E, A, R, S>): BaseViewModel<E, A, R, S> {
+        <E, S>
+        Fragment.createViewModel(provider: () -> BaseViewModel<E, S>): BaseViewModel<E, S> {
     return viewModelProvider(provider)
 }
