@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.FragmentActivity
 
 // Fragment
+@Suppress("UNCHECKED_CAST")
 inline fun <reified VM : ViewModel> android.support.v4.app.Fragment.viewModelProvider(
         crossinline provider: () -> VM): VM {
     return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
@@ -30,6 +31,7 @@ inline fun <reified VM : ViewModel> android.support.v4.app.Fragment.viewModelPro
 }
 
 // Activity
+@Suppress("UNCHECKED_CAST")
 inline fun <reified VM : ViewModel> FragmentActivity.viewModelProvider(
         crossinline provider: () -> VM): VM {
     return ViewModelProviders.of(this, object : ViewModelProvider.Factory {

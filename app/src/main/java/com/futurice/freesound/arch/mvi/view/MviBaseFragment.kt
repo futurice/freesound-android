@@ -27,38 +27,11 @@ import javax.inject.Inject
  */
 abstract class MviBaseFragment<C, E, M, VM : MviViewModel<E, M>> : BaseFragment<C>(), MviView<E, M> {
 
-    //private val vm: VM by flowFinder()
-
     @Inject
-    internal lateinit var flow: Flow<E, M, VM>
+    internal lateinit var binder: Binder<E, M, VM>
 
 }
 
-
-/// Not doing this for now.
-//// What about requireActivity()
-//
-//inline fun <T : Fragment, E , M, reified VM : MviViewModel<E, M>> T.flowFinder()
-//       : VM  {
-//             // Need something to define the initial value when recreating
-//    return makeVM(VM::class.java)
-//            .apply {  }
-//
-//    return Flow<E, M, VM>(this, vm, this)
-//
-//}
-//
-//
-//@Suppress("UNCHECKED_CAST")
-//fun <E, M, VM : MviViewModel<E, M>> makeVM(viewModelClass: Class<VM>): VM {
-//        val method = try {
-//            viewModelClass.getMethod("create")
-//        } catch (exception: NoSuchMethodException) {
-//            null
-//        }
-//        return method?.invoke(null) as VM
-//    }
-//}
 
 
 

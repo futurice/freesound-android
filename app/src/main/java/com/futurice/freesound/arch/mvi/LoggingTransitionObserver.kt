@@ -2,7 +2,7 @@ package com.futurice.freesound.arch.mvi
 
 import timber.log.Timber
 
-class Logger : TransitionObserver {
+class LoggingTransitionObserver : TransitionObserver {
 
     override fun onTransition(tag: String, transitionEvent: TransitionEvent) {
         when (transitionEvent) {

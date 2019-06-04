@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.home.user;
 
-import com.futurice.freesound.arch.mvi.Logger;
-import com.futurice.freesound.arch.mvi.view.Flow;
+import com.futurice.freesound.arch.mvi.LoggingTransitionObserver;
+import com.futurice.freesound.arch.mvi.view.Binder;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.feature.user.UserRepository;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
@@ -42,8 +42,8 @@ public class HomeFragmentModule {
     }
 
     @Provides
-    static Logger provideLogger() {
-        return new Logger();
+    static LoggingTransitionObserver provideLogger() {
+        return new LoggingTransitionObserver();
     }
 
     @Provides
@@ -52,7 +52,7 @@ public class HomeFragmentModule {
             HomeUserInteractor homeUserInteractor,
             RefreshInteractor refreshInteractor,
             SchedulerProvider schedulerProvider,
-            Logger logger) {
+            LoggingTransitionObserver loggingTransitionObserver) {
 
         return ViewModelProviders.of(fragment, new ViewModelProvider.Factory() {
             @SuppressWarnings("unchecked")
@@ -62,7 +62,7 @@ public class HomeFragmentModule {
                 return (T) new HomeFragmentViewModel(homeUserInteractor,
                                                      refreshInteractor,
                                                      schedulerProvider,
-                                                     logger);
+                                                     loggingTransitionObserver);
             }
         }).get(HomeFragmentViewModel.class);
     }
@@ -84,9 +84,9 @@ public class HomeFragmentModule {
 
     @Provides
     @FragmentScope
-    Flow<HomeUiEvent, HomeUiModel, HomeFragmentViewModel> provideFlow(
+    Binder<HomeUiEvent, HomeUiModel, HomeFragmentViewModel> provideFlow(
             HomeFragmentViewModel viewModel) {
-        return new Flow<>(homeFragment, viewModel, homeFragment);
+        return new Binder<>(homeFragment, viewModel, homeFragment);
     }
 
 }

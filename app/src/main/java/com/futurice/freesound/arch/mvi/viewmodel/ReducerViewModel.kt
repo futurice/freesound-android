@@ -22,6 +22,11 @@ import com.futurice.freesound.arch.mvi.TransitionObserver
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import io.reactivex.Flowable
 
+/**
+ * Provides the hooks to transform events->actions->results->states.
+ *
+ * This is a more involved version of the transformation process.
+ */
 abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: SchedulerProvider, transitionObserver: TransitionObserver, tag: String)
     : BaseViewModel<E, S>(initialEvent, schedulerProvider, transitionObserver, tag) {
 
@@ -37,12 +42,12 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
                 .doOnNext { onTransition(TransitionEvent.State(it as Any)) }
     }
 
+    abstract fun initialUiState(): S
+
     abstract fun mapEventToAction(event: E): A
 
     abstract fun dispatchAction(): Dispatcher<A, R>
 
     abstract fun reduceResultToState(): (S, R) -> S
-
-    abstract fun initialUiState(): S
 
 }
