@@ -30,8 +30,8 @@ import io.reactivex.subjects.PublishSubject
  * This class provides the basic mechanism to transform a stream of Events to a stream of States.
  */
 abstract class BaseViewModel<E, S>(
-        initialEvent: E,
-        schedulerProvider: SchedulerProvider,
+        private val initialEvent: E,
+        private val schedulerProvider: SchedulerProvider,
         private val transitionObserver: TransitionObserver,
         private val tag: String) : ViewModel(), MviViewModel<E, S> {
 
@@ -39,7 +39,7 @@ abstract class BaseViewModel<E, S>(
     private val state: MutableLiveData<S> = MutableLiveData()
     private val disposable: SerialDisposable = SerialDisposable()
 
-    init {
+    protected fun bind() {
         disposable.set(
                 events.startWith(initialEvent)
                         .observeOn(schedulerProvider.computation())

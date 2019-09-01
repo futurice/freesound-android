@@ -11,7 +11,7 @@ import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
 
 sealed class HomeUiEvent {
-    object Initial : HomeUiEvent()
+    object LoadRequested : HomeUiEvent()
     object ErrorIndicatorDismissed : HomeUiEvent()
     object RefreshRequested : HomeUiEvent()
 }
@@ -24,7 +24,7 @@ sealed class HomeUiResult {
 }
 
 sealed class HomeUiAction {
-    object Initial : HomeUiAction()
+    object GetHomeUser : HomeUiAction()
     object ClearError : HomeUiAction()
     object RefreshContent : HomeUiAction()
 }
@@ -43,7 +43,12 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
                             schedulerProvider: SchedulerProvider,
                             transitionObserver: TransitionObserver)
     : ReducerViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>
-(HomeUiEvent.Initial, schedulerProvider, transitionObserver, "HomeFragmentViewModel") {
+(HomeUiEvent.LoadRequested, schedulerProvider, transitionObserver, "HomeFragmentViewModel") {
+
+    // FIXME This is the one piece of boilerplate remaiing.
+    init {
+        bind()
+    }
 
     override fun initialUiState(): HomeUiModel = HomeUiModel(
             user = null,
@@ -51,16 +56,18 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
             isRefreshing = false,
             errorMsg = null)
 
+    override fun initialEvent(): HomeUiEvent = HomeUiEvent.LoadRequested
+
     override fun mapEventToAction(event: HomeUiEvent): HomeUiAction =
             when (event) {
-                HomeUiEvent.Initial -> HomeUiAction.Initial
+                HomeUiEvent.LoadRequested -> HomeUiAction.GetHomeUser
                 HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
                 HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
             }
 
     override fun dispatchAction(): Dispatcher<HomeUiAction, HomeUiResult> = combine(
             Dispatcher {
-                it.ofType(HomeUiAction.Initial::class.java)
+                it.ofType(HomeUiAction.GetHomeUser::class.java)
                         .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
                         .map { result -> HomeUiResult.UserUpdated(result) }
             },
@@ -75,7 +82,7 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
             }
     )
 
-    override fun reduceResultToState(): (HomeUiModel, HomeUiResult) -> HomeUiModel = reducer
+    override fun reduceResultToState() = reducer
 }
 
 

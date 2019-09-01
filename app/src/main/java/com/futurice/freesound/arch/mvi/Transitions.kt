@@ -5,6 +5,7 @@ interface TransitionObserver {
     fun onTransition(tag: String, transitionEvent: TransitionEvent)
 }
 
+// FIXME This needs to represent the simple case and be expanded
 sealed class TransitionEvent {
     data class Event(val event: Any) : TransitionEvent()
     data class Action(val action: Any) : TransitionEvent()

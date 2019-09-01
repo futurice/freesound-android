@@ -27,20 +27,23 @@ import io.reactivex.Flowable
  *
  * This is a more involved version of the transformation process.
  */
-abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: SchedulerProvider, transitionObserver: TransitionObserver, tag: String)
+abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: SchedulerProvider,
+                                            transitionObserver: TransitionObserver, tag: String)
     : BaseViewModel<E, S>(initialEvent, schedulerProvider, transitionObserver, tag) {
 
     override fun mapEventToStateStream(event: Flowable<E>): Flowable<S> {
-        return event.doOnNext { onTransition(TransitionEvent.Event(it as Any)) }
+        return event
+                .startWith(initialEvent())
+                .doOnNext { onTransition(TransitionEvent.Event(it as Any)) }
                 .map(::mapEventToAction)
                 .doOnNext { onTransition(TransitionEvent.Action(it as Any)) }
                 .compose(dispatchAction())
                 .doOnNext { onTransition(TransitionEvent.Result(it as Any)) }
-                .compose {
-                    it.scan(initialUiState(), reduceResultToState())
-                }
+                .compose { it.scan(initialUiState(), reduceResultToState()) }
                 .doOnNext { onTransition(TransitionEvent.State(it as Any)) }
     }
+
+    abstract fun initialEvent(): E
 
     abstract fun initialUiState(): S
 
@@ -49,5 +52,4 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
     abstract fun dispatchAction(): Dispatcher<A, R>
 
     abstract fun reduceResultToState(): (S, R) -> S
-
 }

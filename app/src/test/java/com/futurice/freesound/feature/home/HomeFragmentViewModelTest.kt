@@ -1,6 +1,8 @@
 package com.futurice.freesound.feature.home
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.futurice.freesound.arch.mvi.LoggingTransitionObserver
+import com.futurice.freesound.arch.mvi.TransitionObserver
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.feature.home.user.*
@@ -29,6 +31,8 @@ class HomeFragmentViewModelTest {
     @Mock
     private lateinit var refreshInteractor: RefreshInteractor
 
+    private var transitionObserver: TransitionObserver = LoggingTransitionObserver()
+
     private lateinit var schedulers: TrampolineSchedulerProvider
 
     private val testUser: User get() = TestData.user()
@@ -52,7 +56,7 @@ class HomeFragmentViewModelTest {
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVmToTest()) {
+        with(createVmUnderTest()) {
             uiModels().test().assertValue(homeUiModel)
         }
     }
@@ -75,7 +79,7 @@ class HomeFragmentViewModelTest {
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVmToTest()) {
+        with(createVmUnderTest()) {
             uiModels().test()
                     .assertOnlyValue(expected)
         }
@@ -94,7 +98,7 @@ class HomeFragmentViewModelTest {
                 isRefreshing = false,
                 errorMsg = null)
 
-        with(createVmToTest()) {
+        with(createVmUnderTest()) {
             uiModels().test()
                     .assertOnlyValue(expected)
         }
@@ -114,15 +118,15 @@ class HomeFragmentViewModelTest {
                 isRefreshing = false,
                 errorMsg = t.localizedMessage)
 
-        with(createVmToTest()) {
+        with(createVmUnderTest()) {
             uiModels()
                     .test()
                     .assertOnlyValue(expected)
         }
     }
 
-    private fun createVmToTest(): HomeFragmentViewModel =
-            HomeFragmentViewModel(homeUserIteractor, refreshInteractor, schedulers)
+    private fun createVmUnderTest(): HomeFragmentViewModel =
+            HomeFragmentViewModel(homeUserIteractor, refreshInteractor, schedulers, transitionObserver)
 
     fun arrange(init: Arrangement.() -> Unit) = Arrangement().apply(init)
 
