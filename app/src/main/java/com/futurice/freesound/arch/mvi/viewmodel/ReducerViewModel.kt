@@ -35,11 +35,11 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
         return event
                 .startWith(initialEvent())
                 .doOnNext { onTransition(TransitionEvent.Event(it as Any)) }
-                .map(::mapEventToAction)
+                .map(::this@ReducerViewModel.map)
                 .doOnNext { onTransition(TransitionEvent.Action(it as Any)) }
-                .compose(dispatchAction())
+                .compose(dispatch())
                 .doOnNext { onTransition(TransitionEvent.Result(it as Any)) }
-                .compose { it.scan(initialUiState(), reduceResultToState()) }
+                .compose { it.scan(initialUiState(), reduce()) }
                 .doOnNext { onTransition(TransitionEvent.State(it as Any)) }
     }
 
@@ -47,9 +47,9 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
 
     abstract fun initialUiState(): S
 
-    abstract fun mapEventToAction(event: E): A
+    protected abstract fun map(event: E): A
 
-    abstract fun dispatchAction(): Dispatcher<A, R>
+    protected abstract fun dispatch(): Dispatcher<A, R>
 
-    abstract fun reduceResultToState(): (S, R) -> S
+    protected abstract fun reduce(): (S, R) -> S
 }

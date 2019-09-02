@@ -62,10 +62,10 @@ abstract class BaseViewModel<E, S>(
         disposable.dispose()
     }
 
-    fun onTransition(transitionEvent: TransitionEvent) {
+    protected fun onTransition(transitionEvent: TransitionEvent) {
         transitionObserver.onTransition(tag, transitionEvent)
     }
 
-    abstract fun mapEventToStateStream(event: Flowable<E>): Flowable<S>
+    protected abstract fun mapEventToStateStream(event: Flowable<E>): Flowable<S>
 
 }

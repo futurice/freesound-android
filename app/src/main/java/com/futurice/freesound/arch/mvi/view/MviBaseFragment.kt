@@ -31,7 +31,3 @@ abstract class MviBaseFragment<C, E, M, VM : MviViewModel<E, M>> : BaseFragment<
     internal lateinit var binder: Binder<E, M, VM>
 
 }
-
-
-
-

@@ -9,9 +9,10 @@ import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.common.streams.Fetch
 import com.futurice.freesound.feature.common.streams.Operation
 import com.futurice.freesound.network.api.model.User
+import io.reactivex.FlowableTransformer
 
 sealed class HomeUiEvent {
-    object LoadRequested : HomeUiEvent()
+    object LoadHomeUserRequested : HomeUiEvent()
     object ErrorIndicatorDismissed : HomeUiEvent()
     object RefreshRequested : HomeUiEvent()
 }
@@ -24,7 +25,7 @@ sealed class HomeUiResult {
 }
 
 sealed class HomeUiAction {
-    object GetHomeUser : HomeUiAction()
+    object LoadHomeUser : HomeUiAction()
     object ClearError : HomeUiAction()
     object RefreshContent : HomeUiAction()
 }
@@ -43,7 +44,7 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
                             schedulerProvider: SchedulerProvider,
                             transitionObserver: TransitionObserver)
     : ReducerViewModel<HomeUiEvent, HomeUiAction, HomeUiResult, HomeUiModel>
-(HomeUiEvent.LoadRequested, schedulerProvider, transitionObserver, "HomeFragmentViewModel") {
+(HomeUiEvent.LoadHomeUserRequested, schedulerProvider, transitionObserver, "HomeFragmentViewModel") {
 
     // FIXME This is the one piece of boilerplate remaiing.
     init {
@@ -56,33 +57,43 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
             isRefreshing = false,
             errorMsg = null)
 
-    override fun initialEvent(): HomeUiEvent = HomeUiEvent.LoadRequested
+    override fun initialEvent(): HomeUiEvent = HomeUiEvent.LoadHomeUserRequested
 
-    override fun mapEventToAction(event: HomeUiEvent): HomeUiAction =
+    override fun map(event: HomeUiEvent): HomeUiAction =
             when (event) {
-                HomeUiEvent.LoadRequested -> HomeUiAction.GetHomeUser
+                HomeUiEvent.LoadHomeUserRequested -> HomeUiAction.LoadHomeUser
                 HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
                 HomeUiEvent.ErrorIndicatorDismissed -> HomeUiAction.ClearError
             }
 
-    override fun dispatchAction(): Dispatcher<HomeUiAction, HomeUiResult> = combine(
-            Dispatcher {
-                it.ofType(HomeUiAction.GetHomeUser::class.java)
-                        .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
-                        .map { result -> HomeUiResult.UserUpdated(result) }
-            },
-            Dispatcher {
-                it.ofType(HomeUiAction.RefreshContent::class.java)
-                        .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
-                        .map { result -> HomeUiResult.Refreshed(result) }
-            },
+    override fun dispatch(): Dispatcher<HomeUiAction, HomeUiResult> = combine(
+            loadHomeUser(),
+            refresh(),
+            clearError()
+    )
+
+    private fun clearError(): FlowableTransformer<in HomeUiAction, out HomeUiResult> =
             Dispatcher {
                 it.ofType(HomeUiAction.ClearError::class.java)
                         .map { HomeUiResult.ErrorCleared }
             }
-    )
 
-    override fun reduceResultToState() = reducer
+    private fun refresh(): FlowableTransformer<in HomeUiAction, out HomeUiResult> =
+            Dispatcher {
+                it.ofType(HomeUiAction.RefreshContent::class.java)
+                        .flatMap { refreshInteractor.refresh().asUiModelFlowable() }
+                        .map { result -> HomeUiResult.Refreshed(result) }
+            }
+
+
+    private fun loadHomeUser(): FlowableTransformer<in HomeUiAction, out HomeUiResult> =
+            Dispatcher {
+                it.ofType(HomeUiAction.LoadHomeUser::class.java)
+                        .flatMap { homeUserInteractor.homeUserStream().asUiModelFlowable() }
+                        .map { result -> HomeUiResult.UserUpdated(result) }
+            }
+
+
+    override fun reduce() = reducer
 }
-
 
