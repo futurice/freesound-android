@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.arch.mvi.view
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
+import android.arch.lifecycle.LiveData
+
+interface MviView<E, in M> {
+    fun uiEvents(): LiveData<E> = EmptyLiveData()
+    fun render(model: M)
+    fun cancel() {} // nothing by default
 }
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
-}
+private class EmptyLiveData<T> : LiveData<T>()

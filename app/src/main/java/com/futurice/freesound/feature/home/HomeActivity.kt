@@ -17,20 +17,20 @@
 package com.futurice.freesound.feature.home
 
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import butterknife.ButterKnife.findById
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
-import com.futurice.freesound.core.BindingBaseActivity
+import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
+import com.futurice.freesound.feature.home.user.HomeFragment
 import com.futurice.freesound.inject.activity.BaseActivityModule
-import com.futurice.freesound.viewmodel.DataBinder
-import com.futurice.freesound.viewmodel.SimpleDataBinder
-import com.futurice.freesound.viewmodel.ViewModel
+import com.futurice.freesound.arch.mvvm.DataBinder
+import com.futurice.freesound.arch.mvvm.SimpleDataBinder
+import com.futurice.freesound.arch.mvvm.ViewModel
 import javax.inject.Inject
 
-class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
+class HomeActivity : MvvmBaseActivity<HomeActivityComponent>() {
 
     @Inject
     internal lateinit var homeViewModel: HomeViewModel
@@ -44,7 +44,7 @@ class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
             addHomeFragment()
         }
 
-        setSupportActionBar(findById<Toolbar>(this, R.id.toolbar_home))
+        setSupportActionBar(findById(this, R.id.toolbar_home))
     }
 
     override fun viewModel(): ViewModel = homeViewModel
@@ -58,7 +58,7 @@ class HomeActivity : BindingBaseActivity<HomeActivityComponent>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_about  -> true
+            R.id.action_about -> true
             R.id.action_search -> {
                 homeViewModel.openSearch()
                 true

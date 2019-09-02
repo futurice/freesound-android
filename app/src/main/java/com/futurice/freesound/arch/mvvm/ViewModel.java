@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.arch.mvvm;
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
-}
+public interface ViewModel {
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
+    /**
+     * Bind the ViewModel to its data model (typically modelled Observable View data).
+     */
+    void bindToDataModel();
+
+    /**
+     * Unbind the ViewModel from its data model.
+     */
+    void unbindDataModel();
+
+    /**
+     * Permanently dispose of any resources held.
+     *
+     * The instance cannot be reused after this operation.
+     */
+    void dispose();
 }

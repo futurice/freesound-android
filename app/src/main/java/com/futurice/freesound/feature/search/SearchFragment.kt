@@ -25,20 +25,20 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.futurice.freesound.R
 import com.futurice.freesound.common.rx.plusAssign
-import com.futurice.freesound.core.BindingBaseFragment
+import com.futurice.freesound.arch.mvvm.view.MvvmBaseFragment
 import com.futurice.freesound.feature.common.DisplayableItem
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.common.ui.adapter.RecyclerViewAdapter
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.network.api.model.Sound
-import com.futurice.freesound.viewmodel.DataBinder
-import com.futurice.freesound.viewmodel.ViewModel
+import com.futurice.freesound.arch.mvvm.DataBinder
+import com.futurice.freesound.arch.mvvm.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_search.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class SearchFragment : BindingBaseFragment<SearchFragmentComponent>() {
+class SearchFragment : MvvmBaseFragment<SearchFragmentComponent>() {
 
     @Inject
     internal lateinit var searchFragmentViewModel: SearchFragmentViewModel

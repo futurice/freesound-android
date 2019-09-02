@@ -17,7 +17,7 @@
 package com.futurice.freesound.app;
 
 import com.facebook.stetho.Stetho;
-import com.futurice.freesound.core.BaseApplication;
+import com.futurice.freesound.arch.core.BaseApplication;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 import com.squareup.leakcanary.LeakCanary;
 

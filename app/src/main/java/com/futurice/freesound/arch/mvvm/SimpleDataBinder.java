@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.arch.mvvm;
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
-}
+import android.support.annotation.NonNull;
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
+import io.reactivex.disposables.CompositeDisposable;
+
+/**
+ * Implements methods so that child classes don't need to declare empty implementations.
+ */
+public class SimpleDataBinder implements DataBinder {
+
+    @Override
+    public void bind(@NonNull final CompositeDisposable disposables) {
+        // Override this when required.
+    }
+
+    @Override
+    public void unbind() {
+        // Override this when required.
+    }
 }

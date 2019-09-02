@@ -17,6 +17,8 @@
 package com.futurice.freesound.feature.home;
 
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.home.user.HomeFragmentComponent;
+import com.futurice.freesound.feature.home.user.HomeFragmentModule;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.activity.BaseActivityComponent;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
@@ -34,5 +36,3 @@ public interface HomeActivityComponent extends BaseActivityComponent {
     HomeFragmentComponent plus(HomeFragmentModule homeFragmentModule,
                                BaseFragmentModule baseFragmentModule);
 }
-
-

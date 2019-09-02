@@ -16,18 +16,17 @@
 
 package com.futurice.freesound.network.api;
 
+import android.support.annotation.NonNull;
+
 import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.User;
 
-import android.support.annotation.NonNull;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Single;
-import timber.log.Timber;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -61,18 +60,23 @@ final class DefaultFreeSoundApiService implements FreeSoundApiService {
     @NonNull
     public Single<AccessToken> getAccessToken(@NonNull final String code) {
         return freeSoundApi.accessToken(clientId,
-                                        clientSecret,
-                                        ApiConstants.AUTHORIZATION_CODE_GRANT_TYPE_VALUE,
-                                        code);
+                clientSecret,
+                ApiConstants.AUTHORIZATION_CODE_GRANT_TYPE_VALUE,
+                code);
     }
 
     @Override
     @NonNull
     public Single<SoundSearchResult> search(@NonNull final String query) {
         return freeSoundApi.search(get(query),
-                                   null,
-                                   SoundFields.BASE)
-                           .doOnError(Timber::e);
+                null,
+                SoundFields.BASE);
+    }
+
+    @NonNull
+    @Override
+    public Single<SoundSearchResult> sounds(@NonNull String username) {
+        return freeSoundApi.sounds(get(username), SoundFields.BASE);
     }
 
 }

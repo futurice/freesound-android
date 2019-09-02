@@ -19,7 +19,7 @@ package com.futurice.freesound.feature.home
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.feature.common.Navigator
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.viewmodel.SimpleViewModel
+import com.futurice.freesound.arch.mvvm.SimpleViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import polanski.option.Unit
@@ -36,9 +36,9 @@ internal class HomeViewModel(val navigator: Navigator,
 
     override fun bind(disposables: CompositeDisposable) {
         disposables +=
-            openSearchStream.observeOn(schedulerProvider.ui())
-                .subscribe({ navigator.openSearch() },
-                        { Timber.e(it, "Error clearing search") })
+                openSearchStream.observeOn(schedulerProvider.ui())
+                        .subscribe({ navigator.openSearch() },
+                                { Timber.e(it, "Error opening search") })
 
     }
 }

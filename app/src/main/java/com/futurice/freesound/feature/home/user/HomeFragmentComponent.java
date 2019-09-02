@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2016 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.feature.home.user;
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
-}
+import com.futurice.freesound.inject.fragment.BaseFragmentComponent;
+import com.futurice.freesound.inject.fragment.FragmentScope;
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
+import dagger.Subcomponent;
+
+@FragmentScope
+@Subcomponent(modules = HomeFragmentModule.class)
+public interface HomeFragmentComponent extends BaseFragmentComponent {
+
+    void inject(final HomeFragment homeFragment);
+
 }

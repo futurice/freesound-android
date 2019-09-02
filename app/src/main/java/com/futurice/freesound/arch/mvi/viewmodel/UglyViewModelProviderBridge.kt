@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Futurice GmbH
+ * Copyright 2017 Futurice GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.arch.mvi.viewmodel
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
-}
+import android.support.v4.app.Fragment
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
+// FIXME Not using this for now because it's too ugly in Java
+// Need this bridge for now because you can't call reified functions from Java.
+internal fun
+        <E, S>
+        Fragment.createViewModel(provider: () -> BaseViewModel<E, S>): BaseViewModel<E, S> {
+    return viewModelProvider(provider)
 }

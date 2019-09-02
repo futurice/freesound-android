@@ -20,7 +20,7 @@ import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.viewmodel.SimpleViewModel;
+import com.futurice.freesound.arch.mvvm.SimpleViewModel;
 
 import android.support.annotation.NonNull;
 

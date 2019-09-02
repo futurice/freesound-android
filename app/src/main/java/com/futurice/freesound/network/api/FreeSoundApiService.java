@@ -37,4 +37,7 @@ public interface FreeSoundApiService {
 
     @NonNull
     Single<SoundSearchResult> search(@NonNull String query);
+
+    @NonNull
+    Single<SoundSearchResult> sounds(@NonNull String username);
 }

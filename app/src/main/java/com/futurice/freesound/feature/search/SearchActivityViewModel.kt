@@ -17,12 +17,12 @@
 package com.futurice.freesound.feature.search
 
 import android.support.annotation.VisibleForTesting
+import com.futurice.freesound.arch.mvvm.BaseViewModel
 import com.futurice.freesound.common.Text
 import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.feature.analytics.Analytics
 import com.futurice.freesound.feature.audio.AudioPlayer
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.viewmodel.BaseViewModel
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -65,7 +65,6 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
     }
 
     fun search(query: String) {
-       // analytics.log("SearchPressedEvent")
         searchTermOnceAndStream.onNext(query.trim())
     }
 
@@ -83,8 +82,8 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
 
     private fun debounceQuery(): Completable =
             Completable.timer(SEARCH_DEBOUNCE_TIME_SECONDS.toLong(),
-                              TimeUnit.SECONDS,
-                              schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
+                    TimeUnit.SECONDS,
+                    schedulerProvider.time(SEARCH_DEBOUNCE_TAG))
 
     private fun isCloseEnabled(query: String): Boolean = query.isNotEmpty()
 }

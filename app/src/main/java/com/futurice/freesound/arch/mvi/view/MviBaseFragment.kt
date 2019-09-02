@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.common.streams
+package com.futurice.freesound.arch.mvi.view
 
-sealed class Fetch<T> {
-    class InProgress<T> : Fetch<T>()
-    data class Success<T>(val value: T) : Fetch<T>()
-    data class Failure<T>(val error: Throwable) : Fetch<T>()
-}
+import com.futurice.freesound.arch.core.BaseFragment
+import com.futurice.freesound.arch.mvi.viewmodel.MviViewModel
+import javax.inject.Inject
 
-sealed class Operation {
-    object InProgress : Operation()
-    object Complete : Operation()
-    data class Failure(val error: Throwable) : Operation()
+/**
+ * A base Fragment which provides the binding mechanism hooks to a MviView Model.
+ *
+ * @param <C> The DI component class.
+ */
+abstract class MviBaseFragment<C, E, M, VM : MviViewModel<E, M>> : BaseFragment<C>(), MviView<E, M> {
+
+    @Inject
+    internal lateinit var binder: Binder<E, M, VM>
+
 }
