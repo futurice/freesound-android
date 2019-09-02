@@ -35,7 +35,7 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
         return event
                 .startWith(initialEvent())
                 .doOnNext { onTransition(TransitionEvent.Event(it as Any)) }
-                .map(::this@ReducerViewModel.map)
+                .map(::mapEvent)
                 .doOnNext { onTransition(TransitionEvent.Action(it as Any)) }
                 .compose(dispatch())
                 .doOnNext { onTransition(TransitionEvent.Result(it as Any)) }
@@ -47,7 +47,7 @@ abstract class ReducerViewModel<E, A, R, S>(initialEvent: E, schedulerProvider: 
 
     abstract fun initialUiState(): S
 
-    protected abstract fun map(event: E): A
+    protected abstract fun mapEvent(event: E): A
 
     protected abstract fun dispatch(): Dispatcher<A, R>
 

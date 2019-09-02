@@ -59,7 +59,7 @@ class HomeFragmentViewModel(private val homeUserInteractor: HomeUserInteractor,
 
     override fun initialEvent(): HomeUiEvent = HomeUiEvent.LoadHomeUserRequested
 
-    override fun map(event: HomeUiEvent): HomeUiAction =
+    override fun mapEvent(event: HomeUiEvent): HomeUiAction =
             when (event) {
                 HomeUiEvent.LoadHomeUserRequested -> HomeUiAction.LoadHomeUser
                 HomeUiEvent.RefreshRequested -> HomeUiAction.RefreshContent
