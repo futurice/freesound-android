@@ -144,7 +144,7 @@ ext {
             butterknife             : '10.2.1',
             firebase                : '9.4.0',
             stetho                  : '1.5.0',
-            timber                  : '4.7.0',
+            timber                  : '4.7.1',
             junit                   : '4.12',
             mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
