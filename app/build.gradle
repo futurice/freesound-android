@@ -125,14 +125,13 @@ ext {
             androidArchLifecycle    : '1.1.1',
             androidSupportTest      : '1.0.0',
             dagger2                 : '2.4',
-            rxJava2                 : '2.1.0',
-            rxAndroid               : '2.0.2',
-            rxBinding               : '2.0.0',
-            okHttp                  : '3.6.0',
+            rxJava2                 : '2.2.18',
+            rxAndroid               : '2.1.1',
+            rxBinding               : '2.2.0',
+            okHttp                  : '3.14.7',
             picasso                 : '2.5.2',
-            retrofit2               : '2.2.0',
+            retrofit2               : '2.7.2',
             retrofit2RxJava2Adapter : '1.0.0',
-            retrofit2GsonConverter  : '2.0.0',
             moshi                   : '1.9.2',
             moshiConverter          : '2.7.2',
             autoFactory             : '1.0-beta5',
@@ -140,16 +139,16 @@ ext {
             jsr250                  : '1.0',
             jonty                   : '0.7',
             options                 : '1.2.4',
-            exoplayer               : 'r2.1.1',
+            exoplayer               : '2.9.5',
             butterknife             : '10.2.1',
             firebase                : '9.4.0',
             stetho                  : '1.5.0',
-            timber                  : '4.7.0',
+            timber                  : '4.7.1',
             junit                   : '4.12',
             mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
-            leakCanary              : '1.5.1',
-            rxLint                  : '1.6.1']
+            leakCanary              : '2.2',
+            rxLint                  : '1.7.5']
 }
 
 dependencies {
@@ -158,19 +157,19 @@ dependencies {
 
     // Android Support
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.annotation:annotation:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.palette:palette:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
-    testImplementation 'androidx.arch.core:core-testing:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0'
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
@@ -188,7 +187,6 @@ dependencies {
     implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
 
     // Networking
-    implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"
     implementation "com.squareup.picasso:picasso:$dependencyVersions.picasso"
 
@@ -252,8 +250,6 @@ dependencies {
 
     // Leak Canary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
     // RxLint
     implementation "nl.littlerobots.rxlint:rxlint:$dependencyVersions.rxLint"

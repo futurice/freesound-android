@@ -16,13 +16,19 @@
 
 package com.futurice.freesound.feature.audio;
 
+import android.content.Context;
+import android.net.Uri;
+
+import com.futurice.freesound.BuildConfig;
+import com.futurice.freesound.inject.activity.ActivityScope;
+import com.futurice.freesound.inject.app.ForApplication;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
@@ -31,13 +37,6 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-
-import com.futurice.freesound.BuildConfig;
-import com.futurice.freesound.inject.activity.ActivityScope;
-import com.futurice.freesound.inject.app.ForApplication;
-
-import android.content.Context;
-import android.net.Uri;
 
 import dagger.Module;
 import dagger.Provides;
@@ -64,12 +63,8 @@ public class AudioModule {
     //
 
     @Provides
-    static MediaSourceFactory provideMediaSourceFactory(final DataSource.Factory dataSourceFactory,
-                                                        final ExtractorsFactory extractorsFactory) {
-        return uri -> new ExtractorMediaSource(Uri.parse(uri),
-                                               dataSourceFactory,
-                                               extractorsFactory,
-                                               null, null);
+    static MediaSourceFactory provideMediaSourceFactory(final ExtractorMediaSource.Factory extractorMediaSourceFactory) {
+        return uri -> extractorMediaSourceFactory.createMediaSource(Uri.parse(uri));
     }
 
     @Provides
@@ -98,17 +93,22 @@ public class AudioModule {
     @Provides
     static DataSource.Factory provideDataSourceFactory(@ForApplication Context context) {
         return new DefaultDataSourceFactory(context,
-                                            Util.getUserAgent(context, BuildConfig.APPLICATION_ID));
+                Util.getUserAgent(context, BuildConfig.APPLICATION_ID));
     }
 
     @Provides
-    static ExtractorsFactory provideExtractorsFactory() {
-        return new DefaultExtractorsFactory();
+    static ExtractorMediaSource.Factory provideExtractorMediaSourceFactory(final DataSource.Factory dataSourceFactory) {
+        return new ExtractorMediaSource.Factory(dataSourceFactory);
     }
 
     @Provides
     static TrackSelection.Factory provideTrackSelectionFactory() {
         return new FixedTrackSelection.Factory();
+    }
+
+    @Provides
+    static RenderersFactory provideRenderersFactory(@ForApplication Context context) {
+        return new DefaultRenderersFactory(context);
     }
 
     @Provides
@@ -123,9 +123,10 @@ public class AudioModule {
 
     @Provides
     static SimpleExoPlayer provideSimpleExoPlayer(@ForApplication Context context,
+                                                  RenderersFactory renderersFactory,
                                                   TrackSelector trackSelector,
                                                   LoadControl loadControl) {
-        return ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+        return ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
     }
 
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 Futurice GmbH
- *                            
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *                            
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 
 import org.junit.Before;
@@ -56,8 +57,8 @@ public class ExoPlayerAudioPlayerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         exoPlayerAudioPlayer = new ExoPlayerAudioPlayer(exoPlayer,
-                                                        observableExoPlayer,
-                                                        mediaSourceFactory);
+                observableExoPlayer,
+                mediaSourceFactory);
     }
 
     @Test
@@ -72,16 +73,16 @@ public class ExoPlayerAudioPlayerTest {
         PlaybackSource playbackSource = new PlaybackSource(new Id("id"), "url");
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.act()
-                      .togglePlayback(playbackSource)
-                      .init();
+                .togglePlayback(playbackSource)
+                .init();
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.stopPlayback();
         arrangeBuilder.withIdleExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
-                            .test()
-                            .assertValue(isNone(PlayerState::getSource));
+                .test()
+                .assertValue(isNone(PlayerState::getSource));
     }
 
     @Test
@@ -92,8 +93,8 @@ public class ExoPlayerAudioPlayerTest {
         exoPlayerAudioPlayer.init();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
-                            .test()
-                            .assertValue(isNone(PlayerState::getSource));
+                .test()
+                .assertValue(isNone(PlayerState::getSource));
     }
 
     @Test
@@ -121,16 +122,16 @@ public class ExoPlayerAudioPlayerTest {
         PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
-                      .withMediaSource()
-                      .act()
-                      .init();
+                .withMediaSource()
+                .act()
+                .init();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
-                            .test()
-                            .assertValue(v -> v.getSource().equals(Option.ofObj(playbackSource)));
+                .test()
+                .assertValue(v -> v.getSource().equals(Option.ofObj(playbackSource)));
     }
 
     @Test
@@ -140,10 +141,10 @@ public class ExoPlayerAudioPlayerTest {
         PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
-                      .withMediaSource()
-                      .act()
-                      .init()
-                      .togglePlayback(playbackSource);
+                .withMediaSource()
+                .act()
+                .init()
+                .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource);
@@ -158,18 +159,18 @@ public class ExoPlayerAudioPlayerTest {
         PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
-                      .withMediaSource()
-                      .act()
-                      .init()
-                      .togglePlayback(playbackSource);
+                .withMediaSource()
+                .act()
+                .init()
+                .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
-                            .test()
-                            .assertValue(isSome(PlayerState::getSource));
+                .test()
+                .assertValue(isSome(PlayerState::getSource));
     }
 
     @Test
@@ -179,13 +180,13 @@ public class ExoPlayerAudioPlayerTest {
         PlaybackSource playbackSource = new PlaybackSource(new Id(id), url);
         ArrangeBuilder arrangeBuilder = new ArrangeBuilder();
         arrangeBuilder.withIdleExoPlayer()
-                      .withMediaSource()
-                      .act()
-                      .init()
-                      .togglePlayback(playbackSource);
+                .withMediaSource()
+                .act()
+                .init()
+                .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
         arrangeBuilder.act()
-                      .togglePlayback(playbackSource);
+                .togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource);
@@ -206,16 +207,16 @@ public class ExoPlayerAudioPlayerTest {
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
-                      .init()
-                      .togglePlayback(playbackSource);
+                .init()
+                .togglePlayback(playbackSource);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource);
         arrangeBuilder.withPausedExoPlayer();
 
         exoPlayerAudioPlayer.getPlayerStateOnceAndStream()
-                            .test()
-                            .assertValue(isSome(PlayerState::getSource));
+                .test()
+                .assertValue(isSome(PlayerState::getSource));
     }
 
     @Test
@@ -230,8 +231,8 @@ public class ExoPlayerAudioPlayerTest {
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
-                      .init()
-                      .togglePlayback(playbackSource1);
+                .init()
+                .togglePlayback(playbackSource1);
         arrangeBuilder.withPlayingExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource2);
@@ -257,8 +258,8 @@ public class ExoPlayerAudioPlayerTest {
                 .withIdleExoPlayer()
                 .withMediaSource();
         arrangeBuilder.act()
-                      .init()
-                      .togglePlayback(playbackSource1);
+                .init()
+                .togglePlayback(playbackSource1);
         arrangeBuilder.withEndedExoPlayer();
 
         exoPlayerAudioPlayer.togglePlayback(playbackSource2);
@@ -298,19 +299,19 @@ public class ExoPlayerAudioPlayerTest {
         }
 
         ArrangeBuilder withIdleExoPlayer() {
-            return withExoPlayerStateStreamEvent(false, ExoPlayer.STATE_IDLE);
+            return withExoPlayerStateStreamEvent(false, Player.STATE_IDLE);
         }
 
         ArrangeBuilder withPlayingExoPlayer() {
-            return withExoPlayerStateStreamEvent(true, ExoPlayer.STATE_READY);
+            return withExoPlayerStateStreamEvent(true, Player.STATE_READY);
         }
 
         ArrangeBuilder withPausedExoPlayer() {
-            return withExoPlayerStateStreamEvent(false, ExoPlayer.STATE_READY);
+            return withExoPlayerStateStreamEvent(false, Player.STATE_READY);
         }
 
         ArrangeBuilder withEndedExoPlayer() {
-            return withExoPlayerStateStreamEvent(true, ExoPlayer.STATE_ENDED);
+            return withExoPlayerStateStreamEvent(true, Player.STATE_ENDED);
         }
 
         ArrangeBuilder withExoPlayerStateStreamEvent(boolean playWhenReady, int state) {
