@@ -25,13 +25,13 @@ apply from: 'app-config.gradle'
 def STRING = "String"
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.futurice.freesound"
         minSdkVersion 22
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.debug
@@ -120,7 +120,7 @@ task checkstyle(type: Checkstyle) {
 ext {
     dependencyVersions = [
             kotlin                  : kotlin_version,
-            androidSupport          : '27.1.1',
+            androidSupport          : '28.0.0',
             androidSupportConstraint: '1.1.0',
             androidArchLifecycle    : '1.1.1',
             androidSupportTest      : '1.0.0',
