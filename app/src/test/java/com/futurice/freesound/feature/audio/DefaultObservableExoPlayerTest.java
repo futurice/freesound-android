@@ -16,10 +16,9 @@
 
 package com.futurice.freesound.feature.audio;
 
-import com.google.android.exoplayer2.ExoPlayer;
-
 import com.futurice.freesound.test.rx.TimeSkipScheduler;
 import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
+import com.google.android.exoplayer2.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ import io.reactivex.subjects.BehaviorSubject;
 public class DefaultObservableExoPlayerTest {
 
     private static final ExoPlayerState TEST_INITIAL_EXOPLAYER_STATE =
-            new ExoPlayerState(true, ExoPlayer.STATE_IDLE);
+            new ExoPlayerState(true, Player.STATE_IDLE);
 
     private static final long TEST_INITIAL_EXOPLAYER_PROGRESS = 0L;
 
@@ -53,8 +52,8 @@ public class DefaultObservableExoPlayerTest {
                 .createDefault(TEST_INITIAL_EXOPLAYER_PROGRESS);
         schedulerProvider = new TrampolineSchedulerProvider();
         defaultObservableExoPlayer = new DefaultObservableExoPlayer(exoPlayerStateOnceAndStream,
-                                                                    exoPlayerProgressOnceAndStream,
-                                                                    schedulerProvider);
+                exoPlayerProgressOnceAndStream,
+                schedulerProvider);
     }
 
     @Test
@@ -63,8 +62,8 @@ public class DefaultObservableExoPlayerTest {
                 .withExoPlayerState(TEST_INITIAL_EXOPLAYER_STATE);
 
         defaultObservableExoPlayer.getExoPlayerStateOnceAndStream()
-                                  .test()
-                                  .assertValue(TEST_INITIAL_EXOPLAYER_STATE);
+                .test()
+                .assertValue(TEST_INITIAL_EXOPLAYER_STATE);
     }
 
     @Test
@@ -74,8 +73,8 @@ public class DefaultObservableExoPlayerTest {
                 .withProgress(500L);
 
         defaultObservableExoPlayer.getTimePositionMsOnceAndStream(100L, TimeUnit.SECONDS)
-                                  .test()
-                                  .assertValue(500L);
+                .test()
+                .assertValue(500L);
 
     }
 
@@ -86,8 +85,8 @@ public class DefaultObservableExoPlayerTest {
                 .withProgress(500L);
 
         defaultObservableExoPlayer.getTimePositionMsOnceAndStream(100L, TimeUnit.SECONDS)
-                                  .test()
-                                  .assertValue(500L);
+                .test()
+                .assertValue(500L);
     }
 
     @Test
@@ -97,8 +96,8 @@ public class DefaultObservableExoPlayerTest {
                 .withProgress(500L);
 
         defaultObservableExoPlayer.getTimePositionMsOnceAndStream(100L, TimeUnit.SECONDS)
-                                  .test()
-                                  .assertValue(500L);
+                .test()
+                .assertValue(500L);
     }
 
     @Test
@@ -112,8 +111,8 @@ public class DefaultObservableExoPlayerTest {
         testScheduler.triggerActions();
 
         defaultObservableExoPlayer.getTimePositionMsOnceAndStream(100L, TimeUnit.SECONDS)
-                                  .test()
-                                  .assertValue(500L);
+                .test()
+                .assertValue(500L);
 
     }
 
@@ -148,19 +147,19 @@ public class DefaultObservableExoPlayerTest {
         }
 
         ArrangeBuilder withIdleExoPlayer() {
-            return withExoPlayerStateStreamEvent(false, ExoPlayer.STATE_IDLE);
+            return withExoPlayerStateStreamEvent(false, Player.STATE_IDLE);
         }
 
         ArrangeBuilder withPlayingExoPlayer() {
-            return withExoPlayerStateStreamEvent(true, ExoPlayer.STATE_READY);
+            return withExoPlayerStateStreamEvent(true, Player.STATE_READY);
         }
 
         ArrangeBuilder withPausedExoPlayer() {
-            return withExoPlayerStateStreamEvent(false, ExoPlayer.STATE_READY);
+            return withExoPlayerStateStreamEvent(false, Player.STATE_READY);
         }
 
         ArrangeBuilder withEndedExoPlayer() {
-            return withExoPlayerStateStreamEvent(true, ExoPlayer.STATE_ENDED);
+            return withExoPlayerStateStreamEvent(true, Player.STATE_ENDED);
         }
 
         ArrangeBuilder withExoPlayerStateStreamEvent(boolean playWhenReady, int state) {

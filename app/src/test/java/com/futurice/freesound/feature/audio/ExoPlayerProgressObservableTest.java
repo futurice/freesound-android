@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -37,7 +38,7 @@ public class ExoPlayerProgressObservableTest {
     private ExoPlayer exoPlayer;
 
     @Captor
-    private ArgumentCaptor<ExoPlayer.EventListener> listenerCaptor;
+    private ArgumentCaptor<Player.EventListener> listenerCaptor;
 
     private ExoPlayerProgressObservable exoPlayerProgressObservable;
 
@@ -55,14 +56,14 @@ public class ExoPlayerProgressObservableTest {
     public void addsListener_whenSubscribing() {
         exoPlayerProgressObservable.subscribe();
 
-        verify(exoPlayer).addListener(any(ExoPlayer.EventListener.class));
+        verify(exoPlayer).addListener(any(Player.EventListener.class));
     }
 
     @Test
     public void removesListener_whenUnsubscribing() {
         exoPlayerProgressObservable.subscribe().dispose();
 
-        verify(exoPlayer).removeListener(any(ExoPlayer.EventListener.class));
+        verify(exoPlayer).removeListener(any(Player.EventListener.class));
     }
 
     @Test
@@ -75,7 +76,7 @@ public class ExoPlayerProgressObservableTest {
                 .invokeListenerCallback();
 
         testObserver.assertValue(expected)
-                    .assertNotTerminated();
+                .assertNotTerminated();
     }
 
     @Test
@@ -125,8 +126,8 @@ public class ExoPlayerProgressObservableTest {
         }
 
         ExoPlayerTestEventGenerator invokeListenerCallback() {
-            // don't care about value and are nullable anyway
-            listenerCaptor.getValue().onTimelineChanged(null, null);
+            // don't care about values for our implementation
+            listenerCaptor.getValue().onTimelineChanged(null, null, 0);
             return this;
         }
 

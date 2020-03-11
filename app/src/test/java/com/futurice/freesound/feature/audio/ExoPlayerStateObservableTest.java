@@ -17,6 +17,7 @@
 package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -37,7 +38,7 @@ public class ExoPlayerStateObservableTest {
     private ExoPlayer exoPlayer;
 
     @Captor
-    private ArgumentCaptor<ExoPlayer.EventListener> listenerCaptor;
+    private ArgumentCaptor<Player.EventListener> listenerCaptor;
 
     private ExoPlayerStateObservable exoPlayerStateObservable;
 
@@ -55,14 +56,14 @@ public class ExoPlayerStateObservableTest {
     public void addsListener_whenSubscribing() {
         exoPlayerStateObservable.subscribe();
 
-        verify(exoPlayer).addListener(any(ExoPlayer.EventListener.class));
+        verify(exoPlayer).addListener(any(Player.EventListener.class));
     }
 
     @Test
     public void removesListener_whenUnsubscribing() {
         exoPlayerStateObservable.subscribe().dispose();
 
-        verify(exoPlayer).removeListener(any(ExoPlayer.EventListener.class));
+        verify(exoPlayer).removeListener(any(Player.EventListener.class));
     }
 
     @Test
@@ -70,10 +71,10 @@ public class ExoPlayerStateObservableTest {
         TestObserver<ExoPlayerState> testObserver = exoPlayerStateObservable.test();
 
         new ExoPlayerTestEventGenerator()
-                .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
+                .invokeListenerCallback(true, Player.STATE_IDLE);
 
-        testObserver.assertValue(new ExoPlayerState(true, ExoPlayer.STATE_IDLE))
-                    .assertNotTerminated();
+        testObserver.assertValue(new ExoPlayerState(true, Player.STATE_IDLE))
+                .assertNotTerminated();
     }
 
     @Test
@@ -82,7 +83,7 @@ public class ExoPlayerStateObservableTest {
         testObserver.dispose();
 
         new ExoPlayerTestEventGenerator()
-                .invokeListenerCallback(true, ExoPlayer.STATE_IDLE);
+                .invokeListenerCallback(true, Player.STATE_IDLE);
 
         testObserver.assertNoValues();
     }
