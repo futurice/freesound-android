@@ -128,11 +128,10 @@ ext {
             rxJava2                 : '2.2.18',
             rxAndroid               : '2.1.1',
             rxBinding               : '2.2.0',
-            okHttp                  : '3.6.0',
+            okHttp                  : '3.14.7',
             picasso                 : '2.5.2',
-            retrofit2               : '2.2.0',
+            retrofit2               : '2.7.2',
             retrofit2RxJava2Adapter : '1.0.0',
-            retrofit2GsonConverter  : '2.0.0',
             moshi                   : '1.9.2',
             moshiConverter          : '2.7.2',
             autoFactory             : '1.0-beta5',
@@ -188,7 +187,6 @@ dependencies {
     implementation 'com.jakewharton.rx2:replaying-share-kotlin:2.0.0'
 
     // Networking
-    implementation "com.squareup.okhttp3:okhttp:$dependencyVersions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$dependencyVersions.okHttp"
     implementation "com.squareup.picasso:picasso:$dependencyVersions.picasso"
 
