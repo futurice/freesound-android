@@ -148,7 +148,7 @@ ext {
             junit                   : '4.12',
             mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
-            leakCanary              : '1.5.1',
+            leakCanary              : '2.2',
             rxLint                  : '1.6.1']
 }
 
@@ -252,8 +252,6 @@ dependencies {
 
     // Leak Canary
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$dependencyVersions.leakCanary"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
-    testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$dependencyVersions.leakCanary"
 
     // RxLint
     implementation "nl.littlerobots.rxlint:rxlint:$dependencyVersions.rxLint"
