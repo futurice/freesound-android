@@ -16,14 +16,14 @@
 
 package com.futurice.freesound.arch.mvi.viewmodel
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.FragmentActivity
 
 // Fragment
 @Suppress("UNCHECKED_CAST")
-inline fun <reified VM : ViewModel> android.support.v4.app.Fragment.viewModelProvider(
+inline fun <reified VM : ViewModel> androidx.fragment.app.Fragment.viewModelProvider(
         crossinline provider: () -> VM): VM {
     return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
         override fun <T1 : ViewModel> create(aClass: Class<T1>) = provider() as T1

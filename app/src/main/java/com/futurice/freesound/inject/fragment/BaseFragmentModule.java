@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.inject.fragment;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import dagger.Module;
 import dagger.Provides;
@@ -27,7 +27,7 @@ public class BaseFragmentModule {
 
     private final Fragment fragment;
 
-    public BaseFragmentModule(@NonNull final android.support.v4.app.Fragment fragment) {
+    public BaseFragmentModule(@NonNull final Fragment fragment) {
         this.fragment = fragment;
     }
 

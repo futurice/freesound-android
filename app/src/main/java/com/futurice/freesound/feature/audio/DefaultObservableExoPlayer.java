@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.concurrent.TimeUnit;
 

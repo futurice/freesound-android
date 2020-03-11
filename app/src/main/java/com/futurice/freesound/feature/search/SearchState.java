@@ -20,7 +20,7 @@ import com.google.auto.value.AutoValue;
 
 import com.futurice.freesound.network.api.model.Sound;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

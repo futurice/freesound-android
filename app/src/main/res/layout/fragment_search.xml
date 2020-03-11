@@ -36,11 +36,11 @@
             style="@style/HorizontalProgressBarStyle"/>
 
     <!-- Use of ConstraintLayout is perhaps unnecessary, but I wanted an excuse to use it! -->
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_searchResults"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -69,5 +69,5 @@
                 app:layout_constraintVertical_bias="0.25"
                 android:visibility="gone"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

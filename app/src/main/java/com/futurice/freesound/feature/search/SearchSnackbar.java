@@ -18,9 +18,9 @@ package com.futurice.freesound.feature.search;
 
 import com.futurice.freesound.R;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 
 import polanski.option.Option;

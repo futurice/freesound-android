@@ -18,12 +18,12 @@ package com.futurice.freesound.arch.mvvm.viewholder;
 
 import com.futurice.freesound.arch.mvvm.ViewModel;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 /**
- * A {@link android.support.v7.widget.RecyclerView.ViewHolder} which supports binding and unbinding
+ * A {@link RecyclerView.ViewHolder} which supports binding and unbinding
  * to a {@link ViewModel}.
  *
  * @param <T> {@link ViewModel} type

@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -24,20 +24,20 @@
         tools:context=".feature.search.SearchActivity"
         tools:ignore="MergeRootFrame">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <!-- Using ?attr refers to a style attribute in the currently active theme -->
-        <android.support.v7.widget.Toolbar android:layout_width="match_parent"
+        <androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
                                            android:layout_height="?attr/actionBarSize"
                                            android:id="@+id/toolbar_home"
                                            android:background="?attr/colorPrimary"
                                            android:theme="@style/AppToolbarStyle"
                                            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
 
     <FrameLayout
@@ -46,4 +46,4 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

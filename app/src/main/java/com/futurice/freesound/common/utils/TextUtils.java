@@ -18,7 +18,7 @@ package com.futurice.freesound.common.utils;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * String utilities - matches those in the Android platform, but separated to allow for JVM unit

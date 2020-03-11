@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.store
 
-import android.support.v4.util.LruCache
+import androidx.collection.LruCache
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable

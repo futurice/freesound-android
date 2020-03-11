@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.arch.mvi.view
 
-import android.arch.lifecycle.*
+import androidx.lifecycle.*
 import com.futurice.freesound.arch.mvi.viewmodel.MviViewModel
 
 /**

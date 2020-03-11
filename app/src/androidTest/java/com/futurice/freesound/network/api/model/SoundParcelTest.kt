@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.network.api.model
 
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.filters.SmallTest
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.futurice.freesound.helpers.testParcel
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.audio;
 
 import com.futurice.freesound.common.Releasable;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.Observable;
 

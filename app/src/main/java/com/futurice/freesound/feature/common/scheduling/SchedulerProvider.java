@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.common.scheduling;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.Scheduler;
 

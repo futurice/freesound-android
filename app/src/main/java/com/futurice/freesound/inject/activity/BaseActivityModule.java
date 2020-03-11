@@ -20,7 +20,7 @@ import com.futurice.freesound.feature.common.DefaultNavigator;
 import com.futurice.freesound.feature.common.Navigator;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import dagger.Module;
 import dagger.Provides;

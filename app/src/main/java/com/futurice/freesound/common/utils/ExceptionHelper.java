@@ -17,7 +17,7 @@ package com.futurice.freesound.common.utils;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Utility class for exceptions.

@@ -22,9 +22,9 @@ import com.futurice.freesound.arch.mvvm.ViewModel;
 import com.futurice.freesound.arch.core.BaseActivity;
 
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import io.reactivex.disposables.CompositeDisposable;
 

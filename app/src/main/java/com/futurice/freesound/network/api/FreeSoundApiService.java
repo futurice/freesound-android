@@ -20,7 +20,7 @@ import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.network.api.model.User;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.Single;
 

@@ -19,8 +19,8 @@ package com.futurice.freesound.feature.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import android.view.View
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
@@ -128,6 +128,7 @@ class SearchActivity : MvvmBaseActivity<SearchActivityComponent>() {
     }
 
     private fun handleErrorState(searchState: SearchState) {
+        // TODO This should also close the keyboard, otherwise the error is hidden.
         searchState.error()
                 .ifSome { showSnackbar(getString(R.string.search_error)) }
                 .ifNone { this.dismissSnackbar() }

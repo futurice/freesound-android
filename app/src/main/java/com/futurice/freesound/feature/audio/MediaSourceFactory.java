@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.source.MediaSource;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Generates {@link MediaSource} from URIs.

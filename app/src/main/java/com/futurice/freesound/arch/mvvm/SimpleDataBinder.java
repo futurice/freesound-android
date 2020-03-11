@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.arch.mvvm;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.disposables.CompositeDisposable;
 

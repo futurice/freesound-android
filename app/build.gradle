@@ -36,7 +36,7 @@ android {
         versionName "1.0"
         signingConfig signingConfigs.debug
         multiDexEnabled true
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
         buildConfigField(STRING, "FREESOUND_API_URL", freesound_api_url)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
@@ -133,15 +133,15 @@ ext {
             retrofit2               : '2.2.0',
             retrofit2RxJava2Adapter : '1.0.0',
             retrofit2GsonConverter  : '2.0.0',
-            moshi                   : '1.6.0',
-            moshiConverter          : '2.4.0',
+            moshi                   : '1.9.2',
+            moshiConverter          : '2.7.2',
             autoFactory             : '1.0-beta5',
             autoValue               : '1.5.2',
             jsr250                  : '1.0',
             jonty                   : '0.7',
             options                 : '1.2.4',
             exoplayer               : 'r2.1.1',
-            butterknife             : '8.7.0',
+            butterknife             : '10.2.1',
             firebase                : '9.4.0',
             stetho                  : '1.5.0',
             timber                  : '4.7.0',
@@ -157,20 +157,20 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$dependencyVersions.kotlin"
 
     // Android Support
-    implementation "com.android.support:support-v4:$dependencyVersions.androidSupport"
-    implementation "com.android.support:support-annotations:$dependencyVersions.androidSupport"
-    implementation "com.android.support:appcompat-v7:$dependencyVersions.androidSupport"
-    implementation "com.android.support:palette-v7:$dependencyVersions.androidSupport"
-    implementation "com.android.support:recyclerview-v7:$dependencyVersions.androidSupport"
-    implementation "com.android.support:cardview-v7:$dependencyVersions.androidSupport"
-    implementation "com.android.support:design:$dependencyVersions.androidSupport"
-    implementation "com.android.support.constraint:constraint-layout:$dependencyVersions.androidSupportConstraint"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
-    implementation "android.arch.lifecycle:runtime:$dependencyVersions.androidArchLifecycle"
-    implementation "android.arch.lifecycle:extensions:$dependencyVersions.androidArchLifecycle"
-    implementation "android.arch.lifecycle:reactivestreams:$dependencyVersions.androidArchLifecycle"
-    kapt "android.arch.lifecycle:compiler:$dependencyVersions.androidArchLifecycle"
-    testImplementation "android.arch.core:core-testing:$dependencyVersions.androidArchLifecycle"
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    testImplementation 'androidx.arch.core:core-testing:2.0.0'
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
@@ -246,8 +246,8 @@ dependencies {
     testImplementation "com.squareup.okhttp3:mockwebserver:$dependencyVersions.okHttp"
 
     // Instrumentation Testing
-    androidTestImplementation "com.android.support.test:runner:$dependencyVersions.androidSupportTest"
-    androidTestImplementation "com.android.support.test:rules:$dependencyVersions.androidSupportTest"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
     androidTestImplementation "org.assertj:assertj-core:$dependencyVersions.assertJ"
 
     // Leak Canary

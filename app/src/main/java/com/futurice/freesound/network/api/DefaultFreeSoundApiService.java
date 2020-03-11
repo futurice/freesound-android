@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.network.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.futurice.freesound.network.api.model.AccessToken;
 import com.futurice.freesound.network.api.model.SoundFields;

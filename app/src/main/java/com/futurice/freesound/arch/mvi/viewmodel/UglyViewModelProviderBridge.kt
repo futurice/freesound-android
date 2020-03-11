@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.arch.mvi.viewmodel
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 // FIXME Not using this for now because it's too ugly in Java
 // Need this bridge for now because you can't call reified functions from Java.

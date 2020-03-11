@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class RecyclerViewAdapterTest {
         MockitoAnnotations.initMocks(this);
 
         SchedulerProvider schedulerProvider = new UiThreadTrampolineSchedulerProvider();
-        adapter = new RecyclerViewAdapter<Object>(comparator, factoryMap(), binderMap(), schedulerProvider);
+        adapter = new RecyclerViewAdapter<>(comparator, factoryMap(), binderMap(), schedulerProvider);
     }
 
     @Test

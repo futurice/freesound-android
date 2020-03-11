@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.test.assertion.livedata
 
-import android.arch.lifecycle.Observer
-import junit.framework.Assert.assertTrue
+import androidx.lifecycle.Observer
+import org.junit.Assert.assertTrue
 import junit.framework.TestCase.assertEquals
 
 class TestObserver<T> : Observer<T>, LiveDataAssertion<T> {

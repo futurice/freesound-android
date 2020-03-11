@@ -19,7 +19,7 @@ package com.futurice.freesound.common.functional;
 import com.futurice.freesound.common.InstantiationForbiddenError;
 import com.futurice.freesound.common.utils.ExceptionHelper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
