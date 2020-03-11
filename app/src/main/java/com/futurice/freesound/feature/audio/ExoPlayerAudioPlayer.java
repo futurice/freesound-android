@@ -16,12 +16,12 @@
 
 package com.futurice.freesound.feature.audio;
 
-import com.google.android.exoplayer2.ExoPlayer;
-
-import com.futurice.freesound.common.utils.Preconditions;
-
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
+
+import com.futurice.freesound.common.utils.Preconditions;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,13 +38,13 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
  * AudioPlayer implementation that uses ExoPlayer 2.
- *
+ * <p>
  * This is not thread safe; you should only issue commands from the initialization thread.
- *
+ * <p>
  * ExoPlayer documentation recommends that the player instance is only interacted with from
  * a single thread. Callbacks are provided on the same thread that initialized the ExoPlayer
  * instance.
- *
+ * <p>
  * NOTE: I haven't yet found a way to determine the current playing source in ExoPlayer, so this
  * class needs to retain the URL itself. As a consequence, keep this instance with the same scope
  * as the underlying ExoPlayer instance. Otherwise you could arrive at a situation where ExoPlayer
@@ -95,25 +95,25 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
                         .take(1)
                         .map(exoPlayerState -> toToggleAction(playbackSource, exoPlayerState))
                         .map(action -> Pair.create(action, playbackSource)))
-                                       .subscribe(pair -> handleToggleAction(pair.first,
-                                                                             pair.second),
-                                                  e -> Timber
-                                                          .e(e, "Fatal error toggling playback")));
+                        .subscribe(pair -> handleToggleAction(pair.first,
+                                pair.second),
+                                e -> Timber
+                                        .e(e, "Fatal error toggling playback")));
     }
 
     @Override
     @NonNull
     public Observable<PlayerState> getPlayerStateOnceAndStream() {
         return observableExoPlayer.getExoPlayerStateOnceAndStream()
-                                  .map(ExoPlayerAudioPlayer::toState)
-                                  .map(state -> new PlayerState(state, currentSource.get()));
+                .map(ExoPlayerAudioPlayer::toState)
+                .map(state -> new PlayerState(state, currentSource.get()));
     }
 
     @NonNull
     @Override
     public Observable<Long> getTimePositionMsOnceAndStream() {
         return observableExoPlayer.getTimePositionMsOnceAndStream(DEFAULT_UPDATE_PERIOD_MILLIS,
-                                                                  TimeUnit.MILLISECONDS);
+                TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -156,7 +156,7 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported playback action: "
-                                                   + action);
+                        + action);
         }
 
     }
@@ -177,27 +177,27 @@ final class ExoPlayerAudioPlayer implements AudioPlayer {
     }
 
     private static boolean isIdle(final int state) {
-        return state == ExoPlayer.STATE_IDLE || state == ExoPlayer.STATE_ENDED;
+        return state == Player.STATE_IDLE || state == Player.STATE_ENDED;
     }
 
     private boolean hasSourceChanged(@NonNull final PlaybackSource source) {
         return currentSource.get()
-                            .map(playbackSource -> !playbackSource.equals(source))
-                            .orDefault(() -> false);
+                .map(playbackSource -> !playbackSource.equals(source))
+                .orDefault(() -> false);
     }
 
     @NonNull
     private static State toState(@NonNull final ExoPlayerState exoPlayerState) {
         int exoplaybackState = exoPlayerState.getPlaybackState();
         switch (exoplaybackState) {
-            case ExoPlayer.STATE_IDLE:
+            case Player.STATE_IDLE:
                 return State.IDLE;
-            case ExoPlayer.STATE_BUFFERING:
+            case Player.STATE_BUFFERING:
                 return State.BUFFERING;
-            case ExoPlayer.STATE_READY:
+            case Player.STATE_READY:
                 return exoPlayerState.getPlayWhenReady() ?
                         State.PLAYING : State.PAUSED;
-            case ExoPlayer.STATE_ENDED:
+            case Player.STATE_ENDED:
                 return State.ENDED;
             default:
                 throw new IllegalStateException("Unsupported Exoplayer state: " + exoplaybackState);

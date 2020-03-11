@@ -16,11 +16,10 @@
 
 package com.futurice.freesound.feature.audio;
 
-import com.google.android.exoplayer2.ExoPlayer;
+import androidx.annotation.NonNull;
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
-
-import androidx.annotation.NonNull;
+import com.google.android.exoplayer2.Player;
 
 import java.util.concurrent.TimeUnit;
 
@@ -65,8 +64,8 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
         return getExoPlayerStateOnceAndStream()
                 .map(DefaultObservableExoPlayer::isTimelineChanging)
                 .switchMap(isTimelineChanging -> timePositionMsOnceAndStream(isTimelineChanging,
-                                                                             updatePeriod,
-                                                                             timeUnit));
+                        updatePeriod,
+                        timeUnit));
     }
 
     @NonNull
@@ -82,14 +81,14 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
     private Observable<Long> updatingProgressOnceAndStream(final long updatePeriod,
                                                            @NonNull final TimeUnit timeUnit) {
         return Observable.timer(updatePeriod, timeUnit,
-                                schedulerProvider.time(PLAYER_PROGRESS_SCHEDULER_TAG))
-                         .repeat()
-                         .startWith(0L)
-                         .switchMap(__ -> progressOnceAndStream);
+                schedulerProvider.time(PLAYER_PROGRESS_SCHEDULER_TAG))
+                .repeat()
+                .startWith(0L)
+                .switchMap(__ -> progressOnceAndStream);
     }
 
     private static boolean isTimelineChanging(@NonNull final ExoPlayerState playerState) {
-        return playerState.getPlaybackState() == ExoPlayer.STATE_READY
-               && playerState.getPlayWhenReady();
+        return playerState.getPlaybackState() == Player.STATE_READY
+                && playerState.getPlayWhenReady();
     }
 }

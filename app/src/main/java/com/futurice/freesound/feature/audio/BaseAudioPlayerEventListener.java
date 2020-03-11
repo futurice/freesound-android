@@ -16,13 +16,15 @@
 
 package com.futurice.freesound.feature.audio;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-
-import androidx.annotation.NonNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,13 +38,13 @@ import static com.futurice.freesound.common.utils.Preconditions.get;
  *
  * @param <T> the Observable value type.
  */
-abstract class BaseAudioPlayerEventListener<T> implements Disposable, ExoPlayer.EventListener {
+abstract class BaseAudioPlayerEventListener<T> implements Disposable, Player.EventListener {
 
     @NonNull
-    protected final ExoPlayer exoPlayer;
+    final ExoPlayer exoPlayer;
 
     @NonNull
-    protected final Observer<? super T> observer;
+    final Observer<? super T> observer;
 
     @NonNull
     private final AtomicBoolean unsubscribed = new AtomicBoolean();
@@ -58,23 +60,24 @@ abstract class BaseAudioPlayerEventListener<T> implements Disposable, ExoPlayer.
         // Override if needed
     }
 
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
+        // Override if needed
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+        // Override if needed
+    }
+
     @Override
     public void onPlayerStateChanged(final boolean playWhenReady, final int playbackState) {
         // Override if needed
     }
 
     @Override
-    public void onTimelineChanged(final Timeline timeline, final Object manifest) {
-        // Override if needed
-    }
-
-    @Override
     public void onPlayerError(final ExoPlaybackException error) {
-        // Override if needed
-    }
-
-    @Override
-    public void onPositionDiscontinuity() {
         // Override if needed
     }
 

@@ -140,7 +140,7 @@ ext {
             jsr250                  : '1.0',
             jonty                   : '0.7',
             options                 : '1.2.4',
-            exoplayer               : 'r2.1.1',
+            exoplayer               : '2.9.5',
             butterknife             : '10.2.1',
             firebase                : '9.4.0',
             stetho                  : '1.5.0',
