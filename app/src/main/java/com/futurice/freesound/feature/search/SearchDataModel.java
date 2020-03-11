@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.search;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;

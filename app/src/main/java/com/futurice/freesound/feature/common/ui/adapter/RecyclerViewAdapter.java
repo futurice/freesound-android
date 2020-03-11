@@ -21,9 +21,9 @@ import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.arch.mvvm.viewholder.BaseBindingViewHolder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;

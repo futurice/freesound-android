@@ -18,8 +18,8 @@ package com.futurice.freesound.common.utils;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Static class that provides helper methods to check preconditions.

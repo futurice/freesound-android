@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.search
 
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import com.futurice.freesound.arch.mvvm.BaseViewModel
 import com.futurice.freesound.common.Text
 import com.futurice.freesound.common.rx.plusAssign

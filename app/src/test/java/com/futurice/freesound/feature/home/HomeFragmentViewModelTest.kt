@@ -1,6 +1,6 @@
 package com.futurice.freesound.feature.home
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.futurice.freesound.arch.mvi.LoggingTransitionObserver
 import com.futurice.freesound.arch.mvi.TransitionObserver
 import com.futurice.freesound.feature.common.streams.Fetch

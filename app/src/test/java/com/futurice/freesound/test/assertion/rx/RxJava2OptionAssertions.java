@@ -18,7 +18,7 @@ package com.futurice.freesound.test.assertion.rx;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;

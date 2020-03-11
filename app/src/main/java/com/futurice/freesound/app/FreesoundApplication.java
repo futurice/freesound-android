@@ -21,7 +21,7 @@ import com.futurice.freesound.arch.core.BaseApplication;
 import com.futurice.freesound.inject.app.BaseApplicationModule;
 import com.squareup.leakcanary.LeakCanary;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import javax.inject.Inject;
 

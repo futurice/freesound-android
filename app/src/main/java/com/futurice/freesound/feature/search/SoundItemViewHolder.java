@@ -32,8 +32,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +45,6 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static butterknife.ButterKnife.findById;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel> {
@@ -150,7 +149,7 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
         ButterKnife.bind(this, view);
         this.picasso = get(picasso);
         this.playbackWaveformViewTarget = new WaveformViewTarget(
-                findById(view, R.id.playbackWaveformView_soundItem),
+                view.findViewById(R.id.playbackWaveformView_soundItem),
                 new BlackBackgroundWaveformExtractor());
         this.schedulerProvider = get(schedulerProvider);
     }
@@ -197,8 +196,8 @@ final class SoundItemViewHolder extends BaseBindingViewHolder<SoundItemViewModel
         @Override
         public void bind(@NonNull final RecyclerView.ViewHolder viewHolder,
                          @NonNull final DisplayableItem<Sound> item) {
-            SoundItemViewHolder soundItemViewHolder = SoundItemViewHolder.class.cast(viewHolder);
-            Sound sound = Sound.class.cast(item.getModel());
+            SoundItemViewHolder soundItemViewHolder = (SoundItemViewHolder) viewHolder;
+            Sound sound = item.getModel();
             soundItemViewHolder.bind(viewModelFactory.create(sound));
         }
     }

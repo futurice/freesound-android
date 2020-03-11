@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.arch.mvi.viewmodel
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 interface MviViewModel<in E, M> {
 

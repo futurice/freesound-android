@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.feature.logging;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Exception reporting mechanism.

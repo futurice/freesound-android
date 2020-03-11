@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.audio;
 
 import com.google.android.exoplayer2.ExoPlayer;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import javax.inject.Inject;
 

@@ -20,8 +20,8 @@ import com.google.android.exoplayer2.ExoPlayer;
 
 import com.futurice.freesound.common.utils.Preconditions;
 
-import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 
 import java.util.concurrent.TimeUnit;
 

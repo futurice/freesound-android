@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.logging;
 
 import com.google.firebase.crash.FirebaseCrash;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 

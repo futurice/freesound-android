@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.search;
 
 import com.google.auto.value.AutoValue;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import polanski.option.Option;
 

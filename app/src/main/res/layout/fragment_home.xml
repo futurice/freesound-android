@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/feed_swipeToRefresh">
@@ -38,9 +38,8 @@
                              style="@style/CircularProgressBarStyle"
                              android:layout_gravity="center"/>
 
-                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                xmlns:tools="http://schemas.android.com/tools"
-                                android:id="@+id/homeUser_container"
+                <RelativeLayout
+                    android:id="@+id/homeUser_container"
                                 android:layout_gravity="top"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -73,5 +72,5 @@
                 </RelativeLayout>
             </FrameLayout>
         </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

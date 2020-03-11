@@ -16,8 +16,8 @@
 
 package com.futurice.freesound.feature.logging;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import polanski.option.Option;
 import timber.log.Timber;

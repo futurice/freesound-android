@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.common.waveform;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Extracts the waveform from the background by evaluating that any non-waveform component is the

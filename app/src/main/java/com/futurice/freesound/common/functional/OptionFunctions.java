@@ -18,7 +18,7 @@ package com.futurice.freesound.common.functional;
 
 import com.futurice.freesound.common.InstantiationForbiddenError;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import polanski.option.Option;
 import polanski.option.function.Action0;

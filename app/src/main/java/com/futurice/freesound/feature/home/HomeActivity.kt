@@ -19,7 +19,6 @@ package com.futurice.freesound.feature.home
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import butterknife.ButterKnife.findById
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
 import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
@@ -44,7 +43,7 @@ class HomeActivity : MvvmBaseActivity<HomeActivityComponent>() {
             addHomeFragment()
         }
 
-        setSupportActionBar(findById(this, R.id.toolbar_home))
+        setSupportActionBar(findViewById(R.id.toolbar_home))
     }
 
     override fun viewModel(): ViewModel = homeViewModel

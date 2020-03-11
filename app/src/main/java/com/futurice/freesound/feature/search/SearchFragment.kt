@@ -17,7 +17,7 @@
 package com.futurice.freesound.feature.search
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -76,7 +76,7 @@ class SearchFragment : MvvmBaseFragment<SearchFragmentComponent>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView_searchResults.layoutManager = LinearLayoutManager(activity).apply {
+        recyclerView_searchResults.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity).apply {
             recycleChildrenOnDetach = true
         }
     }

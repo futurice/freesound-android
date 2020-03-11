@@ -17,6 +17,7 @@
 package com.futurice.freesound.network.api;
 
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
+import com.futurice.freesound.network.api.model.GeoLocation;
 import com.futurice.freesound.network.api.model.mapping.FreesoundDateAdapter;
 import com.futurice.freesound.network.api.model.mapping.GeoLocationJsonAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -69,8 +70,8 @@ public class ApiNetworkModule {
     @ForFreeSoundApi
     static Moshi provideMoshi() {
         return new Moshi.Builder()
-                .add(new KotlinJsonAdapterFactory())
                 .add(new GeoLocationJsonAdapter())
+                .add(new KotlinJsonAdapterFactory())
                 .add(new FreesoundDateAdapter(new Rfc3339DateJsonAdapter()))
                 .build();
     }

@@ -17,8 +17,8 @@
 package com.futurice.freesound.feature.common.ui.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.ViewGroup;
 
 /**

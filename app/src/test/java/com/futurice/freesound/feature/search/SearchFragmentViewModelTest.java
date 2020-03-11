@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

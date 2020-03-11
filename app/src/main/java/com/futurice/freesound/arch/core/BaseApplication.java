@@ -19,8 +19,8 @@ package com.futurice.freesound.arch.core;
 import com.futurice.freesound.inject.Injector;
 
 import android.app.Application;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 
 /**
  * A base Application which provides a dependency injection mechanism.

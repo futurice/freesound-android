@@ -24,8 +24,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -97,7 +97,7 @@ public class WaveformView extends View implements WaveformRender {
             return;
         }
 
-        final float drawableWidth = canvas.getWidth();
+        final float drawableWidth = getWidth();
 
         // The number of whole columns that fit in the drawable width with the desired column spacing
         final int columnCount = Math.min(waveform.length,
@@ -110,8 +110,8 @@ public class WaveformView extends View implements WaveformRender {
         final int datapoints = waveform.length / columnCount;
 
         // Max height to be used by the waveform
-        final int heightScalingFactor = canvas.getHeight() / 2;
-        final int centreLine = canvas.getHeight() / 2;
+        final int heightScalingFactor = getHeight() / 2;
+        final int centreLine = getHeight() / 2;
 
         // Incrementing column borders
         int left = (int) (columnGapPx + remainder) / 2; // initial margin

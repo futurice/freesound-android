@@ -19,8 +19,10 @@ package com.futurice.freesound.arch.mvvm.viewholder;
 import com.futurice.freesound.arch.mvvm.DataBinder;
 import com.futurice.freesound.arch.mvvm.ViewModel;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -28,7 +30,7 @@ import static com.futurice.freesound.common.utils.Preconditions.checkNotNull;
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
 /**
- * Provides the base operations for a binding {@link android.support.v7.widget.RecyclerView.ViewHolder}
+ * Provides the base operations for a binding {@link RecyclerView.ViewHolder}
  *
  * Specific handling is required to support recycling.
  */

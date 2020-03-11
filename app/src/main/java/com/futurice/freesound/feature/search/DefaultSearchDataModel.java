@@ -21,7 +21,7 @@ import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

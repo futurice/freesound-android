@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.test.assertion.livedata
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 fun <T> LiveData<T>.test(): TestObserver<T> {
     return TestObserver<T>()

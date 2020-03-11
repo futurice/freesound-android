@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.inject.fragment;
 
+import androidx.fragment.app.Fragment;
+
 import com.futurice.freesound.inject.activity.BaseActivityModule;
 
 import dagger.Component;
@@ -25,6 +27,6 @@ import dagger.Component;
 public interface BaseFragmentComponent {
 
     @FragmentScope
-    android.support.v4.app.Fragment getFragment();
+    Fragment getFragment();
 
 }

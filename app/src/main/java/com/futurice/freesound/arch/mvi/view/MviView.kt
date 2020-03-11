@@ -16,7 +16,7 @@
 
 package com.futurice.freesound.arch.mvi.view
 
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 interface MviView<E, in M> {
     fun uiEvents(): LiveData<E> = EmptyLiveData()

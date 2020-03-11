@@ -16,9 +16,9 @@
 
 package com.futurice.freesound.arch.mvi.viewmodel
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.futurice.freesound.arch.mvi.TransitionEvent
 import com.futurice.freesound.arch.mvi.TransitionObserver
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider

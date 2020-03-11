@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -24,28 +24,28 @@
         tools:context=".feature.search.SearchActivity"
         tools:ignore="MergeRootFrame">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_search"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <android.support.v7.widget.SearchView
+            <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:iconifiedByDefault="false"
                     android:imeOptions="actionSearch|flagNoExtractUi"/>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
             android:id="@+id/container"
@@ -53,4 +53,4 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,7 +18,7 @@ package com.futurice.freesound.feature.common;
 
 import com.futurice.freesound.network.api.model.Sound;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public interface Navigator {
 
