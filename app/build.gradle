@@ -149,7 +149,7 @@ ext {
             mockito                 : '2.18.3',
             assertJ                 : '1.7.1',
             leakCanary              : '2.2',
-            rxLint                  : '1.6.1']
+            rxLint                  : '1.7.5']
 }
 
 dependencies {
