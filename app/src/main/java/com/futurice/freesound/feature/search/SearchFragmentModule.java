@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.feature.search;
 
+import android.content.Context;
+
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
@@ -26,10 +28,9 @@ import com.futurice.freesound.feature.common.ui.adapter.ViewHolderFactory;
 import com.futurice.freesound.inject.activity.ForActivity;
 import com.futurice.freesound.inject.fragment.BaseFragmentModule;
 import com.futurice.freesound.inject.fragment.FragmentScope;
+import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.squareup.picasso.Picasso;
-
-import android.content.Context;
 
 import java.util.Map;
 
@@ -47,8 +48,9 @@ public class SearchFragmentModule {
     @FragmentScope
     static SearchFragmentViewModel provideSearchFragmentViewModel(SearchDataModel searchDataModel,
                                                                   Navigator navigator,
-                                                                  AudioPlayer audioPlayer) {
-        return new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer);
+                                                                  AudioPlayer audioPlayer,
+                                                                  SchedulerProvider schedulerProvider) {
+        return new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer, schedulerProvider);
     }
 
     @Provides
@@ -58,7 +60,7 @@ public class SearchFragmentModule {
                                                       Map<Integer, ViewHolderBinder<Sound>> binderMap,
                                                       SchedulerProvider schedulerProvider) {
         return new RecyclerViewAdapter<>(itemComparator, factoryMap, binderMap,
-                                              schedulerProvider);
+                schedulerProvider);
     }
 
     @Provides
@@ -73,8 +75,15 @@ public class SearchFragmentModule {
                                                     Picasso picasso,
                                                     SchedulerProvider schedulerProvider) {
         return new SoundItemViewHolder.SoundItemViewHolderFactory(context,
-                                                                  picasso,
-                                                                  schedulerProvider);
+                picasso,
+                schedulerProvider);
+    }
+
+    @Provides
+    SoundItemViewModelFactory provideSoundViewModelFactory(Navigator navigator,
+                                                           AudioPlayer audioPlayer,
+                                                           FreeSoundApiService freeSoundApiService) {
+        return new SoundItemViewModelFactory(navigator, audioPlayer, freeSoundApiService);
     }
 
     @IntoMap

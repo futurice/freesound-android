@@ -22,6 +22,7 @@ import com.futurice.freesound.arch.mvvm.SimpleViewModel;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.model.Sound;
 
 import java.util.List;
@@ -43,18 +44,24 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     @NonNull
     private final AudioPlayer audioPlayer;
 
+    @NonNull
+    private SchedulerProvider schedulerProvider;
+
     SearchFragmentViewModel(@NonNull final SearchDataModel searchDataModel,
                             @NonNull final Navigator navigator,
-                            @NonNull final AudioPlayer audioPlayer) {
+                            @NonNull final AudioPlayer audioPlayer,
+                            @NonNull final SchedulerProvider schedulerProvider) {
         this.searchDataModel = get(searchDataModel);
         this.navigator = get(navigator);
         this.audioPlayer = get(audioPlayer);
+        this.schedulerProvider = schedulerProvider;
     }
 
     @NonNull
     Observable<Option<List<DisplayableItem<Sound>>>> getSoundsOnceAndStream() {
         // When there are none results (result == null), this won't do anything.
         return searchDataModel.getSearchStateOnceAndStream()
+                .observeOn(schedulerProvider.ui())
                 .map(SearchFragmentViewModel::extractResults)
                 .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
                 .doOnNext(__ -> audioPlayer.stopPlayback());
@@ -67,9 +74,7 @@ final class SearchFragmentViewModel extends SimpleViewModel {
         } else if (searchState instanceof KSearchState.Success) {
             return Option.ofObj(((KSearchState.Success) searchState).getSounds());
         }
-
         return Option.none();
-
     }
 
     @NonNull

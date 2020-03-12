@@ -16,6 +16,7 @@
 
 package com.futurice.freesound.feature.search
 
+import com.futurice.freesound.arch.mvvm.SimpleViewModel
 import com.futurice.freesound.feature.audio.AudioPlayer
 import com.futurice.freesound.feature.audio.PlaybackSource
 import com.futurice.freesound.feature.audio.PlayerState
@@ -23,19 +24,15 @@ import com.futurice.freesound.feature.audio.from
 import com.futurice.freesound.feature.common.Navigator
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.Sound
-import com.futurice.freesound.arch.mvvm.SimpleViewModel
-import com.google.auto.factory.AutoFactory
-import com.google.auto.factory.Provided
 import io.reactivex.Observable
 import io.reactivex.Single
 import polanski.option.Option
 import java.text.DateFormat
 
-@AutoFactory
 internal class SoundItemViewModel(private val sound: Sound,
-                                  private @Provided val navigator: Navigator,
-                                  private @Provided val audioPlayer: AudioPlayer,
-                                  private @Provided val freeSoundApiService: FreeSoundApiService) : SimpleViewModel() {
+                                  private val navigator: Navigator,
+                                  private val audioPlayer: AudioPlayer,
+                                  private val freeSoundApiService: FreeSoundApiService) : SimpleViewModel() {
 
     private val thumbnail: String = sound.images.medSizeWaveformUrl
 

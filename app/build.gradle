@@ -42,20 +42,6 @@ android {
         buildConfigField(STRING, "FREESOUND_API_CLIENT_ID", freesound_api_client_id)
         buildConfigField(STRING, "FREESOUND_API_CLIENT_SECRET", freesound_api_client_secret)
 
-        // AutoValue and AutoFactory require this workaround because they haven't separated their
-        // annotation processor from their compile time dependencies.
-        //
-        // Without this, compilation would fail as it requires that annotation processors are only
-        // used by kapt/annotationProcessor.
-        //
-        // Note: This option has also been targeted for deprecation by the Android Gradle plugin.
-        //
-        // Refer: https://github.com/google/auto/issues/268
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath false
-            }
-        }
     }
 
     signingConfigs {
@@ -74,7 +60,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     './proguard-rules/android-support-rules.pro',
-                    './proguard-rules/autovalue-rules.pro',
                     './proguard-rules/okhttp3-rules.pro',
                     './proguard-rules/picasso-rules.pro',
                     './proguard-rules/retrofit2-rules.pro',
@@ -134,8 +119,6 @@ ext {
             retrofit2RxJava2Adapter : '1.0.0',
             moshi                   : '1.9.2',
             moshiConverter          : '2.7.2',
-            autoFactory             : '1.0-beta5',
-            autoValue               : '1.5.2',
             jsr250                  : '1.0',
             jonty                   : '0.7',
             options                 : '1.2.4',
@@ -199,18 +182,6 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$dependencyVersions.moshi"
     implementation "com.squareup.moshi:moshi-adapters:$dependencyVersions.moshi"
     implementation "com.squareup.retrofit2:converter-moshi:$dependencyVersions.moshiConverter"
-
-    // AutoFactory
-    compileOnly "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
-    kapt "com.google.auto.factory:auto-factory:$dependencyVersions.autoFactory"
-
-    // Auto-Value
-    compileOnly "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
-    kapt "com.google.auto.value:auto-value:$dependencyVersions.autoValue"
-
-    // Required because "javax.annotation.Generated" is referenced by AutoValue/Factory
-    // Refer to https://github.com/google/auto/issues/240
-    compileOnly "javax.annotation:jsr250-api:$dependencyVersions.jsr250"
 
     // Jonty
     compileOnly "com.github.peter-tackage.jonty:jonty:$dependencyVersions.jonty"

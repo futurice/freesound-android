@@ -23,6 +23,7 @@ import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +61,10 @@ public class SearchFragmentViewModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        viewModel = new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer);
+        viewModel = new SearchFragmentViewModel(searchDataModel,
+                navigator,
+                audioPlayer,
+                new TrampolineSchedulerProvider());
     }
 
     @Test
