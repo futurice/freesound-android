@@ -67,18 +67,18 @@ final class SearchFragmentViewModel extends SimpleViewModel {
                 .doOnNext(__ -> audioPlayer.stopPlayback());
     }
 
-    private static Option<List<Sound>> extractResults(KSearchState searchState) {
+    private static Option<List<Sound>> extractResults(SearchState searchState) {
         // FIXME Again not the best implementation, but this class will become MVI and Kotlin.
-        if (searchState instanceof KSearchState.InProgress) {
-            return Option.ofObj(((KSearchState.InProgress) searchState).getSounds());
-        } else if (searchState instanceof KSearchState.Success) {
-            return Option.ofObj(((KSearchState.Success) searchState).getSounds());
+        if (searchState instanceof SearchState.InProgress) {
+            return Option.ofObj(((SearchState.InProgress) searchState).getSounds());
+        } else if (searchState instanceof SearchState.Success) {
+            return Option.ofObj(((SearchState.Success) searchState).getSounds());
         }
         return Option.none();
     }
 
     @NonNull
-    Observable<KSearchState> getSearchStateOnceAndStream() {
+    Observable<SearchState> getSearchStateOnceAndStream() {
         return searchDataModel.getSearchStateOnceAndStream();
     }
 

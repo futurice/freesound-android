@@ -27,7 +27,7 @@ public interface SearchDataModel {
     Completable querySearch(@NonNull String query, @NonNull final Completable preliminaryTask);
 
     @NonNull
-    Observable<KSearchState> getSearchStateOnceAndStream();
+    Observable<SearchState> getSearchStateOnceAndStream();
 
     @NonNull
     Completable clear();

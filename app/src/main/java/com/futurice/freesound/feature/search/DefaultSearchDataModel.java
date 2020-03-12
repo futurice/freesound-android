@@ -75,7 +75,7 @@ final class DefaultSearchDataModel implements SearchDataModel {
 
     @Override
     @NonNull
-    public Observable<KSearchState> getSearchStateOnceAndStream() {
+    public Observable<SearchState> getSearchStateOnceAndStream() {
         return Observable.combineLatest(resultsOnceAndStream,
                 errorOnceAndStream,
                 inProgressOnceAndStream,
@@ -84,28 +84,28 @@ final class DefaultSearchDataModel implements SearchDataModel {
                 .distinctUntilChanged();
     }
 
-    private static KSearchState combine(Option<List<Sound>> results, Option<Throwable> error, Boolean inProgress) {
+    private static SearchState combine(Option<List<Sound>> results, Option<Throwable> error, Boolean inProgress) {
         // FIXME This is not an ideal implementation, but:
         //  1. This ViewModel will be re-implemented as MVI
         //  2. I really want to get rid of AutoValue and this is the last usage of it.
 
         if (error.isSome()) {
             // No combining errors and existing state, sorry.
-            return new KSearchState.Error(OptionUnsafe.getUnsafe(error));
+            return new SearchState.Error(OptionUnsafe.getUnsafe(error));
         }
 
         if (inProgress) {
             // Progress can exist with results
-            return new KSearchState.InProgress(results.orDefault(() -> null));
+            return new SearchState.InProgress(results.orDefault(() -> null));
         }
 
         if (results.isSome()) {
             // No error and not in progress, but have results -> success!
-            return new KSearchState.Success(OptionUnsafe.getUnsafe(results));
+            return new SearchState.Success(OptionUnsafe.getUnsafe(results));
         }
 
         // Nothingness.
-        return KSearchState.Cleared.INSTANCE;
+        return SearchState.Cleared.INSTANCE;
     }
 
     @Override

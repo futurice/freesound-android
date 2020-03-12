@@ -127,10 +127,10 @@ class SearchActivity : MvvmBaseActivity<SearchActivityComponent>() {
                 .commit()
     }
 
-    private fun handleErrorState(searchState: KSearchState) {
+    private fun handleErrorState(searchState: SearchState) {
         // TODO This should also close the keyboard on error, otherwise the error is hidden.
         when (searchState) {
-            is KSearchState.Error -> showSnackbar(getString(R.string.search_error))
+            is SearchState.Error -> showSnackbar(getString(R.string.search_error))
             else -> dismissSnackbar()
         }
     }

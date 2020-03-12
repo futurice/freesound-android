@@ -117,9 +117,9 @@ class SearchFragment : MvvmBaseFragment<SearchFragmentComponent>() {
         }
     }
 
-    private fun showProgress(searchState: KSearchState) {
+    private fun showProgress(searchState: SearchState) {
         progressBar_searchProgress.visibility = when (searchState) {
-            is KSearchState.InProgress -> VISIBLE
+            is SearchState.InProgress -> VISIBLE
             else -> GONE
         }
     }

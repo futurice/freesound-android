@@ -284,11 +284,11 @@ public class SearchActivityViewModelTest {
 
     private class ArrangeBuilder {
 
-        private final BehaviorSubject<KSearchState> searchResultsStream = BehaviorSubject
-                .createDefault(KSearchState.Cleared.INSTANCE);
+        private final BehaviorSubject<SearchState> searchResultsStream = BehaviorSubject
+                .createDefault(SearchState.Cleared.INSTANCE);
 
-        private final BehaviorSubject<KSearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(KSearchState.Cleared.INSTANCE);
+        private final BehaviorSubject<SearchState> mockedSearchResultsStream
+                = BehaviorSubject.createDefault(SearchState.Cleared.INSTANCE);
 
         ArrangeBuilder() {
             Mockito.when(searchDataModel.getSearchStateOnceAndStream())
@@ -321,7 +321,7 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder enqueueSearchResults(@NonNull final List<Sound> sounds) {
-            mockedSearchResultsStream.onNext(new KSearchState.Success(sounds));
+            mockedSearchResultsStream.onNext(new SearchState.Success(sounds));
             return this;
         }
 

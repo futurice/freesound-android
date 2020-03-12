@@ -18,10 +18,10 @@ package com.futurice.freesound.feature.search
 
 import com.futurice.freesound.network.api.model.Sound
 
-sealed class KSearchState {
-    object Cleared : KSearchState()
-    data class InProgress(val sounds: List<Sound>?) : KSearchState()
-    data class Success(val sounds: List<Sound>) : KSearchState()
-    data class Error(val throwable: Throwable) : KSearchState()
+sealed class SearchState {
+    object Cleared : SearchState()
+    data class InProgress(val sounds: List<Sound>?) : SearchState()
+    data class Success(val sounds: List<Sound>) : SearchState()
+    data class Error(val throwable: Throwable) : SearchState()
 }
 

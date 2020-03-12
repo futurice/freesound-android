@@ -72,7 +72,7 @@ internal class SearchActivityViewModel(private val searchDataModel: SearchDataMo
         get() = searchTermOnceAndStream.observeOn(schedulerProvider.computation())
                 .map { isCloseEnabled(it) }
 
-    val searchStateOnceAndStream: Observable<KSearchState>
+    val searchStateOnceAndStream: Observable<SearchState>
         get() = searchDataModel.searchStateOnceAndStream
 
     private fun querySearch(query: String): Completable =
