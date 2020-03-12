@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.feature.search
 
-import com.google.auto.value.AutoValue;
+import com.futurice.freesound.network.api.model.Sound
 
-import androidx.annotation.NonNull;
-
-import polanski.option.Option;
-
-@AutoValue
-abstract class SearchQuery {
-
-    @NonNull
-    abstract Option<String> query();
-
-    abstract boolean clearEnabled();
-
-    @NonNull
-    static SearchQuery create(@NonNull final Option<String> query,
-                              final boolean clearEnabled) {
-        return new AutoValue_SearchQuery(query, clearEnabled);
-    }
-
+sealed class SearchState {
+    object Cleared : SearchState()
+    data class InProgress(val sounds: List<Sound>?) : SearchState()
+    data class Success(val sounds: List<Sound>) : SearchState()
+    data class Error(val throwable: Throwable) : SearchState()
 }
+

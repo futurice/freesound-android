@@ -16,18 +16,19 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.test.data.TestData;
+import com.futurice.freesound.test.rx.TrampolineSchedulerProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -60,7 +61,10 @@ public class SearchFragmentViewModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        viewModel = new SearchFragmentViewModel(searchDataModel, navigator, audioPlayer);
+        viewModel = new SearchFragmentViewModel(searchDataModel,
+                navigator,
+                audioPlayer,
+                new TrampolineSchedulerProvider());
     }
 
     @Test
@@ -68,8 +72,8 @@ public class SearchFragmentViewModelTest {
         new Arrangement().enqueueSearchResults(Option.none());
 
         viewModel.getSoundsOnceAndStream()
-                 .test()
-                 .assertValue(isNone());
+                .test()
+                .assertValue(isNone());
     }
 
     @Test
@@ -78,8 +82,8 @@ public class SearchFragmentViewModelTest {
         new Arrangement().enqueueSearchResults(ofObj(sounds));
 
         viewModel.getSoundsOnceAndStream()
-                 .test()
-                 .assertValue(hasOptionValue(expectedDisplayableItems(sounds)));
+                .test()
+                .assertValue(hasOptionValue(expectedDisplayableItems(sounds)));
     }
 
     @Test
@@ -87,7 +91,7 @@ public class SearchFragmentViewModelTest {
         new Arrangement();
 
         viewModel.getSoundsOnceAndStream()
-                 .test();
+                .test();
 
         verify(audioPlayer).stopPlayback();
     }
@@ -96,7 +100,7 @@ public class SearchFragmentViewModelTest {
     public void stopsAudioPlayback_whenSearchResultChange() {
         Arrangement arrangement = new Arrangement();
         viewModel.getSoundsOnceAndStream()
-                 .test();
+                .test();
         reset(audioPlayer); // is invoked by default, so reset the mock invocation count.
 
         arrangement.enqueueSearchResults(ofObj(TestData.sounds(10)));
@@ -117,15 +121,15 @@ public class SearchFragmentViewModelTest {
     private static List<DisplayableItem<Sound>> expectedDisplayableItems(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
-                         .map(it -> new DisplayableItem<>(it, SOUND))
-                         .toList()
-                         .blockingGet();
+                .map(it -> new DisplayableItem<>(it, SOUND))
+                .toList()
+                .blockingGet();
     }
 
     private class Arrangement {
 
         private final BehaviorSubject<SearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(SearchState.cleared());
+                = BehaviorSubject.createDefault(SearchState.Cleared.INSTANCE);
 
         Arrangement() {
             withSuccessfulSearchResultStream();
@@ -139,8 +143,8 @@ public class SearchFragmentViewModelTest {
 
         Arrangement enqueueSearchResults(@NonNull final Option<List<Sound>> sounds) {
             sounds.ifSome(
-                    soundList -> mockedSearchResultsStream.onNext(SearchState.success(soundList)))
-                  .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.cleared()));
+                    soundList -> mockedSearchResultsStream.onNext(new SearchState.Success(soundList)))
+                    .ifNone(() -> mockedSearchResultsStream.onNext(SearchState.Cleared.INSTANCE));
             return this;
         }
 

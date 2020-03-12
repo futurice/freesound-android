@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
 import com.futurice.freesound.feature.analytics.Analytics;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.network.api.model.Sound;
@@ -31,8 +33,6 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -82,9 +82,9 @@ public class SearchActivityViewModelTest {
         MockitoAnnotations.initMocks(this);
         schedulerProvider = new TrampolineSchedulerProvider();
         viewModel = new SearchActivityViewModel(searchDataModel,
-                                                audioPlayer,
-                                                analytics,
-                                                schedulerProvider);
+                audioPlayer,
+                analytics,
+                schedulerProvider);
     }
 
     @Test
@@ -108,8 +108,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void viewModel_clearsSearchDataModel_afterBind() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         verify(searchDataModel).clear();
     }
@@ -119,16 +119,16 @@ public class SearchActivityViewModelTest {
         new ArrangeBuilder();
 
         viewModel.isClearEnabledOnceAndStream()
-                 .test()
-                 .assertValue(false)
-                 .assertNotTerminated();
+                .test()
+                .assertValue(false)
+                .assertNotTerminated();
     }
 
     @Test
     public void search_queriesSearchDataModelWithTerm() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         viewModel.search(DUMMY_QUERY);
 
@@ -138,8 +138,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void search_duplicateNonEmptyQueriesAreIgnored() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         viewModel.search(DUMMY_QUERY);
         viewModel.search(DUMMY_QUERY);
@@ -153,8 +153,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void search_duplicateEmptyQueriesAreIgnored() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         viewModel.search("");
         viewModel.search("");
@@ -168,8 +168,8 @@ public class SearchActivityViewModelTest {
     @Test
     public void search_clearsSearchDataModel_whenEmptySearchString_afterSearchWithNonEmptyString() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         viewModel.search(DUMMY_QUERY);
         viewModel.search("");
@@ -183,40 +183,40 @@ public class SearchActivityViewModelTest {
     @Test
     public void clear_isEnabled_whenSearchWithNonEmptyQuery() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         viewModel.search(DUMMY_QUERY);
 
         viewModel.isClearEnabledOnceAndStream()
-                 .test()
-                 .assertValue(true)
-                 .assertNotTerminated();
+                .test()
+                .assertValue(true)
+                .assertNotTerminated();
     }
 
     @Test
     public void clear_isDisabled_whenSearchWithEmptyQuery_afterSearchWithNonEmptyString() {
         new ArrangeBuilder().withSuccessfulSearchResultStream()
-                            .act()
-                            .bind();
+                .act()
+                .bind();
 
         final TestObserver<Boolean> ts = viewModel.isClearEnabledOnceAndStream()
-                                                  .test();
+                .test();
 
         viewModel.search(DUMMY_QUERY);
         viewModel.search("");
 
         ts.assertValues(false, true, false)
-          .assertNotTerminated();
+                .assertNotTerminated();
     }
 
     @Test
     public void search_recoversFromSearchErrors_callsApiAgain() {
         ArrangeBuilder arrangement = new ArrangeBuilder();
         arrangement.withErrorWhenSearching()
-                   .act()
-                   .bind()
-                   .search();
+                .act()
+                .bind()
+                .search();
 
         arrangement
                 .withSuccessfulSearchResultStream()
@@ -238,7 +238,7 @@ public class SearchActivityViewModelTest {
                 .search();
 
         testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS,
-                                    TimeUnit.SECONDS);
+                TimeUnit.SECONDS);
         act.search("");
 
         verify(searchDataModel, times(2)).clear();
@@ -256,7 +256,7 @@ public class SearchActivityViewModelTest {
         act.search(DUMMY_QUERY);
 
         verify(searchDataModel).querySearch(searchTermCaptor.capture(),
-                                            searchDelayCaptor.capture());
+                searchDelayCaptor.capture());
 
         assertThat(searchTermCaptor.getValue()).isEqualTo(DUMMY_QUERY);
         searchDelayCaptor.getValue().test().assertNotTerminated();
@@ -273,29 +273,29 @@ public class SearchActivityViewModelTest {
         act.search(DUMMY_QUERY);
 
         verify(searchDataModel).querySearch(searchTermCaptor.capture(),
-                                            searchDelayCaptor.capture());
+                searchDelayCaptor.capture());
 
         assertThat(searchTermCaptor.getValue()).isEqualTo(DUMMY_QUERY);
         TestObserver<Void> testObserver = searchDelayCaptor.getValue().test();
         testScheduler.advanceTimeBy(SEARCH_DEBOUNCE_TIME_SECONDS,
-                                    TimeUnit.SECONDS);
+                TimeUnit.SECONDS);
         testObserver.assertComplete();
     }
 
     private class ArrangeBuilder {
 
         private final BehaviorSubject<SearchState> searchResultsStream = BehaviorSubject
-                .createDefault(SearchState.cleared());
+                .createDefault(SearchState.Cleared.INSTANCE);
 
         private final BehaviorSubject<SearchState> mockedSearchResultsStream
-                = BehaviorSubject.createDefault(SearchState.cleared());
+                = BehaviorSubject.createDefault(SearchState.Cleared.INSTANCE);
 
         ArrangeBuilder() {
             Mockito.when(searchDataModel.getSearchStateOnceAndStream())
-                   .thenReturn(searchResultsStream);
+                    .thenReturn(searchResultsStream);
             Mockito.when(searchDataModel.clear()).thenReturn(Completable.complete());
             Mockito.when(searchDataModel.querySearch(anyString(), any(Completable.class)))
-                   .thenReturn(Completable.complete());
+                    .thenReturn(Completable.complete());
             withSuccessfulSearchResultStream();
             withTimeSkipScheduler();
         }
@@ -321,7 +321,7 @@ public class SearchActivityViewModelTest {
         }
 
         ArrangeBuilder enqueueSearchResults(@NonNull final List<Sound> sounds) {
-            mockedSearchResultsStream.onNext(SearchState.success(sounds));
+            mockedSearchResultsStream.onNext(new SearchState.Success(sounds));
             return this;
         }
 

@@ -82,6 +82,7 @@ final class DefaultObservableExoPlayer implements ObservableExoPlayer {
                                                            @NonNull final TimeUnit timeUnit) {
         return Observable.timer(updatePeriod, timeUnit,
                 schedulerProvider.time(PLAYER_PROGRESS_SCHEDULER_TAG))
+                .observeOn(schedulerProvider.ui())
                 .repeat()
                 .startWith(0L)
                 .switchMap(__ -> progressOnceAndStream);

@@ -16,12 +16,12 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.Sound;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -30,6 +30,7 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import polanski.option.Option;
+import polanski.option.OptionUnsafe;
 
 import static com.futurice.freesound.common.utils.Preconditions.get;
 
@@ -63,24 +64,48 @@ final class DefaultSearchDataModel implements SearchDataModel {
     public Completable querySearch(@NonNull final String query,
                                    @NonNull final Completable preliminaryTask) {
         return preliminaryTask.doOnSubscribe(__ -> reportInProgress())
-                              //   .doFinally(this::reportNotInProgress)
-                              .andThen(freeSoundApiService.search(get(query))
-                                                          .map(DefaultSearchDataModel::toResults)
-                                                          .doOnSuccess(this::reportResults)
-                                                          .doOnError(this::reportError)
-                                                          .toCompletable()
-                                                          .onErrorComplete());
+                //   .doFinally(this::reportNotInProgress)
+                .andThen(freeSoundApiService.search(get(query))
+                        .map(DefaultSearchDataModel::toResults)
+                        .doOnSuccess(this::reportResults)
+                        .doOnError(this::reportError)
+                        .toCompletable()
+                        .onErrorComplete());
     }
 
     @Override
     @NonNull
     public Observable<SearchState> getSearchStateOnceAndStream() {
         return Observable.combineLatest(resultsOnceAndStream,
-                                        errorOnceAndStream,
-                                        inProgressOnceAndStream,
-                                        SearchState::create)
-                         .observeOn(schedulerProvider.computation())
-                         .distinctUntilChanged();
+                errorOnceAndStream,
+                inProgressOnceAndStream,
+                DefaultSearchDataModel::combine)
+                .observeOn(schedulerProvider.computation())
+                .distinctUntilChanged();
+    }
+
+    private static SearchState combine(Option<List<Sound>> results, Option<Throwable> error, Boolean inProgress) {
+        // FIXME This is not an ideal implementation, but:
+        //  1. This ViewModel will be re-implemented as MVI
+        //  2. I really want to get rid of AutoValue and this is the last usage of it.
+
+        if (error.isSome()) {
+            // No combining errors and existing state, sorry.
+            return new SearchState.Error(OptionUnsafe.getUnsafe(error));
+        }
+
+        if (inProgress) {
+            // Progress can exist with results
+            return new SearchState.InProgress(results.orDefault(() -> null));
+        }
+
+        if (results.isSome()) {
+            // No error and not in progress, but have results -> success!
+            return new SearchState.Success(OptionUnsafe.getUnsafe(results));
+        }
+
+        // Nothingness.
+        return SearchState.Cleared.INSTANCE;
     }
 
     @Override

@@ -16,6 +16,8 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
 import com.futurice.freesound.network.api.FreeSoundApiService;
 import com.futurice.freesound.network.api.model.SoundSearchResult;
 import com.futurice.freesound.test.data.TestData;
@@ -25,8 +27,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import androidx.annotation.NonNull;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -52,7 +52,7 @@ public class DefaultSearchDataModelTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         defaultSearchDataModel = new DefaultSearchDataModel(freeSoundApiService,
-                                                            new TrampolineSchedulerProvider());
+                new TrampolineSchedulerProvider());
     }
 
     @Test
@@ -69,8 +69,8 @@ public class DefaultSearchDataModelTest {
         new Arrangement().withSearchResultsFor(QUERY, dummyResults());
 
         defaultSearchDataModel.querySearch(QUERY, Completable.complete())
-                              .test()
-                              .assertComplete();
+                .test()
+                .assertComplete();
     }
 
     @Test
@@ -78,30 +78,30 @@ public class DefaultSearchDataModelTest {
         new Arrangement().withSearchResultError(new Exception());
 
         defaultSearchDataModel.querySearch("should-error", Completable.complete())
-                              .test()
-                              .assertComplete();
+                .test()
+                .assertComplete();
     }
 
     @Test
     public void getSearchStateOnceAndStream_isInitiallyClear() {
         defaultSearchDataModel.getSearchStateOnceAndStream()
-                              .test()
-                              .assertNotTerminated()
-                              .assertValue(SearchState.cleared());
+                .test()
+                .assertNotTerminated()
+                .assertValue(SearchState.Cleared.INSTANCE);
     }
 
     @Test
     public void querySearch_triggersSearchStateProgress() {
         new Arrangement().withDummySearchResult();
         TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
-                                                             .skip(1)
-                                                             .test();
+                .skip(1)
+                .test();
 
         defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
         ts.assertValueCount(3);
-        assertThat(ts.values().get(0).isInProgress()).isTrue();
-        assertThat(ts.values().get(2).isInProgress()).isFalse();
+        assertThat(ts.values().get(0)).isEqualTo(new SearchState.InProgress(null));
+        assertThat(ts.values().get(2)).isInstanceOf(SearchState.Success.class);
     }
 
     @Test
@@ -109,19 +109,20 @@ public class DefaultSearchDataModelTest {
         SoundSearchResult expected = dummyResults();
         new Arrangement().withSearchResultsFor(QUERY, expected);
 
+
         defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
         defaultSearchDataModel.getSearchStateOnceAndStream()
-                              .test()
-                              .assertNoErrors()
-                              .assertValue(SearchState.success(expected.getResults()));
+                .test()
+                .assertNoErrors()
+                .assertValue(new SearchState.Success(expected.getResults()));
     }
 
     @Test
     public void getSearchStateOnceAndStream_doesNotCompleteOrError_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError(new Exception());
         TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
-                                                             .test();
+                .test();
 
         defaultSearchDataModel.querySearch("should-error", Completable.complete()).subscribe();
 
@@ -131,40 +132,40 @@ public class DefaultSearchDataModelTest {
     @Test
     public void getSearchStateOnceAndStream_hasNoTerminalEvent() {
         defaultSearchDataModel.getSearchStateOnceAndStream()
-                              .test()
-                              .assertNotTerminated();
+                .test()
+                .assertNotTerminated();
     }
 
     @Test
     public void getSearchStateOnceAndStream_emitsErrorValue_whenQuerySearchErrors() {
         Exception searchError = new Exception();
         new Arrangement().withSearchResultError(searchError)
-                         .act()
-                         .querySearch();
+                .act()
+                .querySearch();
 
         defaultSearchDataModel
                 .getSearchStateOnceAndStream().test()
                 .assertNotTerminated()
                 .assertValueCount(1)
-                .assertValue(SearchState.error(searchError));
+                .assertValue(new SearchState.Error(searchError));
     }
 
     @Test
     public void getSearchStateOnceAndStream_doesNotTerminate_whenQuerySearchSuccessful() {
         new Arrangement().withDummySearchResult()
-                         .act()
-                         .querySearch();
+                .act()
+                .querySearch();
 
         defaultSearchDataModel.getSearchStateOnceAndStream()
-                              .test()
-                              .assertNotTerminated();
+                .test()
+                .assertNotTerminated();
     }
 
     @Test
     public void getSearchStateOnceAndStream_doesNotTerminate_whenQuerySearchErrors() {
         new Arrangement().withSearchResultError();
         TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
-                                                             .test();
+                .test();
 
         defaultSearchDataModel.querySearch(QUERY, Completable.complete()).subscribe();
 
@@ -175,8 +176,8 @@ public class DefaultSearchDataModelTest {
     public void getSearchStateOnceAndStream_doesNotEmitDuplicateEvents() {
         new Arrangement().withDummySearchResult();
         TestObserver<SearchState> ts = defaultSearchDataModel.getSearchStateOnceAndStream()
-                                                             .skip(1) // ignore initial value
-                                                             .test();
+                .skip(1) // ignore initial value
+                .test();
 
         defaultSearchDataModel.querySearch(QUERY, Completable.never()).subscribe();
         defaultSearchDataModel.querySearch(QUERY, Completable.never()).subscribe();
@@ -187,23 +188,23 @@ public class DefaultSearchDataModelTest {
     @Test
     public void clear_clearsSearchState() {
         new Arrangement().withDummySearchResult()
-                         .act()
-                         .querySearch();
+                .act()
+                .querySearch();
 
         defaultSearchDataModel.clear().subscribe();
 
         defaultSearchDataModel.getSearchStateOnceAndStream()
-                              .test()
-                              .assertValueCount(1)
-                              .assertValue(SearchState.cleared())
-                              .assertNotTerminated();
+                .test()
+                .assertValueCount(1)
+                .assertValue(SearchState.Cleared.INSTANCE)
+                .assertNotTerminated();
     }
 
     @Test
     public void clear_completes() {
         defaultSearchDataModel.clear()
-                              .test()
-                              .assertComplete();
+                .test()
+                .assertComplete();
     }
 
     @NonNull

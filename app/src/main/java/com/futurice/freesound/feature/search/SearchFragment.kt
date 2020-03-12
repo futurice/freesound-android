@@ -17,22 +17,21 @@
 package com.futurice.freesound.feature.search
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.futurice.freesound.R
-import com.futurice.freesound.common.rx.plusAssign
+import com.futurice.freesound.arch.mvvm.DataBinder
+import com.futurice.freesound.arch.mvvm.ViewModel
 import com.futurice.freesound.arch.mvvm.view.MvvmBaseFragment
+import com.futurice.freesound.common.rx.plusAssign
 import com.futurice.freesound.feature.common.DisplayableItem
 import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
 import com.futurice.freesound.feature.common.ui.adapter.RecyclerViewAdapter
 import com.futurice.freesound.inject.fragment.BaseFragmentModule
 import com.futurice.freesound.network.api.model.Sound
-import com.futurice.freesound.arch.mvvm.DataBinder
-import com.futurice.freesound.arch.mvvm.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_search.*
 import timber.log.Timber
@@ -119,7 +118,10 @@ class SearchFragment : MvvmBaseFragment<SearchFragmentComponent>() {
     }
 
     private fun showProgress(searchState: SearchState) {
-        progressBar_searchProgress.visibility = if (searchState.isInProgress) VISIBLE else GONE
+        progressBar_searchProgress.visibility = when (searchState) {
+            is SearchState.InProgress -> VISIBLE
+            else -> GONE
+        }
     }
 
     companion object {

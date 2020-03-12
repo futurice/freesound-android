@@ -16,13 +16,14 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
+import com.futurice.freesound.arch.mvvm.SimpleViewModel;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.arch.mvvm.SimpleViewModel;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -43,20 +44,37 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     @NonNull
     private final AudioPlayer audioPlayer;
 
+    @NonNull
+    private SchedulerProvider schedulerProvider;
+
     SearchFragmentViewModel(@NonNull final SearchDataModel searchDataModel,
                             @NonNull final Navigator navigator,
-                            @NonNull final AudioPlayer audioPlayer) {
+                            @NonNull final AudioPlayer audioPlayer,
+                            @NonNull final SchedulerProvider schedulerProvider) {
         this.searchDataModel = get(searchDataModel);
         this.navigator = get(navigator);
         this.audioPlayer = get(audioPlayer);
+        this.schedulerProvider = schedulerProvider;
     }
 
     @NonNull
     Observable<Option<List<DisplayableItem<Sound>>>> getSoundsOnceAndStream() {
+        // When there are none results (result == null), this won't do anything.
         return searchDataModel.getSearchStateOnceAndStream()
-                              .map(SearchState::results)
-                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
-                              .doOnNext(__ -> audioPlayer.stopPlayback());
+                .observeOn(schedulerProvider.ui())
+                .map(SearchFragmentViewModel::extractResults)
+                .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
+                .doOnNext(__ -> audioPlayer.stopPlayback());
+    }
+
+    private static Option<List<Sound>> extractResults(SearchState searchState) {
+        // FIXME Again not the best implementation, but this class will become MVI and Kotlin.
+        if (searchState instanceof SearchState.InProgress) {
+            return Option.ofObj(((SearchState.InProgress) searchState).getSounds());
+        } else if (searchState instanceof SearchState.Success) {
+            return Option.ofObj(((SearchState.Success) searchState).getSounds());
+        }
+        return Option.none();
     }
 
     @NonNull
@@ -76,8 +94,8 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
-                         .map(sound -> new DisplayableItem<>(sound, SOUND))
-                         .toList()
-                         .blockingGet();
+                .map(sound -> new DisplayableItem<>(sound, SOUND))
+                .toList()
+                .blockingGet();
     }
 }
