@@ -19,20 +19,20 @@ package com.futurice.freesound.feature.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
-import android.view.View
 import com.futurice.freesound.R
 import com.futurice.freesound.app.FreesoundApplication
-import com.futurice.freesound.common.rx.plusAssign
-import com.futurice.freesound.common.utils.Preconditions.get
-import com.futurice.freesound.common.utils.ifNull
-import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
-import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
-import com.futurice.freesound.inject.activity.BaseActivityModule
 import com.futurice.freesound.arch.mvvm.DataBinder
 import com.futurice.freesound.arch.mvvm.SimpleDataBinder
 import com.futurice.freesound.arch.mvvm.ViewModel
+import com.futurice.freesound.arch.mvvm.view.MvvmBaseActivity
+import com.futurice.freesound.common.rx.plusAssign
+import com.futurice.freesound.common.utils.Preconditions.get
+import com.futurice.freesound.common.utils.ifNull
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider
+import com.futurice.freesound.inject.activity.BaseActivityModule
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.Scheduler
@@ -127,15 +127,16 @@ class SearchActivity : MvvmBaseActivity<SearchActivityComponent>() {
                 .commit()
     }
 
-    private fun handleErrorState(searchState: SearchState) {
-        // TODO This should also close the keyboard, otherwise the error is hidden.
-        searchState.error()
-                .ifSome { showSnackbar(getString(R.string.search_error)) }
-                .ifNone { this.dismissSnackbar() }
+    private fun handleErrorState(searchState: KSearchState) {
+        // TODO This should also close the keyboard on error, otherwise the error is hidden.
+        when (searchState) {
+            is KSearchState.Error -> showSnackbar(getString(R.string.search_error))
+            else -> dismissSnackbar()
+        }
     }
 
     private fun setClearSearchVisible(isClearButtonVisible: Boolean) {
-        val closeButton : View = search_view.findViewById(R.id.search_close_btn)
+        val closeButton: View = search_view.findViewById(R.id.search_close_btn)
         closeButton.visibility = if (isClearButtonVisible) View.VISIBLE else View.GONE
     }
 
@@ -149,7 +150,8 @@ class SearchActivity : MvvmBaseActivity<SearchActivityComponent>() {
 
     companion object {
 
-        @JvmStatic fun open(context: Context) {
+        @JvmStatic
+        fun open(context: Context) {
             Intent(context, SearchActivity::class.java)
                     .apply { context.startActivity(this) }
         }

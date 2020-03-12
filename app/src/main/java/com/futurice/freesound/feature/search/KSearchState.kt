@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.search;
+package com.futurice.freesound.feature.search
 
-import androidx.annotation.NonNull;
+import com.futurice.freesound.network.api.model.Sound
 
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-
-public interface SearchDataModel {
-
-    @NonNull
-    Completable querySearch(@NonNull String query, @NonNull final Completable preliminaryTask);
-
-    @NonNull
-    Observable<KSearchState> getSearchStateOnceAndStream();
-
-    @NonNull
-    Completable clear();
+sealed class KSearchState {
+    object Cleared : KSearchState()
+    data class InProgress(val sounds: List<Sound>?) : KSearchState()
+    data class Success(val sounds: List<Sound>) : KSearchState()
+    data class Error(val throwable: Throwable) : KSearchState()
 }
+

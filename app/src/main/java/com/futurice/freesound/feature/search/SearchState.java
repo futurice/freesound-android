@@ -16,11 +16,10 @@
 
 package com.futurice.freesound.feature.search;
 
-import com.google.auto.value.AutoValue;
+import androidx.annotation.NonNull;
 
 import com.futurice.freesound.network.api.model.Sound;
-
-import androidx.annotation.NonNull;
+import com.google.auto.value.AutoValue;
 
 import java.util.List;
 
@@ -43,18 +42,18 @@ abstract class SearchState {
         return new AutoValue_SearchState(results, error, isInProgress);
     }
 
-    @NonNull
-    static SearchState cleared() {
-        return new AutoValue_SearchState(Option.none(), Option.none(), false);
-    }
-
-    @NonNull
-    static SearchState error(@NonNull Throwable throwable) {
-        return new AutoValue_SearchState(Option.none(), Option.ofObj(throwable), false);
-    }
-
-    @NonNull
-    static SearchState success(@NonNull List<Sound> results) {
-        return new AutoValue_SearchState(Option.ofObj(results), Option.none(), false);
-    }
+//    @NonNull
+//    static SearchState cleared() {
+//        return new AutoValue_SearchState(Option.none(), Option.none(), false);
+//    }
+//
+//    @NonNull
+//    static SearchState error(@NonNull Throwable throwable) {
+//        return new AutoValue_SearchState(Option.none(), Option.ofObj(throwable), false);
+//    }
+//
+//    @NonNull
+//    static SearchState success(@NonNull List<Sound> results) {
+//        return new AutoValue_SearchState(Option.ofObj(results), Option.none(), false);
+//    }
 }

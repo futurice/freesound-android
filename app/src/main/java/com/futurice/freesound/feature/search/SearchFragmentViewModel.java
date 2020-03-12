@@ -16,13 +16,13 @@
 
 package com.futurice.freesound.feature.search;
 
+import androidx.annotation.NonNull;
+
+import com.futurice.freesound.arch.mvvm.SimpleViewModel;
 import com.futurice.freesound.feature.audio.AudioPlayer;
 import com.futurice.freesound.feature.common.DisplayableItem;
 import com.futurice.freesound.feature.common.Navigator;
 import com.futurice.freesound.network.api.model.Sound;
-import com.futurice.freesound.arch.mvvm.SimpleViewModel;
-
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -53,14 +53,27 @@ final class SearchFragmentViewModel extends SimpleViewModel {
 
     @NonNull
     Observable<Option<List<DisplayableItem<Sound>>>> getSoundsOnceAndStream() {
+        // When there are none results (result == null), this won't do anything.
         return searchDataModel.getSearchStateOnceAndStream()
-                              .map(SearchState::results)
-                              .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
-                              .doOnNext(__ -> audioPlayer.stopPlayback());
+                .map(SearchFragmentViewModel::extractResults)
+                .map(it -> it.map(SearchFragmentViewModel::wrapInDisplayableItem))
+                .doOnNext(__ -> audioPlayer.stopPlayback());
+    }
+
+    private static Option<List<Sound>> extractResults(KSearchState searchState) {
+        // FIXME Again not the best implementation, but this class will become MVI and Kotlin.
+        if (searchState instanceof KSearchState.InProgress) {
+            return Option.ofObj(((KSearchState.InProgress) searchState).getSounds());
+        } else if (searchState instanceof KSearchState.Success) {
+            return Option.ofObj(((KSearchState.Success) searchState).getSounds());
+        }
+
+        return Option.none();
+
     }
 
     @NonNull
-    Observable<SearchState> getSearchStateOnceAndStream() {
+    Observable<KSearchState> getSearchStateOnceAndStream() {
         return searchDataModel.getSearchStateOnceAndStream();
     }
 
@@ -76,8 +89,8 @@ final class SearchFragmentViewModel extends SimpleViewModel {
     private static List<DisplayableItem<Sound>> wrapInDisplayableItem(
             @NonNull final List<Sound> sounds) {
         return Observable.fromIterable(sounds)
-                         .map(sound -> new DisplayableItem<>(sound, SOUND))
-                         .toList()
-                         .blockingGet();
+                .map(sound -> new DisplayableItem<>(sound, SOUND))
+                .toList()
+                .blockingGet();
     }
 }
