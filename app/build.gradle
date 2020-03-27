@@ -109,6 +109,7 @@ ext {
             androidSupportConstraint: '1.1.0',
             androidArchLifecycle    : '1.1.1',
             androidSupportTest      : '1.0.0',
+            androidPaging           : '2.1.2',
             dagger2                 : '2.4',
             rxJava2                 : '2.2.18',
             rxAndroid               : '2.1.1',
@@ -153,6 +154,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0'
     kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:$dependencyVersions.androidPaging"
+    testImplementation "androidx.paging:paging-common:$dependencyVersions.androidPaging"
+    implementation "androidx.paging:paging-rxjava2:$dependencyVersions.androidPaging"
 
     // Dagger 2
     kapt "com.google.dagger:dagger-compiler:$dependencyVersions.dagger2"
