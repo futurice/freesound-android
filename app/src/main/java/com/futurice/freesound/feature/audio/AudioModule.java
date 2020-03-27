@@ -20,6 +20,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.futurice.freesound.BuildConfig;
+import com.futurice.freesound.feature.common.scheduling.SchedulerProvider;
 import com.futurice.freesound.inject.activity.ActivityScope;
 import com.futurice.freesound.inject.app.ForApplication;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -38,9 +39,10 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.concurrent.TimeUnit;
+
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.Observable;
 
 @Module
 public class AudioModule {
@@ -63,31 +65,34 @@ public class AudioModule {
     //
 
     @Provides
+    @ActivityScope
+    ExoPlayerAudioPlayer provideExoPlayerAudioPlayer(ObservableExoPlayer observableExoPlayer,
+                                                     SchedulerProvider schedulerProvider) {
+
+        final int DEFAULT_UPDATE_PERIOD_MILLIS = 50;
+
+        return new ExoPlayerAudioPlayer(
+                observableExoPlayer,
+                DEFAULT_UPDATE_PERIOD_MILLIS,
+                TimeUnit.MILLISECONDS,
+                schedulerProvider);
+    }
+
+    @Provides
+    static ObservableExoPlayer provideObservableExoPlayer(ExoPlayer exoPlayer,
+                                                          MediaSourceFactory mediaSourceFactory) {
+        return new DefaultObservableExoPlayer(exoPlayer, mediaSourceFactory);
+    }
+
+    @Provides
     static MediaSourceFactory provideMediaSourceFactory(final ExtractorMediaSource.Factory extractorMediaSourceFactory) {
         return uri -> extractorMediaSourceFactory.createMediaSource(Uri.parse(uri));
     }
 
     @Provides
-    Observable<ExoPlayerState> provideExoPlayerStateObservable(
-            ExoPlayerStateObservable observable) {
-        return observable;
-    }
-
-    @Provides
-    Observable<Long> provideExoPlayerProgressObservable(
-            ExoPlayerProgressObservable observable) {
-        return observable;
-    }
-
-    @Provides
     @ActivityScope
-    ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer) {
+    static ExoPlayer provideExoPlayer(SimpleExoPlayer simpleExoPlayer) {
         return simpleExoPlayer;
-    }
-
-    @Provides
-    ObservableExoPlayer provideObservableExoPlayer(DefaultObservableExoPlayer exoPlayer) {
-        return exoPlayer;
     }
 
     @Provides

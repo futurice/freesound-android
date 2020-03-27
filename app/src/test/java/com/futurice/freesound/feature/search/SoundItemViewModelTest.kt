@@ -16,34 +16,25 @@
 
 package com.futurice.freesound.feature.search
 
-import com.futurice.freesound.feature.audio.AudioPlayer
-import com.futurice.freesound.feature.audio.PlaybackSource
-import com.futurice.freesound.feature.audio.PlayerState
-import com.futurice.freesound.feature.audio.State
+import com.futurice.freesound.feature.audio.*
 import com.futurice.freesound.feature.common.Navigator
 import com.futurice.freesound.network.api.FreeSoundApiService
 import com.futurice.freesound.network.api.model.Sound
 import com.futurice.freesound.network.api.model.User
 import com.futurice.freesound.test.data.TestData
-
-import org.junit.Before
-import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-
-import java.text.DateFormat
-import java.util.Date
-import java.util.concurrent.TimeUnit
-
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
-import polanski.option.Option
-
-import com.futurice.freesound.feature.audio.from
-import com.futurice.freesound.network.api.model.Image
+import org.junit.Before
+import org.junit.Test
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.Mockito.verify
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
+import polanski.option.Option
+import java.text.DateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class SoundItemViewModelTest {
 
@@ -70,8 +61,7 @@ class SoundItemViewModelTest {
                 .copy(avatar = TestData.avatar().copy(medium = avatar_m))
 
         ArrangeBuilder().withUserResponse(username, user)
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.userAvatar()
                 .test()
@@ -85,8 +75,7 @@ class SoundItemViewModelTest {
         val user = TestData.user().copy(username = username)
         ArrangeBuilder().withUserResponse(username, user)
 
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.username()
                 .test()
@@ -98,8 +87,7 @@ class SoundItemViewModelTest {
         val createdDate = Date(1000L)
         val sound = TEST_SOUND.copy(created = createdDate)
 
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.createdDate()
                 .test()
@@ -197,8 +185,7 @@ class SoundItemViewModelTest {
         val expectedPercentage = 5
         val sound = TEST_SOUND.copy(id = 1L, url = "url", duration = durationSec)
         ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
-                .withPlayerProgressEvent(positionMs)
+                .withPlayerStateEvent(playerStateWithSound(sound, PlaybackStatus.PLAYING, positionMs))
         val vm = SoundItemViewModel(sound, navigator, audioPlayer,
                 freeSoundApiService)
 
@@ -214,8 +201,7 @@ class SoundItemViewModelTest {
         val expectedPercentage = 0
         val sound = TEST_SOUND.copy(id = 1L, url = "url", duration = durationSec)
         ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
-                .withPlayerProgressEvent(positionMs)
+                .withPlayerStateEvent(playerStateWithSound(sound, PlaybackStatus.PLAYING, positionMs))
         val vm = SoundItemViewModel(sound, navigator, audioPlayer,
                 freeSoundApiService)
 
@@ -231,10 +217,8 @@ class SoundItemViewModelTest {
         val expectedPercentage = 99
         val sound = TEST_SOUND.copy(id = 1L, url = "url", duration = durationSec)
         ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
-                .withPlayerProgressEvent(positionMs)
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+                .withPlayerStateEvent(playerStateWithSound(sound, PlaybackStatus.PLAYING, positionMs))
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.progressPercentage()
                 .test()
@@ -248,10 +232,8 @@ class SoundItemViewModelTest {
         val expectedPercentage = 100
         val sound = TEST_SOUND.copy(id = 1L, url = "url", duration = durationSec)
         ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
-                .withPlayerProgressEvent(positionMs)
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+                .withPlayerStateEvent(playerStateWithSound(sound, PlaybackStatus.PLAYING, positionMs))
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.progressPercentage()
                 .test()
@@ -265,10 +247,8 @@ class SoundItemViewModelTest {
         val expectedPercentage = 100
         val sound = TEST_SOUND.copy(id = 1L, url = "url", duration = durationSec)
         ArrangeBuilder()
-                .withPlayerStateEvent(playerStatewithSound(State.PLAYING, sound))
-                .withPlayerProgressEvent(positionMs)
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+                .withPlayerStateEvent(playerStateWithSound(sound, PlaybackStatus.PLAYING, positionMs))
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.progressPercentage()
                 .test()
@@ -282,11 +262,11 @@ class SoundItemViewModelTest {
         val id2 = 2L
         val sound = TEST_SOUND.copy(id = id1, url = url1)
         ArrangeBuilder()
-                .withPlayerStateEvent(PlayerState(State.PLAYING,
-                        Option.ofObj(PlaybackSource(from(id2),
-                                url1))))
-        val vm = SoundItemViewModel(sound, navigator, audioPlayer,
-                freeSoundApiService)
+                .withPlayerStateEvent(PlayerState.Assigned(
+                        PlaybackSource(from(id2), url1),
+                        PlaybackStatus.PLAYING,
+                        100))
+        val vm = SoundItemViewModel(sound, navigator, audioPlayer, freeSoundApiService)
 
         vm.progressPercentage()
                 .test()
@@ -300,9 +280,11 @@ class SoundItemViewModelTest {
         val id2 = 2L
         val sound = TEST_SOUND.copy(id = id1, url = url1)
         ArrangeBuilder()
-                .withPlayerStateEvent(PlayerState(State.PLAYING,
-                        Option.ofObj(PlaybackSource(from(id2),
-                                url1))))
+                .withPlayerStateEvent(PlayerState.Assigned(
+                        PlaybackSource(from(id2), url1),
+                        PlaybackStatus.PLAYING,
+                        100))
+
         val vm = SoundItemViewModel(sound, navigator, audioPlayer,
                 freeSoundApiService)
 
@@ -321,23 +303,14 @@ class SoundItemViewModelTest {
 
     private inner class ArrangeBuilder internal constructor() {
 
-        private val playerStateOnceAndStream = BehaviorSubject.createDefault(PlayerState(State.IDLE, Option.none<PlaybackSource>()))
-        private val playerProgressOnceAndStream = BehaviorSubject
-                .createDefault(0L)
+        private val playerStateOnceAndStream = BehaviorSubject.createDefault<PlayerState>(PlayerState.Idle)
 
         init {
             `when`(audioPlayer.playerStateOnceAndStream).thenReturn(playerStateOnceAndStream)
-            `when`(audioPlayer.timePositionMsOnceAndStream)
-                    .thenReturn(playerProgressOnceAndStream)
         }
 
         internal fun withPlayerStateEvent(playerState: PlayerState): ArrangeBuilder {
             playerStateOnceAndStream.onNext(playerState)
-            return this
-        }
-
-        internal fun withPlayerProgressEvent(progress: Long): ArrangeBuilder {
-            playerProgressOnceAndStream.onNext(progress)
             return this
         }
 
@@ -353,12 +326,11 @@ class SoundItemViewModelTest {
 
         // Helpers
 
-        private fun playerStatewithSound(state: State,
-                                         sound: Sound): PlayerState {
-            return PlayerState(state,
-                    Option.ofObj(
-                            PlaybackSource(from(sound.id),
-                                    sound.url)))
+        private fun playerStateWithSound(sound: Sound,
+                                         status: PlaybackStatus,
+                                         timePositionMs: Long): PlayerState {
+            return PlayerState.Assigned(
+                    PlaybackSource(from(sound.id), sound.url), status, timePositionMs)
         }
     }
 

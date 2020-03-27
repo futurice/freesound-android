@@ -37,8 +37,10 @@ internal class SoundItemViewModel(private val sound: Sound,
     private val thumbnail: String = sound.images.medSizeWaveformUrl
 
     private val currentPercentage: Observable<Option<Int>>
-        get() = audioPlayer.timePositionMsOnceAndStream
-                .map { positionMs -> toPercentage(positionMs, sound.duration) }
+        get() = audioPlayer.playerStateOnceAndStream
+                .filter { it is PlayerState.Assigned }
+                .map { it as PlayerState.Assigned }
+                .map { state -> toPercentage(state.timePositionMs, sound.duration) }
                 .map { Option.ofObj(it) }
 
     fun thumbnailImageUrl(): Single<String> = Single.just(thumbnail)
@@ -82,9 +84,10 @@ internal class SoundItemViewModel(private val sound: Sound,
     }
 
     private fun isThisSound(playerState: PlayerState): Boolean =
-            playerState.source
-                    .filter { (id) -> id == from(sound.id) }
-                    .isSome
+            when (playerState) {
+                PlayerState.Idle -> false
+                is PlayerState.Assigned -> playerState.source.id == from(sound.id)
+            }
 
     private fun toPercentage(positionMs: Long, durationSec: Float): Int =
             Math.min(100, (positionMs / (durationSec * 1000.0f) * 100L).toInt())

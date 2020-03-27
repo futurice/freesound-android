@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.audio;
+package com.futurice.freesound.feature.audio
 
-import androidx.annotation.NonNull;
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
+import io.reactivex.Observable
 
 /**
- * Represent the {@link com.google.android.exoplayer2.ExoPlayer} through Observables.
+ * Represent the [com.google.android.exoplayer2.ExoPlayer] through Observables.
  */
-interface ObservableExoPlayer {
-
+internal interface ObservableExoPlayer {
     /**
-     * ExoPlayer state {@link Observable} with initial value.
+     * ExoPlayer state [Observable] with initial value.
      *
-     * @return the Observable {@link ExoPlayerState}.
+     * @return the Observable [ExoPlayerState].
      */
-    @NonNull
-    Observable<ExoPlayerState> getExoPlayerStateOnceAndStream();
+     val stateOnceAndStream: Observable<ExoPlayerState>
 
     /**
      * ExoPlayer current playback time position with initial value.
      *
      * @return the Observable playback time position in milliseconds.
      */
-    @NonNull
-    Observable<Long> getTimePositionMsOnceAndStream(long update, TimeUnit timeUnit);
+    val timePositionMsOnceAndStream: Observable<Long>
+
+    // Player controls
+    fun play(url: String)
+    fun stop()
+    fun pause()
+    fun resume()
+    fun release()
 }

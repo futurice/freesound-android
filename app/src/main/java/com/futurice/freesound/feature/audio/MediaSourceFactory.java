@@ -16,15 +16,16 @@
 
 package com.futurice.freesound.feature.audio;
 
-import com.google.android.exoplayer2.source.MediaSource;
-
 import androidx.annotation.NonNull;
+
+import com.google.android.exoplayer2.source.MediaSource;
 
 /**
  * Generates {@link MediaSource} from URIs.
- *
+ * <p>
  * Can't be an AutoFactory because we can't annotate the ExoPlayer classes.
  */
+@FunctionalInterface
 interface MediaSourceFactory {
 
     /**

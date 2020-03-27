@@ -14,39 +14,28 @@
  * limitations under the License.
  */
 
-package com.futurice.freesound.feature.audio;
+package com.futurice.freesound.feature.audio
 
-import com.futurice.freesound.common.Releasable;
+import com.futurice.freesound.common.Releasable
 
-import androidx.annotation.NonNull;
-
-import io.reactivex.Observable;
+import io.reactivex.Observable
 
 /**
  * An AudioPlayer for URL based sources.
  */
-public interface AudioPlayer extends Releasable {
+interface AudioPlayer : Releasable {
+
+    /**
+     * Reports the initial player status and subsequent changes.
+     *
+     * @return A stream of the [PlayerState].
+     */
+    val playerStateOnceAndStream: Observable<out PlayerState>
 
     /**
      * Initialize the player.
      */
-    void init();
-
-    /**
-     * Reports the initial player state and subsequent changes.
-     *
-     * @return A stream of the {@link PlayerState}.
-     */
-    @NonNull
-    Observable<PlayerState> getPlayerStateOnceAndStream();
-
-    /**
-     * Current playback time position with initial value.
-     *
-     * @return the Observable playback time position in milliseconds.
-     */
-    @NonNull
-    Observable<Long> getTimePositionMsOnceAndStream();
+    fun init()
 
     /**
      * Toggles the playback for the given URL.
@@ -55,15 +44,15 @@ public interface AudioPlayer extends Releasable {
      *
      * @param playbackSource the audio source.
      */
-    void togglePlayback(@NonNull PlaybackSource playbackSource);
+    fun togglePlayback(playbackSource: PlaybackSource)
 
     /**
      * Stops the current playback and reset state.
      */
-    void stopPlayback();
+    fun stopPlayback()
 
     /**
      * Dispose of the player, the instance cannot be reused.
      */
-    void release();
+    override fun release()
 }
