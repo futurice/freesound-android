@@ -24,10 +24,8 @@ import io.reactivex.Single
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.eq
+import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
@@ -229,18 +227,18 @@ class DefaultSearchDataModelTest {
 
     private inner class Arrangement {
         fun withDummySearchResult(): Arrangement {
-            `when`(freeSoundApiService.search(ArgumentMatchers.anyString()))
+            `when`(freeSoundApiService.search(anyString()))
                     .thenReturn(Single.just(dummyResults()))
             return this
         }
 
         fun withSearchResultsFor(query: String, results: SoundSearchResult): Arrangement {
-            `when`(freeSoundApiService.search(ArgumentMatchers.eq(query))).thenReturn(Single.just(results))
+            `when`(freeSoundApiService.search(eq(query))).thenReturn(Single.just(results))
             return this
         }
 
         fun withSearchResultError(exception: Exception = Exception()): Arrangement {
-            `when`(freeSoundApiService.search(ArgumentMatchers.any())).thenReturn(Single.error(exception))
+            `when`(freeSoundApiService.search(any())).thenReturn(Single.error(exception))
             return this
         }
 
