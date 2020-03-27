@@ -39,7 +39,7 @@ import dagger.Provides;
 import dagger.multibindings.IntKey;
 import dagger.multibindings.IntoMap;
 
-import static com.futurice.freesound.feature.search.SearchConstants.SearchResultListItems.SOUND;
+import static com.futurice.freesound.feature.search.SearchResultListItems.SOUND;
 
 @Module(includes = BaseFragmentModule.class)
 public class SearchFragmentModule {

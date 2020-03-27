@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.futurice.freesound.feature.search
 
-package com.futurice.freesound.feature.search;
-
-import com.futurice.freesound.common.InstantiationForbiddenError;
-
-final class SearchConstants {
-
-    static final class SearchResultListItems {
-
-        static final int SOUND = 0;
-        static final int AD = 1;
-
-        SearchResultListItems() {
-            throw new InstantiationForbiddenError();
-        }
-    }
-
-    SearchConstants() {
-        throw new InstantiationForbiddenError();
-    }
+object SearchResultListItems {
+    const val SOUND = 0
+    const val AD = 1
 }

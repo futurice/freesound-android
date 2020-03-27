@@ -227,8 +227,7 @@ class DefaultSearchDataModelTest {
 
     private inner class Arrangement {
         fun withDummySearchResult(): Arrangement {
-            `when`(freeSoundApiService.search(anyString()))
-                    .thenReturn(Single.just(dummyResults()))
+            `when`(freeSoundApiService.search(anyString())).thenReturn(Single.just(dummyResults()))
             return this
         }
 
